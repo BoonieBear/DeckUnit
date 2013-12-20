@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Timers;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using BoonieBear.DockUnit.Model;
 using GalaSoft.MvvmLight.Command;
@@ -22,6 +23,7 @@ namespace BoonieBear.DockUnit.ViewModel
         /// </summary>
         public const string WelcomeTitlePropertyName = "WelcomeTitle";
 
+        public const string CdName = "CanDo";
         public bool CanDo
         {
             get
@@ -35,7 +37,9 @@ namespace BoonieBear.DockUnit.ViewModel
                 else
                 {
                     _cando = value;
+                    RaisePropertyChanged(CdName);
                     NewCommand.RaiseCanExecuteChanged();
+                    
                 }
             }
         }
@@ -54,7 +58,7 @@ namespace BoonieBear.DockUnit.ViewModel
 
         public bool Iscan()
         {
-            return CanDo;
+            return true;
         }
 
         /// <summary>
@@ -97,7 +101,9 @@ namespace BoonieBear.DockUnit.ViewModel
 
                     WelcomeTitle = item.Title;
                 });
-            NewCommand = new RelayCommand(ChangeTitle, Iscan);
+            NewCommand = new RelayCommand(
+               () => ChangeTitle(), 
+             () => CanDo);
             Timer t =new Timer(3000);
             t.Elapsed += t_Elapsed;
             t.Start();
@@ -106,7 +112,7 @@ namespace BoonieBear.DockUnit.ViewModel
         void t_Elapsed(object sender, ElapsedEventArgs e)
         {
             WelcomeTitle = DateTime.Now.ToString();
-            if ( DateTime.Now.Second%2 == 0)
+            if (CanDo)
             {
                 CanDo = false;
                 
@@ -115,6 +121,7 @@ namespace BoonieBear.DockUnit.ViewModel
             else
             {
                 CanDo = true;
+                
                 Debug.WriteLine("cando change to true");
             }
         }

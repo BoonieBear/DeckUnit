@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("BoonieBear.DockUni.SysResourceLib")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("System Resource government Lib")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("IACAS")]
 [assembly: AssemblyProduct("BoonieBear.DockUni.SysResourceLib")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]

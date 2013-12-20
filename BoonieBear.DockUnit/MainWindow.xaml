@@ -27,7 +27,7 @@
                    VerticalAlignment="Center"
                    HorizontalAlignment="Center"
                    TextWrapping="Wrap" />
-        <Button Content="Button" HorizontalAlignment="Left" Margin="411,385,0,0" VerticalAlignment="Top" Width="159" RenderTransformOrigin="1.694,1.039" Height="31" Command="{Binding NewCommand}" IsEnabled="{Binding CanDo, Mode=TwoWay}"/>
+        <Button Content="{Binding WelcomeTitle}" HorizontalAlignment="Left" Margin="411,385,0,0" VerticalAlignment="Top" Width="159" RenderTransformOrigin="1.694,1.039" Height="31" Command="{Binding NewCommand}" IsManipulationEnabled="True" />
 
     </Grid>
 </Window>

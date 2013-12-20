@@ -8,9 +8,9 @@ using System.Windows;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("BoonieBear.DockUnit")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("DockUnit UI")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("IACAS")]
 [assembly: AssemblyProduct("BoonieBear.DockUnit")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]

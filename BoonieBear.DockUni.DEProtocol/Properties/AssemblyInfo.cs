@@ -6,9 +6,9 @@ using System.Runtime.InteropServices;
 // 特性集控制。更改这些特性值可修改
 // 与程序集关联的信息。
 [assembly: AssemblyTitle("BoonieBear.DockUni.DEProtocol")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("DataExchange Protocol")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("LOAT IACAS")]
 [assembly: AssemblyProduct("BoonieBear.DockUni.DEProtocol")]
 [assembly: AssemblyCopyright("Copyright ©  2013")]
 [assembly: AssemblyTrademark("")]
