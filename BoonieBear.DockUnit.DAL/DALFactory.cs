@@ -5,7 +5,10 @@ using System.Text;
 
 namespace BoonieBear.DockUnit.DAL
 {
-    public class Class1
+    /// <summary>
+    /// 数据库访问工厂类
+    /// </summary>
+    public class DALFactory
     {
     }
 }
