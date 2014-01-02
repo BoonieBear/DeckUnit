@@ -156,3 +156,4 @@ $RECYCLE.BIN/
 .DS_Store
 packages/
 BoonieBear.DockUnit.sln.GhostDoc.xml
+*.DotSettings
