@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
-namespace BoonieBear.DockUnit.DAL
+namespace BoonieBear.DockUni.DEProtocol
 {
     /// <summary>
-    /// 数据库实体类
+    /// 数据交换工厂类
     /// </summary>
-    public class DBModel
+    public class DEFactory
     {
     }
 }
