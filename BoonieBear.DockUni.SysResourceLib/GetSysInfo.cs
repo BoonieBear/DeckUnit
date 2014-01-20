@@ -4,7 +4,11 @@ using System.Text;
 
 namespace BoonieBear.DockUni.SysResourceLib
 {
-    public class Class1
+    public class GetSysInfo
     {
+        private static int GetCPUusage()
+        {
+            return 0;
+        }
     }
 }

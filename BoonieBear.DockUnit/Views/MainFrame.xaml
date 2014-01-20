@@ -1,0 +1,22 @@
+﻿<Metro:TransparentWindow x:Class="BoonieBear.DockUnit.Views.MainFrame"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:Metro="clr-namespace:BoonieBear.TinyMetro.WPF.Metro;assembly=TinyMetroWpfLibrary" 
+        xmlns:Commands="clr-namespace:BoonieBear.TinyMetro.WPF.Commands;assembly=TinyMetroWpfLibrary" 
+        xmlns:Frames="clr-namespace:BoonieBear.TinyMetro.WPF.Frames;assembly=TinyMetroWpfLibrary" 
+        DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainFrameViewModel}"
+        Commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
+        Title="MainFrame" Height="350" Width="525">
+    <Grid>
+
+        <!-- The animation frame is used to have page transitions on page navigation -->
+        <Frames:AnimationFrame x:Name="ContentFrame"
+                               Source="MainPageView.xaml" 
+                               NavigationUIVisibility="Hidden"
+                               AnimationMode="Slide"
+                               FadeDuration="0:0:0.050"
+                               FadeOffset="0:0:0.150"/>
+
+            
+    </Grid>
+</Metro:TransparentWindow>
