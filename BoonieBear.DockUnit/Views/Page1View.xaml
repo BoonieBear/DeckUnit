@@ -11,7 +11,7 @@
 
     <Grid>
         <StackPanel Margin="0,0,-200,0">
-            <TextBlock Text="Example Page 1" Style="{StaticResource WinTextTitle1Style}"/>
+            <TextBlock Text="数据页面" Style="{StaticResource WinTextTitle1Style}"/>
 
             <Button Content="Go back"
                     FontWeight="ExtraBold"

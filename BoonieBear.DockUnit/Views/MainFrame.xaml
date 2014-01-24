@@ -6,15 +6,15 @@
         xmlns:Frames="clr-namespace:BoonieBear.TinyMetro.WPF.Frames;assembly=TinyMetroWpfLibrary" 
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainFrameViewModel}"
         Commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        Title="MainFrame" Height="350" Width="525">
+        Title="MainFrame" Height="480" Width="640">
     <Grid>
 
         <!-- The animation frame is used to have page transitions on page navigation -->
         <Frames:AnimationFrame x:Name="ContentFrame"
                                Source="MainPageView.xaml" 
                                NavigationUIVisibility="Hidden"
-                               AnimationMode="Slide"
-                               FadeDuration="0:0:0.050"
+                               AnimationMode="Fade"
+                               FadeDuration="0:0:0.150"
                                FadeOffset="0:0:0.150"/>
 
             

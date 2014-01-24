@@ -4,7 +4,7 @@ using BoonieBear.DockUnit.ViewModels;
 namespace BoonieBear.DockUnit.Core
 {
 
-    public class TestViewModelLocator
+    public class UnitViewModelLocator
     {
         private MainFrameViewModel _mainFrameViewModel;
         private MainPageViewModel _mainPageViewModel;

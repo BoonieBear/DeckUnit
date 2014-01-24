@@ -56,7 +56,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Core\TestViewModelLocator.cs" />
+    <Compile Include="Core\UnitViewModelLocator.cs" />
     <Compile Include="NavigationEvents\GoPage1NavigationRequest.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MainFrameViewModel.cs" />
@@ -64,8 +64,8 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\TestController.cs" />
-    <Compile Include="Core\TestKernal.cs" />
+    <Compile Include="Core\UnitController.cs" />
+    <Compile Include="Core\UnitKernal.cs" />
     <Compile Include="ViewModels\Page1ViewModel.cs" />
     <Compile Include="Views\MainPageView.xaml.cs">
       <SubType>Code</SubType>
@@ -107,6 +107,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Page Include="Resources\ControlStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Resources\SkinStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainPageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -119,6 +127,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\splash.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\IACAS.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\return.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

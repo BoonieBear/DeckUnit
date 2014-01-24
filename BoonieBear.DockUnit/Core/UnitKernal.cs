@@ -3,7 +3,7 @@ using BoonieBear.TinyMetro.WPF.EventAggregation;
 
 namespace BoonieBear.DockUnit.Core
 {
-    internal class TestKernal : Kernel
+    internal class UnitKernal : Kernel
     {
         private INavigationController _controller;
         private EventAggregator _eventAggregator;
@@ -23,7 +23,7 @@ namespace BoonieBear.DockUnit.Core
         /// </summary>
         public override INavigationController Controller
         {
-            get { return _controller ?? (_controller = new TestController()); }
+            get { return _controller ?? (_controller = new UnitController()); }
         }
 
         #endregion

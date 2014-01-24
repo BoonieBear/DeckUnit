@@ -7,7 +7,7 @@ namespace BoonieBear.DockUnit.Core
     /// <summary>
     /// 消息处理函数
     /// </summary>
-    internal class TestController : BaseController,
+    internal class UnitController : BaseController,
         IHandleMessage<GoPage1NavigationRequest>
     {
         public void Handle(GoPage1NavigationRequest message)
