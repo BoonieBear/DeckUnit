@@ -6,7 +6,7 @@
         xmlns:Frames="clr-namespace:BoonieBear.TinyMetro.WPF.Frames;assembly=TinyMetroWpfLibrary" 
         DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainFrameViewModel}"
         Commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        Title="MainFrame" Height="480" Width="640">
+        Title="MainFrame" Height="480" Width="640" Resizeable="False" WindowStartupLocation="CenterScreen">
     <Grid>
 
         <!-- The animation frame is used to have page transitions on page navigation -->

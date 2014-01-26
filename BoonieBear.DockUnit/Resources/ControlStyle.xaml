@@ -71,5 +71,10 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+    <TransformGroup x:Key="MainButtonRenderSize">
+        <ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+        <SkewTransform AngleX="0" AngleY="0"/>
+        <RotateTransform Angle="0"/>
+        <TranslateTransform X="0" Y="0"/>
+    </TransformGroup>
 </ResourceDictionary>
