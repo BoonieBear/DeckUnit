@@ -1,8 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 					xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d"
-					xmlns:sys="clr-namespace:System;assembly=mscorlib">
+					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                    mc:Ignorable="d">
+					
     <!--ButtonStyle-->
 	<Style x:Key="GlassButtonStyle" BasedOn="{x:Null}" TargetType="{x:Type Button}">
 		<Setter Property="Template">
@@ -76,7 +77,7 @@
 	</Style>
     
 	<TransformGroup x:Key="MainButtonRenderSize">
-		<ScaleTransform ScaleX="0.9" ScaleY="0.9"/>
+		<ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
 		<SkewTransform AngleX="0" AngleY="0"/>
 		<RotateTransform Angle="0"/>
 		<TranslateTransform X="0" Y="0"/>
@@ -324,7 +325,8 @@
 							</DoubleAnimationUsingKeyFrames>
 							</Storyboard>
                 	</ControlTemplate.Resources>
-                    <Grid>
+                    <Grid Width="180">
+                        <!--Content box-->
 						<!--circle-->
 						<Ellipse x:Name="_base4" StrokeThickness="30" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="60" Fill="{x:Null}" Stroke="#FF0A4F57">
 										<Ellipse.RenderTransform>
@@ -347,9 +349,9 @@
 										</Ellipse.RenderTransform>
 									</Ellipse>
                         <!-- Background Layer -->
-                        <Ellipse Fill="{TemplateBinding Background}"/>
+                        <Ellipse Fill="{TemplateBinding Background}" Margin="0"/>
                         <!-- Refraction Layer -->
-                        <Ellipse x:Name="RefractionLayer">
+                        <Ellipse x:Name="RefractionLayer" Width="180" Margin="0">
                             <Ellipse.Fill>
                                 <RadialGradientBrush GradientOrigin="0.496,1.052">
                                     <RadialGradientBrush.RelativeTransform>
@@ -364,7 +366,7 @@
                             </Ellipse.Fill>
                         </Ellipse>
                         <!-- Reflection Layer -->
-                        <Path x:Name="ReflectionLayer" VerticalAlignment="Top" Stretch="Fill" Height="196.111" Margin="0,0,0,-17.111">
+                        <Path x:Name="ReflectionLayer" VerticalAlignment="Top" Stretch="Fill" Height="190.665" Margin="0,0,0,-11.165">
                             <Path.RenderTransform>
                         		<TransformGroup>
                         			<ScaleTransform ScaleY="0.5"/>
@@ -421,8 +423,16 @@
                                 </RadialGradientBrush>
                             </Path.Fill>
                         </Path>
-                        <!-- ContentPresenter -->
-                        <ContentPresenter Margin="0,2,0,0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <TextBlock Margin="45.389,134.167,44.111,0" VerticalAlignment="Top" Width="Auto" Height="36.5" FontFamily="Segoe UI" FontSize="18.667" Foreground="#FF020101" Text="{TemplateBinding Content}" TextAlignment="Center" TextWrapping="Wrap" IsHitTestVisible="False" x:Name="textBlock" RenderTransformOrigin="0.405,-0.218">
+                        	<TextBlock.RenderTransform>
+                        		<TransformGroup>
+                        			<ScaleTransform/>
+                        			<SkewTransform/>
+                        			<RotateTransform/>
+                        			<TranslateTransform/>
+                        		</TransformGroup>
+                        	</TextBlock.RenderTransform>
+                        </TextBlock>
                     </Grid>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
@@ -511,5 +521,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-	<sys:Double x:Key="MainRoundButtonWidth">180</sys:Double>
 </ResourceDictionary>

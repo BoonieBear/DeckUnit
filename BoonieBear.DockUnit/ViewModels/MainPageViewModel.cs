@@ -2,7 +2,7 @@
 using BoonieBear.DockUnit.NavigationEvents;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-
+using System.Threading;
 namespace BoonieBear.DockUnit.ViewModels
 {
 
@@ -23,6 +23,17 @@ namespace BoonieBear.DockUnit.ViewModels
         }
 
         #endregion
+
+		#region 绑定属性
+		string realtime;
+		public string NowTime
+		{
+			get{return  GetPropertyValue(() => realtime); }
+			set { SetPropertyValue(() => realtime, value); }
+		}
+		
+
+		#endregion
 
         #region GoBack Command
 
