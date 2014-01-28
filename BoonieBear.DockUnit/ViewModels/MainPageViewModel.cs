@@ -1,8 +1,11 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Threading;
+using System.Windows.Input;
+using System.Windows.Threading;
 using BoonieBear.DockUnit.NavigationEvents;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-using System.Threading;
+
 namespace BoonieBear.DockUnit.ViewModels
 {
 
@@ -15,6 +18,13 @@ namespace BoonieBear.DockUnit.ViewModels
         {
             GoPage1Command = RegisterCommand(ExecuteGoPage1Command, CanExecuteGoPage1Command, true);
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
+            AddPropertyChangedNotification(() => NowTime);
+            var t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
+        }
+
+        void Tick(object sender, EventArgs e)
+        {
+            NowTime = DateTime.Now.ToString();
         }
 
 
@@ -25,11 +35,10 @@ namespace BoonieBear.DockUnit.ViewModels
         #endregion
 
 		#region 绑定属性
-		string realtime;
 		public string NowTime
 		{
-			get{return  GetPropertyValue(() => realtime); }
-			set { SetPropertyValue(() => realtime, value); }
+            get { return GetPropertyValue(() => NowTime); }
+            set { SetPropertyValue(() => NowTime, value); }
 		}
 		
 
