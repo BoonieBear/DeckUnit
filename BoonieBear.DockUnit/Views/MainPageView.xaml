@@ -180,20 +180,20 @@
             </ColorAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisableModermStoryboard">
-        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ModermViewport3DD">
-        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
-        	</DoubleAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="ModermViewport3DD">
-        		<DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="False"/>
-        	</BooleanAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ModermViewport3DD">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="ModermViewport3DD">
+                <DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="False"/>
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
-		<Storyboard x:Key="EnableModermStoryboard">
-        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ModermViewport3DD">
-        		<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
-        	</DoubleAnimationUsingKeyFrames>
-        	<BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="ModermViewport3DD">
-        		<DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="true"/>
-        	</BooleanAnimationUsingKeyFrames>
+        <Storyboard x:Key="EnableModermStoryboard">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ModermViewport3DD">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="ModermViewport3DD">
+                <DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="true"/>
+            </BooleanAnimationUsingKeyFrames>
         </Storyboard>
     </Page.Resources>
     <Page.Triggers>
@@ -201,12 +201,12 @@
             <BeginStoryboard x:Name="InitBeginStoryboard"  Storyboard="{StaticResource InitStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource EnableModermStoryboard}"/>
         </EventTrigger>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="DeviceDataButton">	
-        	<BeginStoryboard x:Name="MoveDeviceButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveDeviceButtonsBottom}"/>
-			<BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard" Storyboard="{StaticResource EnableReturnButton}"/>
-			<BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
-			<StopStoryboard BeginStoryboardName="RotationStoryboard_BeginStoryboard"/>
-		</EventTrigger>
+        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="DeviceDataButton">
+            <BeginStoryboard x:Name="MoveDeviceButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveDeviceButtonsBottom}"/>
+            <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard" Storyboard="{StaticResource EnableReturnButton}"/>
+            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
+            <StopStoryboard BeginStoryboardName="RotationStoryboard_BeginStoryboard"/>
+        </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="OptionButton">
             <BeginStoryboard x:Name="MoveOptionStoryboard" Storyboard="{StaticResource MoveOptionButtonsBottom}"/>
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard1" Storyboard="{StaticResource EnableReturnButton}"/>
@@ -215,17 +215,17 @@
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="SysResourceButton">
             <BeginStoryboard x:Name="MoveResourceButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveResourceButtonsBottom}"/>
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard2" Storyboard="{StaticResource EnableReturnButton}"/>
-			<BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
-		</EventTrigger>
+            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
+        </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="MoreButton">
             <BeginStoryboard x:Name="MoveMoreButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveMoreButtonsBottom}"/>
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard3" Storyboard="{StaticResource EnableReturnButton}"/>
-			<BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
-		</EventTrigger>
+            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
+        </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ReturnButton">
             <BeginStoryboard x:Name="ReturnBeginStoryboard" Storyboard="{StaticResource InitStoryboard}"/>
-			<BeginStoryboard Storyboard="{StaticResource EnableModermStoryboard}"/>
-		</EventTrigger>
+            <BeginStoryboard Storyboard="{StaticResource EnableModermStoryboard}"/>
+        </EventTrigger>
     </Page.Triggers>
     <Grid>
 
@@ -316,9 +316,9 @@ Storyboard.TargetName="MyTextEffect"
                         </VisualBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Button x:Name="DeviceDataButton" RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}"   Content="设备数据" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="-30,180" Command="{Binding GoPage1Command}">
+                <Button x:Name="DeviceDataButton" RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}"   Content="通信控制" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="-30,180">
                     <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/adcp.png" />
+                        <ImageBrush ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/adcp.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
                 <Button  x:Name="OptionButton"  RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}"  Content="系统设置" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="80,60">
@@ -329,7 +329,7 @@ Storyboard.TargetName="MyTextEffect"
                 </Button>
                 <Button  x:Name="SysResourceButton" RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="240,60" >
                     <Button.Background>
-                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/System Information.ico" >
+                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/Disk Utility.ico" >
                         </ImageBrush>
                     </Button.Background>
                 </Button>
@@ -1692,6 +1692,26 @@ Storyboard.TargetName="MyTextEffect"
                         </ModelVisual3D>
                     </ModelVisual3D>
                 </Viewport3D>
+                <Button x:Name="RemoteControlButton"  Content ="声学指令" Style="{StaticResource GlassButtonStyle}" Width="80" Height="48" RenderTransformOrigin="0.575,4.05" Canvas.Top="190" Canvas.Left="57.364" IsEnabled="False">
+                    <Button.Background>
+                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="DownLoadButton" Content="下载" Style="{StaticResource GlassButtonStyle}" Width="80" Height="48" RenderTransformOrigin="0.575,4.05" Canvas.Top="190" Canvas.Left="201.364" IsEnabled="False">
+                    <Button.Background>
+                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="DownLoadButton_Copy1" Style="{StaticResource GlassButtonStyle}" Width="80" Height="48" RenderTransformOrigin="0.575,4.05" Canvas.Top="190" Canvas.Left="344.364" IsEnabled="False">
+                    <Button.Background>
+                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="DownLoadButton_Copy2" Style="{StaticResource GlassButtonStyle}" Width="80" Height="48" RenderTransformOrigin="0.575,4.05" Canvas.Top="190" Canvas.Left="488.364" IsEnabled="False">
+                    <Button.Background>
+                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
+                    </Button.Background>
+                </Button>
             </Canvas>
         </Grid>
     </Grid>
