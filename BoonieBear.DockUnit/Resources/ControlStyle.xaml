@@ -153,24 +153,27 @@
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Opacity" TargetName="shine" Value="0.4"/>
-                            <Setter Property="Background" TargetName="border" Value="#CC000000"/>
-                            <Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
-                        </Trigger>
+                		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                			<BeginStoryboard x:Name="GrowUp_BeginStoryboard" Storyboard="{StaticResource GrowUp}"/>
+                		</EventTrigger>
+                		<Trigger Property="IsPressed" Value="True">
+                			<Trigger.EnterActions>
+                				<BeginStoryboard x:Name="GrowUp_BeginStoryboard1" Storyboard="{StaticResource GrowUp}"/>
+                			</Trigger.EnterActions>
+                			<Setter Property="Opacity" TargetName="shine" Value="0.4"/>
+                			<Setter Property="Background" TargetName="border" Value="#CC000000"/>
+                			<Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
+                		</Trigger>
 
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard x:Name="Timeline1_BeginStoryboard" Storyboard="{StaticResource Timeline1}"/>
-                            </Trigger.EnterActions>
-                            <Trigger.ExitActions>
-                                <BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
-                            </Trigger.ExitActions>
-                        </Trigger>
-                        <EventTrigger RoutedEvent="FrameworkElement.Loaded">
-                        	<BeginStoryboard x:Name="GrowUp_BeginStoryboard" Storyboard="{StaticResource GrowUp}"/>
-                        </EventTrigger>
-                    </ControlTemplate.Triggers>
+                		<Trigger Property="IsMouseOver" Value="True">
+                			<Trigger.EnterActions>
+                				<BeginStoryboard x:Name="Timeline1_BeginStoryboard" Storyboard="{StaticResource Timeline1}"/>
+                			</Trigger.EnterActions>
+                			<Trigger.ExitActions>
+                				<BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
+                			</Trigger.ExitActions>
+                		</Trigger>
+                	</ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -400,11 +403,11 @@
                     <ControlTemplate.Resources>
                         <Storyboard x:Key="CircleStoryboard">
                             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="0.9"/>
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="1.9"/>
                                 <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
                             </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="0.9"/>
+                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="1.9"/>
                                 <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
                             </DoubleAnimationUsingKeyFrames>
                             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -425,7 +428,7 @@
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                     </ControlTemplate.Resources>
-                    <Grid Width="180">
+                    <Grid Width="180" Height="180">
                         <!--Content box-->
                         <!--circle-->
                         <Ellipse x:Name="_base4" StrokeThickness="30" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="60" Fill="{x:Null}" Stroke="#FF0A4F57">
@@ -451,7 +454,7 @@
                         <!-- Background Layer -->
                         <Ellipse Fill="{TemplateBinding Background}" Margin="0"/>
                         <!-- Refraction Layer -->
-                        <Ellipse x:Name="RefractionLayer" Width="180" Margin="0">
+                        <Ellipse x:Name="RefractionLayer"  Margin="0">
                             <Ellipse.Fill>
                                 <RadialGradientBrush GradientOrigin="0.496,1.052">
                                     <RadialGradientBrush.RelativeTransform>
@@ -466,7 +469,7 @@
                             </Ellipse.Fill>
                         </Ellipse>
                         <!-- Reflection Layer -->
-                        <Path x:Name="ReflectionLayer" VerticalAlignment="Top" Stretch="Fill" Height="190.665" Margin="0,0,0,-11.165">
+                        <Path x:Name="ReflectionLayer" VerticalAlignment="Top" Stretch="Fill" Height="191.999" Margin="1.333,0,1.333,-12.499">
                             <Path.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform ScaleY="0.5"/>
