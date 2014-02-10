@@ -21,49 +21,61 @@
                             </DoubleAnimationUsingKeyFrames>
                         </Storyboard>
                         <Storyboard x:Key="GrowUp">
-							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="OutBorder">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1">
-                        			<EasingDoubleKeyFrame.EasingFunction>
-                        				<BounceEase EasingMode="EaseOut"/>
-                        			</EasingDoubleKeyFrame.EasingFunction>
-                        		</EasingDoubleKeyFrame>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="OutBorder">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.3">
+									<EasingDoubleKeyFrame.EasingFunction>
+										<BounceEase EasingMode="EaseOut"/>
+									</EasingDoubleKeyFrame.EasingFunction>
+								</EasingDoubleKeyFrame>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.05"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.05"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="grid">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="glow">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="contentPresenter">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="shine">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0.9"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="0.9"/>
                         	</DoubleAnimationUsingKeyFrames>
 							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="OutBorder">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.2">
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.3">
                         			<EasingDoubleKeyFrame.EasingFunction>
                         				<BounceEase EasingMode="EaseOut"/>
                         			</EasingDoubleKeyFrame.EasingFunction>
                         		</EasingDoubleKeyFrame>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="grid">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="glow">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="contentPresenter">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="1.1"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.1"/>
                         	</DoubleAnimationUsingKeyFrames>
                         	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="shine">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.8" Value="0.9"/>
+                        		<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0.9"/>
                         	</DoubleAnimationUsingKeyFrames>
                         </Storyboard>
 
@@ -123,7 +135,7 @@
                                         </RadialGradientBrush>
                                     </Border.Background>
                                 </Border>
-                                <ContentPresenter x:Name="contentPresenter"   Grid.RowSpan="2" RenderTransformOrigin="0.5,0.5"  Height="20" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="18,5.688,0,5.311">
+                                <ContentPresenter x:Name="contentPresenter"   Grid.RowSpan="1" RenderTransformOrigin="0.5,0.5"  Height="20" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="18,20.499,0,-25" Grid.Row="1">
                                 	<ContentPresenter.RenderTransform>
                                 		<TransformGroup>
                                 			<ScaleTransform/>
@@ -153,19 +165,20 @@
                         </Border>
                     </Border>
                     <ControlTemplate.Triggers>
-                		<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+                		<EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
                 			<BeginStoryboard x:Name="GrowUp_BeginStoryboard" Storyboard="{StaticResource GrowUp}"/>
                 		</EventTrigger>
-                		<Trigger Property="IsPressed" Value="True">
-                			<Trigger.EnterActions>
-                				<BeginStoryboard x:Name="GrowUp_BeginStoryboard1" Storyboard="{StaticResource GrowUp}"/>
-                			</Trigger.EnterActions>
+                        <EventTrigger RoutedEvent="Loaded">
+                            <BeginStoryboard x:Name="GrowUp_BeginStoryboard2" Storyboard="{StaticResource GrowUp}"/>
+                        </EventTrigger>
+                        <Trigger Property="IsPressed" Value="True">
                 			<Setter Property="Opacity" TargetName="shine" Value="0.4"/>
                 			<Setter Property="Background" TargetName="border" Value="#CC000000"/>
                 			<Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
                 		</Trigger>
 
                 		<Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
                 			<Trigger.EnterActions>
                 				<BeginStoryboard x:Name="Timeline1_BeginStoryboard" Storyboard="{StaticResource Timeline1}"/>
                 			</Trigger.EnterActions>

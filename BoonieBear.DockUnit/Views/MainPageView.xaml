@@ -39,16 +39,16 @@
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="RemoteControlButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="DownLoadButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="VoiceTelButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="MonitorModeButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisableDeviceButtonStoryboard">
@@ -77,18 +77,18 @@
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="RemoteControlButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="DownLoadButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="VoiceTelButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="MonitorModeButton">
-            	<EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
-            
+
         </Storyboard>
         <Storyboard x:Key="MoveDeviceButtonsBottom">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="OptionButton" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -116,7 +116,7 @@
                     </EasingThicknessKeyFrame.EasingFunction>
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
-            
+
         </Storyboard>
         <Storyboard x:Key="MoveOptionButtonsBottom">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DeviceDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -199,18 +199,8 @@
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
-        <Storyboard x:Key ="EnableReturnButton">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ReturnButton" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ReturnButton" Storyboard.TargetProperty ="IsEnabled">
-                <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="True"/>
-            </BooleanAnimationUsingKeyFrames>
-        </Storyboard>
+        <Storyboard x:Key ="EnableReturnButton"/>
         <Storyboard x:Key="InitStoryboard">
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ReturnButton" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="DeviceDataButton">
                 <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="40,200"/>
             </ThicknessAnimationUsingKeyFrames>
@@ -250,9 +240,6 @@
             </DoubleAnimationUsingKeyFrames>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MoreButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="True"/>
-            </BooleanAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ReturnButton" Storyboard.TargetProperty ="IsEnabled">
-                <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisableModermStoryboard">
@@ -300,8 +287,8 @@
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard3" Storyboard="{StaticResource EnableReturnButton}"/>
             <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
         </EventTrigger>
-        <EventTrigger RoutedEvent="ButtonBase.Click" SourceName="ReturnButton">
-            <BeginStoryboard x:Name="ReturnBeginStoryboard" Storyboard="{StaticResource InitStoryboard}"/>
+        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonUp" SourceName="grid">
+            <BeginStoryboard Storyboard="{StaticResource InitStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource EnableModermStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource DisableDeviceButtonStoryboard}"/>
         </EventTrigger>
@@ -417,13 +404,8 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/Toolbar Utilities Folder.ico" Stretch="None" />
                     </Button.Background>
                 </Button>
-                <Button x:Name="ReturnButton" Style="{StaticResource GlassButtonStyle}" Width="40" Height="40" RenderTransformOrigin="0.575,4.05" Canvas.Top="426" Opacity="0">
-                    <Button.Background>
-                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
-                    </Button.Background>
-                </Button>
                 <TextBlock x:Name="TextBlock" Text="{Binding NowTime}" FontFamily="Segoe UI Semibold" Canvas.Left="480" Canvas.Top="4" FontSize="14"/>
-                <Viewport3D x:Name="ModermViewport3DD" Height="191" Width="195" Canvas.Left="220" Canvas.Top="265">
+                <Viewport3D x:Name="ModermViewport3DD" Height="191" Width="195" Canvas.Left="220" Canvas.Top="265" Panel.ZIndex="-1">
                     <Viewport3D.Camera>
                         <PerspectiveCamera FarPlaneDistance="1.138135" LookDirection="-0.591625438835131,-0.525542905388051,-0.611378765348801" NearPlaneDistance="0" Position="0.438092,0.438021,0.438092" UpDirection="-0.337609067793506,0.912865583975171,0.229557275940602" FieldOfView="48" />
                     </Viewport3D.Camera>
@@ -1772,53 +1754,53 @@ Storyboard.TargetName="MyTextEffect"
                     </ModelVisual3D>
                 </Viewport3D>
                 <Button x:Name="RemoteControlButton" Content ="声学指令" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="57.364" IsEnabled="False" Opacity="0">
-                	<Button.RenderTransform>
-                		<TransformGroup>
-                			<ScaleTransform/>
-                			<SkewTransform/>
-                			<RotateTransform/>
-                			<TranslateTransform/>
-                		</TransformGroup>
-                	</Button.RenderTransform>
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
                     <Button.Background>
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
                 <Button x:Name="DownLoadButton" Opacity="0" Content="远程下载" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False">
-                	<Button.RenderTransform>
-                		<TransformGroup>
-                			<ScaleTransform/>
-                			<SkewTransform/>
-                			<RotateTransform/>
-                			<TranslateTransform/>
-                		</TransformGroup>
-                	</Button.RenderTransform>
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
                     <Button.Background>
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
                 <Button x:Name="VoiceTelButton" Opacity="0" Content="水声电话" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False">
-                	<Button.RenderTransform>
-                		<TransformGroup>
-                			<ScaleTransform/>
-                			<SkewTransform/>
-                			<RotateTransform/>
-                			<TranslateTransform/>
-                		</TransformGroup>
-                	</Button.RenderTransform>
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
                     <Button.Background>
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
                 <Button x:Name="MonitorModeButton" Opacity="0" Content="监控模式" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False">
-                	<Button.RenderTransform>
-                		<TransformGroup>
-                			<ScaleTransform/>
-                			<SkewTransform/>
-                			<RotateTransform/>
-                			<TranslateTransform/>
-                		</TransformGroup>
-                	</Button.RenderTransform>
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
                     <Button.Background>
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
