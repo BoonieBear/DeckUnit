@@ -16,7 +16,7 @@ namespace BoonieBear.DockUnit.ViewModels
 
         public override void Initialize()
         {
-            GoPage1Command = RegisterCommand(ExecuteGoPage1Command, CanExecuteGoPage1Command, true);
+            GoWaterTelPageCommand = RegisterCommand(ExecuteGoWaterTelPageCommand, CanExecuteGoWaterTelPageCommand, true);
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             AddPropertyChangedNotification(() => NowTime);
             var t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
@@ -67,25 +67,26 @@ namespace BoonieBear.DockUnit.ViewModels
 
         #endregion
 
-        #region GoPage1 Command
+        #region GoWaterTelPageCommand 
 
 
-        public ICommand GoPage1Command
+        public ICommand GoWaterTelPageCommand
         {
-            get { return GetPropertyValue(() => GoPage1Command); }
-            set { SetPropertyValue(() => GoPage1Command, value); }
+            get { return GetPropertyValue(() => GoWaterTelPageCommand); }
+            set { SetPropertyValue(() => GoWaterTelPageCommand, value); }
         }
 
 
-        public void CanExecuteGoPage1Command(object sender, CanExecuteRoutedEventArgs eventArgs)
+        public void CanExecuteGoWaterTelPageCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
         }
 
 
-        public void ExecuteGoPage1Command(object sender, ExecutedRoutedEventArgs eventArgs)
+        public void ExecuteGoWaterTelPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            EventAggregator.PublishMessage(new GoPage1NavigationRequest());
+            
+            EventAggregator.PublishMessage(new GoWaterTelPageNavigationRequest());
         }
 
         #endregion

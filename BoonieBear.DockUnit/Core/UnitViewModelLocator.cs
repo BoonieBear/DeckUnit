@@ -8,7 +8,7 @@ namespace BoonieBear.DockUnit.Core
     {
         private MainFrameViewModel _mainFrameViewModel;
         private MainPageViewModel _mainPageViewModel;
-        private Page1ViewModel _page1ViewModel;
+        private WaterTelViewModel _waterTelViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -43,17 +43,17 @@ namespace BoonieBear.DockUnit.Core
             }
         }
 
-        public Page1ViewModel Page1ViewModel
+        public WaterTelViewModel WaterTelViewModel
         {
             get
             {
                 // Creates the Example ViewModel
-                if (_page1ViewModel == null)
+                if (_waterTelViewModel == null)
                 {
-                    _page1ViewModel = new Page1ViewModel();
-                    _page1ViewModel.Initialize();
+                    _waterTelViewModel = new WaterTelViewModel();
+                    _waterTelViewModel.Initialize();
                 }
-                return _page1ViewModel;
+                return _waterTelViewModel;
             }
         }
     }

@@ -8,11 +8,11 @@ namespace BoonieBear.DockUnit.Core
     /// 消息处理函数
     /// </summary>
     internal class UnitController : BaseController,
-        IHandleMessage<GoPage1NavigationRequest>
+        IHandleMessage<GoWaterTelPageNavigationRequest>
     {
-        public void Handle(GoPage1NavigationRequest message)
+        public void Handle(GoWaterTelPageNavigationRequest message)
         {
-            NavigateToPage("Views/Page1View.xaml");
+            NavigateToPage("Views/WaterTelView.xaml");
         }
     }
 }

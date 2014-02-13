@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/TinyMetroWpfLibrary;component/Styles/MetroStyles.xaml" />
                 <ResourceDictionary Source="Resources/SkinStyle.xaml"/>
                 <ResourceDictionary Source="Resources/ControlStyle.xaml"/>
+                <ResourceDictionary Source="/MahApps.Metro;component/styles/colors.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Locale Static Resources -->

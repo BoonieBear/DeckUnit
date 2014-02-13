@@ -2,25 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
 					xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
 					xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+                    xmlns:unit="clr-namespace:BoonieBear.DockUnit"
+                    xmlns:GifImageLib="clr-namespace:GifImageLib;assembly=GifImageLib"
                     mc:Ignorable="d">
 
     <!--ButtonStyle-->
-    <Style x:Key="GlassButtonStyle" BasedOn="{x:Null}" TargetType="{x:Type Button}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate  TargetType="{x:Type Button}">
-                    <ControlTemplate.Resources>
-                        <Storyboard x:Key="Timeline1">
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                        <Storyboard x:Key="Timeline2">
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                        <Storyboard x:Key="GrowUp">
+	<Style x:Key="GlassButtonStyle" BasedOn="{x:Null}" TargetType="{x:Type Button}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate  TargetType="{x:Type Button}">
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="Timeline1">
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+						<Storyboard x:Key="Timeline2">
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="glow" Storyboard.TargetProperty="(UIElement.Opacity)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.3000000" Value="0"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+						<Storyboard x:Key="GrowUp">
 							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="OutBorder">
 								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.3">
@@ -28,613 +30,748 @@
 										<BounceEase EasingMode="EaseOut"/>
 									</EasingDoubleKeyFrame.EasingFunction>
 								</EasingDoubleKeyFrame>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="border">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.05"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="grid">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="grid">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="glow">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="glow">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="contentPresenter">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="contentPresenter">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="shine">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="shine">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="0.9"/>
-                        	</DoubleAnimationUsingKeyFrames>
+							</DoubleAnimationUsingKeyFrames>
 							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="OutBorder">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.3">
-                        			<EasingDoubleKeyFrame.EasingFunction>
-                        				<BounceEase EasingMode="EaseOut"/>
-                        			</EasingDoubleKeyFrame.EasingFunction>
-                        		</EasingDoubleKeyFrame>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+									<EasingDoubleKeyFrame.EasingFunction>
+										<BounceEase EasingMode="EaseOut"/>
+									</EasingDoubleKeyFrame.EasingFunction>
+								</EasingDoubleKeyFrame>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="border">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="grid">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="grid">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="glow">
-                        		<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="glow">
+								<EasingDoubleKeyFrame KeyTime="0:00:00.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:00:00.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="contentPresenter">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="contentPresenter">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="1.1"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        	<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="shine">
-                        		<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="shine">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="1"/>
 								<EasingDoubleKeyFrame KeyTime="0:0:0.5" Value="0.9"/>
-                        	</DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
 
-                    </ControlTemplate.Resources>
-                    <Border x:Name ="OutBorder" BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4" Background="{TemplateBinding Background}" RenderTransformOrigin="0.5,0.5">
-                        <Border.RenderTransform>
-                            <TransformGroup>
-                                <ScaleTransform/>
-                                <SkewTransform/>
-                                <RotateTransform/>
-                                <TranslateTransform/>
-                            </TransformGroup>
-                        </Border.RenderTransform>
-                        <Border x:Name="border" Background="#7F000000" BorderBrush="#FF000000" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4" RenderTransformOrigin="0.5,0.5">
-                        	<Border.RenderTransform>
-                        		<TransformGroup>
-                        			<ScaleTransform/>
-                        			<SkewTransform/>
-                        			<RotateTransform/>
-                        			<TranslateTransform/>
-                        		</TransformGroup>
-                        	</Border.RenderTransform>
-                            <Grid x:Name="grid" RenderTransformOrigin="0.5,0.5">
-                            	<Grid.RenderTransform>
-                            		<TransformGroup>
-                            			<ScaleTransform/>
-                            			<SkewTransform/>
-                            			<RotateTransform/>
-                            			<TranslateTransform/>
-                            		</TransformGroup>
-                            	</Grid.RenderTransform>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="0.507*"/>
-                                    <RowDefinition Height="0.493*"/>
-                                </Grid.RowDefinitions>
-                                <Border Opacity="0" HorizontalAlignment="Stretch" x:Name="glow" Width="Auto" Grid.RowSpan="2" CornerRadius="4,4,4,4" RenderTransformOrigin="0.5,0.5">
-                                	<Border.RenderTransform>
-                                		<TransformGroup>
-                                			<ScaleTransform/>
-                                			<SkewTransform/>
-                                			<RotateTransform/>
-                                			<TranslateTransform/>
-                                		</TransformGroup>
-                                	</Border.RenderTransform>
-                                    <Border.Background>
-                                        <RadialGradientBrush>
-                                            <RadialGradientBrush.RelativeTransform>
-                                                <TransformGroup>
-                                                    <ScaleTransform ScaleX="1.702" ScaleY="2.243"/>
-                                                    <SkewTransform AngleX="0" AngleY="0"/>
-                                                    <RotateTransform Angle="0"/>
-                                                    <TranslateTransform X="-0.368" Y="-0.152"/>
-                                                </TransformGroup>
-                                            </RadialGradientBrush.RelativeTransform>
-                                            <GradientStop Color="#B28DBDFF" Offset="0"/>
-                                            <GradientStop Color="#008DBDFF" Offset="1"/>
-                                        </RadialGradientBrush>
-                                    </Border.Background>
-                                </Border>
-                                <ContentPresenter x:Name="contentPresenter"   Grid.RowSpan="1" RenderTransformOrigin="0.5,0.5"  Height="20" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="18,20.499,0,-25" Grid.Row="1">
-                                	<ContentPresenter.RenderTransform>
-                                		<TransformGroup>
-                                			<ScaleTransform/>
-                                			<SkewTransform/>
-                                			<RotateTransform/>
-                                			<TranslateTransform/>
-                                		</TransformGroup>
-                                	</ContentPresenter.RenderTransform>
-                                </ContentPresenter>
-                                <Border HorizontalAlignment="Stretch" Margin="0,0,0,0" x:Name="shine" Width="Auto" CornerRadius="4,4,0,0" RenderTransformOrigin="0.5,0.5">
-                                	<Border.RenderTransform>
-                                		<TransformGroup>
-                                			<ScaleTransform/>
-                                			<SkewTransform/>
-                                			<RotateTransform/>
-                                			<TranslateTransform/>
-                                		</TransformGroup>
-                                	</Border.RenderTransform>
-                                    <Border.Background>
-                                        <LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
-                                            <GradientStop Color="#99FFFFFF" Offset="0"/>
-                                            <GradientStop Color="#33FFFFFF" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </Border.Background>
-                                </Border>
-                            </Grid>
-                        </Border>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                		<EventTrigger RoutedEvent="PreviewMouseLeftButtonDown">
-                			<BeginStoryboard x:Name="GrowUp_BeginStoryboard" Storyboard="{StaticResource GrowUp}"/>
-                		</EventTrigger>
-                        <EventTrigger RoutedEvent="Loaded">
-                            <BeginStoryboard x:Name="GrowUp_BeginStoryboard2" Storyboard="{StaticResource GrowUp}"/>
-                        </EventTrigger>
-                        <Trigger Property="IsPressed" Value="True">
-                			<Setter Property="Opacity" TargetName="shine" Value="0.4"/>
-                			<Setter Property="Background" TargetName="border" Value="#CC000000"/>
-                			<Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
-                		</Trigger>
+					</ControlTemplate.Resources>
+					<Border x:Name ="OutBorder" BorderBrush="#FFFFFFFF" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4" Background="{TemplateBinding Background}" RenderTransformOrigin="0.5,0.5">
+						<Border.RenderTransform>
+							<TransformGroup>
+								<ScaleTransform/>
+								<SkewTransform/>
+								<RotateTransform/>
+								<TranslateTransform/>
+							</TransformGroup>
+						</Border.RenderTransform>
+						<Border x:Name="border" Background="#7F000000" BorderBrush="#FF000000" BorderThickness="1,1,1,1" CornerRadius="4,4,4,4" RenderTransformOrigin="0.5,0.5">
+							<Border.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</Border.RenderTransform>
+							<Grid x:Name="grid" RenderTransformOrigin="0.5,0.5">
+								<Grid.RenderTransform>
+									<TransformGroup>
+										<ScaleTransform/>
+										<SkewTransform/>
+										<RotateTransform/>
+										<TranslateTransform/>
+									</TransformGroup>
+								</Grid.RenderTransform>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="0.507*"/>
+									<RowDefinition Height="0.493*"/>
+								</Grid.RowDefinitions>
+								<Border Opacity="0" HorizontalAlignment="Stretch" x:Name="glow" Width="Auto" Grid.RowSpan="2" CornerRadius="4,4,4,4" RenderTransformOrigin="0.5,0.5">
+									<Border.RenderTransform>
+										<TransformGroup>
+											<ScaleTransform/>
+											<SkewTransform/>
+											<RotateTransform/>
+											<TranslateTransform/>
+										</TransformGroup>
+									</Border.RenderTransform>
+									<Border.Background>
+										<RadialGradientBrush>
+											<RadialGradientBrush.RelativeTransform>
+												<TransformGroup>
+													<ScaleTransform ScaleX="1.702" ScaleY="2.243"/>
+													<SkewTransform AngleX="0" AngleY="0"/>
+													<RotateTransform Angle="0"/>
+													<TranslateTransform X="-0.368" Y="-0.152"/>
+												</TransformGroup>
+											</RadialGradientBrush.RelativeTransform>
+											<GradientStop Color="#B28DBDFF" Offset="0"/>
+											<GradientStop Color="#008DBDFF" Offset="1"/>
+										</RadialGradientBrush>
+									</Border.Background>
+								</Border>
+								<ContentPresenter x:Name="contentPresenter"   Grid.RowSpan="1" RenderTransformOrigin="0.5,0.5"  Height="20" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="18,20.499,0,-25" Grid.Row="1">
+									<ContentPresenter.RenderTransform>
+										<TransformGroup>
+											<ScaleTransform/>
+											<SkewTransform/>
+											<RotateTransform/>
+											<TranslateTransform/>
+										</TransformGroup>
+									</ContentPresenter.RenderTransform>
+								</ContentPresenter>
+								<Border HorizontalAlignment="Stretch" Margin="0,0,0,0" x:Name="shine" Width="Auto" CornerRadius="4,4,0,0" RenderTransformOrigin="0.5,0.5">
+									<Border.RenderTransform>
+										<TransformGroup>
+											<ScaleTransform/>
+											<SkewTransform/>
+											<RotateTransform/>
+											<TranslateTransform/>
+										</TransformGroup>
+									</Border.RenderTransform>
+									<Border.Background>
+										<LinearGradientBrush EndPoint="0.494,0.889" StartPoint="0.494,0.028">
+											<GradientStop Color="#99FFFFFF" Offset="0"/>
+											<GradientStop Color="#33FFFFFF" Offset="1"/>
+										</LinearGradientBrush>
+									</Border.Background>
+								</Border>
+							</Grid>
+						</Border>
+					</Border>
+					<ControlTemplate.Triggers>
+						<EventTrigger RoutedEvent="UIElement.PreviewMouseLeftButtonDown">
+							<BeginStoryboard x:Name="GrowUp_BeginStoryboard" Storyboard="{StaticResource GrowUp}"/>
+						</EventTrigger>
+						<EventTrigger RoutedEvent="FrameworkElement.Loaded">
+							<BeginStoryboard x:Name="GrowUp_BeginStoryboard2" Storyboard="{StaticResource GrowUp}"/>
+						</EventTrigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Setter Property="Opacity" TargetName="shine" Value="0.4"/>
+							<Setter Property="Background" TargetName="border" Value="#CC000000"/>
+							<Setter Property="Visibility" TargetName="glow" Value="Hidden"/>
+						</Trigger>
 
-                		<Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Cursor" Value="Hand"/>
-                			<Trigger.EnterActions>
-                				<BeginStoryboard x:Name="Timeline1_BeginStoryboard" Storyboard="{StaticResource Timeline1}"/>
-                			</Trigger.EnterActions>
-                			<Trigger.ExitActions>
-                				<BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
-                			</Trigger.ExitActions>
-                		</Trigger>
-                	</ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Trigger.EnterActions>
+								<BeginStoryboard x:Name="Timeline1_BeginStoryboard" Storyboard="{StaticResource Timeline1}"/>
+							</Trigger.EnterActions>
+							<Trigger.ExitActions>
+								<BeginStoryboard x:Name="Timeline2_BeginStoryboard" Storyboard="{StaticResource Timeline2}"/>
+							</Trigger.ExitActions>
+							<Setter Property="Cursor" Value="Hand"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-    <TransformGroup x:Key="MainButtonRenderSize">
-        <ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
-        <SkewTransform AngleX="0" AngleY="0"/>
-        <RotateTransform Angle="0"/>
-        <TranslateTransform X="0" Y="0"/>
-    </TransformGroup>
+	<TransformGroup x:Key="MainButtonRenderSize">
+		<ScaleTransform ScaleX="0.8" ScaleY="0.8"/>
+		<SkewTransform AngleX="0" AngleY="0"/>
+		<RotateTransform Angle="0"/>
+		<TranslateTransform X="0" Y="0"/>
+	</TransformGroup>
+	
+	<Style x:Key="HotSpotButtonStyle" BasedOn="{x:Null}" TargetType="{x:Type Button}">
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="EnterHotspot" AutoReverse="True">
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="0.9"/>
+								<SplineDoubleKeyFrame KeySpline="0,1,1,0" KeyTime="00:00:01.8000000" Value="1.2"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="0.9"/>
+								<SplineDoubleKeyFrame KeySpline="0,1,1,0" KeyTime="00:00:01.8000000" Value="1.2"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.Opacity)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.7"/>
+								<SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
+								<SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0.8"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
+								<SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0.8"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.Opacity)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
+								<SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0"/>
+							</DoubleAnimationUsingKeyFrames>
+							<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="_base">
+								<EasingColorKeyFrame KeyTime="0" Value="#8EFFFFFF"/>
+							</ColorAnimationUsingKeyFrames>
+							<DoubleAnimationUsingPath Duration="0:0:2" Source="X" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="_base2">
+								<DoubleAnimationUsingPath.PathGeometry>
+									<PathGeometry Figures="M99,0 C99,54.67619 54.67619,99 0,99 C-54.67619,99 -99,54.67619 -99,0 C-99,-54.67619 -54.67619,-99 0,-99 C54.67619,-99 99,-54.67619 99,0 z"/>
+								</DoubleAnimationUsingPath.PathGeometry>
+							</DoubleAnimationUsingPath>
+							<DoubleAnimationUsingPath Duration="0:0:2" Source="Y" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="_base2">
+								<DoubleAnimationUsingPath.PathGeometry>
+									<PathGeometry Figures="M99,0 C99,54.67619 54.67619,99 0,99 C-54.67619,99 -99,54.67619 -99,0 C-99,-54.67619 -54.67619,-99 0,-99 C54.67619,-99 99,-54.67619 99,0 z"/>
+								</DoubleAnimationUsingPath.PathGeometry>
+							</DoubleAnimationUsingPath>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="_base2">
+								<EasingDoubleKeyFrame KeyTime="0:0:2" Value="1">
+									<EasingDoubleKeyFrame.EasingFunction>
+										<ElasticEase EasingMode="EaseOut"/>
+									</EasingDoubleKeyFrame.EasingFunction>
+								</EasingDoubleKeyFrame>
+							</DoubleAnimationUsingKeyFrames>
+							<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="_base2">
+								<EasingColorKeyFrame KeyTime="0:0:2" Value="WhiteSmoke"/>
+							</ColorAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="centerShadow2">
+								<EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.495"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="centerShadow1">
+								<EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.33"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="centerBase">
+								<EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.685"/>
+							</DoubleAnimationUsingKeyFrames>
+							<ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="_base3">
+								<EasingColorKeyFrame KeyTime="0:0:0.2" Value="Black"/>
+								<EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FF616372"/>
+								<EasingColorKeyFrame KeyTime="0:0:1.8" Value="Black"/>
+							</ColorAnimationUsingKeyFrames>
+						</Storyboard>
+					</ControlTemplate.Resources>
+					<Grid Width="300" Height="300"  >
+						<Grid HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="Auto" Height="Auto" IsHitTestVisible="False">
+							<Grid Opacity="1" Margin="0" x:Name="grid1" IsHitTestVisible="False" >
+								<Grid x:Name="overAnimationGrid" Visibility="Visible" Focusable="False" Opacity="1" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="0">
+									<Grid.RenderTransform>
+										<TransformGroup>
+											<ScaleTransform ScaleX="1" ScaleY="1"/>
+											<SkewTransform AngleX="0" AngleY="0"/>
+											<RotateTransform Angle="0"/>
+											<TranslateTransform X="0" Y="0"/>
+										</TransformGroup>
+									</Grid.RenderTransform>
+									<Ellipse x:Name="_base4" StrokeThickness="30" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="74.5,74.5,74.5,74.5" Fill="{x:Null}" Stroke="#FF0A4F57">
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
+												<SkewTransform AngleX="0" AngleY="0"/>
+												<RotateTransform Angle="0"/>
+												<TranslateTransform X="0" Y="0"/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Ellipse x:Name="_base3" StrokeThickness="10" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="74.5" Fill="Black" Stroke="#FF0A4F57">
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
+												<SkewTransform AngleX="0" AngleY="0"/>
+												<RotateTransform Angle="0"/>
+												<TranslateTransform X="0" Y="0"/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Ellipse x:Name="_base2" StrokeThickness="10" RenderTransformOrigin="0.5,0.5" Opacity="0.42" HorizontalAlignment="Stretch" Margin="74.5,74.5,74.5,74.5" VerticalAlignment="Stretch" Stroke="#FF0A4F57" Fill="Black">
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
+												<SkewTransform AngleX="0" AngleY="0"/>
+												<RotateTransform Angle="0"/>
+												<TranslateTransform X="0" Y="0"/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Ellipse x:Name="_base" Width="201" Height="201" HorizontalAlignment="Center" Margin="49.5" VerticalAlignment="Center" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.Fill>
+											<RadialGradientBrush>
+												<GradientStop Color="#00215A5E" Offset="1"/>
+												<GradientStop Color="#8E1F5558" Offset="0"/>
+											</RadialGradientBrush>
+										</Ellipse.Fill>
+										<Ellipse.Stroke>
+											<LinearGradientBrush EndPoint="0.002,0.515" StartPoint="0.998,0.5">
+												<GradientStop Color="#FF0A4F57" Offset="0"/>
+												<GradientStop Color="#000A4F57" Offset="0.986"/>
+											</LinearGradientBrush>
+										</Ellipse.Stroke>
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleX="1" ScaleY="1"/>
+												<SkewTransform AngleX="0" AngleY="0"/>
+												<RotateTransform Angle="0"/>
+												<TranslateTransform X="0" Y="0"/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Ellipse Stroke="{x:Null}" x:Name="centerShadow3" Margin="140" Fill="#33000000" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleY="1" ScaleX="1"/>
+												<SkewTransform/>
+												<RotateTransform/>
+												<TranslateTransform/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Ellipse Stroke="{x:Null}" x:Name="centerShadow2" Margin="122.109,123.109,122.972,123.972" Fill="#33000000" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleY="-1" ScaleX="-1"/>
+												<SkewTransform/>
+												<RotateTransform/>
+												<TranslateTransform/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Ellipse Stroke="{x:Null}" x:Name="centerShadow1" Margin="104.109,106.109,102.891,106.891" Fill="{TemplateBinding OpacityMask}" RenderTransformOrigin="0.5,0.5">
+										<Ellipse.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleY="1" ScaleX="1"/>
+												<SkewTransform/>
+												<RotateTransform/>
+												<TranslateTransform/>
+											</TransformGroup>
+										</Ellipse.RenderTransform>
+									</Ellipse>
+									<Path Stretch="Fill" Stroke="{x:Null}" Margin="128.502,158.6,134.088,117.194" x:Name="centerReflex" Width="Auto" Height="Auto" RenderTransformOrigin="0.509,-0.063">
+										<Path.Fill>
+											<LinearGradientBrush EndPoint="0.622,0.834" StartPoint="0.462,-0.148">
+												<GradientStop Color="#BCFFFFFF" Offset="0"/>
+												<GradientStop Color="#00FFFFFF" Offset="0.986"/>
+											</LinearGradientBrush>
+										</Path.Fill>
+										<Path.Data>
+											<PathGeometry>
+												<PathFigure IsClosed="True" StartPoint="30.3210918169212,16.8819757980464">
+													<PolyBezierSegment IsSmoothJoin="True" Points="24.109587,17.81367 25.839185,16.997196 16.521969,15.754796 5.4762738,15.754796 0.96147679,31.512749 0.96147679,20.467054 0.96147679,9.4213589 9.454305,0.5 20.5,0.5 31.545695,0.5 42.282942,14.467202 32.655446,16.33059"/>
+												</PathFigure>
+											</PathGeometry>
+										</Path.Data>
+										<Path.RenderTransform>
+											<TransformGroup>
+												<ScaleTransform ScaleX="-1.4" ScaleY="-1.4"/>
+												<SkewTransform AngleX="0" AngleY="0"/>
+												<RotateTransform Angle="13.453"/>
+												<TranslateTransform X="-3.699" Y="21.638"/>
+											</TransformGroup>
+										</Path.RenderTransform>
+									</Path>
+								</Grid>
+								<TextBlock Margin="44.5,202.5,45,0" VerticalAlignment="Top" Width="Auto" Height="36.5" FontFamily="Segoe UI" FontSize="18" Foreground="#FFFFFFFF" Text="{TemplateBinding Tag}" TextAlignment="Center" TextWrapping="Wrap" IsHitTestVisible="False" x:Name="textBlock"/>
+							</Grid>
+						</Grid>
+						<Ellipse Stroke="{x:Null}" HorizontalAlignment="Center" x:Name="centerBase" VerticalAlignment="Center" Width="50" Height="50" Margin="103,106" Opacity="0.67"/>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsFocused" Value="True"/>
+						<Trigger Property="IsDefaulted" Value="True"/>
+						<Trigger Property="IsPressed" Value="True">
+							<Trigger.EnterActions>
+								<BeginStoryboard x:Name="EnterHotspot_BeginStoryboard" Storyboard="{StaticResource EnterHotspot}"/>
+							</Trigger.EnterActions>
+							<Setter Property="Cursor" TargetName="centerShadow1" Value="Hand"/>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 
-    <Style x:Key="HotSpotButtonStyle" BasedOn="{x:Null}" TargetType="{x:Type Button}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <ControlTemplate.Resources>
-                        <Storyboard x:Key="EnterHotspot" AutoReverse="True">
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="0.9"/>
-                                <SplineDoubleKeyFrame KeySpline="0,1,1,0" KeyTime="00:00:01.8000000" Value="1.2"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="0.9"/>
-                                <SplineDoubleKeyFrame KeySpline="0,1,1,0" KeyTime="00:00:01.8000000" Value="1.2"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.7"/>
-                                <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
-                                <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0.8"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
-                                <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0.8"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
-                                <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.8000000" Value="0"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(GradientBrush.GradientStops)[1].(GradientStop.Color)" Storyboard.TargetName="_base">
-                                <EasingColorKeyFrame KeyTime="0" Value="#8EFFFFFF"/>
-                            </ColorAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingPath Duration="0:0:2" Source="X" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.X)" Storyboard.TargetName="_base2">
-                                <DoubleAnimationUsingPath.PathGeometry>
-                                    <PathGeometry Figures="M99,0 C99,54.67619 54.67619,99 0,99 C-54.67619,99 -99,54.67619 -99,0 C-99,-54.67619 -54.67619,-99 0,-99 C54.67619,-99 99,-54.67619 99,0 z"/>
-                                </DoubleAnimationUsingPath.PathGeometry>
-                            </DoubleAnimationUsingPath>
-                            <DoubleAnimationUsingPath Duration="0:0:2" Source="Y" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="_base2">
-                                <DoubleAnimationUsingPath.PathGeometry>
-                                    <PathGeometry Figures="M99,0 C99,54.67619 54.67619,99 0,99 C-54.67619,99 -99,54.67619 -99,0 C-99,-54.67619 -54.67619,-99 0,-99 C54.67619,-99 99,-54.67619 99,0 z"/>
-                                </DoubleAnimationUsingPath.PathGeometry>
-                            </DoubleAnimationUsingPath>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="_base2">
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="1">
-                                    <EasingDoubleKeyFrame.EasingFunction>
-                                        <ElasticEase EasingMode="EaseOut"/>
-                                    </EasingDoubleKeyFrame.EasingFunction>
-                                </EasingDoubleKeyFrame>
-                            </DoubleAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="_base2">
-                                <EasingColorKeyFrame KeyTime="0:0:2" Value="WhiteSmoke"/>
-                            </ColorAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="centerShadow2">
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.495"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="centerShadow1">
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.33"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="centerBase">
-                                <EasingDoubleKeyFrame KeyTime="0:0:2" Value="0.685"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <ColorAnimationUsingKeyFrames Storyboard.TargetProperty="(Shape.Fill).(SolidColorBrush.Color)" Storyboard.TargetName="_base3">
-                                <EasingColorKeyFrame KeyTime="0:0:0.2" Value="Black"/>
-                                <EasingColorKeyFrame KeyTime="0:0:0.5" Value="#FF616372"/>
-                                <EasingColorKeyFrame KeyTime="0:0:1.8" Value="Black"/>
-                            </ColorAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </ControlTemplate.Resources>
-                    <Grid Width="300" Height="300"  >
-                        <Grid HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="Auto" Height="Auto" IsHitTestVisible="False">
-                            <Grid Opacity="1" Margin="0" x:Name="grid1" IsHitTestVisible="False" >
-                                <Grid x:Name="overAnimationGrid" Visibility="Visible" Focusable="False" Opacity="1" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="0">
-                                    <Grid.RenderTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                            <SkewTransform AngleX="0" AngleY="0"/>
-                                            <RotateTransform Angle="0"/>
-                                            <TranslateTransform X="0" Y="0"/>
-                                        </TransformGroup>
-                                    </Grid.RenderTransform>
-                                    <Ellipse x:Name="_base4" StrokeThickness="30" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="74.5,74.5,74.5,74.5" Fill="{x:Null}" Stroke="#FF0A4F57">
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
-                                                <SkewTransform AngleX="0" AngleY="0"/>
-                                                <RotateTransform Angle="0"/>
-                                                <TranslateTransform X="0" Y="0"/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Ellipse x:Name="_base3" StrokeThickness="10" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="74.5" Fill="Black" Stroke="#FF0A4F57">
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
-                                                <SkewTransform AngleX="0" AngleY="0"/>
-                                                <RotateTransform Angle="0"/>
-                                                <TranslateTransform X="0" Y="0"/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Ellipse x:Name="_base2" StrokeThickness="10" RenderTransformOrigin="0.5,0.5" Opacity="0.42" HorizontalAlignment="Stretch" Margin="74.5,74.5,74.5,74.5" VerticalAlignment="Stretch" Stroke="#FF0A4F57" Fill="Black">
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
-                                                <SkewTransform AngleX="0" AngleY="0"/>
-                                                <RotateTransform Angle="0"/>
-                                                <TranslateTransform X="0" Y="0"/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Ellipse x:Name="_base" Width="201" Height="201" HorizontalAlignment="Center" Margin="49.5" VerticalAlignment="Center" StrokeThickness="3" RenderTransformOrigin="0.5,0.5">
-                                        <Ellipse.Fill>
-                                            <RadialGradientBrush>
-                                                <GradientStop Color="#00215A5E" Offset="1"/>
-                                                <GradientStop Color="#8E1F5558" Offset="0"/>
-                                            </RadialGradientBrush>
-                                        </Ellipse.Fill>
-                                        <Ellipse.Stroke>
-                                            <LinearGradientBrush EndPoint="0.002,0.515" StartPoint="0.998,0.5">
-                                                <GradientStop Color="#FF0A4F57" Offset="0"/>
-                                                <GradientStop Color="#000A4F57" Offset="0.986"/>
-                                            </LinearGradientBrush>
-                                        </Ellipse.Stroke>
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleX="1" ScaleY="1"/>
-                                                <SkewTransform AngleX="0" AngleY="0"/>
-                                                <RotateTransform Angle="0"/>
-                                                <TranslateTransform X="0" Y="0"/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Ellipse Stroke="{x:Null}" x:Name="centerShadow3" Margin="140" Fill="#33000000" RenderTransformOrigin="0.5,0.5">
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleY="1" ScaleX="1"/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Ellipse Stroke="{x:Null}" x:Name="centerShadow2" Margin="122.109,123.109,122.972,123.972" Fill="#33000000" RenderTransformOrigin="0.5,0.5">
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleY="-1" ScaleX="-1"/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Ellipse Stroke="{x:Null}" x:Name="centerShadow1" Margin="104.109,106.109,102.891,106.891" Fill="{TemplateBinding OpacityMask}" RenderTransformOrigin="0.5,0.5">
-                                        <Ellipse.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleY="1" ScaleX="1"/>
-                                                <SkewTransform/>
-                                                <RotateTransform/>
-                                                <TranslateTransform/>
-                                            </TransformGroup>
-                                        </Ellipse.RenderTransform>
-                                    </Ellipse>
-                                    <Path Stretch="Fill" Stroke="{x:Null}" Margin="128.502,158.6,134.088,117.194" x:Name="centerReflex" Width="Auto" Height="Auto" RenderTransformOrigin="0.509,-0.063">
-                                        <Path.Fill>
-                                            <LinearGradientBrush EndPoint="0.622,0.834" StartPoint="0.462,-0.148">
-                                                <GradientStop Color="#BCFFFFFF" Offset="0"/>
-                                                <GradientStop Color="#00FFFFFF" Offset="0.986"/>
-                                            </LinearGradientBrush>
-                                        </Path.Fill>
-                                        <Path.Data>
-                                            <PathGeometry>
-                                                <PathFigure IsClosed="True" StartPoint="30.3210918169212,16.8819757980464">
-                                                    <PolyBezierSegment IsSmoothJoin="True" Points="24.109587,17.81367 25.839185,16.997196 16.521969,15.754796 5.4762738,15.754796 0.96147679,31.512749 0.96147679,20.467054 0.96147679,9.4213589 9.454305,0.5 20.5,0.5 31.545695,0.5 42.282942,14.467202 32.655446,16.33059"/>
-                                                </PathFigure>
-                                            </PathGeometry>
-                                        </Path.Data>
-                                        <Path.RenderTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform ScaleX="-1.4" ScaleY="-1.4"/>
-                                                <SkewTransform AngleX="0" AngleY="0"/>
-                                                <RotateTransform Angle="13.453"/>
-                                                <TranslateTransform X="-3.699" Y="21.638"/>
-                                            </TransformGroup>
-                                        </Path.RenderTransform>
-                                    </Path>
-                                </Grid>
-                                <TextBlock Margin="44.5,202.5,45,0" VerticalAlignment="Top" Width="Auto" Height="36.5" FontFamily="Segoe UI" FontSize="18" Foreground="#FFFFFFFF" Text="{TemplateBinding Tag}" TextAlignment="Center" TextWrapping="Wrap" IsHitTestVisible="False" x:Name="textBlock"/>
-                            </Grid>
-                        </Grid>
-                        <Ellipse Stroke="{x:Null}" HorizontalAlignment="Center" x:Name="centerBase" VerticalAlignment="Center" Width="50" Height="50" Margin="103,106" Opacity="0.67"/>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsFocused" Value="True"/>
-                        <Trigger Property="IsDefaulted" Value="True"/>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard x:Name="EnterHotspot_BeginStoryboard" Storyboard="{StaticResource EnterHotspot}"/>
-                            </Trigger.EnterActions>
-                            <Setter Property="Cursor" TargetName="centerShadow1" Value="Hand"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
 
-
-    <Style x:Key="RoundGlassButton"  BasedOn="{x:Null}" TargetType="{x:Type Button}">
-        <Setter Property="SnapsToDevicePixels" Value="True"/>
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <ControlTemplate.Resources>
-                        <Storyboard x:Key="CircleStoryboard">
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="1.9"/>
-                                <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="1.9"/>
-                                <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.7"/>
-                                <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.000000" Value="0"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
-                                <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
-                                <SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
-                            </DoubleAnimationUsingKeyFrames>
-                            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.Opacity)">
-                                <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
-                                <SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.000000" Value="0"/>
-                            </DoubleAnimationUsingKeyFrames>
-                        </Storyboard>
-                    </ControlTemplate.Resources>
-                    <Grid Width="180" Height="180">
-                        <!--Content box-->
+	<Style x:Key="RoundGlassButton"  BasedOn="{x:Null}" TargetType="{x:Type Button}">
+		<Setter Property="SnapsToDevicePixels" Value="True"/>
+		<Setter Property="OverridesDefaultStyle" Value="True"/>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="CircleStoryboard">
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="1.9"/>
+								<SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.05000000" Value="1.9"/>
+								<SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base3" Storyboard.TargetProperty="(UIElement.Opacity)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0.7"/>
+								<SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.000000" Value="0"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
+								<SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.2"/>
+								<SplineDoubleKeyFrame KeySpline="0,1,1,1" KeyTime="00:00:01.000000" Value="3"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames BeginTime="00:00:00"  Storyboard.TargetName="_base4" Storyboard.TargetProperty="(UIElement.Opacity)">
+								<SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
+								<SplineDoubleKeyFrame KeySpline="0.5,0.5,0.5,1" KeyTime="00:00:01.000000" Value="0"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</ControlTemplate.Resources>
+					<Grid Width="180" Height="180">
+						<!--Content box-->
                         <!--circle-->
-                        <Ellipse x:Name="_base4" StrokeThickness="30" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="60" Fill="{x:Null}" Stroke="#FF0A4F57">
-                            <Ellipse.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
-                                    <SkewTransform AngleX="0" AngleY="0"/>
-                                    <RotateTransform Angle="0"/>
-                                    <TranslateTransform X="0" Y="0"/>
-                                </TransformGroup>
-                            </Ellipse.RenderTransform>
-                        </Ellipse>
-                        <Ellipse x:Name="_base3" StrokeThickness="10" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="60" Fill="Black" Stroke="#FF0A4F57">
-                            <Ellipse.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
-                                    <SkewTransform AngleX="0" AngleY="0"/>
-                                    <RotateTransform Angle="0"/>
-                                    <TranslateTransform X="0" Y="0"/>
-                                </TransformGroup>
-                            </Ellipse.RenderTransform>
-                        </Ellipse>
-                        <!-- Background Layer -->
-                        <Ellipse Fill="{TemplateBinding Background}" Margin="0"/>
+						<Ellipse x:Name="_base4" StrokeThickness="30" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="60" Fill="{x:Null}" Stroke="#FF0A4F57">
+							<Ellipse.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
+									<SkewTransform AngleX="0" AngleY="0"/>
+									<RotateTransform Angle="0"/>
+									<TranslateTransform X="0" Y="0"/>
+								</TransformGroup>
+							</Ellipse.RenderTransform>
+						</Ellipse>
+						<Ellipse x:Name="_base3" StrokeThickness="10" RenderTransformOrigin="0.5,0.5" Opacity="0.42" Margin="60" Fill="Black" Stroke="#FF0A4F57">
+							<Ellipse.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleX="0.1" ScaleY="0.1"/>
+									<SkewTransform AngleX="0" AngleY="0"/>
+									<RotateTransform Angle="0"/>
+									<TranslateTransform X="0" Y="0"/>
+								</TransformGroup>
+							</Ellipse.RenderTransform>
+						</Ellipse>
+						<!-- Background Layer -->
+						<Ellipse Fill="{TemplateBinding Background}" Margin="0"/>
                         <!-- Refraction Layer -->
-                        <Ellipse x:Name="RefractionLayer"  Margin="0">
-                            <Ellipse.Fill>
-                                <RadialGradientBrush GradientOrigin="0.496,1.052">
-                                    <RadialGradientBrush.RelativeTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
-                                            <TranslateTransform X="0.02" Y="0.3"/>
-                                        </TransformGroup>
-                                    </RadialGradientBrush.RelativeTransform>
-                                    <GradientStop Offset="1" Color="#00000000"/>
-                                    <GradientStop Offset="0.208" Color="#FFFFFFFF"/>
-                                </RadialGradientBrush>
-                            </Ellipse.Fill>
-                        </Ellipse>
+						<Ellipse x:Name="RefractionLayer"  Margin="0">
+							<Ellipse.Fill>
+								<RadialGradientBrush GradientOrigin="0.496,1.052">
+									<RadialGradientBrush.RelativeTransform>
+										<TransformGroup>
+											<ScaleTransform CenterX="0.5" CenterY="0.5" ScaleX="1.5" ScaleY="1.5"/>
+											<TranslateTransform X="0.02" Y="0.3"/>
+										</TransformGroup>
+									</RadialGradientBrush.RelativeTransform>
+									<GradientStop Offset="1" Color="#00000000"/>
+									<GradientStop Offset="0.208" Color="#FFFFFFFF"/>
+								</RadialGradientBrush>
+							</Ellipse.Fill>
+						</Ellipse>
                         <!-- Reflection Layer -->
-                        <Path x:Name="ReflectionLayer" VerticalAlignment="Top" Stretch="Fill" Height="191.999" Margin="1.333,0,1.333,-12.499">
-                            <Path.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform ScaleY="0.5"/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </Path.RenderTransform>
-                            <Path.Data>
-                                <PathGeometry>
-                                    <PathFigure IsClosed="True" StartPoint="98.999,45.499">
-                                        <BezierSegment Point1="98.999,54.170" Point2="89.046,52.258" Point3="85.502,51.029"/>
-                                        <BezierSegment
-                                    IsSmoothJoin="True"
-                                    Point1="75.860,47.685"
-                                    Point2="69.111,45.196"
-                                    Point3="50.167,45.196"/>
-                                        <BezierSegment Point1="30.805,45.196" Point2="20.173,47.741" Point3="10.665,51.363"/>
-                                        <BezierSegment
-                                    IsSmoothJoin="True"
-                                    Point1="7.469,52.580"
-                                    Point2="1.000,53.252"
-                                    Point3="1.000,44.999"/>
-                                        <BezierSegment Point1="1.000,39.510" Point2="0.884,39.227" Point3="2.519,34.286"/>
-                                        <BezierSegment
-                                    IsSmoothJoin="True"
-                                    Point1="9.106,14.370"
-                                    Point2="27.875,0"
-                                    Point3="50,0"/>
-                                        <BezierSegment Point1="72.198,0" Point2="91.018,14.466" Point3="97.546,34.485"/>
-                                        <BezierSegment
-                                    IsSmoothJoin="True"
-                                    Point1="99.139,39.369"
-                                    Point2="98.999,40.084"
-                                    Point3="98.999,45.499"/>
-                                    </PathFigure>
-                                </PathGeometry>
-                            </Path.Data>
-                            <Path.Fill>
-                                <RadialGradientBrush GradientOrigin="0.498,0.526">
-                                    <RadialGradientBrush.RelativeTransform>
-                                        <TransformGroup>
-                                            <ScaleTransform
-                                       CenterX="0.5"
-                                       CenterY="0.5"
-                                       ScaleX="1"
-                                       ScaleY="1.997"/>
-                                            <TranslateTransform X="0" Y="0.5"/>
-                                        </TransformGroup>
-                                    </RadialGradientBrush.RelativeTransform>
-                                    <GradientStop Offset="1" Color="#FFFFFFFF"/>
-                                    <GradientStop Offset="0.85" Color="#92FFFFFF"/>
-                                    <GradientStop Offset="0" Color="#00000000"/>
-                                </RadialGradientBrush>
-                            </Path.Fill>
-                        </Path>
-                        <TextBlock Margin="45.389,134.167,44.111,0" VerticalAlignment="Top" Width="Auto" Height="36.5" FontFamily="Segoe UI" FontSize="18.667" Foreground="#FF020101" Text="{TemplateBinding Content}" TextAlignment="Center" TextWrapping="Wrap" IsHitTestVisible="False" x:Name="textBlock" RenderTransformOrigin="0.405,-0.218">
-                            <TextBlock.RenderTransform>
-                                <TransformGroup>
-                                    <ScaleTransform/>
-                                    <SkewTransform/>
-                                    <RotateTransform/>
-                                    <TranslateTransform/>
-                                </TransformGroup>
-                            </TextBlock.RenderTransform>
-                        </TextBlock>
-                    </Grid>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="RefractionLayer" Property="Fill">
-                                <Setter.Value>
-                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
-                                        <RadialGradientBrush.RelativeTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform
-                                          CenterX="0.5"
-                                          CenterY="0.5"
-                                          ScaleX="1.5"
-                                          ScaleY="1.5"/>
-                                                <TranslateTransform X="0.02" Y="0.3"/>
-                                            </TransformGroup>
-                                        </RadialGradientBrush.RelativeTransform>
-                                        <GradientStop Offset="1" Color="#00000000"/>
-                                        <GradientStop Offset="0.45" Color="#FFFFFFFF"/>
-                                    </RadialGradientBrush>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="ReflectionLayer" Property="Fill">
-                                <Setter.Value>
-                                    <RadialGradientBrush GradientOrigin="0.498,0.526">
-                                        <RadialGradientBrush.RelativeTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform
-                                          CenterX="0.5"
-                                          CenterY="0.5"
-                                          ScaleX="1"
-                                          ScaleY="1.997"/>
-                                                <TranslateTransform X="0" Y="0.5"/>
-                                            </TransformGroup>
-                                        </RadialGradientBrush.RelativeTransform>
-                                        <GradientStop Offset="1" Color="#FFFFFFFF"/>
-                                        <GradientStop Offset="0.85" Color="#BBFFFFFF"/>
-                                        <GradientStop Offset="0" Color="#00000000"/>
-                                    </RadialGradientBrush>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Trigger.EnterActions>
-                                <BeginStoryboard Storyboard="{StaticResource CircleStoryboard}"/>
-                            </Trigger.EnterActions>
-                            <Setter TargetName="RefractionLayer" Property="Fill">
-                                <Setter.Value>
-                                    <RadialGradientBrush GradientOrigin="0.496,1.052">
-                                        <RadialGradientBrush.RelativeTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform
-                                          CenterX="0.5"
-                                          CenterY="0.5"
-                                          ScaleX="1.5"
-                                          ScaleY="1.5"/>
-                                                <TranslateTransform X="0.02" Y="0.3"/>
-                                            </TransformGroup>
-                                        </RadialGradientBrush.RelativeTransform>
-                                        <GradientStop Offset="1" Color="#00000000"/>
-                                        <GradientStop Offset="0.3" Color="#FFFFFFFF"/>
-                                    </RadialGradientBrush>
-                                </Setter.Value>
-                            </Setter>
-                            <Setter TargetName="ReflectionLayer" Property="Fill">
-                                <Setter.Value>
-                                    <RadialGradientBrush GradientOrigin="0.498,0.526">
-                                        <RadialGradientBrush.RelativeTransform>
-                                            <TransformGroup>
-                                                <ScaleTransform
-                                          CenterX="0.5"
-                                          CenterY="0.5"
-                                          ScaleX="1"
-                                          ScaleY="1.997"/>
-                                                <TranslateTransform X="0" Y="0.5"/>
-                                            </TransformGroup>
-                                        </RadialGradientBrush.RelativeTransform>
-                                        <GradientStop Offset="1" Color="#CCFFFFFF"/>
-                                        <GradientStop Offset="0.85" Color="#66FFFFFF"/>
-                                        <GradientStop Offset="0" Color="#00000000"/>
-                                    </RadialGradientBrush>
-                                </Setter.Value>
-                            </Setter>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
+						<Path x:Name="ReflectionLayer" VerticalAlignment="Top" Stretch="Fill" Height="191.999" Margin="1.333,0,1.333,-12.499">
+							<Path.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform ScaleY="0.5"/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</Path.RenderTransform>
+							<Path.Data>
+								<PathGeometry>
+									<PathFigure IsClosed="True" StartPoint="98.999,45.499">
+										<BezierSegment Point1="98.999,54.170" Point2="89.046,52.258" Point3="85.502,51.029"/>
+										<BezierSegment
+											IsSmoothJoin="True"
+											Point1="75.860,47.685"
+											Point2="69.111,45.196"
+											Point3="50.167,45.196"/>
+										<BezierSegment Point1="30.805,45.196" Point2="20.173,47.741" Point3="10.665,51.363"/>
+										<BezierSegment
+											IsSmoothJoin="True"
+											Point1="7.469,52.580"
+											Point2="1.000,53.252"
+											Point3="1.000,44.999"/>
+										<BezierSegment Point1="1.000,39.510" Point2="0.884,39.227" Point3="2.519,34.286"/>
+										<BezierSegment
+											IsSmoothJoin="True"
+											Point1="9.106,14.370"
+											Point2="27.875,0"
+											Point3="50,0"/>
+										<BezierSegment Point1="72.198,0" Point2="91.018,14.466" Point3="97.546,34.485"/>
+										<BezierSegment
+											IsSmoothJoin="True"
+											Point1="99.139,39.369"
+											Point2="98.999,40.084"
+											Point3="98.999,45.499"/>
+									</PathFigure>
+								</PathGeometry>
+							</Path.Data>
+							<Path.Fill>
+								<RadialGradientBrush GradientOrigin="0.498,0.526">
+									<RadialGradientBrush.RelativeTransform>
+										<TransformGroup>
+											<ScaleTransform
+												CenterX="0.5"
+												CenterY="0.5"
+												ScaleX="1"
+												ScaleY="1.997"/>
+											<TranslateTransform X="0" Y="0.5"/>
+										</TransformGroup>
+									</RadialGradientBrush.RelativeTransform>
+									<GradientStop Offset="1" Color="#FFFFFFFF"/>
+									<GradientStop Offset="0.85" Color="#92FFFFFF"/>
+									<GradientStop Offset="0" Color="#00000000"/>
+								</RadialGradientBrush>
+							</Path.Fill>
+						</Path>
+						<TextBlock Margin="45.389,134.167,44.111,0" VerticalAlignment="Top" Width="Auto" Height="36.5" FontFamily="Segoe UI" FontSize="18.667" Foreground="#FF020101" Text="{TemplateBinding Content}" TextAlignment="Center" TextWrapping="Wrap" IsHitTestVisible="False" x:Name="textBlock" RenderTransformOrigin="0.405,-0.218">
+							<TextBlock.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</TextBlock.RenderTransform>
+						</TextBlock>
+					</Grid>
+					<ControlTemplate.Triggers>
+						<Trigger Property="IsMouseOver" Value="True">
+							<Setter TargetName="RefractionLayer" Property="Fill">
+								<Setter.Value>
+									<RadialGradientBrush GradientOrigin="0.496,1.052">
+										<RadialGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform
+													CenterX="0.5"
+													CenterY="0.5"
+													ScaleX="1.5"
+													ScaleY="1.5"/>
+												<TranslateTransform X="0.02" Y="0.3"/>
+											</TransformGroup>
+										</RadialGradientBrush.RelativeTransform>
+										<GradientStop Offset="1" Color="#00000000"/>
+										<GradientStop Offset="0.45" Color="#FFFFFFFF"/>
+									</RadialGradientBrush>
+								</Setter.Value>
+							</Setter>
+							<Setter TargetName="ReflectionLayer" Property="Fill">
+								<Setter.Value>
+									<RadialGradientBrush GradientOrigin="0.498,0.526">
+										<RadialGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform
+													CenterX="0.5"
+													CenterY="0.5"
+													ScaleX="1"
+													ScaleY="1.997"/>
+												<TranslateTransform X="0" Y="0.5"/>
+											</TransformGroup>
+										</RadialGradientBrush.RelativeTransform>
+										<GradientStop Offset="1" Color="#FFFFFFFF"/>
+										<GradientStop Offset="0.85" Color="#BBFFFFFF"/>
+										<GradientStop Offset="0" Color="#00000000"/>
+									</RadialGradientBrush>
+								</Setter.Value>
+							</Setter>
+						</Trigger>
+						<Trigger Property="IsPressed" Value="True">
+							<Trigger.EnterActions>
+								<BeginStoryboard Storyboard="{StaticResource CircleStoryboard}"/>
+							</Trigger.EnterActions>
+							<Setter TargetName="RefractionLayer" Property="Fill">
+								<Setter.Value>
+									<RadialGradientBrush GradientOrigin="0.496,1.052">
+										<RadialGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform
+													CenterX="0.5"
+													CenterY="0.5"
+													ScaleX="1.5"
+													ScaleY="1.5"/>
+												<TranslateTransform X="0.02" Y="0.3"/>
+											</TransformGroup>
+										</RadialGradientBrush.RelativeTransform>
+										<GradientStop Offset="1" Color="#00000000"/>
+										<GradientStop Offset="0.3" Color="#FFFFFFFF"/>
+									</RadialGradientBrush>
+								</Setter.Value>
+							</Setter>
+							<Setter TargetName="ReflectionLayer" Property="Fill">
+								<Setter.Value>
+									<RadialGradientBrush GradientOrigin="0.498,0.526">
+										<RadialGradientBrush.RelativeTransform>
+											<TransformGroup>
+												<ScaleTransform
+													CenterX="0.5"
+													CenterY="0.5"
+													ScaleX="1"
+													ScaleY="1.997"/>
+												<TranslateTransform X="0" Y="0.5"/>
+											</TransformGroup>
+										</RadialGradientBrush.RelativeTransform>
+										<GradientStop Offset="1" Color="#CCFFFFFF"/>
+										<GradientStop Offset="0.85" Color="#66FFFFFF"/>
+										<GradientStop Offset="0" Color="#00000000"/>
+									</RadialGradientBrush>
+								</Setter.Value>
+							</Setter>
+						</Trigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key ="TransparentButtonStyle" TargetType="{x:Type Button}" >
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="ClickTimeLine">
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Border">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="Border">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</ControlTemplate.Resources>
+					<Grid >
+						<Border x:Name="Border" Cursor="Hand" Background="{TemplateBinding Background}" RenderTransformOrigin="0.5,0.5">
+							<Border.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</Border.RenderTransform>
+						</Border>
+						<Rectangle x:Name="reflected" OpacityMask ="{StaticResource LinearBgMask}" Margin="0,152.5,0,-42" RenderTransformOrigin="0.507,1.333">
+							<Rectangle.Fill>
+								<VisualBrush Visual="{Binding ElementName=Border}">
+									<VisualBrush.RelativeTransform>
+										<TransformGroup>
+											<ScaleTransform ScaleX="1" ScaleY="-1"/>
+											<TranslateTransform Y="0.7"/>
+										</TransformGroup>
+									</VisualBrush.RelativeTransform>
+								</VisualBrush>
+							</Rectangle.Fill>
+						</Rectangle>
+						<ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Content}" RenderTransformOrigin="0.5,0.5"  Height="21.25" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="50,165,28.5,-36.25" VerticalAlignment="Top" />
+					</Grid>
+					<ControlTemplate.Triggers>
+						<EventTrigger RoutedEvent="ButtonBase.Click">
+							<BeginStoryboard Storyboard="{StaticResource ClickTimeLine}"/>
+						</EventTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key ="SimpleTransparentButtonStyle" TargetType="{x:Type Button}" >
+		<Style.Resources>
+			<Storyboard x:Key="ClickTimeLine"/>
+		</Style.Resources>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="ClickTimeLine">
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Border">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="Border">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</ControlTemplate.Resources>
+					<Grid >
+						<Border x:Name="Border" Cursor="Hand" Background="{TemplateBinding Background}" RenderTransformOrigin="0.5,0.5">
+							<Border.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</Border.RenderTransform>
+						</Border>
+						<ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Content}" RenderTransformOrigin="0.5,0.5"  Height="21.25" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="12.001,57.659,10.833,-43.909" VerticalAlignment="Top" Panel.ZIndex="1" />
+					</Grid>
+					<ControlTemplate.Triggers>
+						<EventTrigger RoutedEvent="ButtonBase.Click">
+							<BeginStoryboard Storyboard="{StaticResource ClickTimeLine}"/>
+						</EventTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
+
+	<Style x:Key ="SmallTransparentButtonStyle" TargetType="{x:Type Button}" >
+		<Style.Resources>
+			<Storyboard x:Key="ClickTimeLine"/>
+		</Style.Resources>
+		<Setter Property="Template">
+			<Setter.Value>
+				<ControlTemplate TargetType="{x:Type Button}">
+					<ControlTemplate.Resources>
+						<Storyboard x:Key="ClickTimeLine">
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)" Storyboard.TargetName="Border">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+							<DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleY)" Storyboard.TargetName="Border">
+								<EasingDoubleKeyFrame KeyTime="0:0:0.1" Value="0.9"/>
+								<EasingDoubleKeyFrame KeyTime="0:0:0.2" Value="1"/>
+							</DoubleAnimationUsingKeyFrames>
+						</Storyboard>
+					</ControlTemplate.Resources>
+					<Grid >
+						<Border x:Name="Border" Cursor="Hand" Background="{TemplateBinding Background}" RenderTransformOrigin="0.5,0.5">
+							<Border.RenderTransform>
+								<TransformGroup>
+									<ScaleTransform/>
+									<SkewTransform/>
+									<RotateTransform/>
+									<TranslateTransform/>
+								</TransformGroup>
+							</Border.RenderTransform>
+						</Border>
+						<ContentPresenter x:Name="contentPresenter" Content="{TemplateBinding Content}" RenderTransformOrigin="0.5,0.5"  Height="21.25" Width="40" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="4.001,39.659,0,-25.909" VerticalAlignment="Top" Panel.ZIndex="1" />
+					</Grid>
+					<ControlTemplate.Triggers>
+						<EventTrigger RoutedEvent="ButtonBase.Click">
+							<BeginStoryboard Storyboard="{StaticResource ClickTimeLine}"/>
+						</EventTrigger>
+					</ControlTemplate.Triggers>
+				</ControlTemplate>
+			</Setter.Value>
+		</Setter>
+	</Style>
 </ResourceDictionary>

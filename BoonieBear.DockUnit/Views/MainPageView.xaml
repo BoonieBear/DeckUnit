@@ -6,6 +6,7 @@
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainPageViewModel}" 
       mc:Ignorable="d" 
+      Name="MainformPage"
       d:DesignHeight="480" d:DesignWidth="640" 
 	Title="甲板单元">
     <Page.Resources>
@@ -202,7 +203,7 @@
         <Storyboard x:Key ="EnableReturnButton"/>
         <Storyboard x:Key="InitStoryboard">
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="DeviceDataButton">
-                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="40,200"/>
+                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="20,200"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="OptionButton">
                 <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="150,80"/>
@@ -211,7 +212,7 @@
                 <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="310,80"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="MoreButton">
-                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="420,200"/>
+                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="440,200"/>
             </ThicknessAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DeviceDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
@@ -241,6 +242,14 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MoreButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(TileBrush.TileMode)" Storyboard.TargetName="DeviceDataButton">
+            	<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static TileMode.None}"/>
+            	<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static TileMode.None}"/>
+            </ObjectAnimationUsingKeyFrames>
+            <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(TileBrush.Stretch)" Storyboard.TargetName="DeviceDataButton">
+            	<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Stretch.Uniform}"/>
+            	<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Stretch.Uniform}"/>
+            </ObjectAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisableModermStoryboard">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ModermViewport3DD">
@@ -295,7 +304,7 @@
     </Page.Triggers>
     <Grid>
 
-        <Grid x:Name="grid" Style="{StaticResource  GlassStyle}" HorizontalAlignment="Left" Width="640">
+        <Grid x:Name="grid" Style="{StaticResource  LightGreenStyle}" HorizontalAlignment="Left" Width="640">
             <Canvas Margin="7">
                 <Border Name="TextBorder" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Grid>
@@ -382,30 +391,30 @@ Storyboard.TargetName="MyTextEffect"
                         </VisualBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Button x:Name="DeviceDataButton" RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}"   Content="通信控制" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="-30,180" >
+                <Button x:Name="DeviceDataButton"  Style="{StaticResource TransparentButtonStyle}"   Content="通信控制" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="-20,180" FontSize="16" >
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/adcp.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
-                <Button  x:Name="OptionButton"  RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}"  Content="系统设置" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="80,60" >
+                <Button  x:Name="OptionButton"   Style="{StaticResource TransparentButtonStyle}"  Content="系统设置" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="100,60" FontSize="16" >
                     <Button.Background>
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/System Preferences.ico" >
                         </ImageBrush>
                     </Button.Background>
                 </Button>
-                <Button  x:Name="SysResourceButton" RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="240,60"  >
+                <Button  x:Name="SysResourceButton"  Style="{StaticResource TransparentButtonStyle}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="240,60" FontSize="16"  >
                     <Button.Background>
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/Disk Utility.ico" >
                         </ImageBrush>
                     </Button.Background>
                 </Button>
-                <Button  x:Name="MoreButton" RenderTransform ="{StaticResource MainButtonRenderSize}" Style="{StaticResource RoundGlassButton}"  Content="更多工具" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Margin="350,180" >
+                <Button  x:Name="MoreButton"  Style="{StaticResource TransparentButtonStyle}"  Content="更多工具" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="350,180" FontSize="16" >
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DockUnit;component/Assets/MainPageButton/Toolbar Utilities Folder.ico" Stretch="None" />
                     </Button.Background>
                 </Button>
                 <TextBlock x:Name="TextBlock" Text="{Binding NowTime}" FontFamily="Segoe UI Semibold" Canvas.Left="480" Canvas.Top="4" FontSize="14"/>
-                <Viewport3D x:Name="ModermViewport3DD" Height="191" Width="195" Canvas.Left="220" Canvas.Top="265" Panel.ZIndex="-1">
+                <Viewport3D x:Name="ModermViewport3DD" Height="202" Width="195" Canvas.Left="220" Canvas.Top="269.5" Panel.ZIndex="-1">
                     <Viewport3D.Camera>
                         <PerspectiveCamera FarPlaneDistance="1.138135" LookDirection="-0.591625438835131,-0.525542905388051,-0.611378765348801" NearPlaneDistance="0" Position="0.438092,0.438021,0.438092" UpDirection="-0.337609067793506,0.912865583975171,0.229557275940602" FieldOfView="48" />
                     </Viewport3D.Camera>
@@ -424,6 +433,13 @@ Storyboard.TargetName="MyTextEffect"
                             <BeginStoryboard x:Name="RotationStoryboard_BeginStoryboard" Storyboard="{StaticResource RotationStoryboard}"/>
                         </EventTrigger>
                     </Viewport3D.Triggers>
+					<ModelVisual3D>
+                            <ModelVisual3D.Content>
+                                <Model3DGroup>
+                                    <DirectionalLight Color="#FFF5F1F1" Direction="0.266264055280985,-0.509085150331775,-0.818496036995293"/>
+                                </Model3DGroup>
+                            </ModelVisual3D.Content>
+                        </ModelVisual3D>
                     <ModelVisual3D x:Name="modelVisual3D">
                         <ModelVisual3D.Transform>
                             <Transform3DGroup>
@@ -438,14 +454,7 @@ Storyboard.TargetName="MyTextEffect"
                                 <TranslateTransform3D/>
                             </Transform3DGroup>
                         </ModelVisual3D.Transform>
-                        <ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <Model3DGroup>
-                                    <AmbientLight Color="#FF816E6E"/>
-                                    <DirectionalLight Color="#FFF5F1F1" Direction="-0.0364077544064342,-0.769165585090948,-0.638011581502077"/>
-                                </Model3DGroup>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
+                        
                         <ModelVisual3D>
                             <ModelVisual3D.Transform>
                                 <MatrixTransform3D Matrix="1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 "/>
@@ -1753,7 +1762,20 @@ Storyboard.TargetName="MyTextEffect"
                         </ModelVisual3D>
                     </ModelVisual3D>
                 </Viewport3D>
-                <Button x:Name="RemoteControlButton" Content ="声学指令" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="57.364" IsEnabled="False" Opacity="0">
+                <Button x:Name="RemoteControlButton" Content ="声学指令" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontSize="14.667">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+                    <Button.Background>
+                        <ImageBrush ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png" Stretch="UniformToFill"/>
+                    </Button.Background>
+                </Button>
+                <Button x:Name="DownLoadButton" Opacity="0" Content="远程下载" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1766,7 +1788,7 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
-                <Button x:Name="DownLoadButton" Opacity="0" Content="远程下载" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False">
+                <Button x:Name="VoiceTelButton" Command ="{Binding GoWaterTelPageCommand}" Opacity="0" Content="水声电话" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1779,20 +1801,7 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
-                <Button x:Name="VoiceTelButton" Opacity="0" Content="水声电话" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False">
-                    <Button.RenderTransform>
-                        <TransformGroup>
-                            <ScaleTransform/>
-                            <SkewTransform/>
-                            <RotateTransform/>
-                            <TranslateTransform/>
-                        </TransformGroup>
-                    </Button.RenderTransform>
-                    <Button.Background>
-                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DockUnit;component/Assets/appbar/appbar.chevron.left.png"/>
-                    </Button.Background>
-                </Button>
-                <Button x:Name="MonitorModeButton" Opacity="0" Content="监控模式" Style="{StaticResource GlassButtonStyle}" Width="80" Height="60" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False">
+                <Button x:Name="MonitorModeButton" Opacity="0" Content="监控模式" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>

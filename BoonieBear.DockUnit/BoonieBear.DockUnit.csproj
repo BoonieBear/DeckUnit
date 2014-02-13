@@ -51,8 +51,24 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="GifImageLib">
+      <HintPath>bin\Debug\GifImageLib.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro">
+      <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro\bin\Debug\MahApps.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro.Resources">
+      <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro.Resources\bin\Debug\MahApps.Metro.Resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Expression.Drawing" />
+    <Reference Include="Microsoft.Expression.Effects" />
+    <Reference Include="Microsoft.Expression.Interactions" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro\bin\Debug\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,6 +80,9 @@
     <Reference Include="TinyMetroWpfLibrary">
       <HintPath>..\..\..\BoonieBear\TinyMetro\TinyMetroWpfLibrary\TinyMetroWpfLibrary\bin\Debug\TinyMetroWpfLibrary.dll</HintPath>
     </Reference>
+    <Reference Include="TpMetroWpfLibrary">
+      <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\TpMetroWpf\tpmetrowpf1.2.2\Output\Debug\TpMetroWpfLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -74,7 +93,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Core\UnitViewModelLocator.cs" />
-    <Compile Include="NavigationEvents\GoPage1NavigationRequest.cs" />
+    <Compile Include="NavigationEvents\GoWaterTelPageNavigationRequest.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MainFrameViewModel.cs" />
     <Compile Include="App.xaml.cs">
@@ -83,7 +102,7 @@
     </Compile>
     <Compile Include="Core\UnitController.cs" />
     <Compile Include="Core\UnitKernal.cs" />
-    <Compile Include="ViewModels\Page1ViewModel.cs" />
+    <Compile Include="ViewModels\WaterTelViewModel.cs" />
     <Compile Include="Views\MainPageView.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainPageView.xaml</DependentUpon>
@@ -92,8 +111,8 @@
       <SubType>Code</SubType>
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Page1View.xaml.cs">
-      <DependentUpon>Page1View.xaml</DependentUpon>
+    <Compile Include="Views\WaterTelView.xaml.cs">
+      <DependentUpon>WaterTelView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -114,6 +133,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <Resource Include="Assets\Gif\star.gif">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -144,7 +166,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\Page1View.xaml">
+    <Page Include="Views\WaterTelView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -184,6 +206,7 @@
     <Resource Include="Assets\IACAS.bmp" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\MainPageButton\adcp.ico" />
     <Resource Include="Assets\MainPageButton\adcp.png" />
     <Resource Include="Assets\MainPageButton\Disk Utility.ico" />
     <Resource Include="Assets\MainPageButton\System Information.ico" />
@@ -191,9 +214,6 @@
     <Resource Include="Assets\MainPageButton\Toolbar Utilities Folder.ico" />
     <Resource Include="Assets\MainPageButton\Utilities.ico" />
     <Resource Include="Assets\return.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Gif\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.0,Profile=Client">
@@ -216,6 +236,12 @@
       <ProductName>Windows Installer 4.5</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Gif\water.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

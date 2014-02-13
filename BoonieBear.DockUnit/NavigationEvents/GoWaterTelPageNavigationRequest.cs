@@ -1,6 +1,6 @@
 ﻿namespace BoonieBear.DockUnit.NavigationEvents
 {
-    public class GoPage1NavigationRequest
+    public class GoWaterTelPageNavigationRequest
     {
 
     }

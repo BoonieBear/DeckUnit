@@ -7,7 +7,7 @@ namespace BoonieBear.DockUnit.ViewModels
     /// <summary>
     /// That's the ViewModel that belongs to the Example View
     /// </summary>
-    public class Page1ViewModel : ViewModelBase
+    public class WaterTelViewModel : ViewModelBase
     {
         #region Overrides of ViewModelBase
 
