@@ -9,6 +9,7 @@ namespace BoonieBear.DockUnit.Core
         private MainFrameViewModel _mainFrameViewModel;
         private MainPageViewModel _mainPageViewModel;
         private WaterTelViewModel _waterTelViewModel;
+        private HistoryDataPageViewModel _historyDataPageViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -54,6 +55,19 @@ namespace BoonieBear.DockUnit.Core
                     _waterTelViewModel.Initialize();
                 }
                 return _waterTelViewModel;
+            }
+        }
+        public HistoryDataPageViewModel HistoryDataPageViewModel
+        {
+            get
+            {
+                // Creates the Example ViewModel
+                if (_historyDataPageViewModel == null)
+                {
+                    _historyDataPageViewModel = new HistoryDataPageViewModel();
+                    _historyDataPageViewModel.Initialize();
+                }
+                return _historyDataPageViewModel;
             }
         }
     }

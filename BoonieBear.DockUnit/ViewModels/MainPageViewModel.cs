@@ -89,6 +89,7 @@ namespace BoonieBear.DockUnit.ViewModels
             EventAggregator.PublishMessage(new GoWaterTelPageNavigationRequest());
         }
 
+
         #endregion
     }
 }

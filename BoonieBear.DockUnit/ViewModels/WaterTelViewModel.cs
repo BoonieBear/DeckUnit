@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using BoonieBear.DockUnit.NavigationEvents;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
@@ -15,6 +16,7 @@ namespace BoonieBear.DockUnit.ViewModels
         public override void Initialize()
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
+            GoDataPageCommand = RegisterCommand(ExecuteGoDataPageCommand, CanExecuteGoDataPageCommand, true);
         }
 
 
@@ -46,5 +48,27 @@ namespace BoonieBear.DockUnit.ViewModels
         }
 
         #endregion
+
+    #region GoDataPageCommand
+        public ICommand GoDataPageCommand
+        {
+            get { return GetPropertyValue(() => GoDataPageCommand); }
+            set { SetPropertyValue(() => GoDataPageCommand, value); }
+        }
+
+
+        public void CanExecuteGoDataPageCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        public void ExecuteGoDataPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+
+            EventAggregator.PublishMessage(new GoHistoryDataPageNavigationRequest(1002));
+        }
+    #endregion
+
     }
 }

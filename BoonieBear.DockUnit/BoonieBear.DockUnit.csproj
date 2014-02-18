@@ -92,8 +92,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ContentPage.cs" />
     <Compile Include="Core\UnitViewModelLocator.cs" />
+    <Compile Include="NavigationEvents\GoHistoryDataPageNavigationRequest.cs" />
     <Compile Include="NavigationEvents\GoWaterTelPageNavigationRequest.cs" />
+    <Compile Include="ViewModels\HistoryDataPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MainFrameViewModel.cs" />
     <Compile Include="App.xaml.cs">
@@ -103,6 +106,9 @@
     <Compile Include="Core\UnitController.cs" />
     <Compile Include="Core\UnitKernal.cs" />
     <Compile Include="ViewModels\WaterTelViewModel.cs" />
+    <Compile Include="Views\HistoryDataPage.xaml.cs">
+      <DependentUpon>HistoryDataPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainPageView.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainPageView.xaml</DependentUpon>
@@ -155,6 +161,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\SkinStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HistoryDataPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -237,9 +247,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Assets\Gif\water.gif" />
   </ItemGroup>

@@ -18,4 +18,13 @@
             <GradientStop Offset="1.0" Color="#00000000"></GradientStop>
         </LinearGradientBrush.GradientStops>
     </LinearGradientBrush>
+    <LinearGradientBrush  x:Key="MainBackGround" EndPoint="0.5,1" StartPoint="0.5,0">
+        <GradientStop Color="#FFEFEFEF" Offset="0.112"/>
+        <GradientStop Color="#FF424849" Offset="1"/>
+    </LinearGradientBrush>
+    <!--textstyle-->
+    <Style x:Key="DescriptionHeaderStyle" TargetType="Label">
+        <Setter Property="FontSize" Value="22" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+    </Style>
 </ResourceDictionary>

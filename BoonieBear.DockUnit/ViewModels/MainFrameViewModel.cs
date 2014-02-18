@@ -16,20 +16,26 @@ namespace BoonieBear.DockUnit.ViewModels
             base.Initialize();
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             pMainFrame = this;
+            //绑定属性初始化
             AddPropertyChangedNotification(()=>IsShowBottomBar);
             IsShowBottomBar = Visibility.Hidden;
+            AddPropertyChangedNotification(() => IsShowTopBar);
+            IsShowTopBar = Visibility.Hidden;
             
         }
-
-        public void ShowBottomBar(Visibility v)
-        {
-            IsShowBottomBar = v;
-        }
+        #region 绑定属性
         public Visibility IsShowBottomBar
         {
             get { return GetPropertyValue(() => IsShowBottomBar); }
             set { SetPropertyValue(() => IsShowBottomBar, value); }
         }
+
+        public Visibility IsShowTopBar
+        {
+            get { return GetPropertyValue(() => IsShowTopBar); }
+            set { SetPropertyValue(() => IsShowTopBar, value); }
+        }
+        #endregion
 
         #region GoBack Command
 
@@ -41,15 +47,16 @@ namespace BoonieBear.DockUnit.ViewModels
         }
 
 
-        public void CanExecuteGoBackCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        private void CanExecuteGoBackCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
         }
 
 
-        public void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        private void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            ShowBottomBar(Visibility.Hidden);
+            IsShowBottomBar =Visibility.Hidden;
+            IsShowTopBar = Visibility.Hidden;
             EventAggregator.PublishMessage(new GoBackNavigationRequest());
         }
 
