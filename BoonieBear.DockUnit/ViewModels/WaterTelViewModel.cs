@@ -49,7 +49,7 @@ namespace BoonieBear.DockUnit.ViewModels
 
         #endregion
 
-    #region GoDataPageCommand
+        #region GoDataPageCommand
         public ICommand GoDataPageCommand
         {
             get { return GetPropertyValue(() => GoDataPageCommand); }
@@ -57,13 +57,13 @@ namespace BoonieBear.DockUnit.ViewModels
         }
 
 
-        public void CanExecuteGoDataPageCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        private void CanExecuteGoDataPageCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
         }
 
 
-        public void ExecuteGoDataPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        private void ExecuteGoDataPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
 
             EventAggregator.PublishMessage(new GoHistoryDataPageNavigationRequest(1002));
