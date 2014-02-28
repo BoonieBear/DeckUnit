@@ -1,0 +1,168 @@
+﻿<controls:ContentPage x:Class="BoonieBear.DeckUnit.Views.WaterTelView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:controls="clr-namespace:BoonieBear.DeckUnit.Controls"
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=WaterTelViewModel}"
+      KeepAlive="True"
+	 Height="480"
+	 Title="水声电话" Width="640" Loaded="ContentPage_Loaded">
+    <controls:ContentPage.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </controls:ContentPage.Resources>
+    <Grid Background="{StaticResource MainBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        
+        <metroControl:MetroAnimatedSingleRowTabControl  Grid.Row="1"  HorizontalContentAlignment="Center" HorizontalAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="0" Width="640" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+            <TabItem  x:Name="metroTabItem"  Foreground="Black" FontSize="22"   FontFamily="SimSun">
+			<TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image VerticalAlignment="Center" Source="/BoonieBear.DeckUnit;component/Assets/MainPageButton/adcp.png" Width="24" />
+						<TextBlock >水声电话</TextBlock>
+				    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                            <ColumnDefinition />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Column="0" Grid.ColumnSpan="1">
+                            <Label Content="Default button" Style="{StaticResource DescriptionHeaderStyle}" />
+                            <Button Width="100" Command="{Binding GoDataPageCommand}"
+                                    Margin="0, 10, 0, 0"
+                                    Content="Enabled" />
+                            <Button Width="100"
+                                    Margin="0, 10, 0, 0"
+                                    Content="Disabled"
+                                    IsEnabled="False" />
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="2">
+                            <Label Content="Toggle button" Style="{StaticResource DescriptionHeaderStyle}" />
+                            <ToggleButton Width="100"
+                                          Margin="0, 10, 0, 0"
+                                          Content="Enabled" />
+                            <ToggleButton Width="100"
+                                          Margin="0, 10, 0, 0"
+                                          Content="Disabled"
+                                          IsEnabled="False" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="3">
+                            <StackPanel.Resources>
+                                <ResourceDictionary>
+                                    <ResourceDictionary.MergedDictionaries>
+                                        <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatButton.xaml" />
+                                    </ResourceDictionary.MergedDictionaries>
+                                </ResourceDictionary>
+                            </StackPanel.Resources>
+                            <Label Content="Flat button" Style="{StaticResource DescriptionHeaderStyle}" />
+                            <Button Width="100"
+                                    Margin="0, 10, 0, 0"
+                                    Content="Enabled" />
+                            <Button Width="100"
+                                    Margin="0, 10, 0, 0"
+                                    Content="Disabled"
+                                    IsEnabled="False" />
+                        </StackPanel>
+                        <StackPanel Grid.Column="4">
+                            <Label Content="Circle button" Style="{StaticResource DescriptionHeaderStyle}" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="0"
+									Grid.ColumnSpan="2"
+                                    HorizontalAlignment="Center" Width="246">
+                            <StackPanel.Resources>
+                                <BooleanToVisibilityConverter x:Key="btv" />
+                            </StackPanel.Resources>
+                            <Label Content="Toggle switch" Style="{StaticResource DescriptionHeaderStyle}" />
+                            <metroControl:ToggleSwitch  Header="With Header"  IsChecked="True" Margin="10,0,0,0" Instruction="english"/>
+                            <metroControl:ToggleSwitch IsChecked="True" Header="right to left" ContentDirection="RightToLeft" Instruction="你好的啊" FontFamily="Segoe UI Symbol" />
+
+                            <metroControl:ToggleSwitch IsChecked="True" IsEnabled="False" />
+                            <metroControl:ToggleSwitch IsEnabled="False" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="1"
+                                    HorizontalAlignment="Center">
+                            <StackPanel.Resources>
+                                <BooleanToVisibilityConverter x:Key="btv" />
+                            </StackPanel.Resources>
+
+
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="2"
+                                    HorizontalAlignment="Center">
+                            <Label Content="Checkbox" Style="{StaticResource DescriptionHeaderStyle}" />
+                            <CheckBox Margin="0, 10, 0, 0" Content="Enabled" />
+                            <CheckBox Margin="0, 10, 0, 0"
+                                      Content="Enabled"
+                                      IsChecked="True" />
+                            <CheckBox Margin="0, 10, 0, 0"
+                                      Content="Enabled" 
+                                      IsChecked="{x:Null}"
+                                      IsThreeState="True" />
+                            <CheckBox Margin="0, 10, 0, 0"
+                                      Content="Disabled"
+                                      IsEnabled="False" />
+                            <CheckBox Margin="0, 10, 0, 0"
+                                      Content="Disabled"
+                                      IsChecked="True"
+                                      IsEnabled="False" />
+                            <CheckBox Margin="0, 10, 0, 0"
+                                      Content="Disabled" 
+                                      IsEnabled="False"
+                                      IsChecked="{x:Null}"
+                                      IsThreeState="True" />
+                        </StackPanel>
+                        <StackPanel Grid.Row="1"
+                                    Grid.Column="3"
+                                    HorizontalAlignment="Center">
+                            <Label Content="Radio button" Style="{StaticResource DescriptionHeaderStyle}" />
+                            <RadioButton Margin="0, 10, 0, 0"
+                                         Content="Enabled"
+                                         GroupName="1" />
+                            <RadioButton Margin="0, 10, 0, 0"
+                                         Content="Enabled"
+                                         GroupName="1"
+                                         IsChecked="True" />
+                            <RadioButton Margin="0, 10, 0, 0"
+                                         Content="Disabled"
+                                         GroupName="2"
+                                         IsEnabled="False" />
+                            <RadioButton Margin="0, 10, 0, 0"
+                                         Content="Disabled"
+                                         GroupName="2"
+                                         IsChecked="True"
+                                         IsEnabled="False" />
+                        </StackPanel>
+                    </Grid>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="设置" FontSize="22" Foreground="Black" Background="{x:Null}" FontFamily="SimSun">
+                <Grid>
+                </Grid>
+            </TabItem>
+        </metroControl:MetroAnimatedSingleRowTabControl>
+
+    </Grid>
+    </controls:ContentPage>
