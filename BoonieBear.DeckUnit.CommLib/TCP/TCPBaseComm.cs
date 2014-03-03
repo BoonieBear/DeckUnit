@@ -1,6 +1,6 @@
 ﻿using System.Net.Sockets;
 
-namespace BoonieBear.DeckUnit.CommLib
+namespace BoonieBear.DeckUnit.CommLib.TCP
 {
     public abstract class TCPBaseComm : ITCPComm
     {

@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO.Ports;
-using System.Linq;
-using System.Text;
 
-namespace BoonieBear.DeckUnit.CommLib.ACNProtocol
+namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     public class ACNSerialHexCommand : SerialBaseComm,IComm
     {

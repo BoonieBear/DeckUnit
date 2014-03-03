@@ -1,4 +1,4 @@
-﻿namespace BoonieBear.DeckUnit.CommLib.ACNProtocol
+﻿namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     public class ACNSerialHexCommandFactory : ISerialFactory
     {

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
 
 namespace BoonieBear.DeckUnit.CommLib
 {
@@ -11,32 +12,8 @@ namespace BoonieBear.DeckUnit.CommLib
     {
         bool Send();
     }
-    #region 串口操作接口和工厂接口
-    public interface ISerialComm
-    {
-        bool Init(SerialPort serialPort);
-        void GetMsg(string str);
-        void GetData(Byte[] bytes);
-        void SendData();
-        void SendMsg();
-    }
-
-    public interface ISerialFactory
-    {
-        ISerialComm CreateSerialComm();
-    }
-    #endregion
+  
 
 
-    #region TCP接口和工厂类
-    public interface ITCPComm
-    {
-        bool Init(TcpClient tcpClient);
-        void GetMsg(string str);
-        void GetData(Byte[] bytes);
-        bool Send();
-        bool SendMsg();
-    }
-
-    #endregion  
+     
 }

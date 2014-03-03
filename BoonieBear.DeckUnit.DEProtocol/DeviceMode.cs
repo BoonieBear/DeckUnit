@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace BoonieBear.DockUni.DEProtocol
+namespace BoonieBear.DeckUni.DEProtocol
 {
-    class DeckUnitDEHelper
+    class DeviceMode
     {
     }
 }

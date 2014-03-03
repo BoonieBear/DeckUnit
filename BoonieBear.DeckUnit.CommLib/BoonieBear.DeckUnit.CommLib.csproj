@@ -58,21 +58,23 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ACNProtocol\SerialCommand.cs" />
-    <Compile Include="ACNProtocol\TCPCommand.cs" />
-    <Compile Include="ACNProtocol\UDPCommand.cs" />
+    <Compile Include="Protocol\ACMProtocol.cs" />
+    <Compile Include="Protocol\ACNProtocol.cs" />
+    <Compile Include="Protocol\DeckDataProtocol.cs" />
+    <Compile Include="Serial\InterfaceSerial.cs" />
+    <Compile Include="Serial\SerialCommand.cs" />
+    <Compile Include="TCP\InterfaceTCP.cs" />
+    <Compile Include="TCP\TCPCommand.cs" />
+    <Compile Include="UDP\UDPCommand.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="IComm.cs" />
-    <Compile Include="SerialBaseComm.cs" />
+    <Compile Include="Serial\SerialBaseComm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ACNProtocol\SerialFactory.cs" />
-    <Compile Include="TCPBaseComm.cs" />
-    <Compile Include="UDPBaseComm.cs" />
+    <Compile Include="Serial\SerialFactory.cs" />
+    <Compile Include="TCP\TCPBaseComm.cs" />
+    <Compile Include="UDP\UDPBaseComm.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ACMDeckProtocol\" />
-    <Folder Include="ACMSubmarineProtocol\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

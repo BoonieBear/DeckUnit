@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO.Ports;
 using System.Linq;
+using System.Threading;
 
-namespace BoonieBear.DeckUnit.CommLib
+namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     /// <summary>
     /// 串口打包协议基类
@@ -12,7 +13,7 @@ namespace BoonieBear.DeckUnit.CommLib
         private SerialPort _serialPort;
         private string _str;
         private Byte[] _nBytes;
-
+        private Mutex _objectMutex;
         public virtual void GetMsg(string str)
         {
             _str = str;
@@ -28,8 +29,9 @@ namespace BoonieBear.DeckUnit.CommLib
         {
             _serialPort.NewLine = endchar;
         }
-        public  bool Init(SerialPort serialPort)
+        public  bool Init(SerialPort serialPort,ref Mutex mutex)
         {
+            _objectMutex = mutex;
             _serialPort = serialPort;
 
             if (_serialPort.IsOpen)

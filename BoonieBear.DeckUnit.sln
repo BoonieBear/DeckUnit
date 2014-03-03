@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.SysReso
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.CommLib", "BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj", "{B2127A13-6FE1-4B46-98EA-6F4BB565670C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.DEProtocol", "BoonieBear.DeckUnit.DEProtocol\BoonieBear.DeckUnit.DEProtocol.csproj", "{A3B53155-A572-43A5-8F2D-9D4DB920656B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.DeviceLib", "BoonieBear.DeckUnit.DEProtocol\BoonieBear.DeckUnit.DeviceLib.csproj", "{A3B53155-A572-43A5-8F2D-9D4DB920656B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Utilities", "BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj", "{77642012-7D37-4461-B14C-CD949E2A3B9E}"
 EndProject

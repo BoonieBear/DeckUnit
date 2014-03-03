@@ -8,7 +8,7 @@ using System.Text;
 namespace BoonieBear.DeckUnit.CommLib
 {
     /// <summary>
-    /// 命令模式的命令类实现，调用ISerialComm和ITCPComm
+    /// 命令模式的命令类实现，调用IComm
     /// </summary>
     public  class Command
     {
