@@ -20,10 +20,6 @@ namespace BoonieBear.DeckUnit.Views
             InitializeComponent();
         }
 
-        private void ContentPage_Loaded(object sender, RoutedEventArgs e)
-        {
-            ChangeBottomBarVisibility(Visibility.Visible);
-            ChangeTopBarVisibility(Visibility.Visible);
-        }
+        
     }
 }

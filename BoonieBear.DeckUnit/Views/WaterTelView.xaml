@@ -8,15 +8,8 @@
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=WaterTelViewModel}"
       KeepAlive="True"
 	 Height="480"
-	 Title="水声电话" Width="640" Loaded="ContentPage_Loaded">
-    <controls:ContentPage.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro.Resources;component/Icons.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </controls:ContentPage.Resources>
+	 Title="水声电话" Width="640"  >
+    
     <Grid Background="{StaticResource MainBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -32,7 +25,7 @@
 						<TextBlock >水声电话</TextBlock>
 				    </StackPanel>
                 </TabItem.Header>
-                <ScrollViewer>
+                <controls:TouchMoveScroll>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
@@ -156,7 +149,7 @@
                                          IsEnabled="False" />
                         </StackPanel>
                     </Grid>
-                </ScrollViewer>
+                </controls:TouchMoveScroll>
             </TabItem>
             <TabItem Header="设置" FontSize="22" Foreground="Black" Background="{x:Null}" FontFamily="SimSun">
                 <Grid>

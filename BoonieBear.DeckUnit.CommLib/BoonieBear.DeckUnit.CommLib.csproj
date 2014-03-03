@@ -7,8 +7,8 @@
     <ProjectGuid>{B2127A13-6FE1-4B46-98EA-6F4BB565670C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoonieBear.DeckUni.CommLib</RootNamespace>
-    <AssemblyName>BoonieBear.DeckUni.CommLib</AssemblyName>
+    <RootNamespace>BoonieBear.DeckUnit.CommLib</RootNamespace>
+    <AssemblyName>BoonieBear.DeckUnit.CommLib</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>
@@ -58,11 +58,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CommFactory.cs" />
+    <Compile Include="ACNProtocol\SerialCommand.cs" />
+    <Compile Include="ACNProtocol\TCPCommand.cs" />
+    <Compile Include="ACNProtocol\UDPCommand.cs" />
+    <Compile Include="Command.cs" />
     <Compile Include="IComm.cs" />
-    <Compile Include="NetComm.cs" />
+    <Compile Include="SerialBaseComm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SerialComm.cs" />
+    <Compile Include="ACNProtocol\SerialFactory.cs" />
+    <Compile Include="TCPBaseComm.cs" />
+    <Compile Include="UDPBaseComm.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ACMDeckProtocol\" />
+    <Folder Include="ACMSubmarineProtocol\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

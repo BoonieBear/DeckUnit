@@ -55,8 +55,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            IsShowBottomBar =Visibility.Hidden;
-            IsShowTopBar = Visibility.Hidden;
+
             EventAggregator.PublishMessage(new GoBackNavigationRequest());
         }
 

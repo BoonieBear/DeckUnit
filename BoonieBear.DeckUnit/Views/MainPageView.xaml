@@ -277,8 +277,7 @@
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="DeviceDataButton">
             <BeginStoryboard x:Name="MoveDeviceButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveDeviceButtonsBottom}"/>
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard" Storyboard="{StaticResource EnableReturnButton}"/>
-            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
-            <StopStoryboard BeginStoryboardName="RotationStoryboard_BeginStoryboard"/>
+            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>   
             <BeginStoryboard Storyboard="{StaticResource EnableDeviceButtonStoryboard}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="OptionButton">

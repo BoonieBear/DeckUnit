@@ -6,7 +6,7 @@ using BoonieBear.TinyMetro.WPF.EventAggregation;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
-    /// 消息处理函数
+    /// 和页面导航相关消息处理函数，包括页面导航，导航传值，关闭页面
     /// </summary>
     internal class UnitNavigationController : BaseController,
         IHandleMessage<GoWaterTelPageBaseNavigationRequest>,
