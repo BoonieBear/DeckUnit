@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using BoonieBear.TinyMetro.WPF.Events;
+using BoonieBear.TinyMetro.WPF.Frames;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
 namespace BoonieBear.DeckUnit.ViewModels
@@ -55,8 +56,9 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-
+            EventAggregator.PublishMessage(new ChangeAnimationModeRequest(AnimationMode.SmoothSlide));
             EventAggregator.PublishMessage(new GoBackNavigationRequest());
+            EventAggregator.PublishMessage(new ChangeAnimationModeRequest(AnimationMode.Fade));
         }
 
         #endregion

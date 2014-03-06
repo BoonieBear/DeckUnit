@@ -8,7 +8,7 @@
       mc:Ignorable="d" 
       Name="MainformPage"
       d:DesignHeight="480" d:DesignWidth="640" 
-	Title="甲板单元">
+	Title="甲板单元" Loaded="MainformPage_Loaded">
     <Page.Resources>
         <Storyboard x:Key="EnableDeviceButtonStoryboard">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="RemoteControlButton" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -303,7 +303,7 @@
     </Page.Triggers>
     <Grid>
 
-        <Grid x:Name="grid" Style="{StaticResource  LightGreenStyle}" HorizontalAlignment="Left" Width="640">
+        <Grid x:Name="grid" Background="{StaticResource MainBackGround}" HorizontalAlignment="Left" Width="640">
             <Canvas Margin="7">
                 <Border Name="TextBorder" HorizontalAlignment="Left" VerticalAlignment="Center">
                     <Grid>

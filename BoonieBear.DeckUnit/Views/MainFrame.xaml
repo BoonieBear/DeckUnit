@@ -16,10 +16,10 @@
         <frames:AnimationFrame x:Name="ContentFrame"
 			Source="MainPageView.xaml" 
 			NavigationUIVisibility="Hidden"
-			AnimationMode="SmoothSlide"
-            SlideorGrowDuration ="0:0:0.650 "
-			FadeDuration="0:0:0.350"
-			FadeOffset="0:0:0.150">
+			AnimationMode="Fade"
+            SlideorGrowDuration ="0:0:0.350 "
+			FadeDuration="0:0:0.150"
+			FadeOffset="0:0:0.050">
         </frames:AnimationFrame>
         <Border x:Name="TopBorder"  Height="30" Background="{DynamicResource BlackBgMask}" VerticalAlignment="Top" Visibility="{Binding IsShowTopBar}">
         <Button Command ="{Binding GoBackCommand}" HorizontalAlignment="Left" Margin="5,5,0,0" VerticalAlignment="Top" Width="20" Height="20" Style="{DynamicResource SmallTransparentButtonStyle}">

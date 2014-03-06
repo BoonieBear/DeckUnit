@@ -17,7 +17,7 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
         #endregion Fields
 
         #region Methods
-
+        /*
         public  static NodeLogic FromJson(string json)
         {
             var jobj = JObject.Parse(json);
@@ -30,7 +30,7 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
             {
                 var jvalue = (JValue)jtoken;
                 var value = (jvalue.Value ?? NULL_TEXT).ToString();
-                return new NodeLogic(value, jvalue.Type.ToString(), null);
+                return new NodeLogic(value, jvalue.Type.ToString(), null, TODO);
             }
             else if (jtoken is JContainer)
             {
@@ -56,14 +56,14 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
                 else
                     throw new Exception("不支持的JContainer类型");
 
-                return new NodeLogic(header, NULL_TEXT, children);
+                return new NodeLogic(header, NULL_TEXT, children, TODO);
             }
             else
             {
                 throw new Exception("不支持的JToken类型");
             }
         }
-
+        */
         #endregion Methods
     }
 }
