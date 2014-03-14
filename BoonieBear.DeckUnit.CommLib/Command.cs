@@ -4,6 +4,9 @@ using System.IO.Ports;
 using System.Net.Sockets;
 using System.Runtime.Remoting.Messaging;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using BoonieBear.DeckUnit.CommLib.Serial;
 
 namespace BoonieBear.DeckUnit.CommLib
 {
@@ -12,11 +15,19 @@ namespace BoonieBear.DeckUnit.CommLib
     /// </summary>
     public  class Command
     {
-        public bool SendSerialCommand(IComm command)
+        public static string Error;
+
+        public static Task<bool> SendCommandAsync(SerialBaseComm command)
         {
-            return command.Send();
+            return Task.Factory.StartNew(() => command.Send(out Error));
+           
         }
-     
+        public static Task<CustomEventArgs> RecvDataAsync(SerialBaseComm command)
+        {
+            return Task.Factory.StartNew(() => command.RecvData());
+
+        }
+
     }
 
 }

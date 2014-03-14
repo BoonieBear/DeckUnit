@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using BoonieBear.DeckUnit.Utilities;
+using Microsoft.SqlServer.Server;
+
 namespace BoonieBear.DeckUnit.Utilities
 {
     public class StringHexConverter
@@ -25,7 +27,7 @@ namespace BoonieBear.DeckUnit.Utilities
         }
         public static string ConvertCharToHex(byte[] str, int length)
         {
-            string data = "";
+            var data = new StringBuilder();
             for (int i = 0; i < length; i++)
             {
                 string s = Convert.ToString(str[i], 16);
@@ -33,10 +35,10 @@ namespace BoonieBear.DeckUnit.Utilities
                 {
                     s = "0" + s;
                 }
-                data += s;
+                data.Append(s);
             }
 
-            return data.ToUpper();
+            return data.ToString().ToUpper();
 
         }
         public static byte[] ConvertHexToChar(string str)

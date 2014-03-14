@@ -2,18 +2,23 @@
 using System.IO.Ports;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using BoonieBear.DeckUnit.Utilities;
 
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {
+    
+
     /// <summary>
     /// 串口打包协议基类
     /// </summary>
-    public abstract class SerialBaseComm : ISerialComm
+    public abstract class SerialBaseComm : IObserver<CustomEventArgs>
     {
-        private SerialPort _serialPort;
-        private string _str;
-        private Byte[] _nBytes;
-        private Mutex _objectMutex;
+        public SerialPort _serialPort;
+        protected string _str;
+        protected Byte[] _nBytes;
+      
+
         public virtual void GetMsg(string str)
         {
             _str = str;
@@ -28,33 +33,60 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         public void SetEndChars(string endchar)
         {
             _serialPort.NewLine = endchar;
-        }
-        public  bool Init(SerialPort serialPort,ref Mutex mutex)
+        } 
+        public virtual bool SendData(out string err)
         {
-            _objectMutex = mutex;
-            _serialPort = serialPort;
-
-            if (_serialPort.IsOpen)
+            try
             {
+                 if (!_serialPort.IsOpen)
+                {
+                    err = "串口未打开";
+                    return false;
+                }
+                _serialPort.Write(_nBytes, 0, _nBytes.Count());
+                err = "发送成功";
                 return true;
             }
-            return false;
+            catch (Exception e)
+            {
+
+                err = e.Message;
+                return false; 
+            }
+           
+        }
+        public virtual bool SendMsg(out string err)
+        {
+            try
+            {
+                if (!_serialPort.IsOpen)
+                {
+                    err = "串口未打开";
+                    return false;
+                }
+                var data = _str.ToCharArray();
+                _serialPort.Write(data, 0, data.Length);
+                err = "发送成功";
+                return true;
+            }
+            catch (Exception e)
+            {
+                err = e.Message;
+                return false;
+            }
+            
         }
 
-        public virtual void SendData()
+
+        public abstract bool Send(out string error);
+
+        public virtual CustomEventArgs RecvData()
         {
-            if (_serialPort.IsOpen)
-            {
-                _serialPort.Write(_nBytes, 0, _nBytes.Count());
-            }
+            return null;
         }
-        public virtual void SendMsg()
-        {
-            if (!_serialPort.IsOpen)
-            {
-                _serialPort.WriteLine(_str);
-            }
-        }
+
+        public virtual void Handle(object sender, CustomEventArgs e)
+        { }
     }
 
 }

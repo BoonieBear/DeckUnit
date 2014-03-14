@@ -2,7 +2,7 @@
 
 namespace BoonieBear.DeckUnit.CommLib.TCP
 {
-    public abstract class TCPBaseComm : ITCPComm
+    public abstract class TCPBaseComm
     {
 
         public bool Send()

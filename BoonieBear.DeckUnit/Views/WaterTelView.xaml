@@ -14,7 +14,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="80"/>
+            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
         
         <metroControl:MetroAnimatedSingleRowTabControl  Grid.Row="1"  HorizontalContentAlignment="Center" HorizontalAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="0" Width="640" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">

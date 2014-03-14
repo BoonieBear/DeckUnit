@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BoonieBear.DeckUnit.CommLib</RootNamespace>
     <AssemblyName>BoonieBear.DeckUnit.CommLib</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -29,6 +31,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +41,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
@@ -47,6 +51,7 @@
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -58,21 +63,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CustomEventArgs.cs" />
+    <Compile Include="IService.cs" />
+    <Compile Include="Properties\Annotations.cs" />
     <Compile Include="Protocol\ACMProtocol.cs" />
     <Compile Include="Protocol\ACNProtocol.cs" />
     <Compile Include="Protocol\DeckDataProtocol.cs" />
+    <Compile Include="define.cs" />
     <Compile Include="Serial\InterfaceSerial.cs" />
     <Compile Include="Serial\SerialCommand.cs" />
+    <Compile Include="Serial\SerialService.cs" />
     <Compile Include="TCP\InterfaceTCP.cs" />
     <Compile Include="TCP\TCPCommand.cs" />
+    <Compile Include="TCP\TCPService.cs" />
+    <Compile Include="UDP\InterfaceUDP.cs" />
     <Compile Include="UDP\UDPCommand.cs" />
     <Compile Include="Command.cs" />
-    <Compile Include="IComm.cs" />
     <Compile Include="Serial\SerialBaseComm.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Serial\SerialFactory.cs" />
     <Compile Include="TCP\TCPBaseComm.cs" />
     <Compile Include="UDP\UDPBaseComm.cs" />
+    <Compile Include="UDP\UDPService.cs" />
+    <Compile Include="UDP\UDPFactory.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">

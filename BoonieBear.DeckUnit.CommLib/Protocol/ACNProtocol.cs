@@ -9,7 +9,7 @@ using BoonieBear.DeckUnit.Utilities.JSON;
 
 namespace BoonieBear.DeckUnit.CommLib.Protocol
 {
-    internal class ACNSerial
+    public class ACNSerialProtocol
     {
         private static readonly Hashtable ACNWebHashtableID = new Hashtable();
         private static readonly Hashtable ACNCommandID = new Hashtable();
@@ -17,10 +17,11 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         private static BitArray packdata;//将打包数据转换成bit数组
         private static int index = 0;//累进解析器的下标位置。
         private static int packindex = 0;//累进打包器的下标位置
-        private static List<string[]> parselist = new List<string[]>();
+        public static List<string[]> parselist = new List<string[]>();
         private static string[] str;
         public static string Errormessage { get; private set; }
-
+        public static string BuoyID { get; set; }
+        public static int Port { get; set; }
         #region 协议成员类
         //{"结束标识","分段标识","邻节点表","网络表","网络简表","路由表","路径记录","路径安排",
         //                          "路径中断","转发失败"};
@@ -452,6 +453,9 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         /// </summary>
         static public void Init()
         {
+            BuoyID = "00";
+            Port = 2;
+            ACNWebHashtableID.Clear();
             ACNWebHashtableID.Add(0, "结束标识");
             ACNWebHashtableID.Add(1, "分段标识");
             ACNWebHashtableID.Add(2, "节点信息表");
@@ -539,12 +543,12 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         }
         static public void GetData(byte[] d)
         {
-            index = 0;
+            Clear();
             data = new BitArray(d);
         }
         static public void GetData(BitArray d)
         {
-            index = 0;
+            Clear();
             data = new BitArray(d);
         }
 
@@ -558,6 +562,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         }
         static public void InitForPack(int bitlen)
         {
+            Clear();
             packdata = new BitArray(bitlen);
             packindex = 0;
         }
@@ -619,7 +624,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         #region 串口打包解包
 
         //串口打包函数，加0xAA，校验，浮标协议包头
-        public static byte[] CommPackage(int id, int buoyId, int port, byte[] outcmd)
+        public static byte[] CommPackage(int id, byte[] outcmd)
         {
             string head;
             byte type;
@@ -643,11 +648,11 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
                     type = (byte) id;
                 timelen = 23; //加上长度域
             }
-            var aaHeadCmd = PackageAAHead(type, (byte) port, outcmd); //加AA协议
+            var aaHeadCmd = PackageAAHead(type, (byte) Port, outcmd); //加AA协议
             if (aaHeadCmd == null) throw new ArgumentNullException("协议无效！");
             var headbyte = Encoding.Default.GetBytes(head);
             var tailbyte = Encoding.Default.GetBytes(tail);
-            var buoyid = buoyId.ToString(CultureInfo.CurrentCulture) + ",";
+            var buoyid = BuoyID.ToString(CultureInfo.CurrentCulture) + ",";
             var bytebuoyid = Encoding.Default.GetBytes(buoyid);
             var cmd = new byte[headbyte.Length + aaHeadCmd.Length + 4 + timelen];
             Buffer.BlockCopy(headbyte, 0, cmd, 0, headbyte.Length);
@@ -1562,6 +1567,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             return str;
         }
         #endregion
+
         #region 写入比特流方法
 
         /// <summary>
