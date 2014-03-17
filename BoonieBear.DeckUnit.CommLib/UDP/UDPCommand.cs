@@ -1,28 +1,59 @@
 ﻿using System;
+using System.Net;
 using System.Net.Sockets;
 
 namespace BoonieBear.DeckUnit.CommLib.UDP
 {
-    public class ACNUDPCommand:UDPBaseComm
+    public class ACNUDPShellCommand:UDPBaseComm
     {
-        ACNCommandMode _mode = ACNCommandMode.CmdCharMode;
+
         private string cmd = null;
-        private byte[] _bytes;
-        public ACNUDPCommand(UdpClient udpClient, ACNCommandMode mode,string str,byte[] bytes)
+        public ACNUDPShellCommand(UdpClient udpClient,string str)
         {
-            _udpClient = udpClient;
-            _mode = mode;
-            if (mode == ACNCommandMode.CmdCharMode)
-            {
-                cmd = str;
-            }
-            if (mode == ACNCommandMode.CmdWithData)
-            {
-                _bytes =new byte[bytes.Length];
-                Array.Copy(bytes,_bytes,bytes.Length);
-            }
+            if (!base.Init(udpClient)) return;
+
+            cmd = str;
 
         }
 
+        public override bool Send(IPAddress ip, int port)
+        {
+ 
+            return SendTo(ip,port,cmd);
+
+        }
+
+        public override bool BroadCast()
+        {
+            
+              return BroadCastMsg(cmd);
+           
+        }
+    }
+    public class ACNUDPDataCommand : UDPBaseComm
+    {
+        
+        private byte[] _bytes;
+
+        public ACNUDPDataCommand(UdpClient udpClient, byte[] bytes)
+        {
+            if (!base.Init(udpClient)) return;
+            _bytes = new byte[bytes.Length];
+            Array.Copy(bytes, _bytes, bytes.Length);
+        }
+
+        public override bool Send(IPAddress ip, int port)
+        {
+           
+            return SendTo(ip, port, _bytes);
+           
+        }
+
+        public override bool BroadCast()
+        {
+
+           return BroadCast(_bytes);
+           
+        }
     }
 }

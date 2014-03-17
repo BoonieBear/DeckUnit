@@ -69,11 +69,11 @@ namespace BoonieBear.DeckUnit.CommLibTests
             var commfactory = new ACNSerialCommHexCommandFactory(AcnSerialsevice.ReturnSerialPort());
             var serialcommand = commfactory.CreateSerialComm(ACNCommandMode.CmdIDMode, 247, null,null);
             AcnSerialsevice.Register(serialcommand);
-            var ans = await Command.SendCommandAsync(serialcommand);
+            var ans = await Command.SendSerialAsync(serialcommand);
              
             if (ans)
             {
-                var e = await Command.RecvDataAsync(serialcommand);
+                var e = await Command.RecvSerialAsync(serialcommand);
                 if (e != null)
                 {
                     if (e.ParseOK)

@@ -15,9 +15,20 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
         {
             _udpClient = udpClient;
         }
-        public UDPBaseComm CreateSerialComm(ACNCommandMode mode, int id, byte[] bytes,string str)
+        public UDPBaseComm CreateUDPComm(ACNCommandMode mode, byte[] bytes,string str)
         {
-            return new ACNUDPCommand(_udpClient, mode, str, bytes);
+            switch (mode)
+            {
+                case ACNCommandMode.CmdCharMode:
+                    return new ACNUDPShellCommand(_udpClient,str);
+                    break;
+                case ACNCommandMode.CmdWithData:
+                    return new ACNUDPDataCommand(_udpClient,bytes);
+                    break;
+                default:
+                    throw new InvalidOperationException("不支持的命令模式！");
+            }
+            
         }
     }
     public class UDPDebugServiceFactory:IUDPServiceFactory

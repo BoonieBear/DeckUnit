@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.CommLib.Serial;
+using BoonieBear.DeckUnit.CommLib.TCP;
 
 namespace BoonieBear.DeckUnit.CommLib
 {
@@ -17,12 +18,28 @@ namespace BoonieBear.DeckUnit.CommLib
     {
         public static string Error;
 
-        public static Task<bool> SendCommandAsync(SerialBaseComm command)
+        public static Task<bool> SendSerialAsync(SerialBaseComm command)
         {
             return Task.Factory.StartNew(() => command.Send(out Error));
            
         }
-        public static Task<CustomEventArgs> RecvDataAsync(SerialBaseComm command)
+        public static Task<CustomEventArgs> RecvSerialAsync(SerialBaseComm command)
+        {
+            return Task.Factory.StartNew(() => command.RecvData());
+
+        }
+        ///////////////////////////////////////////////////////////////////////////////////////////////
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="command"></param>
+        /// <returns></returns>
+        public static Task<bool> SendTCPAsync(TCPBaseComm command)
+        {
+            return Task.Factory.StartNew(() => command.Send(out Error));
+
+        }
+        public static Task<CustomEventArgs> RecvTCPAsync(TCPBaseComm command)
         {
             return Task.Factory.StartNew(() => command.RecvData());
 

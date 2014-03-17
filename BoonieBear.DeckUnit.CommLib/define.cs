@@ -26,10 +26,16 @@ namespace BoonieBear.DeckUnit.CommLib
 
     public enum ACNCommandMode
     {
+        //shell string
         CmdCharMode=0,
+        //id,null
         CmdIDMode =1,
+        //cmd,data
         CmdWithData = 2,
-        LoaderDataMode=3,
+        //cmd,stream
+        CmdWithStream = 3,
+        //loader
+        LoaderDataMode=4,
         
     }
 }

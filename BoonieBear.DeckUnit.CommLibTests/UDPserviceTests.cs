@@ -21,7 +21,8 @@ namespace BoonieBear.DeckUnit.CommLibTests
         [TestInitialize]
         public void Init()
         {
-             udpClient=new UdpClient(8080);
+            if (udpClient==null)
+                udpClient=new UdpClient(8080);
             autoReset = new AutoResetEvent(false);
             ACNProtocol.Init();
         }
@@ -76,19 +77,20 @@ namespace BoonieBear.DeckUnit.CommLibTests
             {
                 if (debugservice.Start())
                 {
-                    if (autoReset.WaitOne())
+                    if (autoReset.WaitOne(10000))
                     {
+                        debugservice.Stop();
                         Assert.AreEqual("aaa",str);
                     }
                     else
                     {
-                        
+                        debugservice.Stop();
                         Assert.Fail();
                     }
                 }
                 else
                 {
-
+   
                     Assert.Fail();
                 }
             }
@@ -107,13 +109,14 @@ namespace BoonieBear.DeckUnit.CommLibTests
             {
                 if (debugservice.Start())
                 {
-                    if (autoReset.WaitOne())
+                    if (autoReset.WaitOne(10000))
                     {
+                        debugservice.Stop();
                         Assert.IsNotNull(str,"str=null");
                     }
                     else
                     {
-
+                        debugservice.Stop();
                         Assert.Fail();
                     }
                 }
@@ -129,7 +132,16 @@ namespace BoonieBear.DeckUnit.CommLibTests
         [TestMethod]
         public void BroadCastUdpTest()
         {
-            
+            var command = new UDPCommFactory(udpClient);
+            var comm = command.CreateUDPComm(ACNCommandMode.CmdCharMode,  null, "something");
+            Assert.IsTrue(comm.BroadCast());
+        }
+        [TestMethod]
+        public void BroadCastDataUdpTest()
+        {
+            var command = new UDPCommFactory(udpClient);
+            var comm = command.CreateUDPComm(ACNCommandMode.CmdWithData, new byte[]{30,31}, "something");
+            Assert.IsTrue(comm.BroadCast());
         }
     }
 }

@@ -11,7 +11,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
 
     public interface IUDPCommFactory
     {
-        UDPBaseComm CreateSerialComm(ACNCommandMode mode, int id, byte[] bytes,string str);
+        UDPBaseComm CreateUDPComm(ACNCommandMode mode, byte[] bytes,string str);
     }
 
     public interface IUDPServiceFactory

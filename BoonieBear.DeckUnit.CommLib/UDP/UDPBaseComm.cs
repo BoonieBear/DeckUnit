@@ -11,8 +11,10 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
         protected int BroadCastPort = 10020;
         public virtual bool Init(UdpClient udp)
         {
+
             _udpClient = udp;
-            return (_udpClient!=null)&&(_udpClient.EnableBroadcast);
+            _udpClient.EnableBroadcast = true;
+            return (_udpClient!=null);
         }
         protected virtual bool BroadCast(byte[] bytes)
         {
@@ -25,7 +27,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
             return BroadCast(sendBytes);
         }
 
-        protected virtual bool SendTo(IPAddress ip,int port,byte[] bytes)
+        protected virtual bool SendTo(IPAddress ip, int port, byte[] bytes)
         {
             try
             {
@@ -37,7 +39,22 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 return false;
             }
         }
+        protected virtual bool SendTo(IPAddress ip, int port, string cmd)
+        {
+            try
+            {
+                var sendBytes = Encoding.Default.GetBytes(cmd);
+                SendTo(ip, port, sendBytes);
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
+        }
 
+        public abstract bool Send(IPAddress ip, int port);
+        public abstract bool BroadCast();
         public void Handle(object sender, CustomEventArgs e)
         {
             throw new NotImplementedException();

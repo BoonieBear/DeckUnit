@@ -98,19 +98,19 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
     public class ACNSerialLoaderCommand:SerialBaseComm
     {
         ACNCommandMode _mode = ACNCommandMode.CmdCharMode;
-        private string cmd = null;
-        private byte[] _bytes;
+
         public ACNSerialLoaderCommand(SerialPort serialPort, ACNCommandMode mode, string command, byte[] bytes)
         {
             _serialPort = serialPort;
+            _mode = mode;
             switch (mode)
             {
                 case ACNCommandMode.CmdCharMode:
                     base.GetMsg(command);
                     break;
                 case ACNCommandMode.LoaderDataMode:
-                    _bytes =new byte[bytes.Length];
-                    Array.Copy(bytes,_bytes,bytes.Length);
+                    _nBytes = new byte[bytes.Length];
+                    Array.Copy(bytes, _nBytes, bytes.Length);
                     break;
                 default:
                     break;
