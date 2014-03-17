@@ -9,7 +9,7 @@ using BoonieBear.DeckUnit.Utilities.JSON;
 
 namespace BoonieBear.DeckUnit.CommLib.Protocol
 {
-    public class ACNSerialProtocol
+    public class ACNProtocol
     {
         private static readonly Hashtable ACNWebHashtableID = new Hashtable();
         private static readonly Hashtable ACNCommandID = new Hashtable();
@@ -790,8 +790,20 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         #endregion
 
         #endregion
+        #region 网络打包
+        //网络打包函数，加0xAA，校验，网络包头
+        static public byte[] NetPackage(byte[] outcmd)
+        {
+            var fullpackage = new byte[outcmd.Length + 4];//完整命令 
+            UInt16 uid = 0xEE01;
+            Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, fullpackage, 0, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(outcmd.Length), 0, fullpackage, 2, 2);
+            Buffer.BlockCopy(outcmd, 0, fullpackage, 4, outcmd.Length);
+            return fullpackage;
 
-        
+        }
+        #endregion
+
         #region 网络信源包解包
         static public bool Parse()
         {

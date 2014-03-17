@@ -193,9 +193,9 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                     string time;
                     byte[] data;
                     int id;
-                    if (ACNSerialProtocol.DepackCommData(bytes, out time, out id, out data))
+                    if (ACNProtocol.DepackCommData(bytes, out time, out id, out data))
                     {
-                        var ack = "EB90,03," + ACNSerialProtocol.BuoyID + ",Y,";
+                        var ack = "EB90,03," + ACNProtocol.BuoyID + ",Y,";
                         var crc = CRCHelper.CRC16(ack);
                         var bcrc = BitConverter.GetBytes(crc);
                         var tmp = bcrc[0];
@@ -226,15 +226,15 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             try
                             {
 
-                                ACNSerialProtocol.GetData(data);
-                                if (ACNSerialProtocol.Parse())
+                                ACNProtocol.GetData(data);
+                                if (ACNProtocol.Parse())
                                 {
-                                    hexString = StringListToTree.LstToJson(ACNSerialProtocol.parselist);
+                                    hexString = StringListToTree.LstToJson(ACNProtocol.parselist);
                                     flag = true;
                                 }
                                 else
                                 {
-                                    error = ACNSerialProtocol.Errormessage;
+                                    error = ACNProtocol.Errormessage;
                                     flag = false;
                                 }
                                 
@@ -305,10 +305,10 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                                         else
                                             info.AppendLine("纬度位置无可用数据");
                                         info.AppendLine("串口2设备:" +
-                                                        Enum.GetName(typeof (ACNSerialProtocol.DeviceAddr),
+                                                        Enum.GetName(typeof (ACNProtocol.DeviceAddr),
                                                             int.Parse(hexStr.Substring(40, 4))));
                                         info.AppendLine("串口3设备:" +
-                                                        Enum.GetName(typeof (ACNSerialProtocol.DeviceAddr),
+                                                        Enum.GetName(typeof (ACNProtocol.DeviceAddr),
                                                             int.Parse(hexStr.Substring(44, 4))));
 
                                         int emittype = int.Parse(hexStr.Substring(48, 2));
@@ -414,7 +414,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                     }
                     else
                     {
-                        var ack = "EB90,03," + ACNSerialProtocol.BuoyID + ",N,";
+                        var ack = "EB90,03," + ACNProtocol.BuoyID + ",N,";
                         var crc = CRCHelper.CRC16(ack);
                         var bcrc = BitConverter.GetBytes(crc);
                         var tmp = bcrc[0];

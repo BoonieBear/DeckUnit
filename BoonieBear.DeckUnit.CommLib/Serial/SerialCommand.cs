@@ -25,13 +25,13 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                 case ACNCommandMode.CmdIDMode:
                     var cmd = new byte[1];
                     cmd[0] =Convert.ToByte(id);
-                    _nBytes = ACNSerialProtocol.CommPackage(id, cmd);
+                    _nBytes = ACNProtocol.CommPackage(id, cmd);
                     break;
                 case ACNCommandMode.CmdWithData:
-                    _nBytes = ACNSerialProtocol.CommPackage(id, bytes);
+                    _nBytes = ACNProtocol.CommPackage(id, bytes);
                     break;
                 default:
-                    _nBytes = ACNSerialProtocol.CommPackage(id, bytes);
+                    _nBytes = ACNProtocol.CommPackage(id, bytes);
                     break;
             }
         }

@@ -18,8 +18,8 @@ namespace BoonieBear.DeckUnit.CommLibTests
         [TestMethod()]
         public void SerialSeviceTest()
         {
-            var serial = new SerialPort("com21",9600);
-            ACNSerialProtocol.Init();
+            var serial = new SerialPort("2",9600);
+            ACNProtocol.Init();
 
             var IServiceFactory = new ACNSerialServiceFactory();
             var AcnSerialsevice = IServiceFactory.CreateService();
@@ -36,8 +36,8 @@ namespace BoonieBear.DeckUnit.CommLibTests
         [TestMethod()]
         public async Task ACNSerialCMDTest()
         {
-            var serial = new SerialPort("com21", 9600);
-            ACNSerialProtocol.Init();
+            var serial = new SerialPort("com2", 9600);
+            ACNProtocol.Init();
 
             var IServiceFactory = new ACNSerialServiceFactory();
             var AcnSerialsevice = IServiceFactory.CreateService();
