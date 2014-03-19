@@ -41,13 +41,13 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         {
             DoParse -= observer.Handle;
         }
-        public async void ConnectAsync()
+        public  void ConnectAsync()
         {
             if (_tcpClient == null) return;
             try
             {
-                var t = _tcpClient.ConnectAsync(IP, port);
-                await t;
+                _tcpClient.Connect(IP, port);
+                
             }
             catch (SocketException exception)
             {

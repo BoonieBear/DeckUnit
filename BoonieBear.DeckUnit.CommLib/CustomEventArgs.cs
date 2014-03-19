@@ -5,7 +5,7 @@ using System.Text;
 using BoonieBear.DeckUnit.CommLib.Serial;
 namespace BoonieBear.DeckUnit.CommLib
 {
-    public class CustomEventArgs
+    public class CustomEventArgs:EventArgs
     {
         public CustomEventArgs(string outstring, byte[] buf, int length, bool parseOK, string errorMsg, CallMode callmode)
         {

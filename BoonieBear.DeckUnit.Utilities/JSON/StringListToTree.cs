@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Schema;
 
 namespace BoonieBear.DeckUnit.Utilities.JSON
 {
@@ -70,7 +72,9 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
         {
             var n =TransListToNodeLogic(strList);
             var newnode = RemoveFatherPointer(n);
-            return JsonConvert.SerializeObject(newnode);
+            var json =  JsonConvert.SerializeObject(newnode);
+            var s =json.Replace("\"Father\":null,", "");
+            return s;
         }
         
     }

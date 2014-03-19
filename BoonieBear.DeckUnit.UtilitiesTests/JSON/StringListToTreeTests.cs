@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BoonieBear.DeckUnit.Utilities.JSON;
 using Newtonsoft.Json;
@@ -25,10 +26,11 @@ namespace BoonieBear.DeckUnit.UtilitiesTests.JSON
                 new[] {"4", "块数9", "13", ""},
                 new[] {"2", "块数", "31", ""}
             };
-            var nodetree = StringListToTree.TransListToNodeLogic(strlStringses);
-            var newtree = StringListToTree.RemoveFatherPointer(nodetree);
-            var jsonstr = JsonConvert.SerializeObject(newtree);
+
+            var jsonstr = StringListToTree.LstToJson(strlStringses);
+            Debug.WriteLine(jsonstr);
             var node = JsonConvert.DeserializeObject<NodeLogic>(jsonstr);  
+            
              Assert.IsNotNull(node);
         }
 

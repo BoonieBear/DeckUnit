@@ -212,13 +212,7 @@
     <Resource Include="Assets\IACAS.bmp" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Assets\MainPageButton\adcp.ico" />
     <Resource Include="Assets\MainPageButton\adcp.png" />
-    <Resource Include="Assets\MainPageButton\Disk Utility.ico" />
-    <Resource Include="Assets\MainPageButton\System Information.ico" />
-    <Resource Include="Assets\MainPageButton\System Preferences.ico" />
-    <Resource Include="Assets\MainPageButton\Toolbar Utilities Folder.ico" />
-    <Resource Include="Assets\MainPageButton\Utilities.ico" />
     <Resource Include="Assets\return.png" />
   </ItemGroup>
   <ItemGroup>
@@ -245,6 +239,11 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Gif\water.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\MainPageButton\Disk Utility.png" />
+    <Resource Include="Assets\MainPageButton\System Preferences.png" />
+    <Resource Include="Assets\MainPageButton\Toolbar Utilities Folder.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

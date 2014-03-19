@@ -667,7 +667,7 @@
 								</TransformGroup>
 							</Border.RenderTransform>
 						</Border>
-						<Rectangle x:Name="reflected" OpacityMask ="{StaticResource LinearBgMask}" Margin="0,152.5,0,-42" RenderTransformOrigin="0.507,1.333">
+						<Rectangle x:Name="reflected" OpacityMask ="{StaticResource LinearBgMask}" Margin="0,150,0,-42" RenderTransformOrigin="0.507,1.333">
 							<Rectangle.Fill>
 								<VisualBrush Visual="{Binding ElementName=Border}">
 									<VisualBrush.RelativeTransform>

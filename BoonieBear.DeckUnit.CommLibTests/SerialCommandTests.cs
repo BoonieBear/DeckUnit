@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
@@ -18,7 +19,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
         [TestMethod()]
         public void SerialSeviceTest()
         {
-            var serial = new SerialPort("2",9600);
+            var serial = new SerialPort("com3",9600);
             ACNProtocol.Init();
 
             var IServiceFactory = new ACNSerialServiceFactory();
@@ -34,9 +35,9 @@ namespace BoonieBear.DeckUnit.CommLibTests
             }
         }
         [TestMethod()]
-        public async Task ACNSerialCMDTest()
+        public  void ACNSerialCMDTest()
         {
-            var serial = new SerialPort("com2", 9600);
+            var serial = new SerialPort("com3", 9600);
             ACNProtocol.Init();
 
             var IServiceFactory = new ACNSerialServiceFactory();
@@ -47,10 +48,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
                 if(AcnSerialsevice.Start())
                 {
                     string error = null;
-                    var ans = SendcommandAsync(AcnSerialsevice);
-                    var bans = await ans;
-                   
-                    Assert.IsTrue(bans);
+                    Assert.IsTrue(SendcommandAsync(AcnSerialsevice));
                 }
                 else
                 {
@@ -64,34 +62,54 @@ namespace BoonieBear.DeckUnit.CommLibTests
             
         }
 
-        async Task<bool> SendcommandAsync(ISerialService AcnSerialsevice)
+
+        bool SendcommandAsync(ISerialService AcnSerialsevice)
         {
+            var auto = new AutoResetEvent(false); 
             var commfactory = new ACNSerialCommHexCommandFactory(AcnSerialsevice.ReturnSerialPort());
             var serialcommand = commfactory.CreateSerialComm(ACNCommandMode.CmdIDMode, 247, null,null);
             AcnSerialsevice.Register(serialcommand);
-            var ans = await Command.SendSerialAsync(serialcommand);
-             
-            if (ans)
+            var ans =  Command.SendSerialAsync(serialcommand);
+            
+            ans.ContinueWith(t =>
             {
-                var e = await Command.RecvSerialAsync(serialcommand);
-                if (e != null)
+                if(t.Result)
                 {
-                    if (e.ParseOK)
+                    RecvAsync(serialcommand, auto);
+                }
+                
+            });
+            return auto.WaitOne(10000);
+        }
+        static void RecvAsync(SerialBaseComm serialcommand,AutoResetEvent auto)
+        {
+            var task = Command.RecvSerialAsync(serialcommand);
+            task.ContinueWith(t =>
+            {
+                if (t.Result != null)
+                {
+                    if (t.Result.ParseOK)
                     {
-                        Debug.Write(e.Outstring);
+                        Debug.Write(task.Result.Outstring);
+                        auto.Set();
                     }
                     else
                     {
-                        Debug.WriteLine(e.ErrorMsg);
+                        Debug.WriteLine(task.Result.ErrorMsg);
+  
                     }
+                    Assert.IsTrue(t.Result.ParseOK);
                 }
                 else
                 {
                     Debug.WriteLine("超时");
+               
                 }
-            }
-            AcnSerialsevice.UnRegister(serialcommand);
-            return ans;
+                Assert.Fail();
+            });
+
         }
+        
+
     }
 }

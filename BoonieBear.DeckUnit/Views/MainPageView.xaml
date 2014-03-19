@@ -9,7 +9,11 @@
       Name="MainformPage"
       d:DesignHeight="480" d:DesignWidth="640" 
 	Title="甲板单元" Loaded="MainformPage_Loaded">
+    
+        
+    
     <Page.Resources>
+        
         <Storyboard x:Key="EnableDeviceButtonStoryboard">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="RemoteControlButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
@@ -203,16 +207,16 @@
         <Storyboard x:Key ="EnableReturnButton"/>
         <Storyboard x:Key="InitStoryboard">
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="DeviceDataButton">
-                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="20,200"/>
+                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="10,200"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="OptionButton">
                 <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="150,80"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="SysResourceButton">
-                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="310,80"/>
+                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="320,80"/>
             </ThicknessAnimationUsingKeyFrames>
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="MoreButton">
-                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="440,200"/>
+                <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="450,200"/>
             </ThicknessAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DeviceDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
@@ -261,7 +265,7 @@
         </Storyboard>
         <Storyboard x:Key="EnableModermStoryboard">
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.Opacity)" Storyboard.TargetName="ModermViewport3DD">
-                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="1"/>
+                <EasingDoubleKeyFrame KeyTime="0:0:2.8" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <BooleanAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.IsEnabled)" Storyboard.TargetName="ModermViewport3DD">
                 <DiscreteBooleanKeyFrame KeyTime="0:0:0.3" Value="true"/>
@@ -270,14 +274,14 @@
     </Page.Resources>
     <Page.Triggers>
         <EventTrigger RoutedEvent="Page.Loaded" SourceName="DeviceDataButton">
-            <BeginStoryboard x:Name="InitBeginStoryboard"  Storyboard="{StaticResource InitStoryboard}"/>
+            <BeginStoryboard  x:Name="InitBeginStoryboard"  Storyboard="{StaticResource InitStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource EnableModermStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource DisableDeviceButtonStoryboard}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="DeviceDataButton">
             <BeginStoryboard x:Name="MoveDeviceButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveDeviceButtonsBottom}"/>
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard" Storyboard="{StaticResource EnableReturnButton}"/>
-            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>   
+            <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource EnableDeviceButtonStoryboard}"/>
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="OptionButton">
@@ -318,15 +322,6 @@
                             </Image.OpacityMask>
                         </Image>
                         <TextBlock Name="RealText" FontFamily="Segoe UI" FontSize="34px" Margin="60,5,10,5" Foreground="#FFFFF0">水声通信机
-                            <TextBlock.TextEffects>
-                                <TextEffect PositionCount="1" x:Name="MyTextEffect">
-                                    <TextEffect.Transform>
-                                        <SkewTransform x:Name="TextEffectSkewTransform" CenterX="0" CenterY="30">
-                                        </SkewTransform>
-                                    </TextEffect.Transform>
-
-                                </TextEffect>
-                            </TextBlock.TextEffects>
                             <TextBlock.Effect>
                                 <DropShadowEffect
                                       ShadowDepth="7"
@@ -383,33 +378,33 @@ Storyboard.TargetName="MyTextEffect"
                         <VisualBrush Visual="{Binding ElementName=TextBorder}">
                             <VisualBrush.RelativeTransform>
                                 <TransformGroup>
-                                    <ScaleTransform ScaleX="1" ScaleY="-1"></ScaleTransform>
-                                    <TranslateTransform Y="0.8"></TranslateTransform>
+                                    <ScaleTransform ScaleX="1" ScaleY="-1"/>
+                                    <TranslateTransform Y="0.7"/>
                                 </TransformGroup>
                             </VisualBrush.RelativeTransform>
                         </VisualBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Button x:Name="DeviceDataButton"  Style="{StaticResource TransparentButtonStyle}"   Content="通信控制" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="-20,180" FontSize="16" >
+                <Button x:Name="DeviceDataButton"  Style="{StaticResource TransparentButtonStyle}"   Content="通信控制" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="-20,180" FontSize="16" >
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/adcp.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
-                <Button  x:Name="OptionButton"   Style="{StaticResource TransparentButtonStyle}"  Content="系统设置" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="100,60" FontSize="16" >
+                <Button  x:Name="OptionButton"   Style="{StaticResource TransparentButtonStyle}"  Content="系统设置" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="100,60" FontSize="16" >
                     <Button.Background>
-                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/System Preferences.ico" >
-                        </ImageBrush>
+                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/System Preferences.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
-                <Button  x:Name="SysResourceButton"  Style="{StaticResource TransparentButtonStyle}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="240,60" FontSize="16"  >
+
+                <Button  x:Name="SysResourceButton"  Style="{StaticResource TransparentButtonStyle}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="240,60" FontSize="16"  >
                     <Button.Background>
-                        <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/Disk Utility.ico" >
-                        </ImageBrush>
+                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/Disk Utility.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
-                <Button  x:Name="MoreButton"  Style="{StaticResource TransparentButtonStyle}"  Content="更多工具" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="180"  Width="180" Margin="350,180" FontSize="16" >
+ 
+                <Button  x:Name="MoreButton"  Style="{StaticResource TransparentButtonStyle}"  Content="更多工具" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="350,180" FontSize="16" >
                     <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/Toolbar Utilities Folder.ico" Stretch="None" />
+                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/Toolbar Utilities Folder.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
                 <TextBlock x:Name="TextBlock" Text="{Binding NowTime}" FontFamily="Segoe UI Semibold" Canvas.Left="480" Canvas.Top="4" FontSize="14"/>

@@ -10,10 +10,11 @@
 	Title="历史数据">
 
     <Grid Background="{StaticResource MainBackGround}">
-        <StackPanel>
+
+        
             <TextBlock Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/>
             <controls:ToggleSwitch IsChecked="True" Header=" 选项1" Instruction="打开or关闭串口" OffLabel="关" OnLabel="开" />
-           <DataGrid x:Name="HistoryDataGrid">
+           <DataGrid x:Name="HistoryDataGrid" Height="200.99">
                 <DataGrid.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.ContainerStyle>
@@ -37,7 +38,10 @@
                     </GroupStyle>
                 </DataGrid.GroupStyle>
             </DataGrid>
+           <Popup/>
+         
            
-        </StackPanel>
+       
+        
     </Grid>
 </Page>

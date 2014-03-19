@@ -16,12 +16,14 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             base.Initialize();
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
+			ShowOptionPanelCommand = RegisterCommand(ExecuteShowOptionPanelCommand, CanExecuteShowOptionPanelCommand, true);
             pMainFrame = this;
             //绑定属性初始化
             AddPropertyChangedNotification(()=>IsShowBottomBar);
             IsShowBottomBar = Visibility.Hidden;
-            AddPropertyChangedNotification(() => IsShowTopBar);
-            IsShowTopBar = Visibility.Hidden;
+			AddPropertyChangedNotification(()=>OptionPanelWidth);
+            OptionPanelWidth = 0;
+
             
         }
         #region 绑定属性
@@ -30,12 +32,12 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => IsShowBottomBar); }
             set { SetPropertyValue(() => IsShowBottomBar, value); }
         }
-
-        public Visibility IsShowTopBar
+        public int OptionPanelWidth
         {
-            get { return GetPropertyValue(() => IsShowTopBar); }
-            set { SetPropertyValue(() => IsShowTopBar, value); }
+            get { return GetPropertyValue(() => OptionPanelWidth); }
+            set { SetPropertyValue(() => OptionPanelWidth, value); }
         }
+      
         #endregion
 
         #region GoBack Command
@@ -62,6 +64,25 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
         #endregion
+		
+		#region ShowOptionPanelCommand
+		public ICommand ShowOptionPanelCommand
+		{
+			get { return GetPropertyValue(() => ShowOptionPanelCommand); }
+            set { SetPropertyValue(() => ShowOptionPanelCommand, value); }
+		}
+		private void CanExecuteShowOptionPanelCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+		private void ExecuteShowOptionPanelCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+			if(OptionPanelWidth==0)
+				OptionPanelWidth = 120;
+			else
+				OptionPanelWidth=0;
+		}
+		#endregion
     }
    
 }
