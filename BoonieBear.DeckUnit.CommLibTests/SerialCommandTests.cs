@@ -77,9 +77,14 @@ namespace BoonieBear.DeckUnit.CommLibTests
                 {
                     RecvAsync(serialcommand, auto);
                 }
+                else
+                {
+                    Debug.WriteLine(Command.Error);
+                    Assert.Fail();
+                }
                 
             });
-            return auto.WaitOne(10000);
+            return auto.WaitOne(3000);
         }
         static void RecvAsync(SerialBaseComm serialcommand,AutoResetEvent auto)
         {

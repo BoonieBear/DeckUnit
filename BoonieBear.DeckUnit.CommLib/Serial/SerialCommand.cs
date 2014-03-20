@@ -38,30 +38,31 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
   
         public override bool Send(out string error)
         {
-  
-            //发送成功
-            if (SendData(out error))
+            try
             {
-                if (EAutoResetEvent.WaitOne(TimeOut))
+                if (SendData(out error))
                 {
-                    MReaderWriterLock.AcquireWriterLock(TimeOut);
-    
-                    if (_args.ParseOK)
+                    if (EAutoResetEvent.WaitOne(TimeOut))
                     {
-                        MReaderWriterLock.ReleaseWriterLock();
-                        
-                        return true;
-                    }
-                    MReaderWriterLock.ReleaseWriterLock();
-                    
-                    return false;
-                }
+                        MReaderWriterLock.AcquireWriterLock(TimeOut);
 
-                
+                        if (_args.ParseOK)
+                        {
+                            MReaderWriterLock.ReleaseWriterLock();
+
+                            return true;
+                        }
+                        MReaderWriterLock.ReleaseWriterLock();
+                    }
+                }
                 return false;
             }
-            
-            return false;
+            catch(Exception exception)
+            {
+                error = exception.Message;
+                return false;
+            }
+           
         }
         
 
