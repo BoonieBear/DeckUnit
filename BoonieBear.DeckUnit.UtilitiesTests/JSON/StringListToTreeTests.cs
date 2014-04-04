@@ -1,16 +1,20 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Net.Sockets;
+using System.Threading;
+using BoonieBear.DeckUnit.CommLib.Protocol;
+using NUnit.Framework;
 using BoonieBear.DeckUnit.Utilities.JSON;
 using Newtonsoft.Json;
 
 namespace BoonieBear.DeckUnit.UtilitiesTests.JSON
 {
-    [TestClass()]
+    [TestFixture]
     public class StringListToTreeTests
     {
-        [TestMethod()]
-        public void TransListToNodeLogicTest()
+        
+        [Test]
+        public void TransListToNodeWriteLineicTest()
         {
             var strlStringses = new List<string[]>
             {
@@ -29,7 +33,7 @@ namespace BoonieBear.DeckUnit.UtilitiesTests.JSON
 
             var jsonstr = StringListToTree.LstToJson(strlStringses);
             Debug.WriteLine(jsonstr);
-            var node = JsonConvert.DeserializeObject<NodeLogic>(jsonstr);  
+            var node = JsonConvert.DeserializeObject<NodeWriteLineic>(jsonstr);  
             
              Assert.IsNotNull(node);
         }

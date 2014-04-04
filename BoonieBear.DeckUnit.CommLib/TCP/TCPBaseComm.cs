@@ -82,7 +82,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
 
         public virtual void Handle(object sender, CustomEventArgs e)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

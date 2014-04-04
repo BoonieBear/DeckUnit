@@ -9,18 +9,24 @@ using System.Threading.Tasks;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
 using BoonieBear.DeckUnit.CommLib.Protocol;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
+
 namespace BoonieBear.DeckUnit.CommLibTests
 {
-    [TestClass()]
+    [TestFixture()]
     public class SerialCommandTests
     {
-
-        [TestMethod()]
+        private SerialPort serial;
+        [TestFixtureSetUp]
+        public void Init()
+        {
+            serial = new SerialPort("com3", 9600);
+            ACNProtocol.Init();
+        }
+        [Test]
         public void SerialSeviceTest()
         {
-            var serial = new SerialPort("com3",9600);
-            ACNProtocol.Init();
+           
 
             var IServiceFactory = new ACNSerialServiceFactory();
             var AcnSerialsevice = IServiceFactory.CreateService();
@@ -34,11 +40,10 @@ namespace BoonieBear.DeckUnit.CommLibTests
                 Assert.Fail();
             }
         }
-        [TestMethod()]
+        [Test]
         public  void ACNSerialCMDTest()
         {
-            var serial = new SerialPort("com3", 9600);
-            ACNProtocol.Init();
+            
 
             var IServiceFactory = new ACNSerialServiceFactory();
             var AcnSerialsevice = IServiceFactory.CreateService();
@@ -47,7 +52,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
 
                 if(AcnSerialsevice.Start())
                 {
-                    string error = null;
+                    
                     Assert.IsTrue(SendcommandAsync(AcnSerialsevice));
                 }
                 else
@@ -67,13 +72,17 @@ namespace BoonieBear.DeckUnit.CommLibTests
         {
             var auto = new AutoResetEvent(false); 
             var commfactory = new ACNSerialCommHexCommandFactory(AcnSerialsevice.ReturnSerialPort());
-            var serialcommand = commfactory.CreateSerialComm(ACNCommandMode.CmdIDMode, 247, null,null);
+            var setdebugmode = commfactory.CreateSerialComm(250, new byte[] { 0x01 }, null);
+            AcnSerialsevice.Register(setdebugmode);
+            Command.SendSerialAsync(setdebugmode).ContinueWith(t => AcnSerialsevice.UnRegister(setdebugmode));
+            Thread.Sleep(500);
+            var serialcommand = commfactory.CreateSerialComm(247, new byte[] { 247 }, null);
             AcnSerialsevice.Register(serialcommand);
-            var ans =  Command.SendSerialAsync(serialcommand);
-            
+            var ans = Command.SendSerialAsync(serialcommand);
+
             ans.ContinueWith(t =>
             {
-                if(t.Result)
+                if (t.Result)
                 {
                     RecvAsync(serialcommand, auto);
                 }
@@ -82,7 +91,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
                     Debug.WriteLine(Command.Error);
                     Assert.Fail();
                 }
-                
+
             });
             return auto.WaitOne(3000);
         }

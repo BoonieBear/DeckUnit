@@ -126,6 +126,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                     
                     while (strcmd.Contains("EB90")&&strcmd.Contains("END"))
                     {
+                        Debug.WriteLine(strcmd);
                         var eb90index = strcmd.IndexOf("EB90", StringComparison.Ordinal);
                         var endindex = strcmd.IndexOf("END", StringComparison.Ordinal)+3;
                         if ( eb90index < endindex  )
@@ -206,12 +207,13 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                         byte[] b = Encoding.Default.GetBytes(ack);
                         b[13] = bcrc[0];
                         b[14] = bcrc[1];
-                        //MsgLog(MsgMode.RecvSerialData, id, "MSP430", "上位机", SourceDataClass.DataId[id].ToString());
+                        //MsgWriteLine(MsgMode.RecvSerialData, id, "MSP430", "上位机", SourceDataClass.DataId[id].ToString());
                         if (_serialPort.IsOpen)
                         {
                             _serialPort.Write(b, 0, b.Length);
                         }
                         //处理数据分为特殊命令和dsp数据
+                        var mode = CallMode.DataMode;
                         if (id == 170)
                         {
                             /*
@@ -219,10 +221,11 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             string DataFilename = MSPDataFile.adfile.fileName;
                             MSPDataFile.BinaryWrite(data);
                             MSPDataFile.close();
-                            WriteCommLog("收到DSP转发数据。");
+                            WriteCommWriteLine("收到DSP转发数据。");
                             */
                             string error = null;
                             var flag = false;
+                            
                             try
                             {
 
@@ -235,6 +238,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                                 else
                                 {
                                     error = ACNProtocol.Errormessage;
+                                    mode = CallMode.ErrMode;
                                     flag = false;
                                 }
                                 
@@ -242,11 +246,12 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             catch (Exception exception)
                             {
                                 error = exception.Message;
+                                mode = CallMode.ErrMode;
                                 flag = false;
                             }
                             finally
                             {
-                                var e = new CustomEventArgs(hexString, data, data.Length, flag, error, CallMode.DataMode);
+                                var e = new CustomEventArgs(hexString, data, data.Length, flag, error, mode);
 
                                 OnParsed(e);
                             }
@@ -400,12 +405,13 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             catch (Exception exception)
                             {
                                 flag = false;
+                                mode = CallMode.ErrMode;
                                 error = "链路数据错误：" + exception.Message;
                             }
                             finally
                             {
 
-                                var e = new CustomEventArgs(info.ToString(), data, data.Length, flag, error, CallMode.DataMode);
+                                var e = new CustomEventArgs(info.ToString(), data, data.Length, flag, error, mode);
                                 OnParsed(e);
                             }
 
@@ -433,7 +439,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             //
                         }
                         const string error = "链路传输错误";
-                        var e = new CustomEventArgs(null, data, data.Length, false, error, CallMode.DataMode);
+                        var e = new CustomEventArgs(null, data, data.Length, false, error, CallMode.ErrMode);
                         OnParsed(e);
                     }
                 }

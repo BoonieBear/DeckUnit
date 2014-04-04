@@ -357,19 +357,19 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
 
         //路径记录
         //记录了所在数据块已经过的节点有哪些
-        class RouterLog
+        class RouterWriteLine
         {
             int StartId;
-            List<int> IdLog;
-            public RouterLog(int Startid, List<int> id)
+            List<int> IdWriteLine;
+            public RouterWriteLine(int Startid, List<int> id)
             {
                 StartId = Startid;
-                IdLog = id;
+                IdWriteLine = id;
             }
             public int BeginID
             { get { return StartId; } }
             public List<int> ViaID
-            { get { return IdLog; } }
+            { get { return IdWriteLine; } }
         }
 
         //路径安排
@@ -377,18 +377,18 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         class RouterAssign
         {
             int StartId;
-            List<int> IdLog;
+            List<int> IdWriteLine;
             int EndId;
             public RouterAssign(int Startid, List<int> id, int Endid)
             {
                 StartId = Startid;
-                IdLog = id;
+                IdWriteLine = id;
                 EndId = Endid;
             }
             public int BeginID
             { get { return StartId; } }
             public List<int> ViaID
-            { get { return IdLog; } }
+            { get { return IdWriteLine; } }
             public int EndID
             { get { return EndId; } }
         }
@@ -398,18 +398,18 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         class RouterBroken
         {
             int StartId;
-            //List<int> IdLog;
+            //List<int> IdWriteLine;
             int EndId;
             public RouterBroken(int Startid, List<int> id, int Endid)
             {
                 StartId = Startid;
-                //IdLog = id;
+                //IdWriteLine = id;
                 EndId = Endid;
             }
             public int BeginID
             { get { return StartId; } }
             //public List<int> ViaID
-            //{ get { return IdLog; } }
+            //{ get { return IdWriteLine; } }
             public int EndID
             { get { return EndId; } }
         }
@@ -456,6 +456,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             BuoyID = "00";
             Port = 2;
             ACNWebHashtableID.Clear();
+            ACNCommandID.Clear();
             ACNWebHashtableID.Add(0, "结束标识");
             ACNWebHashtableID.Add(1, "分段标识");
             ACNWebHashtableID.Add(2, "节点信息表");
@@ -552,7 +553,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             data = new BitArray(d);
         }
 
-        private static void Clear()
+        public static void Clear()
         {
             if(parselist!=null)
                 parselist.Clear();

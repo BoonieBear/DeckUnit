@@ -8,12 +8,7 @@ using System.Threading.Tasks;
 
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {
-    #region 串口命令工厂接口和服务工厂接口
-
-    public interface ISerialCommFactory
-    {
-        SerialBaseComm CreateSerialComm(ACNCommandMode mode,int id, byte[] bytes,string str);
-    }
+    #region 串口服务工厂接口
 
     public interface ISerialServiceFactory
     {

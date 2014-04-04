@@ -5,7 +5,7 @@ using BoonieBear.TinyMetro.WPF.EventAggregation;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
-    /// 模块间消息处理函数，包括log，数据传递，系统消息广播，报警等
+    /// 模块间消息处理函数，包括WriteLine，数据传递，系统消息广播，报警等
     /// </summary>
     class UnitMessageController
     {

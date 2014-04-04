@@ -18,19 +18,19 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
 
         #region Methods
         /*
-        public  static NodeLogic FromJson(string json)
+        public  static NodeWriteLineic FromJson(string json)
         {
             var jobj = JObject.Parse(json);
             return FromJToken(jobj);
         }
 
-        static NodeLogic FromJToken(JToken jtoken)
+        static NodeWriteLineic FromJToken(JToken jtoken)
         {
             if (jtoken is JValue)
             {
                 var jvalue = (JValue)jtoken;
                 var value = (jvalue.Value ?? NULL_TEXT).ToString();
-                return new NodeLogic(value, jvalue.Type.ToString(), null, TODO);
+                return new NodeWriteLineic(value, jvalue.Type.ToString(), null, TODO);
             }
             else if (jtoken is JContainer)
             {
@@ -56,7 +56,7 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
                 else
                     throw new Exception("不支持的JContainer类型");
 
-                return new NodeLogic(header, NULL_TEXT, children, TODO);
+                return new NodeWriteLineic(header, NULL_TEXT, children, TODO);
             }
             else
             {

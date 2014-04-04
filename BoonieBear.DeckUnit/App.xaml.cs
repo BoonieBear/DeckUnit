@@ -7,7 +7,7 @@ using BoonieBear.TinyMetro.WPF.Controller;
 namespace BoonieBear.DeckUnit
 {
     /// <summary>
-    /// Interaction logic for App.xaml
+    /// Interaction WriteLineic for App.xaml
     /// </summary>
     public partial class App : Application
     {

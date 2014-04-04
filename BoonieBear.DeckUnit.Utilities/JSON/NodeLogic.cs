@@ -6,7 +6,7 @@ using System.Text;
 
 namespace BoonieBear.DeckUnit.Utilities.JSON
 {
-    public class NodeLogic
+    public class NodeWriteLineic
     {
         
         #region Fields
@@ -16,7 +16,7 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
 
         #region Constructors
 
-        public NodeLogic(string text, string data, string meaning,List<NodeLogic> children )
+        public NodeWriteLineic(string text, string data, string meaning,List<NodeWriteLineic> children )
         {
             Text = text;
             Data = data;
@@ -33,8 +33,8 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
         public string Data { get; set; }
 
         public string Description { get; set; }
-        public NodeLogic Father { get; set; }
-        public List<NodeLogic> Children { get; set; }
+        public NodeWriteLineic Father { get; set; }
+        public List<NodeWriteLineic> Children { get; set; }
 
         
 

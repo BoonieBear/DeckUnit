@@ -7,18 +7,18 @@ using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Protocol;
 using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.Utilities.JSON;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 using Newtonsoft.Json;
 
 namespace BoonieBear.DeckUnit.CommLibTests
 {
-    [TestClass]
+    [TestFixture]
     public class UDPserviceTests
     {
         UdpClient udpClient = null;
         private static AutoResetEvent autoReset = null;
         private static string str = null;
-        [TestInitialize]
+        [SetUp]
         public void Init()
         {
             if (udpClient==null)
@@ -26,6 +26,8 @@ namespace BoonieBear.DeckUnit.CommLibTests
             autoReset = new AutoResetEvent(false);
             ACNProtocol.Init();
         }
+
+
 
         class MyClass:CommLib.IObserver<CustomEventArgs>
         {
@@ -45,7 +47,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
                         ACNProtocol.GetData(bytes);
                         if (ACNProtocol.Parse())
                         {
-                            var nodetree = StringListToTree.TransListToNodeLogic(ACNProtocol.parselist);
+                            var nodetree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
                             var newtree = StringListToTree.RemoveFatherPointer(nodetree);
                             var jsonstr = JsonConvert.SerializeObject(newtree);
                             str = jsonstr;
@@ -67,7 +69,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
         }
 
         
-        [TestMethod]
+        [Test]
         public void SetUpDebugUDPServiceTest()
         {
             var servicefactory = new UDPDebugServiceFactory();
@@ -99,7 +101,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
 
 
         }
-        [TestMethod]
+        [Test]
         public void SetUpDataServiceTest()
         {
             var servicefactory = new UDPDataServiceFactory();
@@ -129,14 +131,14 @@ namespace BoonieBear.DeckUnit.CommLibTests
             else
                 Assert.Fail();
         }
-        [TestMethod]
+        [Test]
         public void BroadCastUdpTest()
         {
             var command = new UDPCommFactory(udpClient);
             var comm = command.CreateUDPComm(ACNCommandMode.CmdCharMode,  null, "something");
             Assert.IsTrue(comm.BroadCast());
         }
-        [TestMethod]
+        [Test]
         public void BroadCastDataUdpTest()
         {
             var command = new UDPCommFactory(udpClient);

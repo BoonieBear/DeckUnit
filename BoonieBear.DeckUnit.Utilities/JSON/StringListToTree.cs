@@ -11,13 +11,13 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
     public class StringListToTree
     {
         /// <summary>
-        /// 将list<string>类型的解析数据转为nodelogic类，以便做json序列化
+        /// 将list<string>类型的解析数据转为nodeWriteLineic类，以便做json序列化
         /// </summary>
         /// <param name="strList">格式：(string level, string typename, string datastring, string description)</param>
         /// <returns></returns>
-        public static NodeLogic TransListToNodeLogic(List<string[]> strList)
+        public static NodeWriteLineic TransListToNodeWriteLineic(List<string[]> strList)
         {
-            var node = new NodeLogic("信源数据包", null, null, null) {Father = null};
+            var node = new NodeWriteLineic("信源数据包", null, null, null) {Father = null};
             var lastNode = node;
             var i = -1;
             foreach (var stringse in strList)
@@ -26,9 +26,9 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
                 
                 if (j > i)
                 {
-                    var tempnode = new NodeLogic(stringse[1], stringse[2], stringse[3], null);
+                    var tempnode = new NodeWriteLineic(stringse[1], stringse[2], stringse[3], null);
                     if (lastNode.Children==null)
-                        lastNode.Children = new List<NodeLogic> {tempnode};
+                        lastNode.Children = new List<NodeWriteLineic> {tempnode};
                     else
                     {
                         lastNode.Children.Add(tempnode);
@@ -42,7 +42,7 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
                     {
                         lastNode = lastNode.Father;
                     }
-                    var tempnode = new NodeLogic(stringse[1], stringse[2], stringse[3], null);
+                    var tempnode = new NodeWriteLineic(stringse[1], stringse[2], stringse[3], null);
                     lastNode.Father.Children.Add(tempnode);
                     tempnode.Father = lastNode.Father;
                     lastNode = tempnode;
@@ -55,22 +55,22 @@ namespace BoonieBear.DeckUnit.Utilities.JSON
         /// <summary>
         /// 删除Father指针，以便json序列化时不会循环引用
         /// </summary>
-        /// <param name="nodeLogic"></param>
-        public static NodeLogic RemoveFatherPointer(NodeLogic nodeLogic)
+        /// <param name="nodeWriteLineic"></param>
+        public static NodeWriteLineic RemoveFatherPointer(NodeWriteLineic nodeWriteLineic)
         {
            
-            if (nodeLogic.Children != null)
+            if (nodeWriteLineic.Children != null)
             {
-                nodeLogic.Children.ForEach(logic => RemoveFatherPointer(logic));
+                nodeWriteLineic.Children.ForEach(WriteLineic => RemoveFatherPointer(WriteLineic));
             }
 
-            nodeLogic.Father = null;
-            return nodeLogic;
+            nodeWriteLineic.Father = null;
+            return nodeWriteLineic;
         }
 
         public static string LstToJson(List<string[]> strList)
         {
-            var n =TransListToNodeLogic(strList);
+            var n =TransListToNodeWriteLineic(strList);
             var newnode = RemoveFatherPointer(n);
             var json =  JsonConvert.SerializeObject(newnode);
             var s =json.Replace("\"Father\":null,", "");

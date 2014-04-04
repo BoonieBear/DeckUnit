@@ -51,5 +51,11 @@ namespace BoonieBear.DeckUnit.CommLib
         void RecvThread(object obj);
         TcpClient ReturnTcpClient();
         void OnParsed(CustomEventArgs eventArgs);
+
+        bool Connected
+        {
+            get;
+
+        }
     }
 }

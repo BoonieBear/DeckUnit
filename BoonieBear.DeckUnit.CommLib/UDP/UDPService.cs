@@ -108,6 +108,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
             var buffer = new byte[4096];
             string error = string.Empty;
             var numberOfBytesRead = 0;
+            var mode = CallMode.DataMode;
             while (flag)
             {
                 try
@@ -137,6 +138,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                     if (exception.ErrorCode != 0x2714) //程序关闭
                     {
                         error = exception.Message;
+                        mode = CallMode.ErrMode;
                         flag = false;
                     }
                     else
@@ -148,7 +150,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(string.Empty, buffer, numberOfBytesRead, flag, error, CallMode.DataMode);
+                    var e = new CustomEventArgs(string.Empty, buffer, numberOfBytesRead, flag, error, mode);
                     numberOfBytesRead = 0;
                     OnParsed(e);
                 }

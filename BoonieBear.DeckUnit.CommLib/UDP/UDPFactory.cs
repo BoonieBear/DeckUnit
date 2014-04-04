@@ -21,10 +21,10 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
             {
                 case ACNCommandMode.CmdCharMode:
                     return new ACNUDPShellCommand(_udpClient,str);
-                    break;
+                 
                 case ACNCommandMode.CmdWithData:
                     return new ACNUDPDataCommand(_udpClient,bytes);
-                    break;
+               
                 default:
                     throw new InvalidOperationException("不支持的命令模式！");
             }

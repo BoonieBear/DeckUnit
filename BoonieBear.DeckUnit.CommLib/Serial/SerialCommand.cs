@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Text;
 using System.Threading;
@@ -15,25 +16,14 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         private static readonly AutoResetEvent EAutoResetEvent = new AutoResetEvent(false);
         private static readonly AutoResetEvent DAutoResetEvent = new AutoResetEvent(false);
         private static bool _haveReceData = false;
-        private const int TimeOut = 20000;
+        private const int TimeOut = 2000;
         private static readonly object Lockobject = new object();
-        public ACNSerialHexCommand(SerialPort serialPort,ACNCommandMode mode,int id,byte[] bytes)
+        public ACNSerialHexCommand(SerialPort serialPort,int id,byte[] bytes)
         {
             _serialPort = serialPort;
-            switch (mode)
-            {
-                case ACNCommandMode.CmdIDMode:
-                    var cmd = new byte[1];
-                    cmd[0] =Convert.ToByte(id);
-                    _nBytes = ACNProtocol.CommPackage(id, cmd);
-                    break;
-                case ACNCommandMode.CmdWithData:
-                    _nBytes = ACNProtocol.CommPackage(id, bytes);
-                    break;
-                default:
-                    _nBytes = ACNProtocol.CommPackage(id, bytes);
-                    break;
-            }
+           
+            _nBytes = ACNProtocol.CommPackage(id, bytes);
+
         }
   
         public override bool Send(out string error)
@@ -52,7 +42,9 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
 
                             return true;
                         }
+                        error = _args.ErrorMsg;
                         MReaderWriterLock.ReleaseWriterLock();
+                        return false;
                     }
                 }
                 return false;
@@ -60,6 +52,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             catch(Exception exception)
             {
                 error = exception.Message;
+                MReaderWriterLock.ReleaseWriterLock();
                 return false;
             }
            
@@ -83,13 +76,15 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                 _args = e;
                 if (_args.Mode.Equals(CallMode.AnsMode))
                 {
-
+                    Debug.WriteLine("recv CallMode.AnsMode");
                     EAutoResetEvent.Set();
                 }
                 if (_args.Mode.Equals(CallMode.DataMode))
                 {
+                    Debug.WriteLine("recv CallMode.DataMode");
                     DAutoResetEvent.Set();
                     _haveReceData = true;
+
                 }
             }
             
@@ -127,13 +122,13 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             {
                 case ACNCommandMode.CmdCharMode:
                     return SendMsg(out error);
-                    break;
+                    
                 case ACNCommandMode.LoaderDataMode:
                     return SendData(out error);
-                    break;
+                    
                 default:
                     return SendMsg(out error);
-                    break;
+                    
             }
             
         }

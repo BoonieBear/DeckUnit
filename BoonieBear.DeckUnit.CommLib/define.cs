@@ -15,6 +15,7 @@ namespace BoonieBear.DeckUnit.CommLib
     /// AnsMode，应答模式：用于串口命令应答接收，TCP数据应答接收
     /// DataMode，数据模式：用于串口数据接收，TCP数据接收，UDP数据接收
     /// LoaderMode，loader模式：用于串口loader模式通信
+    /// ErrMode:接收过程发生错误。
     /// </summary>
     public enum CallMode
     {
@@ -22,20 +23,23 @@ namespace BoonieBear.DeckUnit.CommLib
         AnsMode = 1,
         DataMode =2,
         LoaderMode =3,
+        ErrMode = 4,
     }
 
     public enum ACNCommandMode
     {
         //shell string
         CmdCharMode=0,
-        //id,null
-        CmdIDMode =1,
         //cmd,data
-        CmdWithData = 2,
-        //cmd,stream
-        CmdWithStream = 3,
-        //loader
-        LoaderDataMode=4,
+        CmdWithData = 1,
+        //loaderdata
+        LoaderDataMode=2,
         
+    }
+
+    public enum TaskType
+    {
+        ReadParameter = 0,
+        Reset = 1,
     }
 }

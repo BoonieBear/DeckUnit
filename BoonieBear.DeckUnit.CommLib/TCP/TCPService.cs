@@ -18,6 +18,11 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         protected int port = 8080;
         public static event EventHandler<CustomEventArgs> DoParse;
         protected Thread TdThread;
+        public TCPBaseService()
+        {
+            
+        }
+
 
         public bool Init(TcpClient tcpClient, IPAddress ip,int destport)
         {
@@ -47,7 +52,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             try
             {
                 _tcpClient.Connect(IP, port);
-                
+
             }
             catch (SocketException exception)
             {
@@ -69,14 +74,17 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
 
         public void Stop()
         {
+            if (_tcpClient != null)
+                _tcpClient.Close();
             if (TdThread != null)
             {
                 if (TdThread.IsAlive)
+                {
                     TdThread.Abort();
-               
+
+                }               
             }
-            if (_tcpClient != null)
-                _tcpClient.Close();
+
         }
 
         public TcpClient ReturnTcpClient()
@@ -91,10 +99,13 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                 DoParse(this, eventArgs);
             }
         }
+
+        public bool Connected { get { return ReturnTcpClient().Connected; } }
     }
 
     public class TCPShellService:TCPBaseService
     {
+
         public override void RecvThread(object o)
         {
             TcpClient client = null;
@@ -102,24 +113,27 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             {
                 using (client = o as TcpClient)
                 {
-                    var myCompleteMessage = new StringBuilder();
-                    byte[] myReadBuffer = new byte[2048];
-                    var stream = client.GetStream();
-                    do
+                    while (client.Connected)
                     {
-                        var numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
-
-                        myCompleteMessage.AppendFormat("{0}",
-                            Encoding.Default.GetString(myReadBuffer, 0, numberOfBytesRead));
-                    } while (stream.DataAvailable);
-                    var e = new CustomEventArgs(myCompleteMessage.ToString(), myReadBuffer, 0, true, null,
+                        var myCompleteMessage = new StringBuilder();
+                        var myReadBuffer = new byte[2048];
+                        var stream = client.GetStream();
+                        do
+                        {
+                            var numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
+                            myCompleteMessage.AppendFormat("{0}",Encoding.Default.GetString(myReadBuffer, 0, numberOfBytesRead));
+                        } while (stream.DataAvailable);
+                        Debug.WriteLine(myCompleteMessage.ToString());
+                        var e = new CustomEventArgs(myCompleteMessage.ToString(), myReadBuffer, 0, true, null,
                         CallMode.NoneMode);
-                    OnParsed(e);
+                        OnParsed(e);
+                    }
+                   
                 }
             }
             catch (Exception exception)
             {
-                var e = new CustomEventArgs(null, null, 0, false, exception.Message, CallMode.DataMode);
+                var e = new CustomEventArgs(null, null, 0, false, exception.Message, CallMode.ErrMode);
                 OnParsed(e);
             }
             finally
@@ -131,6 +145,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
     }
     public class TCPDataService : TCPBaseService
     {
+        
         public override void RecvThread(object o)
         {
             TcpClient client = null;
@@ -161,7 +176,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             }
             catch (Exception exception)
             {
-                var e = new CustomEventArgs(null, null, 0, false, exception.Message, CallMode.DataMode);
+                var e = new CustomEventArgs(null, null, 0, false, exception.Message, CallMode.ErrMode);
                 OnParsed(e);
             }
             finally
