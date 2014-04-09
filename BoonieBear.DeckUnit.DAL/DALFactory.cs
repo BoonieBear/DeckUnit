@@ -17,14 +17,15 @@ namespace BoonieBear.DeckUnit.DAL
     /// </summary>
     public class DALFactory
     {
+        static string connectstring;
         static ISqlite CreateDAL(DBType dbType)
         {
             switch (dbType)
             {
                 case DBType.Sqlite:
-                    return new IsqliteSqlDAL();
+                    return new SqliteSqlDAL(connectstring);
                 default:
-                    return new IsqliteSqlDAL();
+                    return new SqliteSqlDAL(connectstring);
             }
         }
     }

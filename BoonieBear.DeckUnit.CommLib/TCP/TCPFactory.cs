@@ -16,7 +16,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
     {
         public ITCPClientService CreateService()
         {
-            return new TCPShellService();
+            return new ACNTCPShellService();
         }
     }
     /// <summary>
@@ -26,7 +26,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
     {
         public ITCPClientService CreateService()
         {
-            return new TCPDataService();
+            return new ACNTCPDataService();
         }
     }
 }

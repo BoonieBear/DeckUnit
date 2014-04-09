@@ -103,7 +103,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         public bool Connected { get { return ReturnTcpClient().Connected; } }
     }
 
-    public class TCPShellService:TCPBaseService
+    public class ACNTCPShellService:TCPBaseService
     {
 
         public override void RecvThread(object o)
@@ -143,7 +143,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             }
         }
     }
-    public class TCPDataService : TCPBaseService
+    public class ACNTCPDataService : TCPBaseService
     {
         
         public override void RecvThread(object o)
@@ -188,4 +188,10 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         }
 
     }
+
+    /// <summary>
+    /// 继承通行网的数据解析方法
+    /// </summary>
+    public class ACMDataService:ACNTCPDataService
+    { }
 }

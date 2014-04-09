@@ -17,7 +17,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         private static BitArray packdata;//将打包数据转换成bit数组
         private static int index = 0;//累进解析器的下标位置。
         private static int packindex = 0;//累进打包器的下标位置
-        public static List<string[]> parselist = new List<string[]>();
+        public  static List<string[]> parselist = new List<string[]>();
         private static string[] str;
         public static string Errormessage { get; private set; }
         public static string BuoyID { get; set; }
@@ -791,6 +791,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         #endregion
 
         #endregion
+
         #region 网络打包
         //网络打包函数，加0xAA，校验，网络包头
         static public byte[] NetPackage(byte[] outcmd)

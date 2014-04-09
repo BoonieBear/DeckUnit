@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Net.Configuration;
 using System.Net.Sockets;
 using System.Threading;
-using BoonieBear.DeckUnit.CommLib.TCP;
 using BoonieBear.DeckUnit.Utilities;
 
-namespace BoonieBear.DeckUnit.CommLib
+namespace BoonieBear.DeckUnit.CommLib.TCP
 {
     public class ACNTCPShellCommand:TCPBaseComm
     {

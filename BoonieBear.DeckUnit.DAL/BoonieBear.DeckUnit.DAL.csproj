@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DALFactory.cs" />
-    <Compile Include="DBModel.cs" />
+    <Compile Include="DBModel\DBModel.cs" />
     <Compile Include="IDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteDAL\SqliteSqlDAL.cs" />
