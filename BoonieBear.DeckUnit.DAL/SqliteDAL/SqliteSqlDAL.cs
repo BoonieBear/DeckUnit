@@ -15,8 +15,8 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
 
         private string[] _tableName =
         {
-            "AlarmConfInfo", "BasicInfo", "CommandIDInfo", "CommandLog", "CommConfInfo",
-            "DeviceInfo", "ModemConfInfo", "TaskInfo"
+            "AlarmConfInfo", "BasicInfo",  "CommandLog", "CommConfInfo",
+             "ModemConfInfo", "TaskInfo"
         };
         public SqliteSqlDAL(string connectionString)
         {
@@ -48,7 +48,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             string[] values = {alarmConfigure.AlarmID.ToString(),alarmConfigure.Alarmname,alarmConfigure.Floor.ToString(),alarmConfigure.Ceiling.ToString(),alarmConfigure.Alarmswitch.ToString(),alarmConfigure.Tips};
             using (sqliteHelperSQL.InsertInto(_tableName[0], values))
             {
-                using (var reader = sqliteHelperSQL.ExecuteQuery("select last_insert_rowid()"))
+                using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT COUNT(*) FROM " + _tableName[0]))
                 {
                     reader.Read();
                     return reader.GetInt32(0);
@@ -83,24 +83,73 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             sqliteHelperSQL.Delete(_tableName[0], col, val);
         }
 
-        public AlarmConfigure GetAlarmConfigure(int alarmid)
+        public AlarmConfigure GetAlarmConfigureByID(int alarmid)
         {
-            throw new NotImplementedException();
+            var lst = GetAlarmConfigureList("AlarmConf_ID = " + alarmid.ToString());
+            if (lst.Count > 0)
+                return lst[0];//count is always 0 because we check the id when add record;
+            return null;
         }
 
-        public DataSet GetAlarmList(string strWhere)
+
+        public List<AlarmConfigure> GetAlarmConfigureList(string strWhere)
         {
-            throw new NotImplementedException();
+            var alarmlist = new List<AlarmConfigure>();
+
+            var reader = sqliteHelperSQL.SelectWhere(_tableName[0],strWhere);
+            while (reader.Read())
+            {
+                var al = new AlarmConfigure
+                {
+                    AlarmID = reader.GetInt32(0),
+                    Alarmname = reader.GetString(1),
+                    Floor = reader.GetFloat(2),
+                    Ceiling = reader.GetFloat(3),
+                    Alarmswitch = (bool)reader.GetValue(4),
+                    Tips = reader.GetString(5)
+                };
+                alarmlist.Add(al);
+            }
+            return alarmlist;
+
         }
 
         public CommConfInfo GetCommConfInfo()
         {
-            throw new NotImplementedException();
+            var reader = sqliteHelperSQL.ReadFullTable(_tableName[3]);
+            if (reader.Read())
+            {
+                var ci = new CommConfInfo
+                {
+                    SerialPort = reader.GetString(0),
+                    SerialPortRate = reader.GetInt32(1),
+                    NetPort1 = reader.GetInt32(2),
+                    NetPort2 = reader.GetInt32(3),
+                    LinkIP = reader.GetString(4),
+                    TraceUDPPort = reader.GetInt32(5)
+                };
+                return ci;
+            }
+            return null;
         }
 
         public void UpdateCommConfInfo(CommConfInfo commConf)
         {
-            throw new NotImplementedException();
+
+            string[] col =
+            {
+                "CommConf_SERIAL", "CommConf_SERIALRATE", "CommConf_NET1", "CommConf_NET2",
+                "CommConf_LINKIP","CommConf_TRACEPORT"
+            };
+
+            string[] values =
+            {
+                commConf.SerialPort, commConf.SerialPortRate.ToString(),commConf.NetPort1.ToString(),
+                commConf.NetPort2.ToString(),commConf.LinkIP,commConf.TraceUDPPort.ToString()
+            };
+
+            sqliteHelperSQL.UpdateInto(_tableName[3], col, values, "","");
+           
         }
 
         public int AddTask(Task task)
@@ -108,7 +157,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             throw new NotImplementedException();
         }
 
-        public void Update(Task task)
+        public void UpdateTask(Task task)
         {
             throw new NotImplementedException();
         }
@@ -118,24 +167,45 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             throw new NotImplementedException();
         }
 
-        public Task GetTask(int id)
+        public Task GetTask(long id)
         {
             throw new NotImplementedException();
         }
 
-        public DataSet GetTaskLst(string strWhere)
+        public List<Task> GetTaskLst(string strWhere)
         {
             throw new NotImplementedException();
         }
 
         public BaseInfo GetBaseConfigure()
         {
-            throw new NotImplementedException();
+            var br = sqliteHelperSQL.ReadFullTable(_tableName[1]);
+            if (br.Read())
+            {
+                var bi = new BaseInfo();
+
+                bi.Name = br.GetString(0);
+                bi.Version = br.GetString(1);
+                bi.Copyright = br.GetString(2);
+                bi.Pubtime = br.GetDateTime(3).ToString();
+                bi.Other = br.GetString(4);
+                return bi;
+            }
+            return null;
         }
 
         public int AddLog(CommandLog commandLog)
         {
-            throw new NotImplementedException();
+            int id = 0;
+            using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT COUNT(*) FROM " + _tableName[2]))
+            {
+                if(reader.Read())
+                    id = reader.GetInt32(0);
+            }
+            var time = DateTime.UtcNow.ToString("s") ;
+            string[] values = { (id + 1).ToString(), time, commandLog.CommID.ToString(), commandLog.Type ? "1" : "0", commandLog.SourceID.ToString(), commandLog.DestID.ToString(),commandLog.FilePath };
+            sqliteHelperSQL.InsertInto(_tableName[2], values);
+            return id+1;
         }
 
         public void DeleteLog(int id)
@@ -143,12 +213,12 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             throw new NotImplementedException();
         }
 
-        public AlarmConfigure GetCommandLog(int id)
+        public CommandLog GetCommandLog(int id)
         {
             throw new NotImplementedException();
         }
 
-        public DataSet GetLogLst(string strWhere)
+        public List<CommandLog> GetLogLst(string strWhere)
         {
             throw new NotImplementedException();
         }
@@ -163,39 +233,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             throw new NotImplementedException();
         }
 
-        public CommandID GetIDInfo(int id)
-        {
-            throw new NotImplementedException();
-        }
 
-        public DataSet GetIDList(string strWhere)
-        {
-            throw new NotImplementedException();
-        }
 
-        public int AddDevice(DeviceInfo deviceInfo)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void DeleteDevice(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void UpdateDevice(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public DataSet GetDeviceLst()
-        {
-            throw new NotImplementedException();
-        }
-
-        public DeviceInfo GetDeviceInfo(int id)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

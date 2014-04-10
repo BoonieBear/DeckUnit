@@ -3,6 +3,9 @@ using System.Diagnostics;
 using BoonieBear.DeckUnit.DAL.SqliteDAL;
 using NUnit.Framework;
 
+
+
+
 namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
 {
     [TestFixture()]
@@ -27,7 +30,16 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
         {
             sqliteHelper.CloseSqlConnection();
         }
-
+        [Test()]
+        public void SelectWhereByStringTest()
+        {
+            var reader = sqliteHelper.SelectWhere("BasicInfo", "Basic_NAME = 1");
+            while (reader.Read())
+            {
+                Debug.WriteLine(reader.GetString(0));
+            }
+            Assert.Pass();
+        }
         [Test()]
         public void ExecuteQueryTest()
         {
@@ -55,7 +67,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
         [Test()]
         public void InsertIntoTest()
         {
-            string[] str = { "1", "2", "3", "\"" + DateTime.UtcNow.ToString("s") + "\"", "5" };
+            string[] str = { "1", "2", "3", DateTime.UtcNow.ToString("s") , "5" };
             var reader = sqliteHelper.InsertInto("BasicInfo",str);
             ReadFullTableTest();
         }
@@ -64,8 +76,8 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
         public void UpdateIntoTest()
         {
             string[] col = { "Basic_NAME", "Basic_VERSION" };
-            string[] val = {"jiabandanyuan","1.0.0.2"};
-            var reader = sqliteHelper.UpdateInto("BasicInfo", col, val, "Basic_NAME", "水声通信甲板单元1");
+            string[] val = {"甲板单元","1.0.0.2"};
+            var reader = sqliteHelper.UpdateInto("BasicInfo", col, val, "", "");
             Assert.IsNotNull(reader);
         }
 
