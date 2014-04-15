@@ -37,9 +37,5 @@ namespace BoonieBear.DeckUnit.CommLib
         
     }
 
-    public enum TaskType
-    {
-        ReadParameter = 0,
-        Reset = 1,
-    }
+   
 }

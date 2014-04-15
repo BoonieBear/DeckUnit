@@ -8,9 +8,9 @@ namespace BoonieBear.DeckUnit.DAL
     /// <summary>
     /// 数据库访问接口
     /// </summary>
-    public interface ISqlite : IAlarmConfigure, ICommConfigure, ITask, IBaseConfigure, ICommandLog, IModemConfigure
+    public interface ISqlDAL : IAlarmConfigure, ICommConfigure, ITask, IBaseConfigure, ICommandLog, IModemConfigure
     {
-       
+        void Close();
     }
 
     public interface IBaseConfigure
@@ -44,7 +44,7 @@ namespace BoonieBear.DeckUnit.DAL
     {
         int AddTask(Task task);
         void UpdateTask(Task task);
-        void DeleteTask(int id);
+        void DeleteTask(Int64 id);
         Task GetTask(Int64 id);
         List<Task> GetTaskLst(string strWhere);
     }

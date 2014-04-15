@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BoonieBear.DeckUnit.DAL</RootNamespace>
     <AssemblyName>BoonieBear.DeckUnit.DAL</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -68,7 +68,12 @@
     <Compile Include="SqliteDAL\SqliteSqlDAL.cs" />
     <Compile Include="SqliteDAL\SqliteHelperSQL.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
+      <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
+      <Name>BoonieBear.DeckUnit.Utilities</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

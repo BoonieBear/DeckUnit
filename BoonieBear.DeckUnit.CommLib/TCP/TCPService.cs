@@ -190,8 +190,14 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
     }
 
     /// <summary>
-    /// 继承通行网的数据解析方法
+    /// 通信机数据接收方法继承通行网的数据解析方法
     /// </summary>
     public class ACMDataService:ACNTCPDataService
+    { }
+
+    /// <summary>
+    /// 甲板单元继承通信网的通信方式
+    /// </summary>
+    public class DeckUnitService:ACNTCPDataService
     { }
 }

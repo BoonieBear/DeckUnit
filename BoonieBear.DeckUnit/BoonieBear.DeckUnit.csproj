@@ -90,6 +90,7 @@
     <Compile Include="Controls\TouchMoveScroll.cs" />
     <Compile Include="Core\DataObserver.ACM.cs" />
     <Compile Include="Core\DataObserver.ACN.cs" />
+    <Compile Include="Core\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitMessageController.cs" />
     <Compile Include="Core\UnitViewModelLocator.cs" />
     <Compile Include="MessageEvents\GoHistoryDataPageBaseNavigationRequest.cs" />

@@ -6,7 +6,7 @@ using BoonieBear.DeckUnit.DAL.SqliteDAL;
 
 namespace BoonieBear.DeckUnit.DAL
 {
-    enum DBType
+    public enum DBType
     {
         Sqlite,
         MysqlL,
@@ -17,8 +17,8 @@ namespace BoonieBear.DeckUnit.DAL
     /// </summary>
     public class DALFactory
     {
-        static string connectstring;
-        static ISqlite CreateDAL(DBType dbType)
+        static public  string connectstring;
+        public static ISqlDAL CreateDAL(DBType dbType)
         {
             switch (dbType)
             {

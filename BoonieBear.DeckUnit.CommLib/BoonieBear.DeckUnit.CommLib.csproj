@@ -90,6 +90,10 @@
     <Compile Include="UDP\UDPFactory.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
+      <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
+      <Name>BoonieBear.DeckUnit.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
       <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
       <Name>BoonieBear.DeckUnit.Utilities</Name>

@@ -1,14 +1,17 @@
 ﻿using System;
+using System.CodeDom;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.Linq;
 using System.Text;
 using BoonieBear.DeckUnit.DAL.DBModel;
+using BoonieBear.DeckUnit.Utilities;
 
 namespace BoonieBear.DeckUnit.DAL.SqliteDAL
 {
-    public class SqliteSqlDAL : ISqlite
+    public class SqliteSqlDAL : ISqlDAL
     {
         private SqliteHelperSQL sqliteHelperSQL;
         private bool _linkStatus = false;
@@ -154,27 +157,92 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
 
         public int AddTask(Task task)
         {
-            throw new NotImplementedException();
+            var b = new[] {0}; 
+            task.ErrIndex.CopyTo(b,0);
+            string[] values =
+            {
+                task.TaskID.ToString(), task.TaskState.ToString(),task.SourceID.ToString(),task.DestID.ToString(),task.DestPort.ToString(),task.CommID.ToString(),
+                task.RecvUnit.ToString(),b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,(task.ParaBytes==null)?0:task.ParaBytes.Length),
+                task.StarTime.ToString("s"),task.TotolTime.ToString(),task.LastTime.ToString("s"),task.RecvBytes.ToString(),task.FilePath,task.IsParsed?"1":"0",task.JSON,
+            };
+            using (sqliteHelperSQL.InsertInto(_tableName[5], values))
+            {
+                using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT COUNT(*) FROM " + _tableName[5]))
+                {
+                    reader.Read();
+                    return reader.GetInt32(0);
+                }
+            }
         }
 
         public void UpdateTask(Task task)
         {
-            throw new NotImplementedException();
+            string[] col =
+            {
+                "TaskInfo_ID", "TaskInfo_STATE", "TaskInfo_SOURCEID", "TaskInfo_DESTID","TaskInfo_DESTPORT","TaskInfo_COMMDID","TaskInfo_RECVUNIT",
+                "TaskInfo_ERRINDEX","TaskInfo_ISPARA","TaskInfo_PARA","TaskInfo_STARTTIME","TaskInfo_TOTALTIME","TaskInfo_LASTENDTIME","TaskInfo_RECVBYTES",
+                "TaskInfo_DATAPATH","TaskInfo_ISPARSED","TaskInfo_STRUCTDATA",
+            };
+            var b = new[] { 0};
+            task.ErrIndex.CopyTo(b, 0);
+            string[] values =
+            {
+                task.TaskID.ToString(), task.TaskState.ToString(),task.SourceID.ToString(),task.DestID.ToString(),task.DestPort.ToString(),task.CommID.ToString(),
+                task.RecvUnit.ToString(),b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,task.ParaBytes.Length),
+                task.StarTime.ToString("s"),task.TotolTime.ToString(),task.LastTime.ToString("s"),task.RecvBytes.ToString(),task.FilePath,task.IsParsed?"1":"0",task.JSON,
+            };
+
+            sqliteHelperSQL.UpdateInto(_tableName[5], col, values, "", "");
         }
 
-        public void DeleteTask(int id)
+        public void DeleteTask(long id)
         {
-            throw new NotImplementedException();
+            string[] col = { "TaskInfo_ID" };
+            string[] val = { id.ToString() };
+            sqliteHelperSQL.Delete(_tableName[5], col, val);
         }
 
         public Task GetTask(long id)
         {
-            throw new NotImplementedException();
+
+            var lst = GetTaskLst("TaskInfo_ID = " + id.ToString());
+            if (lst.Count > 0)
+                return lst[0];//count is always 0 because we check the id when add record;
+            return null;
+
         }
 
         public List<Task> GetTaskLst(string strWhere)
         {
-            throw new NotImplementedException();
+            var tasklist = new List<Task>();
+
+            var reader = sqliteHelperSQL.SelectWhere(_tableName[5], strWhere);
+            while (reader.Read())
+            {
+                var al = new Task();
+                {
+                    al.TaskID = reader.GetInt64(0);
+                    al.TaskState = reader.GetInt32(1);
+                    al.SourceID = reader.GetInt32(2);
+                    al.DestID = reader.GetInt32(3);
+                    al.DestPort = reader.GetInt32(4);
+                    al.CommID = reader.GetInt32(5);
+                    al.RecvUnit = reader.GetInt32(6);
+
+                    al.ErrIndex = new BitArray(new[]{reader.GetInt32(7)});
+                    al.HasPara = (bool) reader.GetValue(8);
+                    al.ParaBytes = StringHexConverter.ConvertHexToChar(reader.GetString(9));
+                    al.StarTime = reader.GetDateTime(10);
+                    al.TotolTime = reader.GetInt32(11);
+                    al.LastTime = reader.GetDateTime(12);
+                    al.RecvBytes = reader.GetInt32(13);
+                    al.FilePath = reader.GetString(14);
+                    al.IsParsed = (bool) reader.GetValue(15);
+                    al.JSON = reader.GetString(16);
+                };
+                tasklist.Add(al);
+            }
+            return tasklist;
         }
 
         public BaseInfo GetBaseConfigure()
@@ -210,27 +278,79 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
 
         public void DeleteLog(int id)
         {
-            throw new NotImplementedException();
+                string[] col = {"LogID"};
+                string[] val = {id.ToString()};
+                sqliteHelperSQL.Delete(_tableName[2], col, val);
         }
 
         public CommandLog GetCommandLog(int id)
         {
-            throw new NotImplementedException();
+            var lst = GetLogLst("LogID = " + id.ToString());
+            if (lst.Count > 0)
+                return lst[0];//count is always 0 because we check the id when add record;
+            return null;
         }
 
         public List<CommandLog> GetLogLst(string strWhere)
         {
-            throw new NotImplementedException();
+            var comlst = new List<CommandLog>();
+
+            var reader = sqliteHelperSQL.SelectWhere(_tableName[2], strWhere);
+            while (reader.Read())
+            {
+                var al = new CommandLog
+                {
+                    LogID = reader.GetInt32(0),
+                    LogTime = reader.GetDateTime(1),
+                    CommID = reader.GetInt32(2),
+                    Type = (bool)reader.GetValue(3),
+                    SourceID = reader.GetInt32(4),
+                    DestID = reader.GetInt32(5),
+                    FilePath = reader.GetString(6),
+                };
+                comlst.Add(al);
+            }
+            return comlst;
         }
 
         public ModemConfigure GetModemConfigure()
         {
-            throw new NotImplementedException();
+            var rd = sqliteHelperSQL.SelectWhere(_tableName[4],"");
+            if (rd.Read())
+            {
+                var ci = new ModemConfigure
+                {
+                    ID = rd.GetInt32(0),
+                    TransmiterType = rd.GetInt32(1),
+                    TransducerNum = rd.GetInt32(2),
+                    ModemType = rd.GetInt32(3),
+                    Com2Device = rd.GetInt32(4),
+                    Com3Device = rd.GetInt32(5),
+                    NetSwitch = (bool)rd.GetValue(6),
+                    NodeType = rd.GetInt32(7),
+                    AccessMode = rd.GetInt32(8),
+                };
+                return ci;
+            }
+            return null;
         }
 
         public void UpdateModemConfigure(ModemConfigure modemConfigure)
         {
-            throw new NotImplementedException();
+            string[] col =
+            {
+                "ModemConf_ID", "ModemConf_TRANSMITERTYPE", "ModemConf_TRANSDUCERNUM", "ModemConf_MODEMTYPE",
+                "ModemConf_COM2DEVICE","ModemConf_COM3DEVICE","ModemConf_NETSWITCH","ModemConf_NODETYPE","ModemConf_ACCESSMODE"
+            };
+
+            string[] values =
+            {
+               modemConfigure.ID.ToString(),modemConfigure.TransmiterType.ToString(),modemConfigure.TransducerNum.ToString(),modemConfigure.ModemType.ToString(),
+               modemConfigure.Com2Device.ToString(),modemConfigure.Com3Device.ToString(),modemConfigure.NetSwitch?"1":"0",modemConfigure.NodeType.ToString(),
+               modemConfigure.AccessMode.ToString()
+            };
+
+            sqliteHelperSQL.UpdateInto(_tableName[4], col, values, "","");
         }
 
 

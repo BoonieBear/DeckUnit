@@ -65,6 +65,10 @@
       <Project>{14AF1D53-3A3E-4740-A56B-C93555DD21A9}</Project>
       <Name>BoonieBear.DeckUnit.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
+      <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
+      <Name>BoonieBear.DeckUnit.Utilities</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="SqliteDAL\default.dudb" />
