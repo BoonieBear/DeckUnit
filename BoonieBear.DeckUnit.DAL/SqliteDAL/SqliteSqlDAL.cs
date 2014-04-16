@@ -162,7 +162,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             string[] values =
             {
                 task.TaskID.ToString(), task.TaskState.ToString(),task.SourceID.ToString(),task.DestID.ToString(),task.DestPort.ToString(),task.CommID.ToString(),
-                task.RecvUnit.ToString(),b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,(task.ParaBytes==null)?0:task.ParaBytes.Length),
+                b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,(task.ParaBytes==null)?0:task.ParaBytes.Length),
                 task.StarTime.ToString("s"),task.TotolTime.ToString(),task.LastTime.ToString("s"),task.RecvBytes.ToString(),task.FilePath,task.IsParsed?"1":"0",task.JSON,
             };
             using (sqliteHelperSQL.InsertInto(_tableName[5], values))
@@ -179,7 +179,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
         {
             string[] col =
             {
-                "TaskInfo_ID", "TaskInfo_STATE", "TaskInfo_SOURCEID", "TaskInfo_DESTID","TaskInfo_DESTPORT","TaskInfo_COMMDID","TaskInfo_RECVUNIT",
+                "TaskInfo_ID", "TaskInfo_STATE", "TaskInfo_SOURCEID", "TaskInfo_DESTID","TaskInfo_DESTPORT","TaskInfo_COMMDID",
                 "TaskInfo_ERRINDEX","TaskInfo_ISPARA","TaskInfo_PARA","TaskInfo_STARTTIME","TaskInfo_TOTALTIME","TaskInfo_LASTENDTIME","TaskInfo_RECVBYTES",
                 "TaskInfo_DATAPATH","TaskInfo_ISPARSED","TaskInfo_STRUCTDATA",
             };
@@ -188,7 +188,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             string[] values =
             {
                 task.TaskID.ToString(), task.TaskState.ToString(),task.SourceID.ToString(),task.DestID.ToString(),task.DestPort.ToString(),task.CommID.ToString(),
-                task.RecvUnit.ToString(),b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,task.ParaBytes.Length),
+                b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,task.ParaBytes.Length),
                 task.StarTime.ToString("s"),task.TotolTime.ToString(),task.LastTime.ToString("s"),task.RecvBytes.ToString(),task.FilePath,task.IsParsed?"1":"0",task.JSON,
             };
 
@@ -227,18 +227,16 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
                     al.DestID = reader.GetInt32(3);
                     al.DestPort = reader.GetInt32(4);
                     al.CommID = reader.GetInt32(5);
-                    al.RecvUnit = reader.GetInt32(6);
-
-                    al.ErrIndex = new BitArray(new[]{reader.GetInt32(7)});
-                    al.HasPara = (bool) reader.GetValue(8);
-                    al.ParaBytes = StringHexConverter.ConvertHexToChar(reader.GetString(9));
-                    al.StarTime = reader.GetDateTime(10);
-                    al.TotolTime = reader.GetInt32(11);
-                    al.LastTime = reader.GetDateTime(12);
-                    al.RecvBytes = reader.GetInt32(13);
-                    al.FilePath = reader.GetString(14);
-                    al.IsParsed = (bool) reader.GetValue(15);
-                    al.JSON = reader.GetString(16);
+                    al.ErrIndex = new BitArray(new[]{reader.GetInt32(6)});
+                    al.HasPara = (bool) reader.GetValue(7);
+                    al.ParaBytes = StringHexConverter.ConvertHexToChar(reader.GetString(8));
+                    al.StarTime = reader.GetDateTime(9);
+                    al.TotolTime = reader.GetInt32(10);
+                    al.LastTime = reader.GetDateTime(11);
+                    al.RecvBytes = reader.GetInt32(12);
+                    al.FilePath = reader.GetString(13);
+                    al.IsParsed = (bool) reader.GetValue(14);
+                    al.JSON = reader.GetString(15);
                 };
                 tasklist.Add(al);
             }

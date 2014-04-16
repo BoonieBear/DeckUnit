@@ -151,7 +151,6 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             task.DestID = 7;
             task.DestPort = 3;
             task.CommID = 1;
-            task.RecvUnit = 24;
             bool[] b =
             {
                 true, false, true, false, true, false, true, false, true, false, true, false, true, false, true,
@@ -181,7 +180,6 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             task.DestID = 7;
             task.DestPort = 3;
             task.CommID = 1;
-            task.RecvUnit = 11;
             bool[] b =
             {
                 true, false, true, false, true, false, true, false, true, false, true, false, true, false, true,
@@ -219,7 +217,6 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             Debug.WriteLine(task.DestID);
             Debug.WriteLine(task.DestPort);
             Debug.WriteLine(task.CommID);
-            Debug.WriteLine(task.RecvUnit);
             int[] a = {0};
             task.ErrIndex.CopyTo(a, 0);
             Debug.WriteLine(a[0]);
@@ -249,7 +246,6 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
                 Debug.WriteLine(task.DestID);
                 Debug.WriteLine(task.DestPort);
                 Debug.WriteLine(task.CommID);
-                Debug.WriteLine(task.RecvUnit);
                 int[] a = { 0 };
                 task.ErrIndex.CopyTo(a, 0);
                 Debug.WriteLine(a[0]);

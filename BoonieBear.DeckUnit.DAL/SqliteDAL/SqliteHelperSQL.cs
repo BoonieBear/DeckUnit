@@ -104,7 +104,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             _dbCommand = _dbConnection.CreateCommand();
             
             _dbCommand.CommandText = sqlQuery;
-            Debug.WriteLine(sqlQuery);
+            //Debug.WriteLine(sqlQuery);
             _reader = _dbCommand.ExecuteReader();
            
             return _reader; 

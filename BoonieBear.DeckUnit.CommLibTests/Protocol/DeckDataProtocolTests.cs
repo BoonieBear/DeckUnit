@@ -1,9 +1,8 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
+using System.Threading;
 using BoonieBear.DeckUnit.CommLib.Protocol;
 using NUnit.Framework;
-
-        
-
 
 namespace BoonieBear.DeckUnit.CommLibTests.Protocol
 {
@@ -24,6 +23,7 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
         [TearDown]
         public void Close()
         {
+            Debug.WriteLine(DeckDataProtocol.SecondTicks);
             DeckDataProtocol.Stop();
         }
         [Test()]
@@ -38,6 +38,7 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
             DeckDataProtocol.Init(sid, dbstring);
             var id = DeckDataProtocol.StartNewTask(62, 3, TaskType.Reset, null);
             Assert.Greater(id,0);
+            
         }
         [Test()]
         public void ContinueTaskTest()
@@ -55,6 +56,17 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
 
         [Test()]
         public void ParseDataTest()
+        {
+
+        }
+        [Test()]
+        public void CheckFileIntegrityTest()
+        {
+
+        }
+
+        [Test()]
+        public void BuildFileTest()
         {
 
         }

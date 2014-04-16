@@ -137,7 +137,6 @@ namespace BoonieBear.DeckUnit.DAL.DBModel
 
         public int DestPort { get; set; }
         public int CommID { get; set; }
-        public int RecvUnit { get; set; }
         public BitArray ErrIndex { get; set; }
         public bool HasPara { get; set; }
         public byte[] ParaBytes { get; set; }
