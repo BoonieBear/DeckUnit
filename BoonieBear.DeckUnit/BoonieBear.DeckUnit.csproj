@@ -51,6 +51,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="De.TorstenMandelkow.MetroChart">
+      <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
+    </Reference>
     <Reference Include="MahApps.Metro">
       <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro\bin\Debug\MahApps.Metro.dll</HintPath>
     </Reference>
@@ -88,13 +91,18 @@
     </ApplicationDefinition>
     <Compile Include="Controls\ContentPage.cs" />
     <Compile Include="Controls\TouchMoveScroll.cs" />
-    <Compile Include="Core\DataObserver.ACM.cs" />
-    <Compile Include="Core\DataObserver.ACN.cs" />
-    <Compile Include="Core\DataObserver.DeckUnit.cs" />
-    <Compile Include="Core\UnitMessageController.cs" />
+    <Compile Include="Core\DataObservers\DataObserver.ACM.cs" />
+    <Compile Include="Core\DataObservers\DataObserver.ACN.cs" />
+    <Compile Include="Core\DataObservers\DataObserver.DeckUnit.cs" />
+    <Compile Include="Core\Controllers\IMessageController.cs" />
+    <Compile Include="Core\IUnitCore.cs" />
+    <Compile Include="Core\IUnitKernel.cs" />
+    <Compile Include="Core\UnitCore.cs" />
+    <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Core\UnitViewModelLocator.cs" />
-    <Compile Include="MessageEvents\GoHistoryDataPageBaseNavigationRequest.cs" />
-    <Compile Include="MessageEvents\GoWaterTelPageBaseNavigationRequest.cs" />
+    <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
+    <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
+    <Compile Include="Events\GoWaterTelPageBaseNavigationRequest.cs" />
     <Compile Include="ViewModels\HistoryDataPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\MainFrameViewModel.cs" />
@@ -102,8 +110,10 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Core\UnitNavigationController.cs" />
+    <Compile Include="Core\Controllers\UnitNavigationController.cs" />
     <Compile Include="Core\UnitKernal.cs" />
+    <Compile Include="Helps\SystemInfo.cs" />
+    <Compile Include="ViewModels\SystemResourceViewModel.cs" />
     <Compile Include="ViewModels\WaterTelViewModel.cs" />
     <Compile Include="Views\HistoryDataPage.xaml.cs">
       <DependentUpon>HistoryDataPage.xaml</DependentUpon>
@@ -115,6 +125,9 @@
     <Compile Include="Views\MainFrame.xaml.cs">
       <SubType>Code</SubType>
       <DependentUpon>MainFrame.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SystemResourceView.xaml.cs">
+      <DependentUpon>SystemResourceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\WaterTelView.xaml.cs">
       <DependentUpon>WaterTelView.xaml</DependentUpon>
@@ -172,6 +185,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MainFrame.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SystemResourceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -266,6 +283,7 @@
       <Name>BoonieBear.DeckUnit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

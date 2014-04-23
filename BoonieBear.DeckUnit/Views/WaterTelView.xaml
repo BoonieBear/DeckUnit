@@ -11,13 +11,13 @@
 	 d:DesignHeight="480" d:DesignWidth="640"
 	 Title="水声电话"  >
 
-    <Grid Background="{StaticResource LinearBgMask}">
+    <Grid Background="{StaticResource LightColorBrush}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
             <RowDefinition/>
-            <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <metroControl:MetroAnimatedSingleRowTabControl  Grid.Row="0"  HorizontalContentAlignment="Center" HorizontalAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="0" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
+        <metroControl:MetroAnimatedSingleRowTabControl  Grid.Row="1"  HorizontalContentAlignment="Center" HorizontalAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="0" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto">
             <TabItem  x:Name="metroTabItem"  Foreground="Black" FontSize="22"   FontFamily="SimSun">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">

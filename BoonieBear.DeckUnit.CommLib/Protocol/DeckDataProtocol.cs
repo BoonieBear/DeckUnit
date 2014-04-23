@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Xml.Linq;
 using BoonieBear.DeckUnit.DAL;
@@ -88,6 +89,8 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             
             if (System.IO.File.Exists(dbPath))
             {
+                if (_sqlite != null)
+                    return true;
                 ID = id;
                 TmpDataPath = @"..\TmpDir\";
                 Directory.CreateDirectory(TmpDataPath);
@@ -95,8 +98,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
                 SecondTicks = 0;
                 DALFactory.connectstring = "Data Source=" + DBFile + ";Pooling=True";
                 _sqlite = DALFactory.CreateDAL(DBType.Sqlite);
-                if (_sqlite!= null)
-                    return true;
+                
             }
             return false;
         }
@@ -254,10 +256,11 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             error = "";
             try
             {
+                WorkingTask.TotolTime += SecondTicks;
+                SecondTicks = 0;
                 if (bytes[0]==(int)PackType.Ack)
                 {
-                    WorkingTask.TotolTime += SecondTicks;
-                    SecondTicks = 0;
+                    
                     switch ((TaskState)bytes[1])
                     {
                         case TaskState.OK:
@@ -266,7 +269,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
                             _sqlite.UpdateTask(WorkingTask);
                             return TaskStage.Continue;
                         case TaskState.Failed:
-                            WorkingTask.TaskState = (int) TaskStage.Failed;
+                            WorkingTask.TaskState = (int)TaskStage.Failed;
 
                             _sqlite.UpdateTask(WorkingTask);
                             return TaskStage.Failed;
@@ -288,7 +291,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
                             else//任务完成
                             {
                                 WorkingTask.TaskState = (int)TaskStage.Finish;
-                                WorkingTask.ErrIndex = new BitArray(new[] { BitConverter.ToInt32(bytes, 2) });
+                                WorkingTask.ErrIndex = new BitArray(new[] { 0 });
                                 _sqlite.UpdateTask(WorkingTask);
                                 totalTimer.Dispose();
                                 return TaskStage.Finish;
@@ -329,32 +332,27 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             stream.Write(bytes, 5, packagelength);
             stream.Flush();
             stream.Close();
-            var filename = Directory.GetFiles(TmpDataPath + "\\" + packageid);
-            var totalbytes = 0;
-            foreach (string s in filename)
-            {
-                var file = new FileInfo(s);
-                totalbytes += (int)file.Length;
-            }
-            WorkingTask.RecvBytes += totalbytes;
-            WorkingTask.TotolTime = SecondTicks;
-            SecondTicks = 0;
+            var filename = Directory.GetFiles(TmpDataPath);
+            var totalbytes = filename.Select(s => new FileInfo(s)).Select(file => (int) file.Length).Sum();//LINQ
+            WorkingTask.RecvBytes = totalbytes;
             _sqlite.UpdateTask(WorkingTask);
         }
 
-        /// <summary>
-        /// 检查任务文件完整性
-        /// </summary>
-        /// <param name="id">任务ID</param>
-        /// <param name="err">错误消息字符串</param>
-        public static bool CheckFileIntegrity(long id, out string err)
+        ///  <summary>
+        ///  检查任务文件完整性,如果文件名是连续的则判断为完整的，本方法默认已收到
+        ///  最后的数据文件，也可在后期加入校验码，但是如果
+        /// 数据比较多的话，DSP无法一次性得出校验，则无法用校验方法。 
+        ///  </summary>
+        ///  <param name="id">任务ID</param>
+        public static bool CheckFileIntegrity(long id)
         {
-            err = "";
-            return false;
+            var filename = Directory.GetFiles(TmpDataPath + "\\" + id);
+            var i = 0;
+            return filename.All(s => int.Parse((new FileInfo(s)).Name) == i++);
         }
 
         /// <summary>
-        /// 组装数据包
+        /// 组装数据包，成功则将文件路径存入数据库
         /// </summary>
         /// <param name="id">任务ID</param>
         /// <param name="err">错误消息字符串</param>
@@ -362,7 +360,55 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         public static bool BuildFile(long id, out string err)
         {
             err = "";
-            return false;
+            try
+            {
+                Directory.CreateDirectory(@"..\TaskDir\");
+                var stream = new FileStream(@"..\TaskDir\"  + id, FileMode.Create);
+                var filename = Directory.GetFiles(TmpDataPath);
+                foreach (var streams in filename.Select(s => new FileStream(s, FileMode.Open)))
+                {
+                    streams.CopyTo(stream);
+                    streams.Close();
+                    
+                }
+                foreach (var s in filename)
+                {
+                    File.Delete(s);
+                }
+                stream.Close();
+                var filepath = @"..\TaskDir\" + id;
+                WorkingTask.FilePath = filepath;
+                _sqlite.UpdateTask(WorkingTask);//存入数据路径
+                return true;
+            }
+            catch (Exception exception)
+            {
+                
+                err = exception.Message;
+                return false;
+            }
+            
+        }
+        /// <summary>
+        /// 分析数据并存入数据库中，暂时没有这个需求
+        /// </summary>
+        /// <param name="id">任务ID</param>
+        /// <param name="err">错误消息</param>
+        /// <returns>true成功，flase失败</returns>
+        public static bool AnalyseData(long id, out string err)
+        {
+            err = "";
+            try
+            {
+                return true;
+            }
+            catch (Exception exception)
+            {
+
+                err = exception.Message;
+                return false;
+            }
+            
         }
     }
 }

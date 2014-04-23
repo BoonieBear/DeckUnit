@@ -2,13 +2,12 @@
 using System.Threading;
 using System.Windows.Input;
 using System.Windows.Threading;
-using BoonieBear.DeckUnit.MessageEvents;
+using BoonieBear.DeckUnit.Events;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
 namespace BoonieBear.DeckUnit.ViewModels
 {
-
     public class MainPageViewModel : ViewModelBase
     {
         #region Overrides of ViewModelBase

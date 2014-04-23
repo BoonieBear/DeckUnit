@@ -58,6 +58,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
+            OptionPanelWidth = 0;
             EventAggregator.PublishMessage(new ChangeAnimationModeRequest(AnimationMode.SmoothSlide));
             EventAggregator.PublishMessage(new GoBackNavigationRequest());
             EventAggregator.PublishMessage(new ChangeAnimationModeRequest(AnimationMode.Fade));
@@ -76,13 +77,11 @@ namespace BoonieBear.DeckUnit.ViewModels
             eventArgs.CanExecute = true;
         }
 		private void ExecuteShowOptionPanelCommand(object sender, ExecutedRoutedEventArgs eventArgs)
-        {
-			if(OptionPanelWidth==0)
-				OptionPanelWidth = 120;
-			else
-				OptionPanelWidth=0;
+		{
+		    OptionPanelWidth = OptionPanelWidth==0 ? 120 : 0;
 		}
-		#endregion
+
+        #endregion
     }
    
 }

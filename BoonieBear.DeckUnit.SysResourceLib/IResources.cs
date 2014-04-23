@@ -16,9 +16,9 @@ namespace BoonieBear.DeckUnit.SysResourceLib
     }
 
    public interface IMspResources
-    {
-        
-    }
+   {
+       double GetMspVoltage();
+   }
 
 
     public class GetSystemInfo
@@ -30,7 +30,7 @@ namespace BoonieBear.DeckUnit.SysResourceLib
         }
         public static IMspResources GreatemsMspResources()
         {
-            IMspResources ir = new GetMspInfo();
+            IMspResources ir = new GetACNMspInfo();
             return ir;
         }
     }

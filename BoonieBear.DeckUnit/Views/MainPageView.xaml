@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:chart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart" 
       xmlns:sys="clr-namespace:System;assembly=mscorlib"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=MainPageViewModel}" 
       mc:Ignorable="d" 
@@ -299,7 +300,7 @@
             <BeginStoryboard x:Name="EnableReturnButton_BeginStoryboard3" Storyboard="{StaticResource EnableReturnButton}"/>
             <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
         </EventTrigger>
-        <EventTrigger RoutedEvent="UIElement.MouseLeftButtonUp" SourceName="grid">
+        <EventTrigger RoutedEvent="UIElement.MouseDown" SourceName="grid">
             <BeginStoryboard Storyboard="{StaticResource InitStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource EnableModermStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource DisableDeviceButtonStoryboard}"/>
@@ -1810,5 +1811,6 @@ Storyboard.TargetName="MyTextEffect"
                 </Button>
             </Canvas>
         </Grid>
+        
     </Grid>
 </Page>

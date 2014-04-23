@@ -1,5 +1,5 @@
 ﻿using System.Windows.Input;
-using BoonieBear.DeckUnit.MessageEvents;
+using BoonieBear.DeckUnit.Events;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 

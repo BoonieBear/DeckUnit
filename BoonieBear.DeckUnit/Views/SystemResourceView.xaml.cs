@@ -1,12 +1,11 @@
 ﻿using System.Windows.Controls;
-using BoonieBear.DeckUnit.Controls;
 
 namespace BoonieBear.DeckUnit.Views
 {
 
-    public partial class HistoryDaaPage : ContentPage
+    public partial class SystemResourceView : Page
     {
-        public HistoryDaaPage()
+        public SystemResourceView()
         {
             InitializeComponent();
         }

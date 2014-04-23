@@ -1,6 +1,6 @@
-﻿using System;
-using BoonieBear.DeckUnit.CommLib;
-namespace BoonieBear.DeckUnit.Core
+﻿using BoonieBear.DeckUnit.CommLib;
+
+namespace BoonieBear.DeckUnit.Core.DataObservers
 {
     public class ACNDataObserver : CommLib.IObserver<CustomEventArgs>
     {

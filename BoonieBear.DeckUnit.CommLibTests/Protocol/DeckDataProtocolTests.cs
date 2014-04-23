@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib.Protocol;
@@ -17,7 +18,7 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
         {
             sid = 1;
             dbstring = "default.dudb";
-            
+            DeckDataProtocol.Init(sid, dbstring);
         }
 
         [TearDown]
@@ -54,21 +55,33 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
             Assert.NotNull(DeckDataProtocol.TaskPackage(201404151359100162));
         }
 
-        [Test()]
-        public void ParseDataTest()
+        
+        [TestCase( new Byte[]{1,0}, ExpectedResult = TaskStage.Continue,TestName = "ParseOK")]
+        [TestCase(new Byte[]{1,3,0,1,0,0}, ExpectedResult = TaskStage.Continue, TestName = "ParseEnd")]
+        [TestCase(new Byte[]{1, 2}, ExpectedResult = TaskStage.Waiting, TestName = "Parsewaiting")]
+        [TestCase(new Byte[] { 1, 1 }, ExpectedResult = TaskStage.Failed, TestName = "ParseFailed")]
+        [TestCase(new Byte[] { 1, 4,0,0,0,0 }, ExpectedResult = TaskStage.Finish, TestName = "ParseFinished")]
+        [TestCase(new Byte[] { 1, 4, 1, 0, 0, 0 }, ExpectedResult = TaskStage.Continue, TestName = "ParseFinishedButHasError")]
+        [TestCase(new Byte[] { 2, 0,1,1,0,1 }, ExpectedResult = TaskStage.Continue, TestName = "ParseData")]
+        [TestCase(new Byte[] { 3, 2 }, ExpectedResult = TaskStage.Undefine, TestName = "ParseUndefine")]
+        public TaskStage ParseDataTest(byte[] bytes)
         {
-
+            DeckDataProtocol.ContinueTask(201404161625160162);
+            string err;
+            return DeckDataProtocol.ParseData(bytes, out err);
         }
         [Test()]
         public void CheckFileIntegrityTest()
         {
-
+            Assert.IsTrue(DeckDataProtocol.CheckFileIntegrity(201404161625160162));
         }
 
         [Test()]
         public void BuildFileTest()
         {
-
+            string err;
+            DeckDataProtocol.ContinueTask(201404161625160162);
+            Assert.IsTrue(DeckDataProtocol.BuildFile(201404161625160162, out err));
         }
     }
 }

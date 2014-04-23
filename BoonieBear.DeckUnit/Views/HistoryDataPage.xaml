@@ -1,20 +1,25 @@
-﻿<Page x:Class="BoonieBear.DeckUnit.Views.HistoryDaaPage"
+﻿<controls1:ContentPage x:Class="BoonieBear.DeckUnit.Views.HistoryDaaPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:controls1="clr-namespace:BoonieBear.DeckUnit.Controls"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=HistoryDataPageViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
-	Title="历史数据">
+	    Title="历史数据">
 
     <Grid Background="{StaticResource MainBackGround}">
-
-        
-            <TextBlock Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/>
+        <Grid.RowDefinitions>
+            
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+        <TextBlock   Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/>
             <controls:ToggleSwitch IsChecked="True" Header=" 选项1" Instruction="打开or关闭串口" OffLabel="关" OnLabel="开" />
-           <DataGrid x:Name="HistoryDataGrid" Height="200.99">
+            <DataGrid x:Name="HistoryDataGrid" Height="300">
                 <DataGrid.GroupStyle>
                     <GroupStyle>
                         <GroupStyle.ContainerStyle>
@@ -25,7 +30,7 @@
                                             <Expander>
                                                 <Expander.Header>
                                                     <StackPanel Orientation="Horizontal">
-                                                        <TextBlock Text="NEEDS TO BE BINDED..."/>
+                                                        <TextBlock Text="{Binding Title}"/>
                                                     </StackPanel>
                                                 </Expander.Header>
                                                 <ItemsPresenter />
@@ -38,10 +43,6 @@
                     </GroupStyle>
                 </DataGrid.GroupStyle>
             </DataGrid>
-           <Popup/>
-         
-           
-       
-        
+        </Grid>
     </Grid>
-</Page>
+    </controls1:ContentPage>

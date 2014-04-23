@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.Core.Controllers;
 using BoonieBear.TinyMetro.WPF.Controller;
 
 namespace BoonieBear.DeckUnit
@@ -18,12 +19,15 @@ namespace BoonieBear.DeckUnit
         }
         protected override void OnStartup(StartupEventArgs e)
         {
-            // At first, a instance of the conrecte Kernel has to be created and set
-            Kernel.Instance = new UnitKernal();
-
+            //  初始化框架
+            //派生接口单实例
+            UnitKernal.Instance = new UnitKernal();
+            //基类单实例，给basecontroller赋值
+            //basecontroller用的是基类接口
+            Kernel.Instance = UnitKernal.Instance;
             // 初始化消息处理函数
-            Kernel.Instance.Controller.Init();
-            
+            UnitKernal.Instance.Controller.Init();//导航消息响应
+            UnitKernal.Instance.MessageController.Init();//系统消息响应
             
             base.OnStartup(e);
         }

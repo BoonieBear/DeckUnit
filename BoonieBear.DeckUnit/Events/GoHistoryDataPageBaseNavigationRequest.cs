@@ -1,4 +1,4 @@
-﻿namespace BoonieBear.DeckUnit.MessageEvents
+﻿namespace BoonieBear.DeckUnit.Events
 {
     class GoHistoryDataPageBaseNavigationRequest
     {

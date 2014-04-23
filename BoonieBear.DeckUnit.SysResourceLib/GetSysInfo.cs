@@ -246,7 +246,14 @@ namespace BoonieBear.DeckUnit.SysResourceLib
         
     }
 
-    public class GetMspInfo : IMspResources
+    /// <summary>
+    /// 使用通信网协议获取通信机资源信息类，暂时没有可用的资源
+    /// </summary>
+    public class GetACNMspInfo : IMspResources
     {
+        public double GetMspVoltage()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

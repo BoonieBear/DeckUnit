@@ -1,7 +1,7 @@
 ﻿using System;
 using BoonieBear.DeckUnit.CommLib;
 
-namespace BoonieBear.DeckUnit.Core
+namespace BoonieBear.DeckUnit.Core.DataObservers
 {
     public class ACMDataObserver : CommLib.IObserver<CustomEventArgs>
     {

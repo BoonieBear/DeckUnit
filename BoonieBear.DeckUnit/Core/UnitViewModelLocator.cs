@@ -10,6 +10,7 @@ namespace BoonieBear.DeckUnit.Core
         private MainPageViewModel _mainPageViewModel;
         private WaterTelViewModel _waterTelViewModel;
         private HistoryDataPageViewModel _historyDataPageViewModel;
+        private SystemResourceViewModel _systemResourceViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -68,6 +69,19 @@ namespace BoonieBear.DeckUnit.Core
                     _historyDataPageViewModel.Initialize();
                 }
                 return _historyDataPageViewModel;
+            }
+        }
+
+        public SystemResourceViewModel SystemResourceViewModel
+        {
+            get
+            {
+                if (_systemResourceViewModel == null)
+                {
+                    _systemResourceViewModel = new SystemResourceViewModel();
+                    _systemResourceViewModel.Initialize();
+                }
+                return _systemResourceViewModel;
             }
         }
     }

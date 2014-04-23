@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using BoonieBear.DeckUnit.CommLib;
 
-namespace BoonieBear.DeckUnit.Core
+namespace BoonieBear.DeckUnit.Core.DataObservers
 {
     public class DeckUnitDataObserver:CommLib.IObserver<CustomEventArgs>
     {
