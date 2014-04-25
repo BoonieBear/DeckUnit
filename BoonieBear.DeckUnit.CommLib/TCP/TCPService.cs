@@ -46,7 +46,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         {
             DoParse -= observer.Handle;
         }
-        public  void ConnectAsync()
+        public  void ConnectSync()
         {
             if (_tcpClient == null) return;
             try

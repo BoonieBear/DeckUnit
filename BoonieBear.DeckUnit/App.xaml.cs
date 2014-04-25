@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Core.Controllers;
+using BoonieBear.DeckUnit.Helps;
 using BoonieBear.TinyMetro.WPF.Controller;
 
 namespace BoonieBear.DeckUnit
@@ -14,7 +15,7 @@ namespace BoonieBear.DeckUnit
     {
         public App()
         {
-            DispatcherUnhandledException += new DispatcherUnhandledExceptionEventHandler(Application_DispatcherUnhandledException);
+            DispatcherUnhandledException += Application_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
         }
         protected override void OnStartup(StartupEventArgs e)
@@ -28,33 +29,24 @@ namespace BoonieBear.DeckUnit
             // 初始化消息处理函数
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
-            
+            LogHelper.WriteLog("系统启动");
             base.OnStartup(e);
         }
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
 
-            MessageBox.Show( e.Exception.Message + "\r\n" + e.Exception.StackTrace);
             e.Handled = true;
+            LogHelper.ErrorLog(null, e.Exception);
         }
 
         static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
-
-            try
+            var o = e.ExceptionObject as Exception;
+            if (o != null)
             {
-
-                //
-
+                LogHelper.ErrorLog(null, o);
             }
-
-            catch
-            {
-                MessageBox.Show(e.ExceptionObject.ToString());
-            }
-            finally
-            { }
         }
     }
 }

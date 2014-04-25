@@ -37,15 +37,14 @@ namespace BoonieBear.DeckUnit.CommLibTests
         [Test]
         public void TestTCPconnect()
         {
-            var auto = new AutoResetEvent(false); 
             
             if (shellservice.Init(shelltcpClient, IPAddress.Parse("192.168.2.212"), 8080) &&
                 (dataservice.Init(datatcpClient, IPAddress.Parse("192.168.2.212"), 8081)))
             {
-                Task.Factory.StartNew(()=>shellservice.ConnectAsync()).ContinueWith(t =>
+                Task.Factory.StartNew(()=>shellservice.ConnectSync()).ContinueWith(t =>
                 {
                     Debug.WriteLine(shellservice.Connected.ToString());
-                    Task.Factory.StartNew(() => dataservice.ConnectAsync()).ContinueWith(d =>
+                    Task.Factory.StartNew(() => dataservice.ConnectSync()).ContinueWith(d =>
                     {
 
                         Debug.WriteLine(dataservice.Connected.ToString());
@@ -66,7 +65,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
         {
             if (shellservice.Init(shelltcpClient, IPAddress.Parse("192.168.2.212"), 8080) )
             {
-                Task.Factory.StartNew(() => shellservice.ConnectAsync()).ContinueWith(t =>
+                Task.Factory.StartNew(() => shellservice.ConnectSync()).ContinueWith(t =>
                 {
                     Debug.WriteLine(shellservice.Connected.ToString());
                     var shellcmd = new ACNTCPShellCommand(shelltcpClient, "aaa");
@@ -86,11 +85,11 @@ namespace BoonieBear.DeckUnit.CommLibTests
             if (shellservice.Init(shelltcpClient, IPAddress.Parse("192.168.2.212"), 8080) &&
                 (dataservice.Init(datatcpClient, IPAddress.Parse("192.168.2.212"), 8081)))
             {
-                Task.Factory.StartNew(() => shellservice.ConnectAsync()).ContinueWith(t =>
+                Task.Factory.StartNew(() => shellservice.ConnectSync()).ContinueWith(t =>
                 {
                     if (shellservice.Start())
                     {
-                        Task.Factory.StartNew(() => dataservice.ConnectAsync()).ContinueWith(d =>
+                        Task.Factory.StartNew(() => dataservice.ConnectSync()).ContinueWith(d =>
                         {
                             if(!dataservice.Connected)
                                 Assert.Fail();

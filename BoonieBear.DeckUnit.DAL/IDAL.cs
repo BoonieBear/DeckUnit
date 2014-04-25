@@ -11,6 +11,7 @@ namespace BoonieBear.DeckUnit.DAL
     public interface ISqlDAL : IAlarmConfigure, ICommConfigure, ITask, IBaseConfigure, ICommandLog, IModemConfigure
     {
         void Close();
+        bool LinkStatus { get; }
     }
 
     public interface IBaseConfigure

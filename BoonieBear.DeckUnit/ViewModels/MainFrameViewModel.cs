@@ -26,6 +26,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
             
         }
+
         #region 绑定属性
         public Visibility IsShowBottomBar
         {

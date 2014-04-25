@@ -45,7 +45,7 @@ namespace BoonieBear.DeckUnit.CommLib
         bool Init(TcpClient tcpClient,IPAddress ip,int destport);
         void Register(IObserver<CustomEventArgs> observer);
         void UnRegister(IObserver<CustomEventArgs> observer);
-        void ConnectAsync();
+        void ConnectSync();
         bool Start();
         void Stop();
         void RecvThread(object obj);

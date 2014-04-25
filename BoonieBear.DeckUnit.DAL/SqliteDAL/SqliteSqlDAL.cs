@@ -36,12 +36,11 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             }
             _linkStatus = false;
         }
-        public bool LinkStatus
+
+        public bool LinkStatus 
         {
             get { return _linkStatus; }
-            set { _linkStatus = value; }
         }
-
         
 
         public int AddAlarm(AlarmConfigure alarmConfigure)

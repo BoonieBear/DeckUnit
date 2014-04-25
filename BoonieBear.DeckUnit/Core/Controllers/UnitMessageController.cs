@@ -1,4 +1,9 @@
-﻿using BoonieBear.TinyMetro.WPF.Controller;
+﻿using System;
+using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.Helps;
+using BoonieBear.DeckUnit.ViewModels;
+using BoonieBear.DeckUnit.Views;
+using BoonieBear.TinyMetro.WPF.Controller;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
 
 namespace BoonieBear.DeckUnit.Core.Controllers
@@ -8,7 +13,7 @@ namespace BoonieBear.DeckUnit.Core.Controllers
     /// 由于不像导航消息处理类那样已经由BaseController处理了一些基本消息
     /// 因此需要自己将消息处理函数完成并完成IMessageController接口
     /// </summary>
-    class UnitMessageController : IMessageController
+    class UnitMessageController : IMessageController,IHandleMessage<LogEvent>
     {
         #region 构造
         private IEventAggregator eventAggregator;
@@ -19,12 +24,16 @@ namespace BoonieBear.DeckUnit.Core.Controllers
             eventAggregator.Subscribe(this);
         }
 
-         ~UnitMessageController()
+        
+
+        ~UnitMessageController()
         {
             eventAggregator.Unsubscribe(this);
         }
         #endregion
-        #region IMessage接口实现 
+
+        #region IMessage接口实现
+        //初始化消息处理类
          public void Init()
         {
             
@@ -32,12 +41,17 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         
         public void SendMessage(string message)
         {
-            throw new System.NotImplementedException();
+            
         }
 
         public void WriteLog(string message)
         {
-            throw new System.NotImplementedException();
+            LogHelper.WriteLog(message);
+        }
+
+        public void ErrorLog(string message, Exception ex)
+        {
+            LogHelper.ErrorLog(message, ex);
         }
 
         public void Alert(string message)
@@ -48,6 +62,13 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         public void BroadCast(string message)
         {
             throw new System.NotImplementedException();
+        }
+        #endregion
+
+        #region IHandle
+        public void Handle(LogEvent message)
+        {
+            throw new NotImplementedException();
         }
         #endregion
     }
