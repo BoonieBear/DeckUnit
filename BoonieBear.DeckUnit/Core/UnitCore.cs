@@ -2,9 +2,12 @@
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
+using BoonieBear.DeckUnit.CommLib.Protocol;
 using BoonieBear.DeckUnit.CommLib.Serial;
 using BoonieBear.DeckUnit.CommLib.TCP;
+using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.Core.DataObservers;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.DAL.DBModel;
@@ -19,33 +22,79 @@ namespace BoonieBear.DeckUnit.Core
     /// </summary>
     class UnitCore : IUnitCore
     {
-        private static IUnitCore Instance;
+        //静态接口，用于在程序域中任意位置操作UnitCore中的成员
+        public static IUnitCore Instance;
+        //事件绑定接口，用于事件广播
         private IEventAggregator _eventAggregator;
         private ISerialService _serialService;
         private ITCPClientService _tcpShellService;
         private ITCPClientService _tcpDataService;
         private IUDPService _udpService;
         private ISqlDAL _sqlDAL;
-        private TcpClient shelltcpClient = null;
-        private TcpClient datatcpClient = null;
-        private CommLib.IObserver<CustomEventArgs> _deckUnitObserver; 
+        private TcpClient _shelltcpClient ;
+        private TcpClient _datatcpClient ;
+        private UdpClient _udpClient;
+        private bool _isWorking;
+        private bool _initialed;
+        private CommLib.IObserver<CustomEventArgs> _deckUnitObserver;
+        private const string Dblinkstring = @"Data Source=..\dudb\default.dudb;Pooling=True";
+
         public bool Init()
         {
             try
             {
-                if (!SqlDAL.LinkStatus) throw new Exception("数据服务无法启动");
+                if(Initailed) throw new Exception("系统已经完成初始化");
+                if (!SqlDAL.LinkStatus) throw new Exception("数据存储服务无法启动");
                 var configure = SqlDAL.GetCommConfInfo();
+                var modemconfigure = SqlDAL.GetModemConfigure();
+                if(modemconfigure==null) throw  new Exception("配置数据不存在");
+                //甲板单元协议自带数据库接口，可以
+                //自动更新数据库，如果是通信网则使用ACNProtocol.Init()
+                DeckDataProtocol.Init(modemconfigure.ID, Dblinkstring);
                 //串口打开成功
-                if (!SerialInit(configure)) throw new Exception("内部端口服务无法启动");
-                return TcpInit(configure);
+                if (!SerialInit(configure)) throw new Exception("内部端口服务无法初始化");
+                if(!UDPInit()) throw new Exception("数据交换服务无法初始化");
+                if(!TcpInit(configure)) throw new Exception("信息交换服务无法初始化");
+                Initailed = true;
+                return true;
             }
             catch (Exception ex)
             {
                 EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
+                Initailed = false;
                 return false;
             }
 
         }
+
+        private bool UDPInit()
+        {
+            if (_udpClient == null)
+                _udpClient = new UdpClient(10010);
+            if (!UDPService.Init(_udpClient)) return false;
+            if (!UDPService.Start()) return false;
+            UDPService.Register(DeckUnitObserver);
+            return true;
+        }
+
+        public void Dispose()
+        {
+            Initailed = false;
+            SqlDAL.Close();
+            
+            SerialService.UnRegister(DeckUnitObserver);
+            SerialService.Stop();
+            
+            TCPShellService.UnRegister(DeckUnitObserver);
+            TCPShellService.Stop();
+           
+            TCPDataService.UnRegister(DeckUnitObserver);
+            TCPDataService.Stop();
+            
+            UDPService.UnRegister(DeckUnitObserver);
+            UDPService.Stop();
+        }
+
         /// <summary>
         /// tcp数据交换初始化
         /// </summary>
@@ -53,17 +102,17 @@ namespace BoonieBear.DeckUnit.Core
         /// <returns></returns>
         private bool TcpInit(CommConfInfo configure)
         {
-            shelltcpClient = new TcpClient {SendTimeout = 1000};
-            datatcpClient = new TcpClient {SendTimeout = 1000};
-            if (!_tcpShellService.Init(shelltcpClient, IPAddress.Parse(configure.LinkIP), configure.NetPort1) ||
-                (!_tcpDataService.Init(datatcpClient, IPAddress.Parse(configure.LinkIP), configure.NetPort2)))
-                throw new Exception("无法初始化数据交换服务");
+            _shelltcpClient = new TcpClient {SendTimeout = 1000};
+            _datatcpClient = new TcpClient {SendTimeout = 1000};
+            if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(configure.LinkIP), configure.NetPort1) ||
+                (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(configure.LinkIP), configure.NetPort2)))
+                return false;
             // 同步方法，会阻塞进程，调用init用task
-            _tcpShellService.ConnectSync();
-            _tcpDataService.ConnectSync();
-            if (!_tcpShellService.Connected || !_tcpDataService.Connected) throw new Exception("无法连接数据交换服务");
-            _tcpShellService.Register(DeckUnitObserver);
-            _tcpDataService.Register(DeckUnitObserver);
+            TCPShellService.ConnectSync();
+            TCPDataService.ConnectSync();
+            if (!TCPShellService.Connected || !TCPDataService.Connected) return false;
+            TCPShellService.Register(DeckUnitObserver);
+            TCPDataService.Register(DeckUnitObserver);
             return true;
         }
 
@@ -74,7 +123,9 @@ namespace BoonieBear.DeckUnit.Core
         /// <returns>成功or失败</returns>
         private bool SerialInit(CommConfInfo configure)
         {
-            return _serialService.Init(new SerialPort(configure.SerialPort)) && _serialService.Start();
+            if (!SerialService.Init(new SerialPort(configure.SerialPort)) || !SerialService.Start()) return false;
+            SerialService.Register(DeckUnitObserver);
+            return true;
         }
 
         #region 属性
@@ -98,36 +149,46 @@ namespace BoonieBear.DeckUnit.Core
                 return _tcpShellService ?? (_tcpShellService = (new TCPShellServiceFactory()).CreateService());
             }
         }
-        public IUDPService UDPService { get; private set; }
+
+        public IUDPService UDPService
+        {
+            get
+            {
+                return _udpService ?? (_udpService = (new UDPDataServiceFactory()).CreateService());
+            }
+        }
 
         public ISqlDAL SqlDAL
         {
             get
             {
-                return _sqlDAL ?? (_sqlDAL = new SqliteSqlDAL(@"Data Source=..\db\default.dudb;Pooling=True"));
+                return _sqlDAL ?? (_sqlDAL = new SqliteSqlDAL(Dblinkstring));
             } 
         }
 
         public CommLib.IObserver<CustomEventArgs> DeckUnitObserver
         {
-            get
-            {
-                return _deckUnitObserver ?? (new DeckUnitDataObserver());
-            }
+            get { return _deckUnitObserver ?? (_deckUnitObserver = new DeckUnitDataObserver()); }
+            
         }
 
-        bool IUnitCore.IsWorking
+        public bool IsWorking
         {
-            get { return isWorking; }
-            set { isWorking = value; }
+            get { return _isWorking; }
+            set { _isWorking = value; }
         }
 
-        private static  bool isWorking { get; set; }
+        public bool Initailed
+        {
+            get { return _initialed; }
+            set { _initialed = value; }
+        }
 
         public IEventAggregator EventAggregator
         {
             get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
         }
+
         #endregion
     }
 }

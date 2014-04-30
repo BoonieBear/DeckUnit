@@ -23,7 +23,7 @@ namespace BoonieBear.DeckUnit.SysResourceLib
 
     public class GetSystemInfo
     {
-        public static IPcResources GreateResources()
+        public static IPcResources CreateResources()
         {
             IPcResources ir = new GetSysInfo();
             return ir;

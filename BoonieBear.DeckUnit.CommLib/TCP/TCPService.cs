@@ -51,13 +51,19 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             if (_tcpClient == null) return;
             try
             {
-                _tcpClient.Connect(IP, port);
-
+               // _tcpClient.Connect(IP, port);
+                var result  = _tcpClient.BeginConnect(IP, port, null, null);
+                var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+                if (!_tcpClient.Connected)
+                {
+                    throw new Exception("连接失败");
+                }
+                // we have connected
+                _tcpClient.EndConnect(result);
             }
-            catch (SocketException exception)
+            catch (Exception exception)
             {
                 Debug.WriteLine(exception.Message);
-                
             }
             
         }

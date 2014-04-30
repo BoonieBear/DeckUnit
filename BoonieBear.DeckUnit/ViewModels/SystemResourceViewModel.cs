@@ -27,20 +27,27 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void RefreshInfos()
         {
-            var ir = GetSystemInfo.GreateResources();
-            SystemInfos.Clear();
-            SystemInfos.Add(new SystemInfo(){Category = "内存使用",Number = ir.GetMemoryUsage()});
-            SystemInfos.Add(new SystemInfo(){Category = "磁盘空间使用",Number = ir.GetDiskUsage()});
+            var ir = GetSystemInfo.CreateResources();
+            if (MemInfos == null)
+                MemInfos = new ObservableCollection<SystemInfo>();
+            MemInfos.Clear();
+           
+            MemInfos.Add(new SystemInfo() { Category = "内存使用", Number = ir.GetMemoryUsage() });
+            
+            //MemInfos.Add(new SystemInfo() { Category = "内存使用1", Number = ir.GetMemoryUsage() });
+            MemInfos.Add(new SystemInfo() { Category = "磁盘空间使用", Number = ir.GetDiskUsage() });
         }
         #endregion
 
         #region 绑定属性
-
-        public ObservableCollection<SystemInfo> SystemInfos
+        
+        public ObservableCollection<SystemInfo> MemInfos
         {
-            get { return GetPropertyValue(() => SystemInfos); }
-            set { SetPropertyValue(() => SystemInfos,value); }
+            get { return GetPropertyValue(() => MemInfos); }
+            set { SetPropertyValue(() => MemInfos, value); }
         }
+       
+        
         #endregion
 
         #region GoBack Command

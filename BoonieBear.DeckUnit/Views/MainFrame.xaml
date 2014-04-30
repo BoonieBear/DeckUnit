@@ -26,7 +26,7 @@
 			AnimationMode="Fade"
             SlideorGrowDuration ="0:0:0.350 "
 			FadeDuration="0:0:0.150"
-			FadeOffset="0:0:0.050" HorizontalContentAlignment="Stretch">
+			FadeOffset="0:0:0.050" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
             </frames:AnimationFrame>
         </Grid>
         <Border x:Name="BottomBorder" HorizontalAlignment="Left" Height="60"  VerticalAlignment="Bottom" Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" Visibility="{Binding IsShowBottomBar}" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}" Grid.ColumnSpan="2"

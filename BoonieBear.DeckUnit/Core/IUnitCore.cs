@@ -1,5 +1,6 @@
 ﻿using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
+using BoonieBear.TinyMetro.WPF.EventAggregation;
 
 namespace BoonieBear.DeckUnit.Core
 {
@@ -7,6 +8,8 @@ namespace BoonieBear.DeckUnit.Core
     {
         //初始化
         bool Init();
+        //功能停止，用于程序关闭或是基础设置重设
+        void Dispose();
         //串口数据接收服务
         ISerialService SerialService { get; }
         //TCP客户端接收数据服务
@@ -20,8 +23,10 @@ namespace BoonieBear.DeckUnit.Core
         /// <summary>
         /// 甲板单元数据观察类，主要负责数据的解析和保存
         /// </summary>
-        CommLib.IObserver<CustomEventArgs> DeckUnitObserver { get; } 
+        CommLib.IObserver<CustomEventArgs> DeckUnitObserver { get;  } 
         //当前是否有工作在进行
         bool IsWorking { get; set; }
+        bool Initailed { get; set; }
+        IEventAggregator EventAggregator {get; }
     }
 }

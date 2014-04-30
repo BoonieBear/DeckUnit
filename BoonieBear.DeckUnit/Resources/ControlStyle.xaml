@@ -1078,12 +1078,12 @@
     <!-- ChartStyle -->
     <system:Double x:Key="SelectedFontSize">11.0</system:Double>
 <Style x:Key="BaseChartStyle" TargetType="metroChart:ChartBase">
-    <Setter Property="Margin" Value="0 0 10 10"/>
+    <Setter Property="Margin" Value="0 0 0 0"/>
     <Setter Property="FontSize" Value="{StaticResource SelectedFontSize}" />
 </Style>
 <Style x:Key="ChartStyleVariableSize" TargetType="metroChart:ChartBase" BasedOn="{StaticResource BaseChartStyle}">
-        <Setter Property="MinWidth" Value="250"/>
-        <Setter Property="MinHeight" Value="200"/>
+        <Setter Property="MinWidth" Value="200"/>
+        <Setter Property="MinHeight" Value="150"/>
 </Style>
     <metroChart:ResourceDictionaryCollection x:Key="MonoChrome">
         <ResourceDictionary>
@@ -1206,5 +1206,5 @@
         </ResourceDictionary>
     </metroChart:ResourceDictionaryCollection>
 
-    <system:String x:Key="TooltipFormat">"{0} in series '{2}' has value '{1}' ({3:P2})"</system:String>
+    <system:String x:Key="TooltipFormat">"{0}:{1}%"</system:String>
 </ResourceDictionary>

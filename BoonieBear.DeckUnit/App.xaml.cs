@@ -48,5 +48,10 @@ namespace BoonieBear.DeckUnit
                 LogHelper.ErrorLog(null, o);
             }
         }
+
+        private void Application_Exit(object sender, ExitEventArgs e)
+        {
+            UnitCore.Instance.Dispose();
+        }
     }
 }

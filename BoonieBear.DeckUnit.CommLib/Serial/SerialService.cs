@@ -33,12 +33,16 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                 SerialServiceMode = SerialServiceMode.HexMode;
                 _recvQueue.Clear();
                 _serialPort = serialPort;
+                if (SerialPort.GetPortNames().All(t => t != _serialPort.PortName.ToUpper()))
+                {
+                   return false;
+                }
                 if (!_serialPort.IsOpen) _serialPort.Open();
                 return _serialPort.IsOpen;
             }
             catch (Exception exception)
             {
-
+                throw new Exception(exception.Message);
                 return false;
             }
             

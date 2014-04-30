@@ -15,9 +15,27 @@ namespace BoonieBear.DeckUnit.Events
 
         public LogEvent(string message, Exception ex, LogType type)
         {
-            this.message = message;
-            this.ex = ex;
-            this.type = type;
+            this.Message = message;
+            this.Ex = ex;
+            this.Type = type;
+        }
+
+        public string Message
+        {
+            get { return message; }
+            set { message = value; }
+        }
+
+        public Exception Ex
+        {
+            get { return ex; }
+            set { ex = value; }
+        }
+
+        public LogType Type
+        {
+            get { return type; }
+            set { type = value; }
         }
     }
 }

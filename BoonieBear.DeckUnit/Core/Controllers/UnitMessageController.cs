@@ -5,6 +5,7 @@ using BoonieBear.DeckUnit.ViewModels;
 using BoonieBear.DeckUnit.Views;
 using BoonieBear.TinyMetro.WPF.Controller;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
+using log4net;
 
 namespace BoonieBear.DeckUnit.Core.Controllers
 {
@@ -68,7 +69,18 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         #region IHandle
         public void Handle(LogEvent message)
         {
-            throw new NotImplementedException();
+            switch (message.Type)
+            {
+                case LogType.Error:
+                    ErrorLog(message.Message, message.Ex);
+                    break;
+                case LogType.Info:
+                    ErrorLog(message.Message, message.Ex);
+                    break;
+                default:
+                    WriteLog(message.Message);
+                    break;
+            }
         }
         #endregion
     }

@@ -11,7 +11,8 @@ namespace BoonieBear.DeckUnit.Core.Controllers
     /// </summary>
     internal class UnitNavigationController : BaseController,
         IHandleMessage<GoWaterTelPageBaseNavigationRequest>,
-        IHandleMessage<GoHistoryDataPageBaseNavigationRequest>
+        IHandleMessage<GoHistoryDataPageBaseNavigationRequest>,
+        IHandleMessage<GoSystemResourceNavigationRequest>
 
     {
         public void Handle(GoWaterTelPageBaseNavigationRequest message)
@@ -24,6 +25,11 @@ namespace BoonieBear.DeckUnit.Core.Controllers
             NavigateToPage("Views/HistoryDataPage.xaml", message.Titile);
             Application.Current.Properties["message"] = message.Titile;
 
+        }
+
+        public void Handle(GoSystemResourceNavigationRequest message)
+        {
+            NavigateToPage("Views/SystemResourceView.xaml");
         }
     }
 }

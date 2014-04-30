@@ -29,7 +29,7 @@ namespace BoonieBear.DeckUnit.SysResourceLib
 
         public  double GetDiskUsage()
         {
-            var w = new WMIInfo(WMIPath.Win32_WriteLineicalDisk);
+            var w = new WMIInfo(WMIPath.Win32_LogicalDisk);
             double availableBytes = 0;
             double totalBytes = 0;
             for (var i = 0; i < w.Count; i++)
@@ -219,7 +219,7 @@ namespace BoonieBear.DeckUnit.SysResourceLib
             Win32_TimeZone, //时区  
             Win32_SystemDriver, //驱动程序  
             Win32_DiskPartition, //磁盘分区  
-            Win32_WriteLineicalDisk, //逻辑磁盘  
+            Win32_LogicalDisk, //逻辑磁盘  
             Win32_WriteLineicalDiskToPartition, //逻辑磁盘所在分区及始末位置。  
             Win32_WriteLineicalMemoryConfiguration, //逻辑内存配置  
             Win32_PageFile, //系统页文件信息  

@@ -6,8 +6,7 @@
       xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=SystemResourceViewModel}"
       KeepAlive="True"   
-      mc:Ignorable="d" 
-      d:DesignHeight="640" d:DesignWidth="480"
+      
 	Title="系统资源">
 
     <Grid>
@@ -15,28 +14,29 @@
             <RowDefinition/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        
-        <StackPanel>
+
+        <StackPanel Orientation="Horizontal">
             <metroChart:RadialGaugeChart  x:Name="SysChart"
                 Style="{StaticResource ChartStyleVariableSize}"
-                ChartTitle="系统资源监控"
-                ChartSubTitle="内存和硬盘使用情况"
+                ChartTitle="系统资源"
+                ChartSubTitle="内存和硬盘资源"
                 Palette="{StaticResource Gradients}"
-                IsRowColumnSwitched= "True"
+                IsRowColumnSwitched= "False"
+                
                 ChartTitleVisibility="Visible"
                 ChartLegendVisibility="Visible"
                 ToolTipFormat="{StaticResource TooltipFormat}"
-                
-                SelectedBrush="{StaticResource SelectedBackgroundBrush}" >
+                SelectedBrush="{StaticResource SelectedBackgroundBrush}">
                 <metroChart:RadialGaugeChart.Series>
                     <metroChart:ChartSeries
-                            SeriesTitle="内存和硬盘空间使用"
+			                SeriesTitle="内存"
                             DisplayMember="Category"
                             ValueMember="Number"
-                            ItemsSource="{Binding Path=SystemInfos}">
-                    </metroChart:ChartSeries>
+                            ItemsSource="{Binding Path= MemInfos}"/>
+                    
                 </metroChart:RadialGaugeChart.Series>
             </metroChart:RadialGaugeChart>
         </StackPanel>
+        <Button Style="{StaticResource ChromeButtonStyle}" VerticalAlignment="Bottom">清理磁盘空间</Button>
     </Grid>
 </Page>
