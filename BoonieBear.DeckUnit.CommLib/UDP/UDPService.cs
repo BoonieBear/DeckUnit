@@ -93,7 +93,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(returnData, null, 0, flag, error, CallMode.NoneMode);
+                    var e = new CustomEventArgs(returnData, null, 0, flag, error, CallMode.NoneMode, _udpClient);
                     OnParsed(e);
                 }
             }
@@ -150,7 +150,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(string.Empty, buffer, numberOfBytesRead, flag, error, mode);
+                    var e = new CustomEventArgs(string.Empty, buffer, numberOfBytesRead, flag, error, mode, _udpClient);
                     numberOfBytesRead = 0;
                     OnParsed(e);
                 }

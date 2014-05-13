@@ -48,9 +48,9 @@ namespace BoonieBear.DeckUnit.CommLib
         void ConnectSync();
         bool Start();
         void Stop();
-        void RecvThread(object obj);
-        TcpClient ReturnTcpClient();
-        void OnParsed(CustomEventArgs eventArgs);
+        //void RecvThread(object obj);
+        //TcpClient ReturnTcpClient();
+        //void OnParsed(CustomEventArgs eventArgs);
 
         bool Connected
         {

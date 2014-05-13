@@ -10,7 +10,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
 {
     class ACMTCPCommand:TCPBaseComm
     {
-        private CustomEventArgs _args = new CustomEventArgs(null, null, 0, false, null, CallMode.NoneMode);
+        private CustomEventArgs _args = new CustomEventArgs(null, null, 0, false, null, CallMode.NoneMode,null);
         private static readonly AutoResetEvent EAutoResetEvent = new AutoResetEvent(false);
         private const int TimeOut = 10000;
         private static readonly object Lockobject = new object();

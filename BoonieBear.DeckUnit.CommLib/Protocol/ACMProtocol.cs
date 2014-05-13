@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace BoonieBear.DeckUnit.CommLib.Protocol
 {
@@ -41,7 +42,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
 
         public static void Init()
         {
-            ACMCommandID.Add(113,"命令");
+            ACMCommandID.Add(124,(Action)Parse124);
             CommPara.Type = CommType.MPSK;
             CommPara.LinkOrient = true;
 
@@ -54,7 +55,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         {
             decodeBytes = bytes;
         }
-        public static void InitForPack()
+        public static void PackData()
         {
             int byteslength = 0;
             switch (CommPara.Type)
@@ -84,7 +85,7 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             }
             dataBytes = new byte[byteslength];
         }
-        public static 
+         
         #endregion
 
         #region 数据成员类
@@ -115,11 +116,33 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
         #endregion
 
         #region 协议解析
-        bool Parse()
+        public static int Parse()
         {
             Errormessage = String.Empty;
-            USBL.Parse(decodeBytes,12);
-            return true;
+            var id = 0;
+            try
+            {
+                id = BitConverter.ToInt16(decodeBytes, 0);
+                //命令列表中存在ID，则处理，不存在，则返回ID，外部处理
+                if (ACMCommandID.ContainsKey(id))
+                    Task.Factory.StartNew((Action)ACMCommandID[id]);
+                return id;
+            }
+            catch (Exception e)
+            {
+                Errormessage = e.Message;
+                id = 0;
+                return id;
+            }
+            
+        }
+        #endregion
+
+        #region 命令处理函数
+
+        static  void Parse124()
+        {
+            
         }
         #endregion
     }

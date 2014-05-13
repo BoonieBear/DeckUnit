@@ -45,7 +45,8 @@ namespace BoonieBear.DeckUnit.Views
                 {
                     if (!UnitCore.Instance.Initailed)
                     {
-                        UnitCore.Instance.EventAggregator.PublishMessage(new GoSystemResourceNavigationRequest());
+                        //导航到设置界面，下面的是示例
+                        //UnitCore.Instance.EventAggregator.PublishMessage(new GoSystemResourceNavigationRequest());
                     }
                 })));
             });

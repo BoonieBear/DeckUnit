@@ -160,7 +160,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
 
         private void ParseOnLoaderMode(string hexString)
         {
-            var e = new CustomEventArgs(hexString, null, 0, true, null, CallMode.LoaderMode); 
+            var e = new CustomEventArgs(hexString, null, 0, true, null, CallMode.LoaderMode, _serialPort); 
             OnParsed(e);
         }
 
@@ -174,7 +174,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                     if (str[3] == "Y")
                     {
                         var error = "命令发送成功";
-                        var e = new CustomEventArgs(hexString, bytes, 0, true, error, CallMode.AnsMode);
+                        var e = new CustomEventArgs(hexString, bytes, 0, true, error, CallMode.AnsMode, _serialPort);
                         OnParsed(e);
                         //校验正确
 
@@ -183,7 +183,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                     else
                     {
                         var error = "命令发送失败";
-                        var e = new CustomEventArgs(hexString, bytes, 0, false, error, CallMode.AnsMode);
+                        var e = new CustomEventArgs(hexString, bytes, 0, false, error, CallMode.AnsMode, _serialPort);
                         OnParsed(e);
                     }
                 }
@@ -255,7 +255,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             }
                             finally
                             {
-                                var e = new CustomEventArgs(hexString, data, data.Length, flag, error, mode);
+                                var e = new CustomEventArgs(hexString, data, data.Length, flag, error, mode, _serialPort);
 
                                 OnParsed(e);
                             }
@@ -415,7 +415,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             finally
                             {
 
-                                var e = new CustomEventArgs(info.ToString(), data, data.Length, flag, error, mode);
+                                var e = new CustomEventArgs(info.ToString(), data, data.Length, flag, error, mode, _serialPort);
                                 OnParsed(e);
                             }
 
@@ -443,7 +443,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             //
                         }
                         const string error = "链路传输错误";
-                        var e = new CustomEventArgs(null, data, data.Length, false, error, CallMode.ErrMode);
+                        var e = new CustomEventArgs(null, data, data.Length, false, error, CallMode.ErrMode, _serialPort);
                         OnParsed(e);
                     }
                 }
