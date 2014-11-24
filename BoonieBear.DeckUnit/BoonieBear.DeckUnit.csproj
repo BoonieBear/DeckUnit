@@ -59,7 +59,7 @@
       <HintPath>..\Tools\log4net.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro">
-      <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro\bin\Debug\MahApps.Metro.dll</HintPath>
+      <HintPath>..\Tools\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="MahApps.Metro.Resources">
       <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro.Resources\bin\Debug\MahApps.Metro.Resources.dll</HintPath>
@@ -78,7 +78,7 @@
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="TinyMetroWpfLibrary">
-      <HintPath>..\..\..\BoonieBear\TinyMetro\TinyMetroWpfLibrary\TinyMetroWpfLibrary\bin\Debug\TinyMetroWpfLibrary.dll</HintPath>
+      <HintPath>..\Tools\TinyMetroWpfLibrary.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
