@@ -23,12 +23,12 @@ namespace BoonieBear.DeckUnit.SysResourceLib
 
     public class GetSystemInfo
     {
-        public static IPcResources CreateResources()
+        public static IPcResources CreateResourcesProbe()
         {
             IPcResources ir = new GetSysInfo();
             return ir;
         }
-        public static IMspResources GreatemsMspResources()
+        public static IMspResources GreatemsMspResourcesProbe()
         {
             IMspResources ir = new GetACNMspInfo();
             return ir;

@@ -5,6 +5,7 @@ namespace BoonieBear.DeckUnit.Events
     public  enum LogType
     {
         Info,
+        Warning,
         Error
     }
     public class LogEvent

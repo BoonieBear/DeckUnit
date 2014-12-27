@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
@@ -21,32 +22,33 @@ namespace BoonieBear.DeckUnit.Views
             UnitCore.Instance = new UnitCore();
             ProgressDialogController remote = null;
             var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
-            Task.Factory.StartNew(() => UnitCore.Instance.Init()).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
+            Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
             {
                 remote = remoteTask.Result;
+                
             }))).ContinueWith(obj =>
             {
+                UnitCore.Instance.Init();
                 remote.SetIndeterminate();
                 //remote.SetCancelable(true);
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    if (!UnitCore.Instance.Initailed)
+                    if (UnitCore.Instance.Initailed)
                     {
-                        remote.SetMessage("初始化失败,详细错误信息请查看系统日志");
+                        remote.SetMessage("初始化成功!您现在可以使用甲板单元的所有功能");
                     }
                     else
                     {
-                        remote.SetMessage("初始化成功!您现在可以使用甲板单元的所有功能");
-                        
+                        remote.SetMessage("初始化失败,详细错误信息请查看系统日志");
                     }
                 }));
-                System.Threading.Thread.Sleep(3000);
+                Thread.Sleep(3000);
                 Dispatcher.Invoke(new Action(() => remote.CloseAsync().ContinueWith(x =>
                 {
                     if (!UnitCore.Instance.Initailed)
                     {
                         //导航到设置界面，下面的是示例
-                        //UnitCore.Instance.EventAggregator.PublishMessage(new GoSystemResourceNavigationRequest());
+                        UnitCore.Instance.EventAggregator.PublishMessage(new GoSystemResourceNavigationRequest());
                     }
                 })));
             });

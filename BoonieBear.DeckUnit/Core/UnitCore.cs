@@ -43,27 +43,27 @@ namespace BoonieBear.DeckUnit.Core
         {
             try
             {
-                if(Initailed) throw new Exception("系统已经完成初始化");
+                if (Initailed) throw new Exception("系统已经完成初始化");
                 if (!SqlDAL.LinkStatus) throw new Exception("数据存储服务无法启动");
                 var configure = SqlDAL.GetCommConfInfo();
                 var modemconfigure = SqlDAL.GetModemConfigure();
-                if(modemconfigure==null) throw  new Exception("配置数据不存在");
+                if (modemconfigure == null) throw new Exception("配置数据不存在");
                 //甲板单元协议自带数据库接口，可以
                 //自动更新数据库，如果是通信网则使用ACNProtocol.Init()
                 DeckDataProtocol.Init(modemconfigure.ID, Dblinkstring);
                 //串口打开成功
                 if (!SerialInit(configure)) throw new Exception("内部端口服务无法初始化");
-                if(!UDPInit()) throw new Exception("数据交换服务无法初始化");
-                if(!TcpInit(configure)) throw new Exception("信息交换服务无法初始化");
+                if (!UDPInit()) throw new Exception("数据交换服务无法初始化");
+                if (!TcpInit(configure)) throw new Exception("信息交换服务无法初始化");
                 Initailed = true;
-                return true;
             }
             catch (Exception ex)
             {
                 EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
                 Initailed = false;
-                return false;
+                
             }
+            return Initailed;
 
         }
 
@@ -79,20 +79,23 @@ namespace BoonieBear.DeckUnit.Core
 
         public void Dispose()
         {
+            if (SqlDAL.LinkStatus)
+                SqlDAL.Close();
+            if (Initailed)
+            {
+                SerialService.UnRegister(DeckUnitObserver);
+                SerialService.Stop();
+
+                TCPShellService.UnRegister(DeckUnitObserver);
+                TCPShellService.Stop();
+
+                TCPDataService.UnRegister(DeckUnitObserver);
+                TCPDataService.Stop();
+
+                UDPService.UnRegister(DeckUnitObserver);
+                UDPService.Stop();
+            }
             Initailed = false;
-            SqlDAL.Close();
-            
-            SerialService.UnRegister(DeckUnitObserver);
-            SerialService.Stop();
-            
-            TCPShellService.UnRegister(DeckUnitObserver);
-            TCPShellService.Stop();
-           
-            TCPDataService.UnRegister(DeckUnitObserver);
-            TCPDataService.Stop();
-            
-            UDPService.UnRegister(DeckUnitObserver);
-            UDPService.Stop();
         }
 
         /// <summary>

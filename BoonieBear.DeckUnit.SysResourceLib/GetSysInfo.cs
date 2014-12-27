@@ -38,7 +38,7 @@ namespace BoonieBear.DeckUnit.SysResourceLib
                 totalBytes += Math.Round(Int64.Parse(w[i, "Size"].ToString()) / 1024.0, 1);
                 availableBytes += Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString()) / 1024.0, 1);
             }
-            return availableBytes * 100 / totalBytes;
+            return 100-availableBytes * 100 / totalBytes;
         }
 
         public  string GetMacAddress()

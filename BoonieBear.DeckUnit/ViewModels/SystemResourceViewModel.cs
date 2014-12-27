@@ -27,7 +27,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void RefreshInfos()
         {
-            var ir = GetSystemInfo.CreateResources();
+            var ir = GetSystemInfo.CreateResourcesProbe();
             if (MemInfos == null)
                 MemInfos = new ObservableCollection<SystemInfo>();
             MemInfos.Clear();
