@@ -22,6 +22,8 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void InitializePage(object extraData)
         {
         }
+
+        #endregion
         #region 绑定属性
         public string Title
         {
@@ -30,10 +32,6 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
         #endregion
-
-
-        #endregion
-
 
 
 

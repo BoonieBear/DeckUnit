@@ -85,7 +85,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         public void ExecuteGoWaterTelPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             
-            EventAggregator.PublishMessage(new GoWaterTelPageBaseNavigationRequest());
+            EventAggregator.PublishMessage(new GoWaterTelPageBaseNavigationRequest("水声电话"));
         }
 
 

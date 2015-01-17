@@ -4,9 +4,9 @@ using BoonieBear.DeckUnit.Controls;
 namespace BoonieBear.DeckUnit.Views
 {
 
-    public partial class HistoryDaaPage : ContentPage
+    public partial class HistoryDataPage : ContentPage
     {
-        public HistoryDaaPage()
+        public HistoryDataPage()
         {
             InitializeComponent();
         }

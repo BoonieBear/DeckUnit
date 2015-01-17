@@ -74,8 +74,8 @@ namespace BoonieBear.DeckUnit.Core.Controllers
                 case LogType.Error:
                     ErrorLog(message.Message, message.Ex);
                     break;
-                case LogType.Info:
-                    ErrorLog(message.Message, message.Ex);
+                case LogType.Warning:
+                    WriteLog(message.Message);
                     break;
                 default:
                     WriteLog(message.Message);

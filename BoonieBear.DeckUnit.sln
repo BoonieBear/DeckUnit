@@ -23,7 +23,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.DALTest
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Test4500netDemo", "Test4500netDemo\BoonieBear.DeckUnit.Test4500netDemo.csproj", "{2CF7304E-30C8-4E62-81D1-6BF26BD560A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Mov4500DC", "Mov4500DC\BoonieBear.DeckUnit.Mov4500DC.csproj", "{8D48C4C2-3539-4AB6-B365-600C88273879}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Mov4500DC", "BoonieBear.DeckUnit.Mov4500DC\BoonieBear.DeckUnit.Mov4500DC.csproj", "{8D48C4C2-3539-4AB6-B365-600C88273879}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.BP", "BoonieBear.DeckUnit.BP\BoonieBear.DeckUnit.BP.csproj", "{476D97E4-3F48-4408-AB90-7A28412045F7}"
 EndProject

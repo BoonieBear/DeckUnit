@@ -17,7 +17,8 @@ namespace BoonieBear.DeckUnit.Core.Controllers
     {
         public void Handle(GoWaterTelPageBaseNavigationRequest message)
         {
-            NavigateToPage("Views/WaterTelView.xaml");
+            NavigateToPage("Views/WaterTelView.xaml",message.Titile);
+            Application.Current.Properties["message"] = message.Titile;
         }
 
         public void Handle(GoHistoryDataPageBaseNavigationRequest message)

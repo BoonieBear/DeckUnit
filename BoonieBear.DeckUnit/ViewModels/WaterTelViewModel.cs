@@ -1,4 +1,5 @@
-﻿using System.Windows.Input;
+﻿using System.Windows;
+using System.Windows.Input;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
@@ -17,11 +18,22 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             GoDataPageCommand = RegisterCommand(ExecuteGoDataPageCommand, CanExecuteGoDataPageCommand, true);
+            Title = Application.Current.Properties["message"].ToString();
+            AddPropertyChangedNotification(() => Title);
         }
 
 
         public override void InitializePage(object extraData)
         {
+        }
+
+        #endregion
+
+        #region 绑定属性
+        public string Title
+        {
+            get { return GetPropertyValue(() => Title); }
+            set { SetPropertyValue(() => Title, value); }
         }
 
         #endregion
@@ -66,7 +78,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         private void ExecuteGoDataPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
 
-            EventAggregator.PublishMessage(new GoHistoryDataPageBaseNavigationRequest("新的标题"));
+            EventAggregator.PublishMessage(new GoHistoryDataPageBaseNavigationRequest("历史数据"));
         }
     #endregion
 

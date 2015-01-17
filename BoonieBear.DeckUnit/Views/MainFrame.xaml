@@ -32,22 +32,29 @@
         <Border x:Name="BottomBorder" HorizontalAlignment="Left" Height="60"  VerticalAlignment="Bottom" Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" Visibility="{Binding IsShowBottomBar}" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}" Grid.ColumnSpan="2"
                 Grid.Column="0">
             <Grid>
-                <Button Content="后退" Command ="{Binding GoBackCommand}" HorizontalAlignment="Left" Margin="43,0,0,0" VerticalAlignment="Top" Width="40" Height="40" Style="{DynamicResource SmallTransparentButtonStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Command ="{Binding GoBackCommand}" Width="60" Height="60" Style="{DynamicResource MetroCircleButtonStyle}">
+                    <Button.Background>
+                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.chevron.left.png"/>
+                    </Button.Background>
+                </Button>
+                <Button Grid.Column="2" Width="60" Height="60" Style="{DynamicResource MetroCircleButtonStyle}">
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
                     </Button.Background>
                 </Button>
-                <Button Content="导航" HorizontalAlignment="Left" Margin="148,0,0,0" VerticalAlignment="Top" Width="40" Height="40" Style="{DynamicResource SmallTransparentButtonStyle}">
+                <Button Grid.Column="3" Width="60" Style="{DynamicResource MetroCircleButtonStyle}" Height="60">
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
                     </Button.Background>
                 </Button>
-                <Button Content="选项" HorizontalAlignment="Left" Margin="249,0,0,0" VerticalAlignment="Top" Width="40" Style="{DynamicResource SmallTransparentButtonStyle}" Height="40">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
-                    </Button.Background>
-                </Button>
-                <Button Content="选项" HorizontalAlignment="Left" Margin="539,0,0,0" VerticalAlignment="Top" Width="40" Height="40" Style="{DynamicResource SmallTransparentButtonStyle}" Command="{Binding ShowOptionPanelCommand}">
+                <Button Grid.Column="4" Width="60" Height="60" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ShowOptionPanelCommand}">
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
                     </Button.Background>
