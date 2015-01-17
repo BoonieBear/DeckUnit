@@ -46,7 +46,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\Publish\DeckUnit\</OutputPath>
+    <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -65,15 +65,8 @@
       <HintPath>..\Tools\MahApps.Metro.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>G:\学习\计算机相关\C#.net\WPF\控件\MahApps.Metro-master\MahApps.Metro-master\MahApps.Metro\bin\Debug\System.Windows.Interactivity.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
@@ -91,15 +84,9 @@
     </ApplicationDefinition>
     <Compile Include="Controls\ContentPage.cs" />
     <Compile Include="Controls\TouchMoveScroll.cs" />
-    <Compile Include="Core\DataObservers\DataObserver.ACM.cs" />
-    <Compile Include="Core\DataObservers\DataObserver.ACN.cs" />
-    <Compile Include="Core\DataObservers\DataObserver.DeckUnit.cs" />
-    <Compile Include="Core\Controllers\IMessageController.cs" />
-    <Compile Include="Core\IUnitCore.cs" />
-    <Compile Include="Core\IUnitKernel.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
-    <Compile Include="Core\UnitViewModelLocator.cs" />
+    <Compile Include="ViewModels\UnitViewModelLocator.cs" />
     <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
     <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
     <Compile Include="Events\GoWaterTelPageBaseNavigationRequest.cs" />
@@ -114,7 +101,7 @@
     </Compile>
     <Compile Include="Core\Controllers\UnitNavigationController.cs" />
     <Compile Include="Core\UnitKernal.cs" />
-    <Compile Include="Helps\SystemInfo.cs" />
+    <Compile Include="Models\SystemInfo.cs" />
     <Compile Include="ViewModels\SystemResourceViewModel.cs" />
     <Compile Include="ViewModels\WaterTelViewModel.cs" />
     <Compile Include="Views\HistoryDataPage.xaml.cs">
@@ -275,17 +262,21 @@
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
       <Name>BoonieBear.DeckUnit.CommLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Core\BoonieBear.DeckUnit.Core.csproj">
+      <Project>{0faf0e99-79b6-4f10-9a22-ed1839e22387}</Project>
+      <Name>BoonieBear.DeckUnit.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
       <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
       <Name>BoonieBear.DeckUnit.DAL</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
+      <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
+      <Name>BoonieBear.DeckUnit.Protocol</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResourceLib.csproj">
       <Project>{48baf198-55b8-4bcb-92f9-baa0a98b4fe9}</Project>
       <Name>BoonieBear.DeckUnit.SysResourceLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
-      <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
-      <Name>BoonieBear.DeckUnit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

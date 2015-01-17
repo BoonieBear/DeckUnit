@@ -50,6 +50,10 @@
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
       <Name>BoonieBear.DeckUnit.CommLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
+      <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
+      <Name>BoonieBear.DeckUnit.Protocol</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

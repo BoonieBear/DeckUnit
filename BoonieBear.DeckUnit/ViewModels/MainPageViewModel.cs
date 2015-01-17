@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Windows.Input;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Events;

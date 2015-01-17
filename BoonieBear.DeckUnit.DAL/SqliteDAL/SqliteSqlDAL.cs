@@ -1,11 +1,6 @@
 ﻿using System;
-using System.CodeDom;
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
-using System.Globalization;
-using System.Linq;
-using System.Text;
 using BoonieBear.DeckUnit.DAL.DBModel;
 using BoonieBear.DeckUnit.Utilities;
 

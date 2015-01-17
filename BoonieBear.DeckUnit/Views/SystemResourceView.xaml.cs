@@ -1,5 +1,4 @@
-﻿using System.Windows.Controls;
-using BoonieBear.DeckUnit.Controls;
+﻿using BoonieBear.DeckUnit.Controls;
 
 namespace BoonieBear.DeckUnit.Views
 {

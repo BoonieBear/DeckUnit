@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Net.Sockets;
-using System.Text;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
-using BoonieBear.DeckUnit.CommLib.Protocol;
 using BoonieBear.DeckUnit.CommLib.UDP;
+using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
 using BoonieBear.DeckUnit.Utilities.JSON;
 using NUnit.Framework;
 using Newtonsoft.Json;

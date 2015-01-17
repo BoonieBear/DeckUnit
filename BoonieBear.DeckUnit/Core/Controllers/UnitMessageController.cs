@@ -1,11 +1,8 @@
 ﻿using System;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
-using BoonieBear.DeckUnit.ViewModels;
-using BoonieBear.DeckUnit.Views;
 using BoonieBear.TinyMetro.WPF.Controller;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
-using log4net;
 
 namespace BoonieBear.DeckUnit.Core.Controllers
 {

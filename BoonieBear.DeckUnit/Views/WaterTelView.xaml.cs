@@ -1,10 +1,4 @@
-﻿using System;
-using System.Net.Configuration;
-using System.Windows;
-using System.Windows.Controls;
-using BoonieBear.DeckUnit.Controls;
-using BoonieBear.DeckUnit.Core;
-using BoonieBear.DeckUnit.ViewModels;
+﻿using BoonieBear.DeckUnit.Controls;
 
 
 namespace BoonieBear.DeckUnit.Views

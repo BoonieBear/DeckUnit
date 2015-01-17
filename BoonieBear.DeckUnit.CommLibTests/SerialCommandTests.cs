@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO.Ports;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
-using BoonieBear.DeckUnit.CommLib.Protocol;
+using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
 using NUnit.Framework;
 
 namespace BoonieBear.DeckUnit.CommLibTests

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using BoonieBear.DeckUnit.CommLib.Protocol;
+using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
 
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {

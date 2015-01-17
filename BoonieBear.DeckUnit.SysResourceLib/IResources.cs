@@ -1,10 +1,4 @@
-﻿using System;
-using System.CodeDom;
-using System.Collections.Generic;
-using System.Net.Configuration;
-using System.Text;
-
-namespace BoonieBear.DeckUnit.SysResourceLib
+﻿namespace BoonieBear.DeckUnit.SysResourceLib
 {
 
    public interface IPcResources 

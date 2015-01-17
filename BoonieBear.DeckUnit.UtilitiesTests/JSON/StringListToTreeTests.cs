@@ -1,8 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net.Sockets;
-using System.Threading;
-using BoonieBear.DeckUnit.CommLib.Protocol;
 using NUnit.Framework;
 using BoonieBear.DeckUnit.Utilities.JSON;
 using Newtonsoft.Json;

@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Runtime.Remoting.Services;
 using System.Text;
 using System.Threading;
-using BoonieBear.DeckUnit.CommLib.Annotations;
+using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
 using BoonieBear.DeckUnit.Utilities;
 using BoonieBear.DeckUnit.Utilities.JSON;
-using BoonieBear.DeckUnit.CommLib.Protocol;
+
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     public abstract class SerialSerialServiceBase :ISerialService

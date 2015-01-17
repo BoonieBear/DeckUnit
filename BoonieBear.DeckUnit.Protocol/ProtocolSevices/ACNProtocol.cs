@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.Text;
 using BoonieBear.DeckUnit.Utilities;
-using BoonieBear.DeckUnit.Utilities.JSON;
 
-namespace BoonieBear.DeckUnit.CommLib.Protocol
+namespace BoonieBear.DeckUnit.Protocol.ProtocolSevices
 {
     public class ACNProtocol
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
 
-namespace BoonieBear.DeckUnit.Helps
+namespace BoonieBear.DeckUnit.Models
 {
     public class SeriesData
     {

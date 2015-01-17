@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Resources;
 using System.Windows.Input;
-using BoonieBear.DeckUnit.Helps;
+using BoonieBear.DeckUnit.Models;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 using BoonieBear.DeckUnit.SysResourceLib;

@@ -28,7 +28,7 @@
                 ChartTitleVisibility="Visible"
                 ChartLegendVisibility="Visible"
                 ToolTipFormat="{StaticResource TooltipFormat}"
-                SelectedBrush="{StaticResource SelectedBackgroundBrush}" Width="639">
+                SelectedBrush="{StaticResource SelectedBackgroundBrush}" Width="639" FontFamily="Consolas">
                 <metroChart:RadialGaugeChart.Series>
                     <metroChart:ChartSeries
 			                SeriesTitle="内存"

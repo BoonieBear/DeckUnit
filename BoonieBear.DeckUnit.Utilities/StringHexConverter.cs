@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using BoonieBear.DeckUnit.Utilities;
-using Microsoft.SqlServer.Server;
 
 namespace BoonieBear.DeckUnit.Utilities
 {

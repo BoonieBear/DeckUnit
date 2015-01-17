@@ -2,7 +2,6 @@
 using System.Windows;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
-using BoonieBear.DeckUnit.Core.Controllers;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.TinyMetro.WPF.Controller;
 

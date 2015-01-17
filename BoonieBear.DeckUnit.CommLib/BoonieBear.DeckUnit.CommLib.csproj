@@ -64,11 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomEventArgs.cs" />
-    <Compile Include="IService.cs" />
+    <Compile Include="IDataService.cs" />
     <Compile Include="Properties\Annotations.cs" />
-    <Compile Include="Protocol\ACMProtocol.cs" />
-    <Compile Include="Protocol\ACNProtocol.cs" />
-    <Compile Include="Protocol\DeckDataProtocol.cs" />
     <Compile Include="define.cs" />
     <Compile Include="Serial\InterfaceSerial.cs" />
     <Compile Include="Serial\SerialCommand.cs" />
@@ -93,6 +90,10 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
       <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
       <Name>BoonieBear.DeckUnit.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
+      <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
+      <Name>BoonieBear.DeckUnit.Protocol</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
       <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>

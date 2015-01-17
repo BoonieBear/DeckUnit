@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections;
-using System.Data;
 using System.Diagnostics;
-using System.Linq;
 using BoonieBear.DeckUnit.Utilities;
 using BoonieBear.DeckUnit.DAL.DBModel;
 using BoonieBear.DeckUnit.DAL.SqliteDAL;

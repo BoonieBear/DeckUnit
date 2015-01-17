@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows.Media;
 using BoonieBear.DeckUnit.ViewModels;
-using BoonieBear.TinyMetro.WPF.Controller;
-using BoonieBear.TinyMetro.WPF.EventAggregation;
-using BoonieBear.TinyMetro.WPF.Events;
 
 namespace BoonieBear.DeckUnit.Controls
 {

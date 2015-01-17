@@ -1,23 +1,25 @@
 ﻿using System;
 using System.Collections;
-using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace BoonieBear.DeckUnit.CommLib.Protocol
+namespace BoonieBear.DeckUnit.Protocol.ProtocolSevices
 {
-    public class ACMProtocol
+    public class ACM4500Protocol
     {
         private static readonly Hashtable ACMCommandID = new Hashtable();
         private static byte[] dataBytes;//打包数据
         private static byte[] decodeBytes;//解调数据
         private static int ParaLength = 135;
         public static string Errormessage { get; private set; }
+        #region 常量和枚举
         public enum CommType
         {
-            MPSK=0,
+            MPSK = 0,
             QPSK,
             QAM
         }
+        #endregion
+        
         //some initial para
         public class CommPara
         {
@@ -86,33 +88,6 @@ namespace BoonieBear.DeckUnit.CommLib.Protocol
             dataBytes = new byte[byteslength];
         }
          
-        #endregion
-
-        #region 数据成员类
-
-        class USBL
-        {
-            public static double Lat { get; private set; }
-            public static double Lng { get; private set; }
-            public static bool bFlag = false;
-            public static bool Parse(byte[] data,int index)
-            {
-                //do the parse job
-                try
-                {
-                    bFlag = true;
-                }
-                catch (Exception e)
-                {
-
-                    Errormessage += e.Message;
-                    bFlag = false;
-                }
-                
-                return bFlag;
-                
-            }
-        }
         #endregion
 
         #region 协议解析

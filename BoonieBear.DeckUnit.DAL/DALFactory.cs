@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using BoonieBear.DeckUnit.DAL.SqliteDAL;
+﻿using BoonieBear.DeckUnit.DAL.SqliteDAL;
 
 namespace BoonieBear.DeckUnit.DAL
 {

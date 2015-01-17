@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.IO.Ports;
 using System.Net;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using BoonieBear.DeckUnit.CommLib.Serial;
 
 namespace BoonieBear.DeckUnit.CommLib
 {

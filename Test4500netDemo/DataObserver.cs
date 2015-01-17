@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
 using BoonieBear.DeckUnit.CommLib;
-using BoonieBear.DeckUnit.CommLib.Protocol;
 using BoonieBear.DeckUnit.CommLib.TCP;
+using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
 
 namespace Test4500netDemo
 {
@@ -15,8 +12,8 @@ namespace Test4500netDemo
         {
             if (e.ParseOK && (e.Mode ==CallMode.DataMode))
             {
-                ACMProtocol.GetBytes(e.DataBuffer);
-                var id = ACMProtocol.Parse();
+                ACM4500Protocol.GetBytes(e.DataBuffer);
+                var id = ACM4500Protocol.Parse();
                 if (id == 0x45FF)
                 {
                     Console.WriteLine("Receive 0x45FF");

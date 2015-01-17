@@ -1,7 +1,4 @@
-﻿using System.Windows.Controls;
-using BoonieBear.DeckUnit.ViewModels;
-
-namespace BoonieBear.DeckUnit.Core
+﻿namespace BoonieBear.DeckUnit.ViewModels
 {
 
     public class UnitViewModelLocator
