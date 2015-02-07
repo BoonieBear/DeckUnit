@@ -40,9 +40,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ProtocolSevices\ACM4500Protocol.cs" />
-    <Compile Include="ProtocolSevices\ACNProtocol.cs" />
-    <Compile Include="ProtocolSevices\DeckDataProtocol.cs" />
+    <Compile Include="ACMSeries\ACM4500Protocol.cs" />
+    <Compile Include="ACNSeries\ACNProtocol.cs" />
+    <Compile Include="UnitSeries\DeckDataProtocol.cs" />
+    <Compile Include="ACNSeries\ACNType.cs" />
+    <Compile Include="ACMSeries\Mov4500Type.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
@@ -54,9 +56,7 @@
       <Name>BoonieBear.DeckUnit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="SeviceData\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

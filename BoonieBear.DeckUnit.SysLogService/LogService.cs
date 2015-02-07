@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BoonieBear.DeckUnit.LogService.FileLogger
+namespace BoonieBear.DeckUnit.SysLogService
 {
     public class LogService
     {

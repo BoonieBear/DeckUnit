@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Threading.Tasks;
 
-namespace BoonieBear.DeckUnit.Protocol.ProtocolSevices
+namespace BoonieBear.DeckUnit.Protocol.ACMSeries
 {
     public class ACM4500Protocol
     {

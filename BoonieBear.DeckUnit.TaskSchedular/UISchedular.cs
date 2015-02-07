@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using BoonieBear.DeckUnit.TaskSchedular.Schedular;
-using BoonieBear.DeckUnit.Utilities.Schedular;
 
 namespace BoonieBear.DeckUnit.TaskSchedular
 {

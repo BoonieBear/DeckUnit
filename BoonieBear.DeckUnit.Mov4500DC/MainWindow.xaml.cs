@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace BoonieBear.DeckUnit.Mov4500DC
+namespace BoonieBear.DeckUnit.Mov4500UI
 {
     /// <summary>
     /// MainWindow.xaml 的交互逻辑

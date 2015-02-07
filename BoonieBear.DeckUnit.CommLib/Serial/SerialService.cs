@@ -5,9 +5,9 @@ using System.IO.Ports;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
+using BoonieBear.DeckUnit.JsonUtils;
+using BoonieBear.DeckUnit.Protocol.ACNSeries;
 using BoonieBear.DeckUnit.Utilities;
-using BoonieBear.DeckUnit.Utilities.JSON;
 
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {
@@ -162,7 +162,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         }
 
         private void ParseOnHexMode(byte[] bytes, string hexString)
-        {     
+        {
 
                 var str = hexString.Split(',');
                 //MainForm.pMainForm.BuoyChoice.SelectedIndex = int.Parse(BuoyID);
@@ -311,10 +311,10 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                                         else
                                             info.AppendLine("纬度位置无可用数据");
                                         info.AppendLine("串口2设备:" +
-                                                        Enum.GetName(typeof (ACNProtocol.DeviceAddr),
+                                                        Enum.GetName(typeof (DeviceAddr),
                                                             int.Parse(hexStr.Substring(40, 4))));
                                         info.AppendLine("串口3设备:" +
-                                                        Enum.GetName(typeof (ACNProtocol.DeviceAddr),
+                                                        Enum.GetName(typeof (DeviceAddr),
                                                             int.Parse(hexStr.Substring(44, 4))));
 
                                         int emittype = int.Parse(hexStr.Substring(48, 2));

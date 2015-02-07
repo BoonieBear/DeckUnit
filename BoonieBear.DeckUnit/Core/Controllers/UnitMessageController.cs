@@ -1,6 +1,7 @@
 ﻿using System;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
+using BoonieBear.DeckUnit.ICore;
 using BoonieBear.TinyMetro.WPF.Controller;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
 

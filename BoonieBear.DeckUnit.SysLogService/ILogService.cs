@@ -1,7 +1,10 @@
 ﻿using System;
 
-namespace BoonieBear.DeckUnit.LogService.FileLogger
+namespace BoonieBear.DeckUnit.SysLogService
 {
+    /// <summary>
+    /// 程序运行记录服务，用于记录各个子模块的运行状态和错误信息
+    /// </summary>
     public interface ILogService
     {
         void Debug(object message);

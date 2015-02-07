@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using BoonieBear.DeckUnit.Utilities.Schedular;
 
 namespace BoonieBear.DeckUnit.TaskSchedular.Schedular
 {

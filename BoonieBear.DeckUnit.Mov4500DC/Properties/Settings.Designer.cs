@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace BoonieBear.DeckUnit.Mov4500DC.Properties {
+namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]

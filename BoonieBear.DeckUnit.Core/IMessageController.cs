@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BoonieBear.DeckUnit.Core
+namespace BoonieBear.DeckUnit.ICore
 {
     public interface IMessageController
     {

@@ -3,7 +3,7 @@ using System.IO.Ports;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
+using BoonieBear.DeckUnit.Protocol.ACNSeries;
 using NUnit.Framework;
 
 namespace BoonieBear.DeckUnit.CommLibTests

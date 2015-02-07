@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0FAF0E99-79B6-4F10-9A22-ED1839E22387}</ProjectGuid>
+    <ProjectGuid>{8340D7E7-7D37-4A6A-BC9F-DB956BCE9218}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoonieBear.DeckUnit.Core</RootNamespace>
-    <AssemblyName>BoonieBear.DeckUnit.Core</AssemblyName>
+    <RootNamespace>BoonieBea.DeckUnit.LiveService</RootNamespace>
+    <AssemblyName>BoonieBea.DeckUnit.LiveService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -37,28 +37,10 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TinyMetroWpfLibrary">
-      <HintPath>..\Tools\TinyMetroWpfLibrary.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMessageController.cs" />
-    <Compile Include="DataObservers\DataObserver.ACM.cs" />
-    <Compile Include="DataObservers\DataObserver.ACN.cs" />
-    <Compile Include="DataObservers\DataObserver.DeckUnit.cs" />
-    <Compile Include="IUnitCore.cs" />
-    <Compile Include="IUnitKernel.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj">
-      <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
-      <Name>BoonieBear.DeckUnit.CommLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
-      <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
-      <Name>BoonieBear.DeckUnit.DAL</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -2,7 +2,7 @@
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
 
-namespace BoonieBear.DeckUnit.Core
+namespace BoonieBear.DeckUnit.ICore
 {
     public interface IUnitCore
     {
@@ -21,7 +21,7 @@ namespace BoonieBear.DeckUnit.Core
         //数据库接口
         ISqlDAL SqlDAL { get; }
         /// <summary>
-        /// 甲板单元数据观察类，主要负责数据的解析和保存
+        /// 数据观察类，主要负责数据的解析和保存
         /// </summary>
         CommLib.IObserver<CustomEventArgs> DeckUnitObserver { get;  } 
         //当前是否有工作在进行

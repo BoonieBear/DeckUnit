@@ -1,6 +1,6 @@
 ﻿using BoonieBear.TinyMetro.WPF.Controller;
 
-namespace BoonieBear.DeckUnit.Core
+namespace BoonieBear.DeckUnit.ICore
 {
     public interface IUnitKernel:IKernel
     {

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
+using BoonieBear.DeckUnit.Protocol.UnitSeries;
 using NUnit.Framework;
 
 namespace BoonieBear.DeckUnit.CommLibTests.Protocol

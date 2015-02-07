@@ -1,10 +1,8 @@
-﻿using log4net;
-using System;
+﻿using System;
 using System.IO;
+using log4net;
 
-
-
-namespace BoonieBear.DeckUnit.Utilities.FileLogger
+namespace BoonieBear.DeckUnit.SysLogService
 {
     public sealed class FileLogService : ILogService
     {

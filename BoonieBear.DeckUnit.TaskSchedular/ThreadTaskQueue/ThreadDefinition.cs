@@ -1,4 +1,4 @@
-﻿namespace BoonieBear.DeckUnit.Utilities.ThreadTaskQueue
+﻿namespace BoonieBear.DeckUnit.TaskSchedular.ThreadTaskQueue
 {
     public enum THREADED_ENQUEUE_TYPE
     {

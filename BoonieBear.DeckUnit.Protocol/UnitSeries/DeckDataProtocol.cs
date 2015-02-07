@@ -7,7 +7,7 @@ using System.Threading;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.DAL.DBModel;
 
-namespace BoonieBear.DeckUnit.Protocol.ProtocolSevices
+namespace BoonieBear.DeckUnit.Protocol.UnitSeries
 {
     //数据包类型
     public enum PackType

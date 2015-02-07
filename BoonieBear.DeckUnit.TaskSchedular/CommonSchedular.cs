@@ -1,10 +1,8 @@
 ﻿using System;
-
 using System.Threading;
 using BoonieBear.DeckUnit.TaskSchedular.Schedular;
-using BoonieBear.DeckUnit.Utilities.Schedular;
 
-namespace AirMagnet.AircheckWifiTester.ViewModels
+namespace BoonieBear.DeckUnit.TaskSchedular
 {
     //Todo : there multiple schedular, try to remove them
     class CommonSchedular

@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.TCP;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
+using BoonieBear.DeckUnit.Protocol.ACMSeries;
 
 namespace Test4500netDemo
 {
@@ -14,9 +14,9 @@ namespace Test4500netDemo
         
         static void Main(string[] args)
         {
-            AutoResetEvent auto = new AutoResetEvent(false);
+            var auto = new AutoResetEvent(false);
             ACM4500Protocol.Init();
-            ACMDataObserver acmoObserver = new ACMDataObserver();
+            var acmoObserver = new ACMDataObserver();
             var datatcpClient = new TcpClient();
             datatcpClient.SendTimeout = 1000;
             var service = new TCPDataServiceFactory();

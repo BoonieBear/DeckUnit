@@ -4,7 +4,7 @@ using System.ComponentModel;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using BoonieBear.DeckUnit.Utilities.FileLogger;
+using BoonieBear.DeckUnit.SysLogService;
 using BoonieBear.DeckUnit.Utilities.Image;
 
 namespace BoonieBear.DeckUnit.Utilities.ImageBuilder
@@ -13,7 +13,7 @@ namespace BoonieBear.DeckUnit.Utilities.ImageBuilder
 
     public class ShapBuildFacade : INotifyPropertyChanged
     {
-        private static ILogService _logger = LogService.GetLogger(typeof(ShapBuildFacade));
+        private static ILogService _logger = SysLogService.LogService.GetLogger(typeof(ShapBuildFacade));
         private int _pixelWidth;
         private int _pixeHeight;
         private double _scale;

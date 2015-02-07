@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using BoonieBear.DeckUnit.JsonUtils;
 using NUnit.Framework;
-using BoonieBear.DeckUnit.Utilities.JSON;
 using Newtonsoft.Json;
 
 namespace BoonieBear.DeckUnit.UtilitiesTests.JSON

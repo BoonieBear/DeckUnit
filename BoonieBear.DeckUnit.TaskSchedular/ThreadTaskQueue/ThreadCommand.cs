@@ -1,7 +1,7 @@
 using System;
 using System.Windows.Threading;
 
-namespace BoonieBear.DeckUnit.Utilities.ThreadTaskQueue
+namespace BoonieBear.DeckUnit.TaskSchedular.ThreadTaskQueue
 {
     /// <summary>
     /// ThreadedTaskQueue used by the command

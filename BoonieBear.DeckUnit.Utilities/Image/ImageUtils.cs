@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using BoonieBear.DeckUnit.Utilities.FileLogger;
+using BoonieBear.DeckUnit.SysLogService;
 
 
 namespace BoonieBear.DeckUnit.Utilities.Image

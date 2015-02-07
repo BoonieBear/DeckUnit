@@ -4,11 +4,10 @@ using System.Net.Sockets;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.UDP;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
-using BoonieBear.DeckUnit.Utilities.JSON;
+using BoonieBear.DeckUnit.Protocol.ACNSeries;
 using NUnit.Framework;
 using Newtonsoft.Json;
-
+using BoonieBear.DeckUnit.JsonUtils;
 namespace BoonieBear.DeckUnit.CommLibTests
 {
     [TestFixture]

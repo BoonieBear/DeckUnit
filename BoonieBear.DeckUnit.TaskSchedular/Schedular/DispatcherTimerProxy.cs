@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Threading;
 
-namespace BoonieBear.DeckUnit.Utilities.Schedular
+namespace BoonieBear.DeckUnit.TaskSchedular.Schedular
 {
     public class DispatcherTimerProxy : ITimer
     {

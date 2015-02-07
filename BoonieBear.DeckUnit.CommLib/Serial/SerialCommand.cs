@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Threading;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
+using BoonieBear.DeckUnit.Protocol.ACNSeries;
 
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {

@@ -6,12 +6,12 @@ using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
 using BoonieBear.DeckUnit.CommLib.TCP;
 using BoonieBear.DeckUnit.CommLib.UDP;
-using BoonieBear.DeckUnit.Core.DataObservers;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.DAL.DBModel;
 using BoonieBear.DeckUnit.DAL.SqliteDAL;
 using BoonieBear.DeckUnit.Events;
-using BoonieBear.DeckUnit.Protocol.ProtocolSevices;
+using BoonieBear.DeckUnit.ICore;
+using BoonieBear.DeckUnit.Protocol.UnitSeries;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
 
 namespace BoonieBear.DeckUnit.Core

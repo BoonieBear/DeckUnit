@@ -50,9 +50,9 @@
     <Compile Include="UISchedular.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
-      <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
-      <Name>BoonieBear.DeckUnit.Utilities</Name>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.SysLogService\BoonieBear.DeckUnit.SysLogService.csproj">
+      <Project>{198b6b6e-a2ba-4706-b39e-43a198e1d6cd}</Project>
+      <Name>BoonieBear.DeckUnit.SysLogService</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

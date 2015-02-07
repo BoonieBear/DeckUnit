@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using BoonieBear.DeckUnit.Utilities.FileLogger;
+using BoonieBear.DeckUnit.SysLogService;
 
-namespace BoonieBear.DeckUnit.Utilities.ThreadTaskQueue
+namespace BoonieBear.DeckUnit.TaskSchedular.ThreadTaskQueue
 {
     public class ThreadedTaskQueue:IDisposable
     {
@@ -19,9 +19,11 @@ namespace BoonieBear.DeckUnit.Utilities.ThreadTaskQueue
             _existTaskEvent.Reset();
             _exitThreadEvent.Reset();
 
-            _processTaskThread = new Thread(new ThreadStart(ProcessTaskThreadMain));
-            _processTaskThread.IsBackground = true;
-            _processTaskThread.Priority = ThreadPriority.Normal;
+            _processTaskThread = new Thread(ProcessTaskThreadMain)
+            {
+                IsBackground = true,
+                Priority = priority,
+            };
             _processTaskThread.Start();
         }
 
