@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{56002669-156C-4002-9072-E4329E1D1B2C}</ProjectGuid>
+    <ProjectGuid>{515E0E25-DE62-4C8B-890F-9EACFF65B79F}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoonieBear.DeckUnit.TraceFileService</RootNamespace>
-    <AssemblyName>BoonieBear.DeckUnit.TraceFileService</AssemblyName>
+    <RootNamespace>BoonieBear.DeckUnit.VoiceManager</RootNamespace>
+    <AssemblyName>BoonieBear.DeckUnit.VoiceManager</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -39,9 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="TraceFile.cs" />
-    <Compile Include="csFile.cs" />
-    <Compile Include="MovTraceFile.cs" />
+    <Compile Include="Class1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -15,22 +15,69 @@ namespace BoonieBear.DeckUnit.TraceFileService
         public BinaryReader br;
         public BinaryWriter bw;
         public bool opened, writeOpened;
+        protected string ext = @"dat";
+        protected long length;
+        protected string header = "Log";
+	    public DirectoryInfo Di = new DirectoryInfo(@".\");
 		//-----------
-		public csFile() {
+        public csFile(string strheader = null, string extstr = null)
+        {
+            header = strheader ?? (header);
+            ext = extstr ?? (ext);
 			init();
 		}
 		//-----------
 		private void init() {
 			opened = false;
 			writeOpened = false;
+		    length = 0;
 		}
+
+	    public string CreateFullFileName()
+	    {
+            string timestring = CreateNonBlankTimeString();
+
+            return Di.FullName + "\\" + header + timestring + "." + ext;
+	    }
+
+	    public string CreateNonBlankTimeString()
+	    {
+	         string timestring = DateTime.Now.Year.ToString("0000_", CultureInfo.InvariantCulture) +
+	               DateTime.Now.Month.ToString("00_", CultureInfo.InvariantCulture) +
+	               DateTime.Now.Day.ToString("00_", CultureInfo.InvariantCulture) +
+	               DateTime.Now.Hour.ToString("00_", CultureInfo.InvariantCulture)
+	               + DateTime.Now.Minute.ToString("00_", CultureInfo.InvariantCulture) +
+	               DateTime.Now.Second.ToString("00", CultureInfo.InvariantCulture);
+	        return timestring;
+	    }
+        public string CreateTimeString()
+        {
+            string timestring = "(" + DateTime.Now.Month.ToString("00", CultureInfo.InvariantCulture) + "/" + DateTime.Now.Day.ToString("00", CultureInfo.InvariantCulture) + " " + DateTime.Now.Hour.ToString("00", CultureInfo.InvariantCulture)
+                    + ":" + DateTime.Now.Minute.ToString("00", CultureInfo.InvariantCulture) + ":" + DateTime.Now.Second.ToString("00", CultureInfo.InvariantCulture) + ")";
+            return timestring;
+        }
+	    public void SetPath(DirectoryInfo di=null)
+	    {
+	        if (di != null)
+	            Di = di;
+	    }
 		//-----------
 		public csFile(string file_name) 	{
 			fileName = file_name;
 			init();
 		}
-		//-----------
-		public bool OpenForRead(string file_name){
+        public long FileLen
+        {
+            get
+            {
+                return length;
+            }
+        }
+
+        
+        
+	    //-----------
+        public bool OpenForRead(string file_name){
 			fileName = file_name;
 			try {
 				ts = new StreamReader (fileName);
@@ -55,7 +102,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
 			ws.WriteLine (s);
 		}
 		//-----------
-        public virtual void close()
+        public virtual void Close()
         {
             writeOpened = false;
             if (ts!=null)
@@ -72,8 +119,10 @@ namespace BoonieBear.DeckUnit.TraceFileService
 			return OpenForWrite(fileName);
 		}
 		//-----------
-		public bool OpenForWrite(string file_name) {
-			try{
+		public bool OpenForWrite(string file_name)
+		{
+		    if (file_name == null) throw new ArgumentNullException("file_name");
+		    try{
 				ws = new StreamWriter (file_name);
                 ws.AutoFlush = true;
 				fileName = file_name;
@@ -84,7 +133,8 @@ namespace BoonieBear.DeckUnit.TraceFileService
 				return false;
 			}
 		}
-        //-----------
+
+	    //-----------
         public bool BinaryOpenWrite()
         {
             return BinaryOpenWrite(fileName);
@@ -92,6 +142,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         //-----------
         public bool BinaryOpenWrite(string file_name)
         {
+            if (file_name == null) throw new ArgumentNullException("file_name");
             try
             {
                 bw = new BinaryWriter(File.Open(file_name, FileMode.OpenOrCreate));
@@ -104,13 +155,15 @@ namespace BoonieBear.DeckUnit.TraceFileService
                 return false;
             }
         }
-        //-----------
+
+	    //-----------
         public bool BinaryOpenRead()
         {
             return BinaryOpenRead(fileName);
         }
         public bool BinaryOpenRead(string file_name)
         {
+            if (file_name == null) throw new ArgumentNullException("file_name");
             try
             {
                 br = new BinaryReader(File.Open(file_name, FileMode.Open));
@@ -123,119 +176,67 @@ namespace BoonieBear.DeckUnit.TraceFileService
                 return false;
             }
         }
-        public virtual void BinaryWrite(byte[] data)
+
+	    public virtual void BinaryWrite(byte[] data)
         {
-            this.bw.Write(data);
+            bw.Write(data);
         }
+
+
 	}
 
     public class LogFile:csFile
     {
-        public csFile logfile;
-        private string ext;
-        public long length; 
-        public LogFile(string extstr)
-        {
-            ext = extstr;
-            logfile = new csFile();
-            length = 0;
-            
-        }
-        public bool OpenFile(DirectoryInfo di)
-        {
-            if(di.Exists)
-            {
-                string timestring = DateTime.Now.Year.ToString("0000_", CultureInfo.InvariantCulture) + DateTime.Now.Month.ToString("00_", CultureInfo.InvariantCulture) + DateTime.Now.Day.ToString("00_", CultureInfo.InvariantCulture) + DateTime.Now.Hour.ToString("00_", CultureInfo.InvariantCulture)
-                    + DateTime.Now.Minute.ToString("00_", CultureInfo.InvariantCulture) + DateTime.Now.Second.ToString("00", CultureInfo.InvariantCulture);
-                string filename = di.FullName;//文件路径
-                filename = filename + "\\" + ext + timestring + ".txt";
+        public LogFile(string strheader = null, string extstr = null)
+            : base(strheader, extstr){}
 
-                return logfile.OpenForWrite(filename);
-            }
-            else
-                return false;
-        }
-        public override void writeLine(string s)
+        private bool OpenStreamFile()
         {
-            string timestring = "("+DateTime.Now.Month.ToString("00", CultureInfo.InvariantCulture) +"/"+ DateTime.Now.Day.ToString("00", CultureInfo.InvariantCulture) +" "+ DateTime.Now.Hour.ToString("00", CultureInfo.InvariantCulture)
-                    + ":" + DateTime.Now.Minute.ToString("00", CultureInfo.InvariantCulture) + ":" + DateTime.Now.Second.ToString("00", CultureInfo.InvariantCulture)+")";
-            s = timestring + s;
-            logfile.ws.WriteLine(s);
-            
+            if (Di.Exists == false)
+            {
+                Di.Create();
+            }
+            return Di.Exists && OpenForWrite(CreateFullFileName());
+        }
+        public bool CreateFile()
+        {
+            return OpenStreamFile();
+        }
+                
+
+        public long Write(string s)
+        {
+            s = CreateTimeString() + s;
+            ws.WriteLine(s);
+
             length += s.Length;
             length += 2;
-        }
-
-        public override void close()
-        {
-            logfile.close();
-            length = 0;
-            if (logfile.ts != null)
-                logfile.ts.Close();
-            if (logfile.ws != null)
-                logfile.ws.Close();
-            if (logfile.br != null)
-                logfile.br.Close();
-            if (logfile.bw != null)
-                logfile.bw.Close();
+            return length;
         }
         
     }
 
-    public class AdFile : csFile
+    public class ADFile : csFile
     {
-        public csFile adfile;
-        private long length;
-        private string ext;
-        public AdFile(string extstr)
+        public ADFile(string strheader = null, string extstr = null)
+            : base(strheader, extstr){}
+        private bool OpenBinaryFile()
         {
-            ext = extstr;
-            length = 0;
-            adfile = new csFile();
-            
-        }
-        public long FileLen
-        {
-            get
+            if (Di.Exists == false)
             {
-                return length;
+                Di.Create();
             }
+            return Di.Exists && BinaryOpenWrite(CreateFullFileName());
         }
-        public bool OpenFile(DirectoryInfo di)
+        public bool CreateFile()
         {
-            if(di.Exists)
-            {
-                string timestring = DateTime.Now.Year.ToString("0000", CultureInfo.InvariantCulture) + DateTime.Now.Month.ToString("00", CultureInfo.InvariantCulture) + DateTime.Now.Day.ToString("00", CultureInfo.InvariantCulture) + DateTime.Now.Hour.ToString("00", CultureInfo.InvariantCulture)
-                    + DateTime.Now.Minute.ToString("00", CultureInfo.InvariantCulture) + DateTime.Now.Second.ToString("00", CultureInfo.InvariantCulture);
-                string filename = di.FullName;//文件路径
-                filename = filename + "\\" + ext + timestring + ".dat";
-                
-                return adfile.BinaryOpenWrite(filename);
-            }
-            else
-                return false;
+            return OpenBinaryFile();
         }
-        public override void BinaryWrite(byte[] data)
+        public long Write(byte[] data)
         {
-            adfile.bw.Write(data);
+            bw.Write(data);
             length += data.Length;
+            return length;
         }
-        public override void close()
-        {
-            length = 0;
-            
-            if (adfile.ts != null)
-                adfile.ts.Close();
-            if (adfile.ws != null)
-                adfile.ws.Close();
-            if (adfile.br != null)
-                adfile.br.Close();
-            if (adfile.bw != null)
-            {
-                adfile.bw.Close();
-            }
-            adfile.close();
-        }
-        
     }
 }

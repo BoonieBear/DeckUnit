@@ -1,23 +1,39 @@
-﻿namespace BoonieBear.DeckUnit.MovDataManage
+﻿using System;
+using BoonieBear.DeckUnit.Protocol.ACMSeries;
+
+namespace BoonieBear.DeckUnit.MovDataManage
 {
     public class ShipGatherData
     {
-        private readonly static object Syncobject = new object();
+        private readonly static object SyncObject = new object();
         private static ShipGatherData _shipGatherData;
-        private ShipGatherData() { }
+        private int SubPostNum = 5;
+        private SubLatest5Post _subLatest5Post;
+        private byte[] _packageBytes = new byte[MovGlobalVariables.ShipMFSKSize];
+
+        private ShipGatherData()
+        {
+            _subLatest5Post = new SubLatest5Post();
+        }
         
         public static ShipGatherData GetInstance()
         {
-            if (_shipGatherData == null)
+            lock (SyncObject)
             {
-                lock (Syncobject)
-                {
-                    _shipGatherData = new ShipGatherData();
-                }
-                return _shipGatherData;
+                return _shipGatherData ?? (_shipGatherData = new ShipGatherData());
             }
-            return _shipGatherData;
         }
-
+        public void Add(object obj, Mov4500Type mType)
+        {
+            switch (mType)
+            {
+                case Mov4500Type.ALLPOST:
+                    break;
+                case Mov4500Type.WORD:
+                    break;
+                default:
+                    throw new Exception("undefined data type!");
+            }
+        }
     }
 }

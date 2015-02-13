@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace BoonieBear.DeckUnit.Protocol.ACMSeries
 {
     #region 枚举类型
-    enum ModulationType
+    public enum ModulationType
     {
         MFSK = 0,
         MPSK = 2,
@@ -13,29 +13,35 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
         VOICE = 6,
     }
 
-    enum Mov4500Type
+    public enum Mov4500Type
     {
         ALLPOST = 0,
-        BP = 1,
-        BSSS = 2,
-        CTD = 3,
-        SUBPOST = 4,
-        ACUSTICALARM = 5,
-        LIFESUPPLY = 6,
-        ENERGY = 7,
-        SUBALERT = 8,
-        SWITCH = 9,
-        SHIPPOST=10,
-        SUBLASTEST5POST = 11,
+        WORD = 1,
+        BP = 2,
+        BSSS = 3,
+        CTD = 4,
+        SUBPOST = 5,
+        ACUSTICALARM = 6,
+        LIFESUPPLY = 7,
+        ENERGY = 8,
+        SUBALERT = 9,
+        ADCP= 10,
+        SWITCH = 11,
+        SHIPPOST=12,
+        SUBLASTEST5POST = 13,
+        ALERT = 14,
+        IMAGE = 15,
+        
     }
     #endregion
 
-    public class GlobalVariables
+    public class MovGlobalVariables
     {
         public static int MFSKSize = 135;
         public static int ShipMFSKSize = 112;
         public static int MovMFSKSize = 131;
         public static int WordSize = 40;
+        public static int MPSKSize = 16560;
     }
 
     #region 调试数据结构
@@ -117,8 +123,6 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
         private Int16 _relateX;//潜水器相对母船x轴位移
         private Int16 _relateY;//潜水器相对母船y轴位移
         private UInt16 _relateZ;//潜水器相对母船z轴位移	
-        public static UInt32 Length = 40;
-
         public long Ltime
         {
             get { return _ltime; }
@@ -653,123 +657,37 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
             set { _subLat = value; }
         }
     };
+
+    public class Adcpdata
+    {
+        private List<sbyte> _floorX = new List<sbyte>();
+        private List<sbyte> _floorY = new List<sbyte>();
+        private List<sbyte> _floorZ = new List<sbyte>();
+        private int _index = 10;//10层数据
+
+        public Adcpdata()
+        {
+            _floorX.Capacity = _index;
+            _floorY.Capacity = _index;
+            _floorZ.Capacity = _index;
+        }
+        public List<sbyte> FloorX
+        {
+            get { return _floorX; }
+            set { _floorX = value; }
+        }
+        public List<sbyte> FloorY
+        {
+            get { return _floorY; }
+            set { _floorY = value; }
+        }
+        public List<sbyte> FloorZ
+        {
+            get { return _floorZ; }
+            set { _floorZ = value; }
+        }
+    }
     #endregion
 
-    #region 声学通信压缩数据结构
-    //定位信息
-     public class MFSKSysposition {
-         private long _ltime;	//起始时间
-         private byte[]   _interval;//4 interval time from ltime
-	     float[]   subLONG; //潜水器经度 5
-	     float[]   subLAT;//潜水器纬度 5
-	     UInt16  subdepth;//潜水器深度
-	     Int16    relateX;//潜水器相对母船x轴位移
-	     Int16    relateY;//潜水器相对母船y轴位移
-	     UInt16    relateZ;//潜水器相对母船z轴位移	
-	     float shipLONG;//母船经度
-	     float shipLAT; //母船纬度
-
-         public MFSKSysposition()
-         {
-             _interval = new byte[4];
-             Buffer.SetByte(_interval,0,0);
-         }
-         public long Ltime
-         {
-             get { return _ltime; }
-             set { _ltime = value; }
-         }
-
-         public byte[] Interval
-         {
-             get { return _interval; }
-             set { _interval = value; }
-         }
-     };
-
-    //流速信息 ps自定义
-    public class Adcpdata{
-	    SByte[]	floorX;//10
-	    SByte[]	floorY;//10
-	    SByte[]	floorZ;//10
-    };
-
-    //ADL
-    class Adldata {
-	    float adl1;//
-	    float adl2;//
-    };
-
-    //避碰信息
-    public class MFSKBpdata {
-	    byte	frontup;//前上避碰声呐距离
-	    byte	front;//正前
-	    byte	frontdown;//前下
-	    byte	down;//正下
-	    byte	behinddown;//后下
-	    byte	left;//左下
-	    byte	right;//右下	
-    };
-    //侧深侧扫信息
-    public class MFSKBsssdata {
-	    byte depth;//距离海底高度
-    };
-
-
-
-    //CTD信息
-    public class MFSKCtddata {
-	    UInt16 watertemp;//海水温度
-	    UInt16 watercond;//海水电导率
-	    byte vartlevel;//可变压载水舱液位
-	    byte soundvec;//声速
-    };
-
-    //潜水器位姿信息
-    public class MFSKSubposition {
-	    float   subLONG; //潜水器经度
-	    float   subLAT;//潜水器纬度
-	    UInt16 subheading;//潜水器艏向角
-	    Int16 subpitch;//潜水器纵倾角
-	    Int16 subroll;//潜水器横倾角
-	    UInt16 subdepth;//潜水器深度
-	    char subupdownvec;//潜水器升沉速度
-	    char subpitchvec;//潜水器纵速度
-	    char subrollvec;//潜水器横速度
-	    byte subheight;//潜水器高度
-    };
-
-
-    //生命支持系统
-    public class MFSKLifesupply {
-	    byte  oxygen;//氧气浓度
-	    byte  CO2;//二氧化碳浓度
-	    byte  pressure;//舱内压力
-	    byte  temperature;//舱内温度
-	    byte  humidity; //舱内湿度		
-    };
-
-    public class MFSKEnergysys {
-	    byte  mainV;//主电池电压
-	    byte  mainI;//主电池电流
-	    byte  mainconsume;//主电池能源消耗
-	    byte  subV;//副电池电压
-	    byte  subI;//副电池电流
-	    byte  subconsume;//副电池能源消耗	
-    };//能源系统信息
-
-    public class MFSKAlertdata {
-	    byte[]	alert;//报警 4
-	    byte	aleak;//载人舱漏水
-	    byte	pressure;//应急液压源压力
-	    byte	head;//艏纵倾液位检测
-	    byte	behind;//艉纵倾液位检测
-	    byte	cable;//压载水舱液位
-	    byte    temperature;//计算机罐温度
-    };//报警信息
-
-    public class MFSKSwitchdata {
-	    byte[]  state;//开关状态 2
-    };//开关信息
-    #endregion
+    
 }
