@@ -39,8 +39,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="MovTraceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
+      <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
+      <Name>BoonieBear.DeckUnit.Protocol</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.TraceFileService\BoonieBear.DeckUnit.TraceFileService.csproj">
+      <Project>{56002669-156c-4002-9072-e4329e1d1b2c}</Project>
+      <Name>BoonieBear.DeckUnit.TraceFileService</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

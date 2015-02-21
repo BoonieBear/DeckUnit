@@ -9,21 +9,13 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
         private static readonly Hashtable ACMCommandID = new Hashtable();
         private static byte[] dataBytes;//打包数据
         private static byte[] decodeBytes;//解调数据
-        private static int ParaLength = 135;
-        public static string Errormessage { get; private set; }
-        #region 常量和枚举
-        public enum CommType
-        {
-            MPSK = 0,
-            QPSK,
-            QAM
-        }
-        #endregion
         
+        public static string Errormessage { get; private set; }
+
         //some initial para
         public class CommPara
         {
-            public static CommType Type;
+            public static DataType Type;
             public static bool LinkOrient;//true:uplink,false:downlink
 
             //初始化参数属性
@@ -31,7 +23,7 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
             {
                 get
                 {
-                    var bytes = new byte[ParaLength];
+                    var bytes = new byte[MovGlobalVariables.MFSKSize];
                     //将成员变量照协议规定长度位置拷入bytes中
                     //
                     return bytes;
@@ -45,7 +37,7 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
         public static void Init()
         {
             ACMCommandID.Add(124,(Action)Parse124);
-            CommPara.Type = CommType.MPSK;
+            CommPara.Type = DataType.MPSK;
             CommPara.LinkOrient = true;
 
         }
@@ -62,7 +54,7 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
             int byteslength = 0;
             switch (CommPara.Type)
             {
-                case CommType.MPSK:
+                case DataType.MPSK:
                     if (CommPara.LinkOrient)
                     {
                         
@@ -72,7 +64,7 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
                         
                     }
                     break;
-                case CommType.QPSK:
+                case DataType.QPSK:
                     if (CommPara.LinkOrient)
                     {
 

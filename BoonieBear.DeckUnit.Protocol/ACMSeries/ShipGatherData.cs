@@ -1,7 +1,6 @@
 ﻿using System;
-using BoonieBear.DeckUnit.Protocol.ACMSeries;
 
-namespace BoonieBear.DeckUnit.MovDataManage
+namespace BoonieBear.DeckUnit.Protocol.ACMSeries
 {
     public class ShipGatherData
     {

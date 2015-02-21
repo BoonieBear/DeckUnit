@@ -4,15 +4,20 @@ using System.Collections.Generic;
 namespace BoonieBear.DeckUnit.Protocol.ACMSeries
 {
     #region 枚举类型
-    public enum ModulationType
+    public enum DataType
     {
         MFSK = 0,
         MPSK = 2,
-        OPSK = 3,
+        QPSK = 3,
         FHSS = 4,
         VOICE = 6,
     }
 
+    public enum MonitorMode
+    {
+        SHIP = 0,
+        SUBMARINE = 1,
+    }
     public enum Mov4500Type
     {
         ALLPOST = 0,
@@ -33,6 +38,8 @@ namespace BoonieBear.DeckUnit.Protocol.ACMSeries
         IMAGE = 15,
         
     }
+
+        
     #endregion
 
     public class MovGlobalVariables

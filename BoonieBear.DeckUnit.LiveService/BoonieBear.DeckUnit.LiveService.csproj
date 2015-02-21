@@ -7,8 +7,8 @@
     <ProjectGuid>{8340D7E7-7D37-4A6A-BC9F-DB956BCE9218}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoonieBea.DeckUnit.LiveService</RootNamespace>
-    <AssemblyName>BoonieBea.DeckUnit.LiveService</AssemblyName>
+    <RootNamespace>BoonieBear.DeckUnit.LiveService</RootNamespace>
+    <AssemblyName>BoonieBear.DeckUnit.LiveService</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

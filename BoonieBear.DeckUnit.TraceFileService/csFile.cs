@@ -37,7 +37,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
 	    {
             string timestring = CreateNonBlankTimeString();
 
-            return Di.FullName + "\\" + header + timestring + "." + ext;
+            return Di.FullName + header + timestring + "." + ext;
 	    }
 
 	    public string CreateNonBlankTimeString()
@@ -80,7 +80,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         public bool OpenForRead(string file_name){
 			fileName = file_name;
 			try {
-				ts = new StreamReader (fileName);
+                ts = new StreamReader(File.Open(fileName, FileMode.Open, FileAccess.Write, FileShare.ReadWrite));
 				opened=true;
 			}
 			catch(FileNotFoundException e) {
@@ -123,7 +123,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
 		{
 		    if (file_name == null) throw new ArgumentNullException("file_name");
 		    try{
-				ws = new StreamWriter (file_name);
+                ws = new StreamWriter(File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.Read));
                 ws.AutoFlush = true;
 				fileName = file_name;
 				writeOpened = true;
@@ -145,7 +145,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
             if (file_name == null) throw new ArgumentNullException("file_name");
             try
             {
-                bw = new BinaryWriter(File.Open(file_name, FileMode.OpenOrCreate));
+                bw = new BinaryWriter(File.Open(file_name, FileMode.OpenOrCreate,FileAccess.Write,FileShare.Read));
                 fileName = file_name;
                 writeOpened = true;
                 return true;
@@ -166,7 +166,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
             if (file_name == null) throw new ArgumentNullException("file_name");
             try
             {
-                br = new BinaryReader(File.Open(file_name, FileMode.Open));
+                br = new BinaryReader(File.Open(file_name, FileMode.Open, FileAccess.Read, FileShare.ReadWrite));
                 fileName = file_name;
                 writeOpened = true;
                 return true;
@@ -182,6 +182,10 @@ namespace BoonieBear.DeckUnit.TraceFileService
             bw.Write(data);
         }
 
+	    public virtual bool Create()
+	    {
+	        return false;
+	    }
 
 	}
 
@@ -198,7 +202,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
             }
             return Di.Exists && OpenForWrite(CreateFullFileName());
         }
-        public bool CreateFile()
+        public bool Create()
         {
             return OpenStreamFile();
         }
@@ -228,7 +232,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
             }
             return Di.Exists && BinaryOpenWrite(CreateFullFileName());
         }
-        public bool CreateFile()
+        public override bool Create()
         {
             return OpenBinaryFile();
         }

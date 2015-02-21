@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
-using BoonieBear.DeckUnit.Protocol.ACMSeries;
-namespace BoonieBear.DeckUnit.MovDataManage
+
+namespace BoonieBear.DeckUnit.Protocol.ACMSeries
 {
     /// <summary>
     /// 潜器
@@ -101,15 +100,15 @@ namespace BoonieBear.DeckUnit.MovDataManage
                     throw new Exception("undefined data type!");
             }
         }
-        internal byte[] Package(ModulationType mType)
+        internal byte[] Package(DataType mType)
         {
             Array.Clear(_mfskBytes,0,_mfskBytes.Length);
             Array.Clear(_mpskBytes,0,_mpskBytes.Length);
             switch (mType)
             {
-                case ModulationType.MFSK:
+                case DataType.MFSK:
                     break;
-                case ModulationType.MPSK:
+                case DataType.MPSK:
                     break;
                 default:
                     throw new Exception("undefined modulation type!");
@@ -118,11 +117,11 @@ namespace BoonieBear.DeckUnit.MovDataManage
         }
         public byte[] PackageMFSKBytes
         {
-            get { return Package(ModulationType.MFSK); }
+            get { return Package(DataType.MFSK); }
         }
         public byte[] PackageMPSKBytes
         {
-            get { return Package(ModulationType.MPSK); }
+            get { return Package(DataType.MPSK); }
         }
 
         public List<string> Msghistory
