@@ -46,6 +46,9 @@
       <HintPath>..\Tools\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.XML" />
+    <Reference Include="TinyMetroWpfLibrary.Utility">
+      <HintPath>..\Tools\TinyMetroWpfLibrary.Utility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Choose>
     <When Condition="('$(VisualStudioVersion)' == '10.0' or '$(VisualStudioVersion)' == '') and '$(TargetFrameworkVersion)' == 'v3.5'">
@@ -64,10 +67,6 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
       <Project>{14AF1D53-3A3E-4740-A56B-C93555DD21A9}</Project>
       <Name>BoonieBear.DeckUnit.DAL</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
-      <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
-      <Name>BoonieBear.DeckUnit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

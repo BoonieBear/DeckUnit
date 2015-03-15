@@ -3,7 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net.Sockets;
 using System.Threading;
-using BoonieBear.DeckUnit.Utilities;
+using TinyMetroWpfLibrary.Utility;
 
 namespace BoonieBear.DeckUnit.CommLib.TCP
 {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using BoonieBear.DeckUnit.JsonUtils;
 using BoonieBear.DeckUnit.Protocol.ACNSeries;
-using BoonieBear.DeckUnit.Utilities;
+using TinyMetroWpfLibrary.Utility;
 
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {

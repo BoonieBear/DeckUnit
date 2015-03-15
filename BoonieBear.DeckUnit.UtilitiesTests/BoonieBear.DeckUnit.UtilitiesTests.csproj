@@ -69,10 +69,6 @@
       <Project>{6d2207de-8c36-428a-bd96-614c75dd5a0c}</Project>
       <Name>BoonieBear.DeckUnit.JsonUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
-      <Project>{77642012-7D37-4461-B14C-CD949E2A3B9E}</Project>
-      <Name>BoonieBear.DeckUnit.Utilities</Name>
-    </ProjectReference>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

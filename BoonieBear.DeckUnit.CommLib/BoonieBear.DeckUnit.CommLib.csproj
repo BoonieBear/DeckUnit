@@ -56,6 +56,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="TinyMetroWpfLibrary.Utility">
+      <HintPath>..\Tools\TinyMetroWpfLibrary.Utility.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CustomEventArgs.cs" />
@@ -89,10 +92,6 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
       <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
       <Name>BoonieBear.DeckUnit.Protocol</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Utilities\BoonieBear.DeckUnit.Utilities.csproj">
-      <Project>{77642012-7d37-4461-b14c-cd949e2a3b9e}</Project>
-      <Name>BoonieBear.DeckUnit.Utilities</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

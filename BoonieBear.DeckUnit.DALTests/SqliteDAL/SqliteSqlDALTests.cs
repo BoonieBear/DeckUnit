@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Diagnostics;
-using BoonieBear.DeckUnit.Utilities;
 using BoonieBear.DeckUnit.DAL.DBModel;
 using BoonieBear.DeckUnit.DAL.SqliteDAL;
 using NUnit.Framework;
-
+using TinyMetroWpfLibrary.Utility;
 
 namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
 {
