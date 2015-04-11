@@ -5,8 +5,8 @@ namespace BoonieBear.DeckUnit.DAL
     public enum DBType
     {
         Sqlite,
-        MysqlL,
-        Mssql,
+        Mysql,
+        SqlServer,
     }
     /// <summary>
     /// 数据库访问工厂类

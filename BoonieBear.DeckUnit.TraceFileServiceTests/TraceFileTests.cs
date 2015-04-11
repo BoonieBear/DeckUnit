@@ -43,19 +43,6 @@ namespace BoonieBear.DeckUnit.TraceFileServiceTests
             Assert.IsNotNull(_tracerFile.Errormsg);
         }
 
-        [Test()]
-        public void GetStringTraceTest()
-        {
-            Assert.IsNotNull(_tracerFile.GetStringTrace("log2"));
-        }
-
-        [Test()]
-        public void GetAdTraceTest()
-        {
-            Assert.IsNotNull(_tracerFile.GetAdTrace("ad"));
-        }
-
-
        
     }
 }

@@ -17,6 +17,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         public bool opened, writeOpened;
         protected string ext = @"dat";
         protected long length;
+	    protected long sizelimit;
         protected string header = "Log";
 	    public DirectoryInfo Di = new DirectoryInfo(@".\");
 		//-----------
@@ -31,8 +32,16 @@ namespace BoonieBear.DeckUnit.TraceFileService
 			opened = false;
 			writeOpened = false;
 		    length = 0;
+		    sizelimit = 1024*1024;//1MB
 		}
 
+	    public void SetFileSizeLimit(long size)
+	    {
+	        if (size>0)
+	        {
+	            sizelimit = size;
+	        }
+	    }
 	    public string CreateFullFileName()
 	    {
             string timestring = CreateNonBlankTimeString();
@@ -194,6 +203,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         public LogFile(string strheader = null, string extstr = null)
             : base(strheader, extstr){}
 
+        public static int index = 0;
         private bool OpenStreamFile()
         {
             if (Di.Exists == false)
@@ -210,11 +220,22 @@ namespace BoonieBear.DeckUnit.TraceFileService
 
         public long Write(string s)
         {
+            if (writeOpened == false)
+            {
+                if (Create() == false)
+                    return 0;
+            }
+
             s = CreateTimeString() + s;
             ws.WriteLine(s);
 
             length += s.Length;
             length += 2;
+            if (length>sizelimit)
+            {
+                Close();
+                header += (++index).ToString();
+            }
             return length;
         }
         
@@ -224,6 +245,8 @@ namespace BoonieBear.DeckUnit.TraceFileService
     {
         public ADFile(string strheader = null, string extstr = null)
             : base(strheader, extstr){}
+
+        public static int index = 0;
         private bool OpenBinaryFile()
         {
             if (Di.Exists == false)
@@ -234,12 +257,25 @@ namespace BoonieBear.DeckUnit.TraceFileService
         }
         public override bool Create()
         {
+            SetFileSizeLimit(5*1024*1024);
             return OpenBinaryFile();
         }
+
+        //if you want to create new file everytime, call close() after write()
         public long Write(byte[] data)
         {
+            if (writeOpened == false)
+            {
+                if (Create() == false)
+                    return 0;
+            }
             bw.Write(data);
             length += data.Length;
+            if (length>sizelimit)
+            {
+                Close();
+                header += (++index).ToString();
+            }
             return length;
         }
     }
