@@ -9,13 +9,14 @@ namespace BoonieBear.DeckUnit.TraceFileService
 	/// </summary>
 	public class csFile
 	{
-        public string fileName;
-        public StreamReader ts;
-        public StreamWriter ws;
-        public BinaryReader br;
-        public BinaryWriter bw;
-        public bool opened, writeOpened;
-        protected string ext = @"dat";
+	    private string fileName;
+        protected StreamReader ts;
+        protected StreamWriter ws;
+        protected BinaryReader br;
+        protected BinaryWriter bw;
+	    private bool opened;
+	    private bool writeOpened;
+	    protected string ext = @"dat";
         protected long length;
 	    protected long sizelimit;
         protected string header = "Log";
@@ -83,8 +84,22 @@ namespace BoonieBear.DeckUnit.TraceFileService
             }
         }
 
-        
-        
+	    public string FileName
+	    {
+	        get { return fileName; }
+	    }
+
+	    public bool Opened
+	    {
+	        get { return opened; }
+	    }
+
+	    public bool WriteOpened
+	    {
+	        get { return writeOpened; }
+	    }
+
+
 	    //-----------
         public bool OpenForRead(string file_name){
 			fileName = file_name;
@@ -220,7 +235,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
 
         public long Write(string s)
         {
-            if (writeOpened == false)
+            if (WriteOpened == false)
             {
                 if (Create() == false)
                     return 0;
@@ -264,7 +279,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         //if you want to create new file everytime, call close() after write()
         public long Write(byte[] data)
         {
-            if (writeOpened == false)
+            if (WriteOpened == false)
             {
                 if (Create() == false)
                     return 0;

@@ -6,10 +6,9 @@ namespace BoonieBear.DeckUnit.DataStorageService
     /// <summary>
     /// 4500记录文件类，调用tracefile类生成需要的记录文件，
     /// </summary>
-    public class MovTraceService : ITraceService
+    public class MovTraceService
     {
         private TraceFile _traceFile = TraceFile.GetInstance();
-        private string _error;
         private MonitorMode _mode = MonitorMode.SHIP;
         public string Error
         {
@@ -20,11 +19,9 @@ namespace BoonieBear.DeckUnit.DataStorageService
         {
             _mode = mode;
         }
-
         public MovTraceService(MonitorMode mode)
         {
             SetMode(mode);
-            _error = "";
         }
 
 
@@ -32,7 +29,7 @@ namespace BoonieBear.DeckUnit.DataStorageService
         /// 根据运行模式生成不同的记录文件
         /// </summary>
         /// <returns>生成结果</returns>
-        public bool SetupService()
+        public bool CreateService()
         {
             if (_mode==MonitorMode.SHIP)
             {

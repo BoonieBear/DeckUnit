@@ -13,7 +13,7 @@ using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.Protocol.UnitSeries;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
-
+using BoonieBear.DeckUnit.DataStorageService;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
@@ -29,7 +29,7 @@ namespace BoonieBear.DeckUnit.Core
         private ITCPClientService _tcpShellService;
         private ITCPClientService _tcpDataService;
         private IUDPService _udpService;
-        private ISqlDAL _sqlDAL;
+        private UnitTraceService _unitTraceService;
         private TcpClient _shelltcpClient ;
         private TcpClient _datatcpClient ;
         private UdpClient _udpClient;
@@ -43,11 +43,8 @@ namespace BoonieBear.DeckUnit.Core
             try
             {
                 if (Initailed) throw new Exception("系统已经完成初始化");
-                if (!SqlDAL.LinkStatus) throw new Exception("数据存储服务无法启动");
-                var configure = SqlDAL.GetCommConfInfo();
-                var modemconfigure = SqlDAL.GetModemConfigure();
-                if (modemconfigure == null) throw new Exception("配置数据不存在");
-                //甲板单元协议自带数据库接口，可以
+                if (!TraceService.CreateService()) throw new Exception("数据存储服务无法初始化");
+                //大数据传输协议自带数据库接口，可以
                 //自动更新数据库，如果是通信网则使用ACNProtocol.Init()
                 DeckDataProtocol.Init(modemconfigure.ID, Dblinkstring);
                 //串口打开成功
@@ -78,8 +75,8 @@ namespace BoonieBear.DeckUnit.Core
 
         public void Dispose()
         {
-            if (SqlDAL.LinkStatus)
-                SqlDAL.Close();
+            TraceService.TearDownService();
+            
             if (Initailed)
             {
                 SerialService.UnRegister(DeckUnitObserver);
@@ -160,12 +157,12 @@ namespace BoonieBear.DeckUnit.Core
             }
         }
 
-        public ISqlDAL SqlDAL
+        public UnitTraceService TraceService
         {
             get
             {
-                return _sqlDAL ?? (_sqlDAL = new SqliteSqlDAL(Dblinkstring));
-            } 
+                return _unitTraceService ?? (_unitTraceService = new UnitTraceService());
+            }
         }
 
         public CommLib.IObserver<CustomEventArgs> DeckUnitObserver

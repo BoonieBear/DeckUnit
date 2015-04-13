@@ -13,7 +13,14 @@ namespace BoonieBear.DeckUnit.DAL
     /// </summary>
     public class DALFactory
     {
-        static public  string connectstring;
+        private static string connectstring;
+
+        public static string Connectstring
+        {
+            get { return connectstring; }
+            set { connectstring = value; }
+        }
+
         public static ISqlDAL CreateDAL(DBType dbType)
         {
             switch (dbType)

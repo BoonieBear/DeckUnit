@@ -53,7 +53,7 @@ namespace BoonieBear.DeckUnit.TraceFileServiceTests
         public void csFileTest1()
         {
             var testfile = new csFile("newfile");
-            Assert.AreSame("newfile",testfile.fileName);
+            Assert.AreSame("newfile",testfile.FileName);
         }
 
         [Test()]
@@ -104,7 +104,7 @@ namespace BoonieBear.DeckUnit.TraceFileServiceTests
             if (testfile.OpenForRead("newfile"))
             {
                 testfile.Close();
-                Assert.IsFalse(testfile.writeOpened);
+                Assert.IsFalse(testfile.WriteOpened);
             }
             Assert.Fail("OpenForRead failed");
         }

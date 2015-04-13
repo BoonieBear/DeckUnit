@@ -39,12 +39,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ITraceService.cs" />
     <Compile Include="Mov4500TraceService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UnitTraceService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
+      <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
+      <Name>BoonieBear.DeckUnit.DAL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
       <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
       <Name>BoonieBear.DeckUnit.Protocol</Name>

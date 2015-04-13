@@ -18,8 +18,6 @@ namespace BoonieBear.DeckUnit.ICore
         ITCPClientService TCPShellService { get; }
         //UDP接收数据服务
         IUDPService UDPService { get; }
-        //数据库接口
-        ISqlDAL SqlDAL { get; }
         /// <summary>
         /// 数据观察类，主要负责数据的解析和保存
         /// </summary>

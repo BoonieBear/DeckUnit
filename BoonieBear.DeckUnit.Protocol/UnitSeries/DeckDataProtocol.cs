@@ -95,7 +95,7 @@ namespace BoonieBear.DeckUnit.Protocol.UnitSeries
                 Directory.CreateDirectory(TmpDataPath);
                 DBFile = dbPath;
                 SecondTicks = 0;
-                DALFactory.connectstring = "Data Source=" + DBFile + ";Pooling=True";
+                DALFactory.Connectstring = "Data Source=" + DBFile + ";Pooling=True";
                 _sqlite = DALFactory.CreateDAL(DBType.Sqlite);
                 
             }
