@@ -5,8 +5,7 @@ using System.Net.Sockets;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.TCP;
-using BoonieBear.DeckUnit.Protocol.ACMSeries;
-
+using BoonieBear.DeckUnit.ACMP;
 namespace Test4500netDemo
 {
     static class Program

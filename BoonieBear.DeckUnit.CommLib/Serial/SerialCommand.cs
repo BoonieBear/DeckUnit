@@ -2,8 +2,7 @@
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Threading;
-using BoonieBear.DeckUnit.Protocol.ACNSeries;
-
+using BoonieBear.DeckUnit.ACNP;
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     public class ACNSerialHexCommand : SerialBaseComm

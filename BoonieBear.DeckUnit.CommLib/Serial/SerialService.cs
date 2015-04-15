@@ -6,9 +6,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using BoonieBear.DeckUnit.JsonUtils;
-using BoonieBear.DeckUnit.Protocol.ACNSeries;
 using TinyMetroWpfLibrary.Utility;
-
+using BoonieBear.DeckUnit.ACNP;
 namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     public abstract class SerialSerialServiceBase :ISerialService

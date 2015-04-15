@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using BoonieBear.DeckUnit.DAL.DBModel;
+using BoonieBear.DeckUnit.DAL;
 
 namespace BoonieBear.DeckUnit.DAL
 {

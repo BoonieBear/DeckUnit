@@ -271,17 +271,17 @@
       <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
       <Name>BoonieBear.DeckUnit.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.DataStorageService\BoonieBear.DeckUnit.DataStorageService.csproj">
-      <Project>{36876378-cc3e-4aad-955b-318e8ea2f59a}</Project>
-      <Name>BoonieBear.DeckUnit.DataStorageService</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
-      <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
-      <Name>BoonieBear.DeckUnit.Protocol</Name>
-    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResourceLib.csproj">
       <Project>{48baf198-55b8-4bcb-92f9-baa0a98b4fe9}</Project>
       <Name>BoonieBear.DeckUnit.SysResourceLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.UBP\BoonieBear.DeckUnit.UBP.csproj">
+      <Project>{436a819b-cee9-4fd7-bdc5-03111a5ed85e}</Project>
+      <Name>BoonieBear.DeckUnit.UBP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.UnitBoxTraceService\BoonieBear.DeckUnit.UnitBoxTraceService.csproj">
+      <Project>{f8f3fad9-f0b9-46b4-a4af-995a3eeb1f3f}</Project>
+      <Name>BoonieBear.DeckUnit.UnitBoxTraceService</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

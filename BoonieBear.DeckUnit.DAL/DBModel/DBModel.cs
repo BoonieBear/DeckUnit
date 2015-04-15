@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace BoonieBear.DeckUnit.DAL.DBModel
+namespace BoonieBear.DeckUnit.DAL
 {
     /// <summary>
     /// 数据库实体类

@@ -61,6 +61,10 @@
     <Compile Include="TCPTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.ACNP\BoonieBear.DeckUnit.ACNP.csproj">
+      <Project>{61f9032e-ae3b-4fd8-988b-1cfa90c5b5b2}</Project>
+      <Name>BoonieBear.DeckUnit.ACNP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj">
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
       <Name>BoonieBear.DeckUnit.CommLib</Name>
@@ -69,9 +73,9 @@
       <Project>{6d2207de-8c36-428a-bd96-614c75dd5a0c}</Project>
       <Name>BoonieBear.DeckUnit.JsonUtils</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.Protocol\BoonieBear.DeckUnit.Protocol.csproj">
-      <Project>{b430a3d4-5d24-4ced-8de2-2c5b9d559133}</Project>
-      <Name>BoonieBear.DeckUnit.Protocol</Name>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.UBP\BoonieBear.DeckUnit.UBP.csproj">
+      <Project>{436a819b-cee9-4fd7-bdc5-03111a5ed85e}</Project>
+      <Name>BoonieBear.DeckUnit.UBP</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

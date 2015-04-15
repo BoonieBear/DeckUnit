@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using BoonieBear.DeckUnit.DAL.DBModel;
+using BoonieBear.DeckUnit.DAL;
 namespace BoonieBear.DeckUnit.DAL
 {
     /// <summary>

@@ -2,8 +2,7 @@
 using System.Net.Sockets;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.TCP;
-using BoonieBear.DeckUnit.Protocol.ACMSeries;
-
+using BoonieBear.DeckUnit.ACMP;
 namespace Test4500netDemo
 {
     public class ACMDataObserver : BoonieBear.DeckUnit.CommLib.IObserver<CustomEventArgs>

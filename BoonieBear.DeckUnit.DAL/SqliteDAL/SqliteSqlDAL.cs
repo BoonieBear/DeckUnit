@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using BoonieBear.DeckUnit.DAL.DBModel;
+using BoonieBear.DeckUnit.DAL;
 using TinyMetroWpfLibrary.Utility;
 
 namespace BoonieBear.DeckUnit.DAL.SqliteDAL

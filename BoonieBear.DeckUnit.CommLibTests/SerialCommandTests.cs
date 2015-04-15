@@ -3,9 +3,8 @@ using System.IO.Ports;
 using System.Threading;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
-using BoonieBear.DeckUnit.Protocol.ACNSeries;
 using NUnit.Framework;
-
+using BoonieBear.DeckUnit.ACNP;
 namespace BoonieBear.DeckUnit.CommLibTests
 {
     [TestFixture()]
