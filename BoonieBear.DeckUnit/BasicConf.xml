@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<甲板单元>
+  <数据库配置>
+    <连接字符串>Data Source=default.dudb;Pooling=True</连接字符串>
+  </数据库配置>
+</甲板单元>

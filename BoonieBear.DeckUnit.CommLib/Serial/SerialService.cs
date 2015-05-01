@@ -229,7 +229,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             try
                             {
 
-                                ACNProtocol.GetData(data);
+                                ACNProtocol.GetDataForParse(data);
                                 if (ACNProtocol.Parse())
                                 {
                                     hexString = StringListToTree.LstToJson(ACNProtocol.parselist);

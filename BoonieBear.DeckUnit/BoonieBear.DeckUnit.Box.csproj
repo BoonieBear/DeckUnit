@@ -259,9 +259,9 @@
     <Resource Include="Assets\MainPageButton\Toolbar Utilities Folder.png" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj">
+    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj">
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
-      <Name>BoonieBear.DeckUnit.CommLib</Name>
+      <Name>BoonieBear.DeckUnit.Comm</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.Core\BoonieBear.DeckUnit.ICore.csproj">
       <Project>{0faf0e99-79b6-4f10-9a22-ed1839e22387}</Project>
@@ -271,9 +271,13 @@
       <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
       <Name>BoonieBear.DeckUnit.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResourceLib.csproj">
+    <ProjectReference Include="..\BoonieBear.DeckUnit.DUConf\BoonieBear.DeckUnit.DUConf.csproj">
+      <Project>{667c59e1-2d10-4687-a4d8-7b41bc3ee10c}</Project>
+      <Name>BoonieBear.DeckUnit.DUConf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResource.csproj">
       <Project>{48baf198-55b8-4bcb-92f9-baa0a98b4fe9}</Project>
-      <Name>BoonieBear.DeckUnit.SysResourceLib</Name>
+      <Name>BoonieBear.DeckUnit.SysResource</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.UBP\BoonieBear.DeckUnit.UBP.csproj">
       <Project>{436a819b-cee9-4fd7-bdc5-03111a5ed85e}</Project>
@@ -284,7 +288,11 @@
       <Name>BoonieBear.DeckUnit.UnitBoxTraceService</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="BasicConf.xml">
+      <SubType>Designer</SubType>
+    </Resource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

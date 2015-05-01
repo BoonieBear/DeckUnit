@@ -5,9 +5,9 @@ VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.DAL", "BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj", "{14AF1D53-3A3E-4740-A56B-C93555DD21A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.SysResourceLib", "BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResourceLib.csproj", "{48BAF198-55B8-4BCB-92F9-BAA0A98B4FE9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.SysResource", "BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResource.csproj", "{48BAF198-55B8-4BCB-92F9-BAA0A98B4FE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.CommLib", "BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj", "{B2127A13-6FE1-4B46-98EA-6F4BB565670C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Comm", "BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj", "{B2127A13-6FE1-4B46-98EA-6F4BB565670C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Box", "BoonieBear.DeckUnit\BoonieBear.DeckUnit.Box.csproj", "{E0304F04-479B-4075-81DD-FF598EB0B886}"
 EndProject
@@ -68,6 +68,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.UnitBoxTraceService", "BoonieBear.DeckUnit.UnitBoxTraceService\BoonieBear.DeckUnit.UnitBoxTraceService.csproj", "{F8F3FAD9-F0B9-46B4-A4AF-995A3EEB1F3F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.ICore", "BoonieBear.DeckUnit.Core\BoonieBear.DeckUnit.ICore.csproj", "{0FAF0E99-79B6-4F10-9A22-ED1839E22387}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{840A1B06-307F-4D42-8033-1B9D466A214D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Mov4500Conf", "BoonieBear.DeckUnit.Mov4500Conf\BoonieBear.DeckUnit.Mov4500Conf.csproj", "{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.DUConf", "BoonieBear.DeckUnit.DUConf\BoonieBear.DeckUnit.DUConf.csproj", "{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -335,6 +341,26 @@ Global
 		{0FAF0E99-79B6-4F10-9A22-ED1839E22387}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{0FAF0E99-79B6-4F10-9A22-ED1839E22387}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{0FAF0E99-79B6-4F10-9A22-ED1839E22387}.Release|x86.ActiveCfg = Release|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B}.Release|x86.ActiveCfg = Release|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -367,5 +393,7 @@ Global
 		{6B3EF1BA-0782-4E89-ABD5-927C553CB0CF} = {5C9A4FAE-0A5E-41D4-93AE-0C1A4453EDB1}
 		{F8F3FAD9-F0B9-46B4-A4AF-995A3EEB1F3F} = {5C9A4FAE-0A5E-41D4-93AE-0C1A4453EDB1}
 		{0FAF0E99-79B6-4F10-9A22-ED1839E22387} = {DB38C11D-FC0C-4FDB-9AAE-775F2F268546}
+		{C5728BB3-1C6B-405A-9D0B-1C18B729F16B} = {840A1B06-307F-4D42-8033-1B9D466A214D}
+		{667C59E1-2D10-4687-A4D8-7B41BC3EE10C} = {840A1B06-307F-4D42-8033-1B9D466A214D}
 	EndGlobalSection
 EndGlobal

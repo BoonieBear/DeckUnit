@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         {
             if (!base.Init(tcpClient)) return;
             if (bytes==null) return;
-            base.GetData(bytes);
+            base.LoadData(bytes);
         }
 
         public override bool Send(out string error)

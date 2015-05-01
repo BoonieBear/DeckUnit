@@ -42,7 +42,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
                     {
                         var bytes = new byte[e.DataBufferLength];
                         Buffer.BlockCopy(e.DataBuffer,0,bytes,0,e.DataBufferLength);
-                        ACNProtocol.GetData(bytes);
+                        ACNProtocol.GetDataForParse(bytes);
                         if (ACNProtocol.Parse())
                         {
                             var nodetree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);

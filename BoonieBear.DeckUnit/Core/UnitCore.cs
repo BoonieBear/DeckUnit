@@ -14,6 +14,7 @@ using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.UBP;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
 using BoonieBear.DeckUnit.UnitBoxTraceService;
+using BoonieBear.DeckUnit.DUConf;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
@@ -33,24 +34,32 @@ namespace BoonieBear.DeckUnit.Core
         private TcpClient _shelltcpClient ;
         private TcpClient _datatcpClient ;
         private UdpClient _udpClient;
+        private DeckUnitConf _deckUnitConf;
         private bool _isWorking;
         private bool _initialed;
         private CommLib.IObserver<CustomEventArgs> _deckUnitObserver;
-        private const string Dblinkstring = @"Data Source=..\dudb\default.dudb;Pooling=True";
 
         public bool Init()
         {
             try
             {
                 if (Initailed) throw new Exception("系统已经完成初始化");
-                if (!TraceService.CreateService()) throw new Exception("数据存储服务无法初始化");
+                //读取配置文件
+                string connstr = DeckConfigure.GetSqlString();
+                if (!TraceService.CreateService(connstr)) throw new Exception("数据存储服务无法初始化");
                 //大数据传输协议自带数据库接口，可以
                 //自动更新数据库，如果是通信网则使用ACNProtocol.Init()
-                DeckDataProtocol.Init(modemconfigure.ID, Dblinkstring);
-                //串口打开成功
-                if (!SerialInit(configure)) throw new Exception("内部端口服务无法初始化");
-                if (!UDPInit()) throw new Exception("数据交换服务无法初始化");
-                if (!TcpInit(configure)) throw new Exception("信息交换服务无法初始化");
+                var modemconfigure = DeckConfigure.GetModemConfigure();
+                if (!modemconfigure)
+                    throw new Exception("无法读取配置信息(Modem)");
+                if (!DeckDataProtocol.Init(modemconfigure.ID, connstr)) throw new Exception("数据传输协议无法初始化！");
+ 
+                var configure = DeckConfigure.GetCommConfInfo();
+                if (!configure)
+                    throw new Exception("无法读取配置信息(通信)");
+                if (!CreateSerialService(configure)) throw new Exception("内部端口服务无法初始化");
+                if (!CreateUDPService(configure.TraceUDPPort)) throw new Exception("数据交换服务无法初始化");
+                if (!CreateTCPService(configure)) throw new Exception("指令交换服务无法初始化");
                 Initailed = true;
             }
             catch (Exception ex)
@@ -63,10 +72,10 @@ namespace BoonieBear.DeckUnit.Core
 
         }
 
-        private bool UDPInit()
+        private bool CreateUDPService(int port)
         {
             if (_udpClient == null)
-                _udpClient = new UdpClient(10010);
+                _udpClient = new UdpClient(port);
             if (!UDPService.Init(_udpClient)) return false;
             if (!UDPService.Start()) return false;
             UDPService.Register(DeckUnitObserver);
@@ -99,7 +108,7 @@ namespace BoonieBear.DeckUnit.Core
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        private bool TcpInit(CommConfInfo configure)
+        private bool CreateTCPService(CommConfInfo configure)
         {
             _shelltcpClient = new TcpClient {SendTimeout = 1000};
             _datatcpClient = new TcpClient {SendTimeout = 1000};
@@ -120,7 +129,7 @@ namespace BoonieBear.DeckUnit.Core
         /// </summary>
         /// <param name="configure">通信参数</param>
         /// <returns>成功or失败</returns>
-        private bool SerialInit(CommConfInfo configure)
+        private bool CreateSerialService(CommConfInfo configure)
         {
             if (!SerialService.Init(new SerialPort(configure.SerialPort)) || !SerialService.Start()) return false;
             SerialService.Register(DeckUnitObserver);
@@ -186,6 +195,11 @@ namespace BoonieBear.DeckUnit.Core
         public IEventAggregator EventAggregator
         {
             get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
+        }
+
+        public DeckUnitConf DeckConfigure
+        {
+            get { return _deckUnitConf ?? (_deckUnitConf = DeckUnitConf.GetInstance()); }
         }
 
         #endregion

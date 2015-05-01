@@ -31,7 +31,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         {
             if (!base.Init(tcpClient)) return;
             if (bytes==null) return;
-            base.GetData(bytes);
+            base.LoadData(bytes);
         }
 
         public override bool Send(out string error)
@@ -72,7 +72,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                 while ((numberOfBytesRead = (Int16)filereader.Read(mySendBuffer, 4, 1024)) != 0)
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(numberOfBytesRead), 0, mySendBuffer, 2, 2);
-                    base.GetData(mySendBuffer);
+                    base.LoadData(mySendBuffer);
                     
                     //ReportProgress(sendBytes);
                     if (SendData(out error))
@@ -113,7 +113,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                     const int End = 0xEDED;
                     Buffer.BlockCopy(BitConverter.GetBytes(End), 0, mySendBuffer, 0, 2);
                     Buffer.BlockCopy(BitConverter.GetBytes(crc), 0, mySendBuffer, 2, 2);
-                    base.GetData(mySendBuffer);
+                    base.LoadData(mySendBuffer);
                     isEnd = SendData(out error);
                 }
                

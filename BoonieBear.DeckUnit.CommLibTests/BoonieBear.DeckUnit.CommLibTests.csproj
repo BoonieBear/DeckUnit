@@ -65,9 +65,9 @@
       <Project>{61f9032e-ae3b-4fd8-988b-1cfa90c5b5b2}</Project>
       <Name>BoonieBear.DeckUnit.ACNP</Name>
     </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj">
+    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj">
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
-      <Name>BoonieBear.DeckUnit.CommLib</Name>
+      <Name>BoonieBear.DeckUnit.Comm</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.JsonUtils\BoonieBear.DeckUnit.JsonUtils.csproj">
       <Project>{6d2207de-8c36-428a-bd96-614c75dd5a0c}</Project>

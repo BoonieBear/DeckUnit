@@ -48,9 +48,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.CommLib.csproj">
+    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj">
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
-      <Name>BoonieBear.DeckUnit.CommLib</Name>
+      <Name>BoonieBear.DeckUnit.Comm</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
       <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>

@@ -7,8 +7,8 @@
     <ProjectGuid>{B2127A13-6FE1-4B46-98EA-6F4BB565670C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>BoonieBear.DeckUnit.CommLib</RootNamespace>
-    <AssemblyName>BoonieBear.DeckUnit.CommLib</AssemblyName>
+    <RootNamespace>BoonieBear.DeckUnit.Comm</RootNamespace>
+    <AssemblyName>BoonieBear.DeckUnit.Comm</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>

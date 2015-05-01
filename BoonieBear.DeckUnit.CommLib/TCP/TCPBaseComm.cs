@@ -74,7 +74,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             _str = str;
         }
 
-        public virtual void GetData(byte[] bytes)
+        public virtual void LoadData(byte[] bytes)
         {
             _nBytes = new byte[bytes.Length];
             Array.Copy(bytes, _nBytes, bytes.Length);

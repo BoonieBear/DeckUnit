@@ -4,16 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2CF7304E-30C8-4E62-81D1-6BF26BD560A9}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{436A819B-CEE9-4FD7-BDC5-03111A5ED85E}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test4500netDemo</RootNamespace>
-    <AssemblyName>Test4500netDemo</AssemblyName>
+    <RootNamespace>BoonieBear.DeckUnit.UBP</RootNamespace>
+    <AssemblyName>BoonieBear.DeckUnit.UBP</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -23,7 +22,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -41,18 +39,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DataObserver.cs" />
-    <Compile Include="Program.cs" />
+    <Compile Include="DeckDataProtocol.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.ACMP\BoonieBear.DeckUnit.ACMP.csproj">
-      <Project>{6ffcad15-3e47-44da-a462-5dc2871b17c0}</Project>
-      <Name>BoonieBear.DeckUnit.ACMP</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj">
-      <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
-      <Name>BoonieBear.DeckUnit.Comm</Name>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj">
+      <Project>{14af1d53-3a3e-4740-a56b-c93555dd21a9}</Project>
+      <Name>BoonieBear.DeckUnit.DAL</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

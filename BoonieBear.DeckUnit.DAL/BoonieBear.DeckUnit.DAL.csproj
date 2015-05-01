@@ -65,7 +65,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DALFactory.cs" />
-    <Compile Include="DALTrace.cs" />
     <Compile Include="DBModel\DBModel.cs" />
     <Compile Include="IDAL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

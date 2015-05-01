@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.Xml.Serialization;
 using BoonieBear.DeckUnit.DAL;
-namespace BoonieBear.DeckUnit.DAL
+
+namespace BoonieBear.DeckUnit.UnitBoxTraceService
 {
     /// <summary>
     /// 保存命令记录到数据库中
@@ -56,6 +55,13 @@ namespace BoonieBear.DeckUnit.DAL
         {
             if (_sqldal.LinkStatus)
                 _sqldal.Close();
+        }
+
+        public bool SaveCommLog(CommandLog commandLog)
+        {
+            if (_sqldal.LinkStatus)
+                return (_sqldal.AddLog(commandLog)>0);
+            return false;
         }
     }
 }

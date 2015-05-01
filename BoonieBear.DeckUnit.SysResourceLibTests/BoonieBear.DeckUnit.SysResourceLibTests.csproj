@@ -54,9 +54,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResourceLib.csproj">
+    <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.SysResource.csproj">
       <Project>{48baf198-55b8-4bcb-92f9-baa0a98b4fe9}</Project>
-      <Name>BoonieBear.DeckUnit.SysResourceLib</Name>
+      <Name>BoonieBear.DeckUnit.SysResource</Name>
     </ProjectReference>
   </ItemGroup>
   <Choose>

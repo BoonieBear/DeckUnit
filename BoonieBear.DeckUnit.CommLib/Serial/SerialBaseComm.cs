@@ -21,7 +21,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             _str = str;
         }
 
-        public virtual void GetData(Byte[] bytes)
+        public virtual void LoadData(Byte[] bytes)
         {
             _nBytes = new byte[bytes.Length];
             Array.Copy(bytes, _nBytes, bytes.Length);
