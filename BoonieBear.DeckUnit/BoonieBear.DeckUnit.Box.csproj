@@ -87,6 +87,16 @@
     <Compile Include="Core\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
+    <Compile Include="ViewModels\ADViewModel.cs" />
+    <Compile Include="ViewModels\DownLoadOverViewModel.cs" />
+    <Compile Include="ViewModels\MonitorViewModel.cs" />
+    <Compile Include="Views\ADPage.xaml.cs">
+      <DependentUpon>ADPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\DownLoadOverView.xaml.cs">
+      <DependentUpon>DownLoadOverView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModels\DownLoadPageViewModel.cs" />
     <Compile Include="ViewModels\UnitViewModelLocator.cs" />
     <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
     <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
@@ -104,7 +114,10 @@
     <Compile Include="Core\UnitKernal.cs" />
     <Compile Include="Models\SystemInfo.cs" />
     <Compile Include="ViewModels\SystemResourceViewModel.cs" />
-    <Compile Include="ViewModels\WaterTelViewModel.cs" />
+    <Compile Include="ViewModels\AcousticViewModel.cs" />
+    <Compile Include="Views\DownLoadPage.xaml.cs">
+      <DependentUpon>DownLoadPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HistoryDataPage.xaml.cs">
       <DependentUpon>HistoryDataPage.xaml</DependentUpon>
     </Compile>
@@ -116,11 +129,14 @@
       <SubType>Code</SubType>
       <DependentUpon>MainFrame.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\MonitorPage.xaml.cs">
+      <DependentUpon>MonitorPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SystemResourceView.xaml.cs">
       <DependentUpon>SystemResourceView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\WaterTelView.xaml.cs">
-      <DependentUpon>WaterTelView.xaml</DependentUpon>
+    <Compile Include="Views\AcousticView.xaml.cs">
+      <DependentUpon>AcousticView.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +185,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\ADPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DownLoadOverView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\DownLoadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HistoryDataPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -181,11 +209,15 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\MonitorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\SystemResourceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\WaterTelView.xaml">
+    <Page Include="Views\AcousticView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -292,6 +324,9 @@
     <Resource Include="BasicConf.xml">
       <SubType>Designer</SubType>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\CommandView\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

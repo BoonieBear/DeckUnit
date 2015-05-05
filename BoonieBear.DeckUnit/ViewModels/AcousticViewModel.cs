@@ -4,12 +4,12 @@ using BoonieBear.DeckUnit.Events;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
-namespace BoonieBear.DeckUnit.ViewModels
+namespace BoonieBear.DeckUnit.Views
 {
     /// <summary>
     /// That's the ViewModel that belongs to the Example View
     /// </summary>
-    public class WaterTelViewModel : ViewModelBase
+    public class AcousticViewModel : ViewModelBase
     {
         #region Overrides of ViewModelBase
 
@@ -18,8 +18,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             GoDataPageCommand = RegisterCommand(ExecuteGoDataPageCommand, CanExecuteGoDataPageCommand, true);
-            Title = Application.Current.Properties["message"].ToString();
-            AddPropertyChangedNotification(() => Title);
+            
         }
 
 
@@ -30,11 +29,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         #endregion
 
         #region 绑定属性
-        public string Title
-        {
-            get { return GetPropertyValue(() => Title); }
-            set { SetPropertyValue(() => Title, value); }
-        }
+        
 
         #endregion
 

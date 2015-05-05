@@ -1,4 +1,4 @@
-﻿<controls:ContentPage x:Class="BoonieBear.DeckUnit.Views.SystemResourceView"
+﻿<Page x:Class="BoonieBear.DeckUnit.Views.SystemResourceView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -41,4 +41,4 @@
         </StackPanel>
         <Button Style="{StaticResource ChromeButtonStyle}" VerticalAlignment="Bottom" Height="30">清理磁盘空间</Button>
     </Grid>
-</controls:ContentPage>
+</Page>

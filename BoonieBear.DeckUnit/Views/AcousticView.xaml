@@ -1,15 +1,15 @@
-﻿<controls:ContentPage x:Class="BoonieBear.DeckUnit.Views.WaterTelView"
+﻿<controls:ContentPage x:Class="BoonieBear.DeckUnit.Views.AcousticView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
       xmlns:controls="clr-namespace:BoonieBear.DeckUnit.Controls"
-      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=WaterTelViewModel}"
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=AcousticViewModel}"
       KeepAlive="True"
       mc:Ignorable="d" 
 	 d:DesignHeight="480" d:DesignWidth="640"
-	 Title="水声电话"  >
+	 Title="水声通信"  >
 
     <Grid Background="{StaticResource LightColorBrush}">
         <Grid.RowDefinitions>

@@ -1,14 +1,12 @@
-﻿<Page x:Class="BoonieBear.DeckUnit.Views.HistoryDataPage"
+﻿<Page x:Class="BoonieBear.DeckUnit.Views.DownLoadOverView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
-      xmlns:controls1="clr-namespace:BoonieBear.DeckUnit.Controls"
-      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=HistoryDataPageViewModel}"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=DownLoadOverViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
-	    Title="历史数据">
+	    Title="下载数据">
 
     <Grid Background="{StaticResource MainBackGround}">
         <Grid.RowDefinitions>
@@ -16,7 +14,6 @@
             <RowDefinition/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"  Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/> 
-
+        <TextBlock Grid.Row="0"  Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/>
     </Grid>
-    </Page>
+</Page>

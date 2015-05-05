@@ -381,7 +381,7 @@ Storyboard.TargetName="MyTextEffect"
                         </VisualBrush>
                     </Rectangle.Fill>
                 </Rectangle>
-                <Button x:Name="DeviceDataButton"  Style="{StaticResource TransparentButtonStyle}"   Content="通信控制" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="-20,180" FontSize="16" >
+                <Button x:Name="DeviceDataButton"  Style="{StaticResource TransparentButtonStyle}"   Content="水声通信" HorizontalAlignment="Left" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="-20,180" FontSize="16" >
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/adcp.png" Stretch="Uniform" />
                     </Button.Background>
@@ -392,13 +392,13 @@ Storyboard.TargetName="MyTextEffect"
                     </Button.Background>
                 </Button>
 
-                <Button  x:Name="SysResourceButton"  Style="{StaticResource TransparentButtonStyle}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="240,60" FontSize="16"  >
+                <Button  x:Name="SysResourceButton"  Style="{StaticResource TransparentButtonStyle}" Content="系统资源" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="240,60" FontSize="16">
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/Disk Utility.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
  
-                <Button  x:Name="MoreButton"  Style="{StaticResource TransparentButtonStyle}"  Content="更多工具" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="350,180" FontSize="16" >
+                <Button  x:Name="MoreButton"  Style="{StaticResource TransparentButtonStyle}"  Content="历史数据" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="160"  Width="160" Margin="350,180" FontSize="16" >
                     <Button.Background>
                         <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/MainPageButton/Toolbar Utilities Folder.png" Stretch="Uniform" />
                     </Button.Background>
@@ -1778,7 +1778,7 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
-                <Button x:Name="VoiceTelButton" Command ="{Binding GoWaterTelPageCommand}" Opacity="0" Content="水声电话" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="14.667">
+                <Button x:Name="MonitorButton" Command ="{Binding GoWaterTelPageCommand}" Opacity="0" Content="监控模式" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1791,7 +1791,7 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush  Stretch="None" ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
-                <Button x:Name="MonitorModeButton" Opacity="0" Content="监控模式" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False" FontSize="14.667">
+                <Button x:Name="HistoryButton" Opacity="0" Content="历史数据" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>

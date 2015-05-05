@@ -6,10 +6,10 @@ namespace BoonieBear.DeckUnit.Views
     /// <summary>
     /// WaterTelView.xaml 的交互逻辑
     /// </summary>
-    public partial class WaterTelView : ContentPage
+    public partial class AcousticView : ContentPage
     {
 
-        public WaterTelView()
+        public AcousticView()
         {
             InitializeComponent();
         }

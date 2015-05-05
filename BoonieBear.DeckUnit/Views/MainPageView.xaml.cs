@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
-using BoonieBear.DeckUnit.ViewModels;
+using BoonieBear.DeckUnit.Views;
 
 namespace BoonieBear.DeckUnit.Views
 {

@@ -1,10 +1,12 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-
 namespace BoonieBear.DeckUnit.Views
 {
-
-    public class HistoryDataPageViewModel : ViewModelBase
+    public class DownLoadPageViewModel : ViewModelBase
     {
         #region Overrides of ViewModelBase
 
@@ -30,8 +32,5 @@ namespace BoonieBear.DeckUnit.Views
         }
 
         #endregion
-
-
-
     }
 }

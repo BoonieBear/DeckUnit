@@ -22,7 +22,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
             if (udpClient==null)
                 udpClient=new UdpClient(8080);
             autoReset = new AutoResetEvent(false);
-            ACNProtocol.Init();
+            ACNProtocol.Init(00);
         }
 
 

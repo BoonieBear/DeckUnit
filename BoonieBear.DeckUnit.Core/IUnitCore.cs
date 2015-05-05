@@ -1,4 +1,4 @@
-﻿using BoonieBear.DeckUnit.Comm;
+﻿using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
 

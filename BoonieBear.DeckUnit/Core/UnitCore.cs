@@ -7,8 +7,6 @@ using BoonieBear.DeckUnit.CommLib.Serial;
 using BoonieBear.DeckUnit.CommLib.TCP;
 using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.DAL;
-using BoonieBear.DeckUnit.DAL;
-using BoonieBear.DeckUnit.DAL.SqliteDAL;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.UBP;
@@ -50,12 +48,12 @@ namespace BoonieBear.DeckUnit.Core
                 //大数据传输协议自带数据库接口，可以
                 //自动更新数据库，如果是通信网则使用ACNProtocol.Init()
                 var modemconfigure = DeckConfigure.GetModemConfigure();
-                if (!modemconfigure)
-                    throw new Exception("无法读取配置信息(Modem)");
+                if (modemconfigure==null)
+                    throw new Exception("无法读取配置信息(通信机)");
                 if (!DeckDataProtocol.Init(modemconfigure.ID, connstr)) throw new Exception("数据传输协议无法初始化！");
  
                 var configure = DeckConfigure.GetCommConfInfo();
-                if (!configure)
+                if (configure==null)
                     throw new Exception("无法读取配置信息(通信)");
                 if (!CreateSerialService(configure)) throw new Exception("内部端口服务无法初始化");
                 if (!CreateUDPService(configure.TraceUDPPort)) throw new Exception("数据交换服务无法初始化");

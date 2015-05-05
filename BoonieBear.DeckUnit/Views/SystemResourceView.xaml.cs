@@ -3,7 +3,7 @@
 namespace BoonieBear.DeckUnit.Views
 {
 
-    public partial class SystemResourceView : ContentPage
+    public partial class SystemResourceView
     {
         public SystemResourceView()
         {

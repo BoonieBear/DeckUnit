@@ -15,7 +15,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
         public void Init()
         {
             serial = new SerialPort("com3", 9600);
-            ACNProtocol.Init();
+            ACNProtocol.Init(00);
         }
         [Test]
         public void SerialSeviceTest()

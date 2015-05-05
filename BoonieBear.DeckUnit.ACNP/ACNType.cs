@@ -717,7 +717,7 @@ namespace BoonieBear.DeckUnit.ACNP
             strLang += ((Lang - double.Parse(split[0])) * 60).ToString("F04").Replace(".", "").PadLeft(6, '0');
 
             string strLat = Lati.ToString();
-            string[] splitlat = Lati.Split('.');
+            string[] splitlat = strLat.Split('.');
             strLat = splitlat[0].PadLeft(2, '0');
             strLat += ((Lati - double.Parse(splitlat[0])) * 60).ToString("F04").Replace(".", "").PadLeft(6, '0');
             if (Lang < 0)
@@ -763,10 +763,10 @@ namespace BoonieBear.DeckUnit.ACNP
                            double.Parse(HexStr.Substring(20, 2) + "." + HexStr.Substring(22, 4)) / 60;
                 else
                     Lati = 0;
-                Com2Device = int.Parse(HexStr.Substring(26, 4));
-                Com3Device = int.Parse(HexStr.Substring(30, 4));
-                Emittype = int.Parse(HexStr.Substring(34, 2));
-                Emitnum = int.Parse(HexStr.Substring(36, 2));
+                Com2Device = uint.Parse(HexStr.Substring(26, 4));
+                Com3Device = uint.Parse(HexStr.Substring(30, 4));
+                Emittype = uint.Parse(HexStr.Substring(34, 2));
+                Emitnum = uint.Parse(HexStr.Substring(36, 2));
             }
             catch (Exception)
             {
@@ -791,12 +791,14 @@ namespace BoonieBear.DeckUnit.ACNP
             bool ret = true;
             try
             {
-                DtTime.Year = int.Parse(HexStr.Substring(0, 4));
-                DtTime.Month = int.Parse(HexStr.Substring(4, 2));
-                DtTime.Day = int.Parse(HexStr.Substring(6, 2));
-                DtTime.Hour = int.Parse(HexStr.Substring(8, 2));
-                DtTime.Minute = int.Parse(HexStr.Substring(10, 2));
-                DtTime.Second = int.Parse(HexStr.Substring(12, 2));
+                
+                int Year = int.Parse(HexStr.Substring(0, 4));
+                int Month = int.Parse(HexStr.Substring(4, 2));
+                int Day = int.Parse(HexStr.Substring(6, 2));
+                int Hour = int.Parse(HexStr.Substring(8, 2));
+                int Minute = int.Parse(HexStr.Substring(10, 2));
+                int Second = int.Parse(HexStr.Substring(12, 2));
+                DtTime = new DateTime(Year, Month, Day, Hour, Minute, Second);
             }
             catch (Exception)
             {
@@ -817,8 +819,9 @@ namespace BoonieBear.DeckUnit.ACNP
 
         public PWState PwState { get; private set; }
 
-        public int Temprature { get; private set; }
+        public double Temprature { get; private set; }
 
+        //0:喂狗关闭
         public bool Bdog { get; private set; }
 
         public int AdLevel { get; private set; }
@@ -827,9 +830,22 @@ namespace BoonieBear.DeckUnit.ACNP
 
         public uint Com3Wakeuptime { get; private set; }
 
-        public ushort Reboottimes { get; private set; }
+        public uint Reboottimes { get; private set; }
 
-        public string Version { get; private set; }
+        //0:休眠
+        public bool BbuoyOn { get; private set; }
+
+        private string version;
+        public string Version 
+        {
+            get
+            {
+                return (double.Parse(version.Substring(0, 4))/1000).ToString("F03") + " " +
+                       version.Substring(4, 4) + "-" + version.Substring(8, 2) + "-"
+                       + version.Substring(10, 2);
+            }
+            private set { version = value; } 
+        }
 
         public string Contruct()//not used
         {
@@ -838,7 +854,32 @@ namespace BoonieBear.DeckUnit.ACNP
 
         public bool Parse(string HexStr)
         {
-            throw new NotImplementedException();
+            bool ret = true;
+            try
+            {
+                RtcTime.Parse(HexStr);
+                Config.Parse(HexStr.Substring(14));
+                Power48VState.Parse(HexStr.Substring(52));
+                MspWorkState.Parse(HexStr.Substring(82));
+                PwState.Parse(HexStr.Substring(94));
+                int sgn = int.Parse(HexStr.Substring(136, 2));
+                double temp = double.Parse(HexStr.Substring(138, 6))/1000;
+                if (sgn == 1)
+                    temp = -temp;
+                Temprature = temp;
+                Bdog = bool.Parse(HexStr.Substring(144, 2));
+                AdLevel = int.Parse(HexStr.Substring(146, 2));
+                Com2Wakeuptime = UInt32.Parse(HexStr.Substring(148, 10));
+                Com3Wakeuptime = UInt32.Parse(HexStr.Substring(158, 10));
+                Reboottimes = UInt32.Parse(HexStr.Substring(168, 4));
+                BbuoyOn = bool.Parse(HexStr.Substring(172, 2));
+                Version = HexStr.Substring(174, 12);
+            }
+            catch (Exception)
+            {
+                ret = false;
+            }
+            return ret;
         }
     }
    

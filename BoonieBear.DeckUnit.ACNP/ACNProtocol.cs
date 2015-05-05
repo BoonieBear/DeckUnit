@@ -265,11 +265,6 @@ namespace BoonieBear.DeckUnit.ACNP
             
         }
 
-        //打包通信机内部msp命令
-        static public byte[] PackageHex()
-        {
-
-        }
 
         #endregion
 

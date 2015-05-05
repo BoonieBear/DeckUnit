@@ -5,7 +5,7 @@ using BoonieBear.DeckUnit.Events;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
-namespace BoonieBear.DeckUnit.ViewModels
+namespace BoonieBear.DeckUnit.Views
 {
     public class MainPageViewModel : ViewModelBase
     {

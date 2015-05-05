@@ -1,19 +1,21 @@
-﻿using System.Windows;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Windows;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-
 namespace BoonieBear.DeckUnit.Views
 {
-
-    public class HistoryDataPageViewModel : ViewModelBase
+    public class DownLoadOverViewModel:ViewModelBase
     {
         #region Overrides of ViewModelBase
 
-        
+
 
         public override void Initialize()
         {
             Title = Application.Current.Properties["message"].ToString();
-            AddPropertyChangedNotification(()=>Title);
+            AddPropertyChangedNotification(() => Title);
         }
 
 
@@ -30,8 +32,5 @@ namespace BoonieBear.DeckUnit.Views
         }
 
         #endregion
-
-
-
     }
 }

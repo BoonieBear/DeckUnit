@@ -11,18 +11,21 @@ namespace BoonieBear.DeckUnit.ACNP
     /// </summary>
     public class MSPHexBuilder
     {
-        public static byte[] Pack255()
+        public static byte[] Pack255(int adlevel)
         {
-
+            byte[] cmd = new byte[1];
+            cmd[0] = (byte)adlevel;
+            return ACNProtocol.CommPackage(255, cmd);
         }
 
-        public static byte[] Pack254()
+        public static byte[] Pack254(PWState pwState)
         {
-
+            return ACNProtocol.CommPackage(254, StringHexConverter.ConvertHexToChar(pwState.Contruct()));
         }
-        public static byte[] Pack253()
+        public static byte[] Pack253(ModermConfig mconfig)
         {
-
+            string cmd = mconfig.Contruct();
+            return ACNProtocol.CommPackage(253, StringHexConverter.ConvertHexToChar(cmd));
         }
 
         public static byte[] Pack252(DateTime systimTime)
