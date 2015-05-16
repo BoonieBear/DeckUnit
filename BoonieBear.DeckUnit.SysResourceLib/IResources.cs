@@ -1,4 +1,4 @@
-﻿namespace BoonieBear.DeckUnit.SysResourceLib
+﻿namespace BoonieBear.DeckUnit.Resource
 {
 
    public interface IPcResources 

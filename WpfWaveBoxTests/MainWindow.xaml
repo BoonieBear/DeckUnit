@@ -1,0 +1,9 @@
+﻿<Window x:Class="WpfWaveBoxTests.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:wavebox="clr-namespace:BoonieBear.DeckUnit.WaveBox;assembly=LOAT.DeckUnit.WaveBox"
+        Title="MainWindow" Height="300" Width="800">
+    <Grid>
+        <wavebox:WaveControl Name="WaveControl"/>
+    </Grid>
+</Window>

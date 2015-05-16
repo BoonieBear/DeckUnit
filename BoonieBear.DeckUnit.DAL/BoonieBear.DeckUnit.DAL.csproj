@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BoonieBear.DeckUnit.DAL</RootNamespace>
-    <AssemblyName>BoonieBear.DeckUnit.DAL</AssemblyName>
+    <AssemblyName>LOAT.DeckUnit.DAL</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>

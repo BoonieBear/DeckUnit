@@ -1,9 +1,10 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
 using BoonieBear.DeckUnit.Models;
+using BoonieBear.DeckUnit.Resource;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-using BoonieBear.DeckUnit.SysResourceLib;
+
 namespace BoonieBear.DeckUnit.Views
 {
     public class SystemResourceViewModel : ViewModelBase

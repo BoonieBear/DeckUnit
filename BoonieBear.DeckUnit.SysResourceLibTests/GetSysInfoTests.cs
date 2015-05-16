@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.RegularExpressions;
+using BoonieBear.DeckUnit.Resource;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BoonieBear.DeckUnit.SysResourceLib;
 
 namespace BoonieBear.DeckUnit.SysResourceLibTests
 {

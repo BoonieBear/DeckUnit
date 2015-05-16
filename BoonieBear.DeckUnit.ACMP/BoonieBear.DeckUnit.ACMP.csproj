@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>BoonieBear.DeckUnit.ACMP</RootNamespace>
-    <AssemblyName>BoonieBear.DeckUnit.ACMP</AssemblyName>
+    <AssemblyName>LOAT.DeckUnit.ACMP</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

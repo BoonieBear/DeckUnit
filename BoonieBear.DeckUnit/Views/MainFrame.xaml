@@ -29,37 +29,5 @@
 			FadeOffset="0:0:0.050" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
             </frames:AnimationFrame>
         </Grid>
-        <Border x:Name="BottomBorder" HorizontalAlignment="Left" Height="60"  VerticalAlignment="Bottom" Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" Visibility="{Binding IsShowBottomBar}" Width="{Binding ActualWidth, ElementName=grid, Mode=OneWay}" Grid.ColumnSpan="2"
-                Grid.Column="0">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                    <ColumnDefinition />
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Command ="{Binding GoBackCommand}" Width="60" Height="60" Style="{DynamicResource MetroCircleButtonStyle}">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.chevron.left.png"/>
-                    </Button.Background>
-                </Button>
-                <Button Grid.Column="2" Width="60" Height="60" Style="{DynamicResource MetroCircleButtonStyle}">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
-                    </Button.Background>
-                </Button>
-                <Button Grid.Column="3" Width="60" Style="{DynamicResource MetroCircleButtonStyle}" Height="60">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
-                    </Button.Background>
-                </Button>
-                <Button Grid.Column="4" Width="60" Height="60" Style="{DynamicResource MetroCircleButtonStyle}" Command="{Binding ShowOptionPanelCommand}">
-                    <Button.Background>
-                        <ImageBrush ImageSource="/BoonieBear.DeckUnit;component/Assets/appbar/appbar.cogs.png"/>
-                    </Button.Background>
-                </Button>
-            </Grid>
-        </Border>
     </Grid>
 </metroControl:MetroWindow>

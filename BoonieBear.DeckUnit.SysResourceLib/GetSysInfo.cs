@@ -3,7 +3,8 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
 using System.Management;
-namespace BoonieBear.DeckUnit.SysResourceLib
+
+namespace BoonieBear.DeckUnit.Resource
 {
     public class GetSysInfo : IPcResources
     {
