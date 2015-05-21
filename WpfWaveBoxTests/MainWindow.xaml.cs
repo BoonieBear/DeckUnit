@@ -26,25 +26,30 @@ namespace WpfWaveBoxTests
         public MainWindow()
         {
             InitializeComponent();
-            FileStream fs = new FileStream("Ch1AD20121210102223.dat", FileMode.Open);
+            FileStream fs = new FileStream("XMTvoice20120622095015.wav", FileMode.Open);
             br = new BinaryReader(fs);
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 250);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 125);
             timer.Tick += timer_Tick;
             timer.Start();
             WaveControl.isPlaying = true;
         }
         private void timer_Tick(object sender, EventArgs e)
         {
-            byte[] _wave = br.ReadBytes(4096);
-            if (_wave.Length != 4096)//读到头了
+            byte[] _wave = br.ReadBytes(2048);
+            if (_wave.Length != 2048)//读到头了
                 br.BaseStream.Position = 0;
             if (_wave.Length != 0)
             {
                 WaveControl.Display(_wave);
             }
 
+            
+        }
 
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            WaveControl.Dispose();
         }
     }
 }

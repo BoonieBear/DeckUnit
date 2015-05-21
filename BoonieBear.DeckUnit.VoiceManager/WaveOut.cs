@@ -150,9 +150,9 @@ namespace BoonieBear.DeckUnit.VoiceManager
 					m_Finished = true;
 					if (m_WaveOut != IntPtr.Zero)
 						WaveNative.waveOutReset(m_WaveOut);
-					m_Thread.Join();
-					m_FillProc = null;
-					FreeBuffers();
+                    m_FillProc = null;
+                    FreeBuffers();
+					m_Thread.Abort();
 					if (m_WaveOut != IntPtr.Zero)
 						WaveNative.waveOutClose(m_WaveOut);
 				}
@@ -168,9 +168,11 @@ namespace BoonieBear.DeckUnit.VoiceManager
             while (!m_Finished)
             {
                 Advance();
+                if (m_Finished)
+                    return;
 				if (m_FillProc != null && !m_Finished)
 					m_FillProc(m_CurrentBuffer.Data, m_CurrentBuffer.Size);
-				else
+                else if (m_CurrentBuffer!=null)
 				{
 					// zero out buffer
 					byte v = m_zero;
@@ -180,9 +182,13 @@ namespace BoonieBear.DeckUnit.VoiceManager
 					Marshal.Copy(b, 0, m_CurrentBuffer.Data, b.Length);
 
 				}
-                m_CurrentBuffer.Play();
+                else
+                    continue;
+                if (m_CurrentBuffer != null)
+                    m_CurrentBuffer.Play();
             }
-			WaitForAllBuffers();
+            if (m_Buffers!=null)
+			    WaitForAllBuffers();
 		}
         private void AllocateBuffers(int bufferSize, int bufferCount)
         {
@@ -208,6 +214,8 @@ namespace BoonieBear.DeckUnit.VoiceManager
         }
         private void FreeBuffers()
         {
+            if(m_CurrentBuffer!=null)
+                m_CurrentBuffer.Dispose();
             m_CurrentBuffer = null;
             if (m_Buffers != null)
             {

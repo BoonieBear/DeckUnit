@@ -22,19 +22,34 @@ namespace BoonieBear.DeckUnit.WaveBox
 
         static public double[] FFT(ref double[] x)
         {
-            // Assume n is a power of 2
+            
             n = x.Length;
+            
             nu = (int)(Math.Log(n) / Math.Log(2));
+            if (Math.Pow(2, nu) < n) //n is not a power of 2
+            {
+                nu++;
+                n = (int)Math.Pow(2, nu);
+            }
             int n2 = n / 2;
             int nu1 = nu - 1;
             double[] xre = new double[n];
             double[] xim = new double[n];
+            if (n < 128)//too short
+                return null;
             double[] magnitude = new double[n2];
+            
             double[] decibel = new double[n2];
+            
             double tr, ti, p, arg, c, s;
             for (int i = 0; i < n; i++)
             {
-                xre[i] = x[i];
+                if (i < x.Length)
+                    xre[i] = x[i];
+                else
+                {
+                    xre[i] = 0;
+                }
                 xim[i] = 0.0f;
             }
             int k = 0;
