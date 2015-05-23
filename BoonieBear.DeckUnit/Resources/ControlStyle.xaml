@@ -272,7 +272,7 @@
 						</Storyboard>
 					</ControlTemplate.Resources>
 					<Grid Width="300" Height="300"  >
-						<Grid HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="Auto" Height="Auto" IsHitTestVisible="False">
+						<Grid  Background = "{TemplateBinding Background}" HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" Width="Auto" Height="Auto" IsHitTestVisible="False">
 							<Grid Opacity="1" Margin="0" x:Name="grid1" IsHitTestVisible="False" >
 								<Grid x:Name="overAnimationGrid" Visibility="Visible" Focusable="False" Opacity="1" Width="300" Height="300" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Margin="0">
 									<Grid.RenderTransform>

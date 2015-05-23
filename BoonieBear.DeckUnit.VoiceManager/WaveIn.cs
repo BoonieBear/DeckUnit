@@ -175,7 +175,8 @@ namespace BoonieBear.DeckUnit.VoiceManager
 				Advance();
 				if (m_DoneProc != null && !m_Finished)
 					m_DoneProc(m_CurrentBuffer.Data, m_CurrentBuffer.Size);
-				m_CurrentBuffer.Record();
+                if (m_CurrentBuffer != null)
+                    m_CurrentBuffer.Record();
 			}
 		}
 		private void AllocateBuffers(int bufferSize, int bufferCount)

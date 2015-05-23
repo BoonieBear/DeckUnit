@@ -13,7 +13,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-
+using BoonieBear.DeckUnit.WaveBox;
+using BoonieBear.DeckUnit.VoiceManager;
 namespace WpfWaveBoxTests
 {
     /// <summary>
@@ -23,6 +24,7 @@ namespace WpfWaveBoxTests
     {
         private DispatcherTimer timer;
         private BinaryReader br;
+        private byte[] _playerBuffer;
         public MainWindow()
         {
             InitializeComponent();
@@ -31,8 +33,8 @@ namespace WpfWaveBoxTests
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 0, 0, 125);
             timer.Tick += timer_Tick;
-            timer.Start();
-            WaveControl.isPlaying = true;
+            //timer.Start();
+            WaveControl.PlayMode = WaveControl.Mode.Voicerecorder;
         }
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -46,7 +48,7 @@ namespace WpfWaveBoxTests
 
             
         }
-
+       
         private void Window_Closed(object sender, EventArgs e)
         {
             WaveControl.Dispose();

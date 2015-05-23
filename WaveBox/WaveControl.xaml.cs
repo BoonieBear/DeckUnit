@@ -28,15 +28,22 @@ namespace BoonieBear.DeckUnit.WaveBox
         private int _audioBitsPerSample = 16;
         private int _audioChannels = 1;
         private BinaryReader br;
-        private bool _isPlayer = true;
+        private Mode playMode;
         private DispatcherTimer timer;
+        private BufferFillEventHandler voicePlayEventHandler;
+        private BufferDoneEventHandler voiceRecordEventHandler;
         public enum DisplayType
         {
             WAVE,
             SPECTRUM
         }
-        private DisplayType _type = DisplayType.WAVE;
-        
+        private DisplayType _displayType = DisplayType.WAVE;
+        public enum Mode
+        {
+            None,
+            Voiceplayer,
+            Voicerecorder
+        }
         public WaveControl()
         {
             InitializeComponent();
@@ -147,21 +154,29 @@ namespace BoonieBear.DeckUnit.WaveBox
             }
             get { return _audioChannels; }
         }
-        public bool isPlaying
+        public BufferFillEventHandler PlayBufferFillHandler
+        {
+            set { voicePlayEventHandler = value; }
+        }
+        public BufferDoneEventHandler RecordBufferDoneHandler
+        {
+            set { voiceRecordEventHandler = value; }
+        }
+        public Mode PlayMode
         {
             set
             {
-                _isPlayer = value;
+                playMode = value;
                 try
                 {
-                    if (_isPlayer)
+                    if (playMode==Mode.Voiceplayer)
                     {
                         _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);
 
                         if (WaveOutPlayer.DeviceCount == 0)
                         {
 
-                            _isPlayer = false;
+                            playMode = Mode.None;
                             throw new Exception("没有可用的音频设备");
                         }
                         else
@@ -176,28 +191,50 @@ namespace BoonieBear.DeckUnit.WaveBox
                             _player.Dispose();
                     }
 
+                    if (playMode == Mode.Voicerecorder)
+                    {
+                        _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);
+
+                        if (WaveInRecorder.DeviceCount == 0)
+                        {
+
+                            playMode = Mode.None;
+                            throw new Exception("没有可用的录音设备");
+                        }
+                        else
+                        {
+                            _recorder = new WaveInRecorder(-1, _waveFormat, _audioFrameSize * 2, 3,
+                                     new BufferDoneEventHandler(DataArrived));
+                        }
+                    }
+                    else
+                    {
+                        if (_recorder != null)
+                            _recorder.Dispose();
+                    }
+
                 }
                 catch (Exception ex)
                 {
                     throw ex;
                 }
             }
-            get { return _isPlayer; }
+            get { return playMode; }
         }
 
         public DisplayType Type
         {
-            get { return _type; }
+            get { return _displayType; }
             set
             {
-                _type = value;
-                if (_type == DisplayType.SPECTRUM)
+                _displayType = value;
+                if (_displayType == DisplayType.SPECTRUM)
                     _audioFrame.ShowFFT = true;
                 else
                     _audioFrame.ShowFFT = false;
             }
         }
-
+        
  
         public void Initailize()
         {
@@ -211,16 +248,24 @@ namespace BoonieBear.DeckUnit.WaveBox
             try
             {
                 _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);  
-                if (WaveOutPlayer.DeviceCount == 0)
+                if (playMode == Mode.Voiceplayer&&WaveOutPlayer.DeviceCount == 0)
                 {
-                        
-                    isPlaying = false;
+
+                    playMode = Mode.None;
                     throw new Exception("没有可用的音频设备");
+                }
+                else if (playMode == Mode.Voicerecorder && WaveInRecorder.DeviceCount == 0)
+                {
+                    playMode = Mode.None;
+                    throw new Exception("没有可用的录音设备");
                 }
                 else
                 {
-                    if (_isPlayer)
-                        _player = new WaveOutPlayer(-1, _waveFormat, _audioFrameSize*_audioChannels, 3, new BufferFillEventHandler(Filler));
+                    if (playMode == Mode.Voiceplayer)
+                        _player = new WaveOutPlayer(-1, _waveFormat, _audioFrameSize * _audioChannels, 3, new BufferFillEventHandler(Filler));
+                    if (playMode==Mode.Voicerecorder)
+                        _recorder = new WaveInRecorder(-1, _waveFormat, _audioFrameSize * 2, 3,
+                                    new BufferDoneEventHandler(DataArrived));
                 }
 
             }
@@ -236,8 +281,9 @@ namespace BoonieBear.DeckUnit.WaveBox
         }
         private void Stop()
         {
-            isPlaying = false;
+           
             if (_recorder != null)
+            {
                 try
                 {
                     _recorder.Dispose();
@@ -246,34 +292,35 @@ namespace BoonieBear.DeckUnit.WaveBox
                 {
                     _recorder = null;
                 }
-            if (_isPlayer == true)
-            {
-                if (_player != null)
-                    try
-                    {
-                        _player.Dispose();
-                    }
-                    finally
-                    {
-                        _player = null;
-                    }
-
-                if (_stream != null)
-                    try
-                    {
-                        _stream.Flush(); // clear all pending data
-                    }
-                    finally
-                    {
-                        _stream = null;
-                    }
-                
+            }
+            
+            if (_player != null)
+            { 
+                try
+                {
+                    _player.Dispose();
+                }
+                finally
+                {
+                    _player = null;
+                }
+            }
+            if (_stream != null)
+            {   
+                try
+                {
+                    _stream.Flush(); // clear all pending data
+                }
+                finally
+                {
+                    _stream = null;
+                }
             }
         }
 
         private void Filler(IntPtr data, int size)
         {
-            if (_isPlayer == true)
+            if (playMode == Mode.Voiceplayer)
             {
                 if (_playerBuffer == null || _playerBuffer.Length < size)
                     _playerBuffer = new byte[size];
@@ -285,7 +332,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                 System.Runtime.InteropServices.Marshal.Copy(_playerBuffer, 0, data, size);
             }
         }
-
+        
         private void DataArrived(IntPtr data, int size)
         {
             if (_recorderBuffer == null || _recorderBuffer.Length < size)
@@ -293,16 +340,12 @@ namespace BoonieBear.DeckUnit.WaveBox
             if (_recorderBuffer != null)
             {
                 System.Runtime.InteropServices.Marshal.Copy(data, _recorderBuffer, 0, size);
-                if (_isPlayer == true)
-                    _stream.Write(_recorderBuffer, 0, _recorderBuffer.Length);
+                
                 byte[] b = new byte[size];
                 System.Runtime.InteropServices.Marshal.Copy(data,b,0, size);
                 try
                 {
-                    //_audioFrame.Process(ref b);
-                    //_audioFrame.SetYAxis(ref YSection);
-                    _audioFrame.RenderTimeDomain(ref ImageBox);
-                    //_audioFrame.RenderSpectrogram(ref FrequencyDomainBox);
+                    Display(b);
                 }
                 catch (Exception MyEx)
                 {
@@ -312,7 +355,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         }
         public void Display(byte[] buf)
         {
-            if (_isPlayer == true)
+            if (playMode==Mode.Voiceplayer)
                 _stream.Write(buf, 0, buf.Length);
             if (buf.Length <= _audioFrameSize)
             {
@@ -348,9 +391,9 @@ namespace BoonieBear.DeckUnit.WaveBox
             {
                 
                 //_audioFrame.SetYAxis(ref YSection);
-                if (_type == DisplayType.WAVE)
+                if (_displayType == DisplayType.WAVE)
                     _audioFrame.RenderTimeDomain(ref ImageBox);
-                if (_type == DisplayType.SPECTRUM)
+                if (_displayType == DisplayType.SPECTRUM)
                     _audioFrame.RenderSpectrogram(ref ImageBox);
 
             }
@@ -365,9 +408,9 @@ namespace BoonieBear.DeckUnit.WaveBox
             if (_audioFrame != null)
             {
                 //_audioFrame.SetYAxis(ref YSection);
-                if (_type == DisplayType.WAVE)
+                if (_displayType == DisplayType.WAVE)
                     _audioFrame.RenderTimeDomain(ref ImageBox);
-                if (_type == DisplayType.SPECTRUM)
+                if (_displayType == DisplayType.SPECTRUM)
                     _audioFrame.RenderSpectrogram(ref ImageBox);
 
             }

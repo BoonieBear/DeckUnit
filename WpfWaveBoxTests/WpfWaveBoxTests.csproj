@@ -91,6 +91,10 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.VoiceManager\BoonieBear.DeckUnit.VoiceManager.csproj">
+      <Project>{515e0e25-de62-4c8b-890f-9eacff65b79f}</Project>
+      <Name>BoonieBear.DeckUnit.VoiceManager</Name>
+    </ProjectReference>
     <ProjectReference Include="..\WaveBox\BoonieBear.DeckUnit.WaveBox.csproj">
       <Project>{7fd46512-42b0-4ad2-89df-6f44a650018e}</Project>
       <Name>BoonieBear.DeckUnit.WaveBox</Name>

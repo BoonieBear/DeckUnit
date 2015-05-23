@@ -24,7 +24,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         public int _bitsPerSample = 16;
         public int _SampleByte = 2;
         public ArrayList _fftLeftSpect = new ArrayList();
-        private static int inn = 0;
+
         private bool bFFT = false;
         private Bitmap canvas;
         public AudioFrame(int audioSamplesPerSecond, int maxFrequecy, int timedomainlen, int amp, int BitsPerSample, bool EnableFFT)
@@ -170,7 +170,11 @@ namespace BoonieBear.DeckUnit.WaveBox
                 len = len - width;
             }
             if (len == 0)
+            {
+                Monitor.Exit(_fftLeftSpect);
                 return;
+            }
+                
           
             double range = 0;
 
@@ -213,49 +217,51 @@ namespace BoonieBear.DeckUnit.WaveBox
                     //move rect to left
                     for (int x = 0; x < width - len; x++)
                     {
-                        byte* pixel = (byte*)data.Scan0.ToPointer();
-                        pixel += 4 * x;
+                        byte* pixel = (byte*) data.Scan0.ToPointer();
+                        pixel += 4*x;
                         for (int y = 0; y < height; y++, pixel += offset)
                         {
-                            byte* pixelsrc = pixel + 4 * len;
-                            
+                            byte* pixelsrc = pixel + 4*len;
+
                             pixel[0] = pixelsrc[0];
                             pixel[1] = pixelsrc[1];
                             pixel[2] = pixelsrc[2];
                             pixel[3] = pixelsrc[3];
                             pixel += stride;
-                            
+
                         }
-                        
+
                     }
-                    
+
                     //fill the new data
                     for (int x = 0; x < len; x++)
                     {
-                        double distance = ((double)((double[])_fftLeftSpect[len - x - 1]).Length * Fmax / SamplesPerSecond * 2 / (double)(height));
-                        byte* pixel = (byte*)data.Scan0.ToPointer();
-                        pixel += stride - 4 * (x + 1);
+                        double distance = ((double) ((double[]) _fftLeftSpect[len - x - 1]).Length*Fmax/SamplesPerSecond*
+                                           2/(double) (height));
+                        byte* pixel = (byte*) data.Scan0.ToPointer();
+                        pixel += stride - 4*(x + 1);
                         for (int y = 0; y < height; y++, pixel += offset)
                         {
 
-                            double amplitude = ((double[])_fftLeftSpect[len - x - 1])[(int)(distance * (height - 1 - y))];
+                            double amplitude =
+                                ((double[]) _fftLeftSpect[len - x - 1])[(int) (distance*(height - 1 - y))];
 
                             int color = GetColor(min, max, range, amplitude);
-                            if (color > 255)//最强db点
+                            if (color > 255) //最强db点
                             {
 
                             }
-                            pixel[0] = (byte)color;
-                            pixel[1] = (byte)0;
-                            pixel[2] = (byte)color;
-                            pixel[3] = (byte)color;
+                            pixel[0] = (byte) color;
+                            pixel[1] = (byte) 0;
+                            pixel[2] = (byte) color;
+                            pixel[3] = (byte) color;
                             pixel += stride;
                         }
 
                     }
 
                     _fftLeftSpect.Clear();
-                   
+
                     Monitor.Exit(_fftLeftSpect);
                 }
             }
@@ -263,15 +269,13 @@ namespace BoonieBear.DeckUnit.WaveBox
             {
                 Console.WriteLine(ex.StackTrace);
             }
-           
+            
             // unlock image
             canvas.UnlockBits(data);
-            
             // Clean up
             offScreenDC.Dispose();
             ImageBox.Source = BitmapToImageSource(canvas);
-            
-            
+
         }
 
 
