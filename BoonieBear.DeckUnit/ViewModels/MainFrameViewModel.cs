@@ -4,7 +4,7 @@ using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.Frames;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
-namespace BoonieBear.DeckUnit.Views
+namespace BoonieBear.DeckUnit.ViewModels
 {
     /// <summary>
     ///程序主框架viewmodel，用于处理主框架消息

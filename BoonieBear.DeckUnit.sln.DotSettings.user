@@ -7,6 +7,7 @@
 	<s:String x:Key="/Default/CodeStyle/Naming/CSharpNaming/Abbreviations/=VOICE/@EntryIndexedValue">VOICE</s:String>
 	<s:String x:Key="/Default/Environment/AssemblyExplorer/XmlDocument/@EntryValue">&lt;AssemblyExplorer&gt;&#xD;
   &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\TinyMetroWpfLibrary.Utility.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\TinyMetroWpfLibrary.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	
 	

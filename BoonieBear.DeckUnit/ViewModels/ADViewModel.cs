@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-namespace BoonieBear.DeckUnit.Views
+
+namespace BoonieBear.DeckUnit.ViewModels
 {
     public class ADViewModel : ViewModelBase
     {

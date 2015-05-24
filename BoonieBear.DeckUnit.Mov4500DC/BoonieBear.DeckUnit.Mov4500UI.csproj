@@ -49,6 +49,15 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="De.TorstenMandelkow.MetroChart">
+      <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\..\TinyMetro\TinyMetroWpfLibrary\ThirdParty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MahApps.Metro">
+      <HintPath>..\Tools\MahApps.Metro.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -59,6 +68,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="TinyMetroWpfLibrary">
+      <HintPath>..\Tools\TinyMetroWpfLibrary.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -68,11 +80,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
+    <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
+    <Compile Include="Events\GoWaterTelPageBaseNavigationRequest.cs" />
+    <Compile Include="Events\LogEvent.cs" />
+    <Compile Include="Models\SystemInfo.cs" />
+    <Compile Include="ViewModel\SystemResourceViewModel.cs" />
+    <Compile Include="Views\SystemResourceView.xaml.cs">
+      <DependentUpon>SystemResourceView.xaml</DependentUpon>
+    </Compile>
     <Page Include="Controls\MsgBox.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="MainWindow.xaml">
+    <Page Include="Views\MainFrame.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -83,10 +104,22 @@
     <Compile Include="Controls\MsgBox.xaml.cs">
       <DependentUpon>MsgBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.xaml.cs">
-      <DependentUpon>MainWindow.xaml</DependentUpon>
+    <Compile Include="Core\Controllers\UnitMessageController.cs" />
+    <Compile Include="Core\Controllers\UnitNavigationController.cs" />
+    <Compile Include="Core\DataObserver.DeckUnit.cs" />
+    <Compile Include="Core\UnitCore.cs" />
+    <Compile Include="Core\UnitKernal.cs" />
+    <Compile Include="Helpers\LogHelper.cs" />
+    <Compile Include="ViewModel\MainFrameViewModel.cs" />
+    <Compile Include="ViewModel\ViewModelLocator.cs" />
+    <Compile Include="Views\MainFrame.xaml.cs">
+      <DependentUpon>MainFrame.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\SystemResourceView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -106,6 +139,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="log4net.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -135,8 +171,46 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="ViewModel\" />
-    <Folder Include="Views\" />
+    <ProjectReference Include="..\BoonieBear.DeckUnit.ACMP\BoonieBear.DeckUnit.ACMP.csproj">
+      <Project>{6ffcad15-3e47-44da-a462-5dc2871b17c0}</Project>
+      <Name>BoonieBear.DeckUnit.ACMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj">
+      <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>
+      <Name>BoonieBear.DeckUnit.Comm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Core\BoonieBear.DeckUnit.ICore.csproj">
+      <Project>{0faf0e99-79b6-4f10-9a22-ed1839e22387}</Project>
+      <Name>BoonieBear.DeckUnit.ICore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.FileService\BoonieBear.DeckUnit.FileService.csproj">
+      <Project>{bf8892b7-ca8f-4ff8-b7c3-766cd512c7f4}</Project>
+      <Name>BoonieBear.DeckUnit.FileService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.LiveService\BoonieBear.DeckUnit.LiveService.csproj">
+      <Project>{8340d7e7-7d37-4a6a-bc9f-db956bce9218}</Project>
+      <Name>BoonieBear.DeckUnit.LiveService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Mov4500Conf\BoonieBear.DeckUnit.Mov4500Conf.csproj">
+      <Project>{c5728bb3-1c6b-405a-9d0b-1c18b729f16b}</Project>
+      <Name>BoonieBear.DeckUnit.Mov4500Conf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.Mov4500TraceService\BoonieBear.DeckUnit.Mov4500TraceService.csproj">
+      <Project>{6b3ef1ba-0782-4e89-abd5-927c553cb0cf}</Project>
+      <Name>BoonieBear.DeckUnit.Mov4500TraceService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.TraceFileService\BoonieBear.DeckUnit.TraceFileService.csproj">
+      <Project>{56002669-156c-4002-9072-e4329e1d1b2c}</Project>
+      <Name>BoonieBear.DeckUnit.TraceFileService</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.VoiceManager\BoonieBear.DeckUnit.VoiceManager.csproj">
+      <Project>{515e0e25-de62-4c8b-890f-9eacff65b79f}</Project>
+      <Name>BoonieBear.DeckUnit.VoiceManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\WaveBox\BoonieBear.DeckUnit.WaveBox.csproj">
+      <Project>{7fd46512-42b0-4ad2-89df-6f44a650018e}</Project>
+      <Name>BoonieBear.DeckUnit.WaveBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

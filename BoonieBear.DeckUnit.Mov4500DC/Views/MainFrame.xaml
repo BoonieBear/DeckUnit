@@ -4,19 +4,19 @@
         xmlns:commands="clr-namespace:BoonieBear.TinyMetro.WPF.Commands;assembly=TinyMetroWpfLibrary" 
         xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 		xmlns:frames="clr-namespace:BoonieBear.TinyMetro.WPF.Frames;assembly=TinyMetroWpfLibrary" 
-        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Views.MainFrame" 
+        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Mov4500UI.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
         ShowTitleBar ="False"  ShowCloseButton =" False" Title="水声通信机" Height="480" Width="640"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
     <Grid x:Name="grid">
-    	<Grid.ColumnDefinitions>
-    		<ColumnDefinition Width="Auto"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
-    	</Grid.ColumnDefinitions>
-        
+        </Grid.ColumnDefinitions>
+
         <Grid  x:Name="optionpanel" Column="0" Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" Width="{Binding OptionPanelWidth, Mode=OneWay}">
-			
-		</Grid>
+
+        </Grid>
         <Grid x:Name="FirstGrid" Column="1">
             <frames:AnimationFrame x:Name="ContentFrame"
 			Source="MainPageView.xaml" 

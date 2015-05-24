@@ -21,7 +21,7 @@ namespace BoonieBear.DeckUnit.ICore
         /// <summary>
         /// 数据观察类，主要负责数据的解析和保存
         /// </summary>
-        CommLib.IObserver<CustomEventArgs> DeckUnitObserver { get;  } 
+        CommLib.IObserver<CustomEventArgs> DataObserver { get;  } 
         //当前是否有工作在进行
         bool IsWorking { get; set; }
         bool Initailed { get; set; }

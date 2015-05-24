@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using BoonieBear.TinyMetro.WPF.ViewModel;
-namespace BoonieBear.DeckUnit.Views
+
+namespace BoonieBear.DeckUnit.ViewModels
 {
     public class DownLoadOverViewModel:ViewModelBase
     {

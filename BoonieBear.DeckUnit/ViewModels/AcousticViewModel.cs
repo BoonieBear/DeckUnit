@@ -1,10 +1,9 @@
-﻿using System.Windows;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.TinyMetro.WPF.Events;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
-namespace BoonieBear.DeckUnit.Views
+namespace BoonieBear.DeckUnit.ViewModels
 {
     /// <summary>
     /// That's the ViewModel that belongs to the Example View

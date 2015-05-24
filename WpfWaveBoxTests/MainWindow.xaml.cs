@@ -35,6 +35,7 @@ namespace WpfWaveBoxTests
             timer.Tick += timer_Tick;
             //timer.Start();
             WaveControl.PlayMode = WaveControl.Mode.Voicerecorder;
+            WaveControl.AddRecDoneHandle(saverecvoice);
         }
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -48,7 +49,11 @@ namespace WpfWaveBoxTests
 
             
         }
-       
+
+        private void saverecvoice(byte[] bytes)
+        {
+            Console.WriteLine("handle called");
+        }
         private void Window_Closed(object sender, EventArgs e)
         {
             WaveControl.Dispose();

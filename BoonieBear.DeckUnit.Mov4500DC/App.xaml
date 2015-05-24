@@ -1,8 +1,26 @@
 ﻿<Application x:Class="BoonieBear.DeckUnit.Mov4500UI.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             StartupUri="MainWindow.xaml">
+             xmlns:core="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Core"
+             xmlns:views="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Views"
+             xmlns:viewModels="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.ViewModel"
+             StartupUri="Views/MainFrame.xaml" Exit="Application_Exit">
     <Application.Resources>
-         
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+
+                <!-- Important to include the Metro Styles Resource Dictionary -->
+                <ResourceDictionary Source="/TinyMetroWpfLibrary;component/Styles/MetroStyles.xaml" />
+                <ResourceDictionary Source="/MahApps.Metro;component/styles/colors.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Scrollbars.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/fonts.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- Locale Static Resources -->
+            <viewModels:ViewModelLocator x:Key="ViewModelLocator"/>
+
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

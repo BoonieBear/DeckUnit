@@ -1,4 +1,4 @@
-﻿namespace BoonieBear.DeckUnit.Views
+﻿namespace BoonieBear.DeckUnit.ViewModels
 {
 
     public class UnitViewModelLocator

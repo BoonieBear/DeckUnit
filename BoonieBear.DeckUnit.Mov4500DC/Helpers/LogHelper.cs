@@ -1,7 +1,6 @@
 ﻿using System;
 using log4net;
-
-namespace BoonieBear.DeckUnit.Helps
+namespace BoonieBear.DeckUnit.Mov4500UI.Helpers
 {
     /// <summary>
     /// 使用Log4net的log帮助类

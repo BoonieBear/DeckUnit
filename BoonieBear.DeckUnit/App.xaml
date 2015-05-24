@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
              xmlns:core="clr-namespace:BoonieBear.DeckUnit.Core"
              xmlns:viewModels="clr-namespace:BoonieBear.DeckUnit.Views"
+             xmlns:viewModels1="clr-namespace:BoonieBear.DeckUnit.ViewModels"
              StartupUri="Views/MainFrame.xaml" Exit="Application_Exit">
     <Application.Resources>
     
@@ -21,7 +22,7 @@
             </ResourceDictionary.MergedDictionaries>
 
             <!-- Locale Static Resources -->
-            <viewModels:UnitViewModelLocator x:Key="ViewModelLocator"/>
+            <viewModels1:UnitViewModelLocator x:Key="ViewModelLocator"/>
 
         </ResourceDictionary>
         

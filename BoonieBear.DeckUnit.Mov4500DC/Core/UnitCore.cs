@@ -2,18 +2,12 @@
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
-using BoonieBear.DeckUnit.CommLib;
-using BoonieBear.DeckUnit.CommLib.Serial;
-using BoonieBear.DeckUnit.CommLib.TCP;
-using BoonieBear.DeckUnit.CommLib.UDP;
-using BoonieBear.DeckUnit.DAL;
-using BoonieBear.DeckUnit.Events;
-using BoonieBear.DeckUnit.ICore;
-using BoonieBear.DeckUnit.UBP;
 using BoonieBear.TinyMetro.WPF.EventAggregation;
-using BoonieBear.DeckUnit.UnitBoxTraceService;
-using BoonieBear.DeckUnit.DUConf;
-namespace BoonieBear.DeckUnit.Core
+using BoonieBear.DeckUnit.CommLib;
+using BoonieBear.DeckUnit.Mov4500Conf;
+using BoonieBear.DeckUnit.Mov4500TraceService;
+using BoonieBear.DeckUnit.ICore;
+namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     /// <summary>
     /// 核心业务类，包括命令，通信服务，工作逻辑
@@ -28,15 +22,15 @@ namespace BoonieBear.DeckUnit.Core
         private ITCPClientService _tcpShellService;
         private ITCPClientService _tcpDataService;
         private IUDPService _udpService;
-        private UnitTraceService _unitTraceService;
+        private MovTraceService _unitTraceService;
         private TcpClient _shelltcpClient ;
         private TcpClient _datatcpClient ;
         private UdpClient _udpClient;
-        private DeckUnitConf _deckUnitConf;
+        private MovConf _deckUnitConf;
         private bool _isWorking;
         private bool _initialed;
         private CommLib.IObserver<CustomEventArgs> _DataObserver;
-
+        /*
         public bool Init()
         {
             try
@@ -199,7 +193,7 @@ namespace BoonieBear.DeckUnit.Core
         {
             get { return _deckUnitConf ?? (_deckUnitConf = DeckUnitConf.GetInstance()); }
         }
-
-        #endregion
+        
+        #endregion*/
     }
 }

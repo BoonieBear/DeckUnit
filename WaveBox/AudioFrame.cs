@@ -27,6 +27,8 @@ namespace BoonieBear.DeckUnit.WaveBox
 
         private bool bFFT = false;
         private Bitmap canvas;
+
+
         public AudioFrame(int audioSamplesPerSecond, int maxFrequecy, int timedomainlen, int amp, int BitsPerSample, bool EnableFFT)
         {
             SamplesPerSecond = audioSamplesPerSecond;
@@ -40,6 +42,7 @@ namespace BoonieBear.DeckUnit.WaveBox
             canvas = new Bitmap(1000,300);
         }
 
+        
         public int Ymax
         {
             get { return _ymax; }

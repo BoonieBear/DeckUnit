@@ -1,7 +1,7 @@
 ﻿using System.Windows;
 using BoonieBear.TinyMetro.WPF.ViewModel;
 
-namespace BoonieBear.DeckUnit.Views
+namespace BoonieBear.DeckUnit.ViewModels
 {
 
     public class HistoryDataPageViewModel : ViewModelBase

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Drawing;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -30,8 +32,19 @@ namespace BoonieBear.DeckUnit.WaveBox
         private BinaryReader br;
         private Mode playMode;
         private DispatcherTimer timer;
-        private BufferFillEventHandler voicePlayEventHandler;
-        private BufferDoneEventHandler voiceRecordEventHandler;
+
+        public delegate void Recordbufferdonehanlder(byte[] bufBytes);
+
+        private Recordbufferdonehanlder _recProc;
+        public void AddRecDoneHandle(Recordbufferdonehanlder AttachProc)
+        {
+            _recProc = AttachProc;
+        }
+
+        public void RemoveRecDoneHandle()
+        {
+            _recProc = null;
+        }
         public enum DisplayType
         {
             WAVE,
@@ -154,14 +167,6 @@ namespace BoonieBear.DeckUnit.WaveBox
             }
             get { return _audioChannels; }
         }
-        public BufferFillEventHandler PlayBufferFillHandler
-        {
-            set { voicePlayEventHandler = value; }
-        }
-        public BufferDoneEventHandler RecordBufferDoneHandler
-        {
-            set { voiceRecordEventHandler = value; }
-        }
         public Mode PlayMode
         {
             set
@@ -239,6 +244,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         public void Initailize()
         {
             Stop();
+            _recProc = null;
             _stream = new FifoStream();
             _audioFrame = new AudioFrame(_audioSamplesPerSecond, _displayFrequecyMax, _TimeDomainLen, _displayAmpMax, _audioBitsPerSample, Type == DisplayType.SPECTRUM);
             timer = new DispatcherTimer();
@@ -329,7 +335,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                 else
                     for (int i = 0; i < _playerBuffer.Length; i++)
                         _playerBuffer[i] = 0;
-                System.Runtime.InteropServices.Marshal.Copy(_playerBuffer, 0, data, size);
+                Marshal.Copy(_playerBuffer, 0, data, size);
             }
         }
         
@@ -339,13 +345,15 @@ namespace BoonieBear.DeckUnit.WaveBox
                 _recorderBuffer = new byte[size];
             if (_recorderBuffer != null)
             {
-                System.Runtime.InteropServices.Marshal.Copy(data, _recorderBuffer, 0, size);
+                Marshal.Copy(data, _recorderBuffer, 0, size);
                 
                 byte[] b = new byte[size];
-                System.Runtime.InteropServices.Marshal.Copy(data,b,0, size);
+                Marshal.Copy(data,b,0, size);
                 try
                 {
-                    Display(b);
+                    Display(_recorderBuffer);
+                    if (_recProc != null)
+                        _recProc(b);
                 }
                 catch (Exception MyEx)
                 {
@@ -385,7 +393,7 @@ namespace BoonieBear.DeckUnit.WaveBox
 
         }
         
-        private void ImageBox_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
+        private void ImageBox_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (_audioFrame != null)
             {
@@ -399,7 +407,7 @@ namespace BoonieBear.DeckUnit.WaveBox
             }
         }
 
-        private void ImageBox_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private void ImageBox_Loaded(object sender, RoutedEventArgs e)
         {
             timer.Start();
         }
@@ -416,7 +424,5 @@ namespace BoonieBear.DeckUnit.WaveBox
             }
 
         }
-
-
     }
 }
