@@ -1,7 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Input;
-using BoonieBear.TinyMetro.WPF.Events;
-using BoonieBear.TinyMetro.WPF.ViewModel;
+using BoonieBear.DeckUnit.Resource;
+using TinyMetroWpfLibrary.Events;
+using TinyMetroWpfLibrary.ViewModel;
 using BoonieBear.DeckUnit.Mov4500UI.Models;
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {

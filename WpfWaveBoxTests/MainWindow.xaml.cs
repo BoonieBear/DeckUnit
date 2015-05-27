@@ -33,9 +33,9 @@ namespace WpfWaveBoxTests
             timer = new DispatcherTimer();
             timer.Interval = new TimeSpan(0, 0, 0, 0, 125);
             timer.Tick += timer_Tick;
-            //timer.Start();
-            WaveControl.PlayMode = WaveControl.Mode.Voicerecorder;
-            WaveControl.AddRecDoneHandle(saverecvoice);
+            timer.Start();
+            WaveControl.PlayMode = WaveControl.Mode.Voiceplayer;
+            //WaveControl.AddRecDoneHandle(saverecvoice);
         }
         private void timer_Tick(object sender, EventArgs e)
         {

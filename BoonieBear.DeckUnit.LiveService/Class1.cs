@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BoonieBea.DeckUnit.LiveService
+namespace BoonieBear.DeckUnit.LiveService
 {
     public class Class1
     {

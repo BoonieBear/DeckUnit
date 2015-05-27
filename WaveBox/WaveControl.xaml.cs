@@ -248,7 +248,7 @@ namespace BoonieBear.DeckUnit.WaveBox
             _stream = new FifoStream();
             _audioFrame = new AudioFrame(_audioSamplesPerSecond, _displayFrequecyMax, _TimeDomainLen, _displayAmpMax, _audioBitsPerSample, Type == DisplayType.SPECTRUM);
             timer = new DispatcherTimer();
-            timer.Interval = new TimeSpan(0, 0, 0, 0, 128);
+            timer.Interval = new TimeSpan(0, 0, 0, 0, 64);
             timer.Tick += timer_Tick;
 
             try

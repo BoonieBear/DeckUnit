@@ -1,5 +1,5 @@
 ﻿using System.Windows;
-using BoonieBear.TinyMetro.WPF.ViewModel;
+using TinyMetroWpfLibrary.ViewModel;
 
 namespace BoonieBear.DeckUnit.ViewModels
 {

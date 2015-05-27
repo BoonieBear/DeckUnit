@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
-using BoonieBear.TinyMetro.WPF.Controller;
+using TinyMetroWpfLibrary.Controller;
 using MahApps.Metro.Controls.Dialogs;
 
 namespace BoonieBear.DeckUnit.Views

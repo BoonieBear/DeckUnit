@@ -10,7 +10,7 @@ using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.UBP;
-using BoonieBear.TinyMetro.WPF.EventAggregation;
+using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.UnitBoxTraceService;
 using BoonieBear.DeckUnit.DUConf;
 namespace BoonieBear.DeckUnit.Core

@@ -2,7 +2,7 @@
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
-using BoonieBear.TinyMetro.WPF.EventAggregation;
+using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Mov4500Conf;
 using BoonieBear.DeckUnit.Mov4500TraceService;
@@ -195,5 +195,69 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         }
         
         #endregion*/
+
+        public bool Init()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Dispose()
+        {
+            GC.SuppressFinalize(this);
+        }
+
+        public ISerialService SerialService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public ITCPClientService TCPDataService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public ITCPClientService TCPShellService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public IUDPService UDPService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public CommLib.IObserver<CustomEventArgs> DataObserver
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public bool IsWorking
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool Initailed
+        {
+            get
+            {
+                return true;
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public IEventAggregator EventAggregator
+        {
+            get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
+        }
     }
 }

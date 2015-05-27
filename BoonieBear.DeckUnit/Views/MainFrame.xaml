@@ -1,31 +1,20 @@
 ﻿<metroControl:MetroWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
-        xmlns:commands="clr-namespace:BoonieBear.TinyMetro.WPF.Commands;assembly=TinyMetroWpfLibrary" 
+        xmlns:commands="clr-namespace:TinyMetroWpfLibrary.Commands;assembly=TinyMetroWpfLibrary" 
         xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-		xmlns:frames="clr-namespace:BoonieBear.TinyMetro.WPF.Frames;assembly=TinyMetroWpfLibrary" 
+		xmlns:frames="clr-namespace:TinyMetroWpfLibrary.Frames;assembly=TinyMetroWpfLibrary" 
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton =" False" Title="水声通信机" Height="480" Width="640"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None">
+        ShowTitleBar ="False"  ShowCloseButton =" False" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized">
     <Grid x:Name="grid">
-    	<Grid.ColumnDefinitions>
-    		<ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-    	</Grid.ColumnDefinitions>
-        
-        <Grid  x:Name="optionpanel" Column="0" Background="{DynamicResource {x:Static SystemColors.InactiveCaptionBrushKey}}" Width="{Binding OptionPanelWidth, Mode=OneWay}">
-			
-		</Grid>
-        <Grid x:Name="FirstGrid" Column="1">
-            <frames:AnimationFrame x:Name="ContentFrame"
-			Source="MainPageView.xaml" 
+        <frames:AnimationFrame x:Name="ContentFrame"
+			Source="HomePageView.xaml" 
 			NavigationUIVisibility="Hidden"
 			AnimationMode="Fade"
-            SlideorGrowDuration ="0:0:0.350 "
-			FadeDuration="0:0:0.150"
-			FadeOffset="0:0:0.050" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
-            </frames:AnimationFrame>
-        </Grid>
+            SlideorGrowDuration ="0:0:0.020 "
+			FadeDuration="0:0:0.020"
+			FadeOffset="0:0:0.010" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
     </Grid>
 </metroControl:MetroWindow>

@@ -1,8 +1,9 @@
 ﻿using System;
-using BoonieBear.TinyMetro.WPF.Controller;
-using BoonieBear.TinyMetro.WPF.EventAggregation;
+using TinyMetroWpfLibrary.Controller;
+using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.ICore;
+using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
 {
     /// <summary>

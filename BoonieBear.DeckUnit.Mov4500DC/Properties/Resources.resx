@@ -46,7 +46,7 @@
     
     mimetype: application/x-microsoft.net.object.binary.base64
     value   : The object must be serialized with 
-            : System.Serialization.Formatters.Binary.BinaryFormatter
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
             : and then encoded with base64 encoding.
     
     mimetype: application/x-microsoft.net.object.soap.base64
@@ -60,6 +60,7 @@
             : and then encoded with base64 encoding.
     -->
   <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
     <xsd:element name="root" msdata:IsDataSet="true">
       <xsd:complexType>
         <xsd:choice maxOccurs="unbounded">
@@ -68,9 +69,10 @@
               <xsd:sequence>
                 <xsd:element name="value" type="xsd:string" minOccurs="0" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" />
+              <xsd:attribute name="name" use="required" type="xsd:string" />
               <xsd:attribute name="type" type="xsd:string" />
               <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="assembly">
@@ -85,9 +87,10 @@
                 <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
                 <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
               </xsd:sequence>
-              <xsd:attribute name="name" type="xsd:string" msdata:Ordinal="1" />
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
               <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
               <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
             </xsd:complexType>
           </xsd:element>
           <xsd:element name="resheader">
@@ -109,9 +112,60 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="About_Version" xml:space="preserve">
+    <value>Version {0}</value>
+  </data>
+  <data name="Home_Brand" xml:space="preserve">
+    <value>水声通信机</value>
+  </data>
+  <data name="Home_Brand_LOAT" xml:space="preserve">
+    <value>海洋声学技术实验室</value>
+  </data>
+  <data name="Home_Tile_Console" xml:space="preserve">
+    <value>命令行模式</value>
+  </data>
+  <data name="Home_Tile_Data" xml:space="preserve">
+    <value>数据分析</value>
+  </data>
+  <data name="Home_Tile_Live" xml:space="preserve">
+    <value>水声通信</value>
+  </data>
+  <data name="Home_Tile_Setup" xml:space="preserve">
+    <value>基本设置</value>
+  </data>
+  <data name="Home_Title_ApplicationName" xml:space="preserve">
+    <value>4500米载人潜器声学显控程序</value>
+  </data>
+  <data name="Mov4500_ApplicationName" xml:space="preserve">
+    <value>载人潜器声学显控程序</value>
+  </data>
+  <data name="Mov4500_RUNNING" xml:space="preserve">
+    <value>载人潜器声学显控程序正在运行</value>
+  </data>
+  <data name="SPLASH_BAND" xml:space="preserve">
+    <value>通信机显控程序</value>
+  </data>
+  <data name="SPLASH_BAND_DESCRIPTION" xml:space="preserve">
+    <value>与中国科学院声学研究所水声通信机配套使用</value>
+  </data>
+  <data name="SPLASH_COMPANY_NAME" xml:space="preserve">
+    <value>海洋声学技术实验室</value>
+  </data>
+  <data name="SPLASH_COPY_RIGHT" xml:space="preserve">
+    <value> © 2015 中国科学院声学研究所 </value>
+  </data>
+  <data name="SPLASH_PRODUCT_NAME" xml:space="preserve">
+    <value>4500米载人潜器声学显控</value>
+  </data>
+  <data name="SPLASH_RIGHT_RESERVER" xml:space="preserve">
+    <value>版权所有</value>
+  </data>
+  <data name="SPLASH_VERSION" xml:space="preserve">
+    <value>Version 2.0</value>
+  </data>
 </root>

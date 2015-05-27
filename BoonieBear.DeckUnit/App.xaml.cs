@@ -3,7 +3,7 @@ using System.Windows;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Helps;
-using BoonieBear.TinyMetro.WPF.Controller;
+using TinyMetroWpfLibrary.Controller;
 
 namespace BoonieBear.DeckUnit
 {

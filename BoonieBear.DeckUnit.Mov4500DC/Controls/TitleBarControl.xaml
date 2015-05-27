@@ -1,0 +1,46 @@
+﻿<UserControl x:Class="BoonieBear.DeckUnit.Mov4500UI.Controls.TitleBarControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
+             mc:Ignorable="d" 
+             HorizontalAlignment="Stretch" Height="140" ClipToBounds="False"
+             >
+    <Grid>
+       
+        <StackPanel Orientation="Horizontal" 
+                    HorizontalAlignment="Left"
+                    Visibility="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=BackButtonVisibility}">
+            <Button Click="GoBack" Margin="40" Background="Transparent"  Grid.Column="0" VerticalAlignment="Center"  HorizontalAlignment="Center"  Style="{StaticResource BackAppBarButtonStyle}"/>
+            <TextBlock x:Name="pageTitle"
+                       FontWeight="Bold" 
+                       VerticalAlignment="Center" 
+                       Grid.Column="1" 
+                       Text="{Binding RelativeSource={RelativeSource AncestorType=UserControl}, Path=Title}"
+                       FontSize="{StaticResource Big}"/>
+        </StackPanel>
+
+        <StackPanel Orientation="Horizontal"
+                    Margin="0,10,0,0"
+                    VerticalAlignment="Top"
+                    Grid.Column="1"
+                    Grid.Row="0"
+                    HorizontalAlignment="Right">
+            <Grid  Margin="0,0,30,0">
+                <Controls:FanPanel x:Name="fanpanel" Width="40" Height="40"  PanelRadius="70" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Button  Click="GoToGlobalSettings" Controls:FanPanel.Angle="180" VerticalAlignment="Center" Style="{StaticResource SettingsAppBarButtonStyle}" />
+                    <Button  Click="DoHelp" Controls:FanPanel.Angle="135" VerticalAlignment="Center" Style="{StaticResource AssistantAppBarButtonStyle}" Grid.Column="2" HorizontalAlignment="Center"/>
+                    <!--Button Name="MoreButton"  Click="ShowAbout" Controls:FanPanel.Angle="90" VerticalAlignment="Center" Style="{StaticResource AboutAppBarButtonStyle}" Grid.Column="2" HorizontalAlignment="Center"-->
+                </Controls:FanPanel>
+                <Ellipse  Width="40" Height="40" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{StaticResource DefaultBackgroundBrush}"/>
+                <Button  Click="ShowMore" VerticalAlignment="Center" Style="{StaticResource MoreAppBarButtonStyle}"/>
+            </Grid>
+
+            <Button  Click="GoHome"  Margin="0,0,30,0" VerticalAlignment="Center" Style="{StaticResource HomeAppBarButtonStyle}" Grid.Column="3" HorizontalAlignment="Center"/>
+            <Button  Click="Minimize"  Margin="0,0,30,0" VerticalAlignment="Center" Style="{StaticResource MinimizeAppBarButtonStyle}" Grid.Column="3" HorizontalAlignment="Center"/>
+            <Button  Click="ExitProgram"  Margin="0,0,10,0" VerticalAlignment="Center" Style="{StaticResource CloseAppBarButtonStyle}" Grid.Column="4" HorizontalAlignment="Center"/>
+        </StackPanel>
+    </Grid>
+   
+</UserControl>

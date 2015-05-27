@@ -2,8 +2,8 @@
 using System.Windows.Input;
 using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.Resource;
-using BoonieBear.TinyMetro.WPF.Events;
-using BoonieBear.TinyMetro.WPF.ViewModel;
+using TinyMetroWpfLibrary.Events;
+using TinyMetroWpfLibrary.ViewModel;
 
 namespace BoonieBear.DeckUnit.ViewModels
 {

@@ -1,9 +1,9 @@
 ﻿namespace BoonieBear.DeckUnit.Mov4500UI.Events
 {
-    public class GoWaterTelPageBaseNavigationRequest 
+    public class GoDetailStatsNavigationRequest 
     {
         private string _titile;
-        public GoWaterTelPageBaseNavigationRequest(string titile)
+        public GoDetailStatsNavigationRequest(string titile)
 		{
 		    _titile = titile;
 		}

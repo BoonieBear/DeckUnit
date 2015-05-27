@@ -1,6 +1,6 @@
 ﻿using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
-using BoonieBear.TinyMetro.WPF.EventAggregation;
+using TinyMetroWpfLibrary.EventAggregation;
 
 namespace BoonieBear.DeckUnit.ICore
 {

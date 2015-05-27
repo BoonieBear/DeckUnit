@@ -4,22 +4,31 @@
              xmlns:core="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Core"
              xmlns:views="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Views"
              xmlns:viewModels="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.ViewModel"
+             xmlns:Helpers="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Helpers"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              StartupUri="Views/MainFrame.xaml" Exit="Application_Exit">
     <Application.Resources>
         <ResourceDictionary>
+            
             <ResourceDictionary.MergedDictionaries>
 
                 <!-- Important to include the Metro Styles Resource Dictionary -->
                 <ResourceDictionary Source="/TinyMetroWpfLibrary;component/Styles/MetroStyles.xaml" />
-                <ResourceDictionary Source="/MahApps.Metro;component/styles/colors.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/FlatSlider.xaml"/>
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/Controls.Scrollbars.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MahApps.Metro;component/Styles/fonts.xaml" />
+				<ResourceDictionary Source="/TinyMetroWpfLibrary.Controls;component/Styles/ControlStyles.xaml"/>
+				<ResourceDictionary Source="/TinyMetroWpfLibrary.Controls;component/Styles/Colours.xaml"/>
+                <ResourceDictionary Source="Resources/ControlStyle.xaml"/>
+                <ResourceDictionary Source="Resources/SkinStyle.xaml"/>
+                <ResourceDictionary>
+                    
+                    <FontFamily x:Key="SegoeUISymbol">../Font/seguisym.ttf#Segoe UI Symbol</FontFamily>
+                    <!-- Locale Static Resources -->
+                    <viewModels:ViewModelLocator x:Key="ViewModelLocator"/>
+                    <ObjectDataProvider x:Key="Resources" ObjectType="{x:Type Helpers:ResourcesHelper}" MethodName="GetResourceInstance"/>
+                    <ObjectDataProvider x:Key="ResourcesDS" ObjectType="{x:Type Helpers:ResourcesHelper}"/>
+                </ResourceDictionary>
             </ResourceDictionary.MergedDictionaries>
 
-            <!-- Locale Static Resources -->
-            <viewModels:ViewModelLocator x:Key="ViewModelLocator"/>
+
 
         </ResourceDictionary>
     </Application.Resources>

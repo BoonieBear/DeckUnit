@@ -22,7 +22,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resources {
+    public class Resources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         ///   返回此类使用的缓存的 ResourceManager 实例。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("BoonieBear.DeckUnit.Mov4500UI.Properties.Resources", typeof(Resources).Assembly);
@@ -51,12 +51,165 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         ///   重写当前线程的 CurrentUICulture 属性。
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Version {0} 的本地化字符串。
+        /// </summary>
+        public static string About_Version {
+            get {
+                return ResourceManager.GetString("About_Version", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 水声通信机 的本地化字符串。
+        /// </summary>
+        public static string Home_Brand {
+            get {
+                return ResourceManager.GetString("Home_Brand", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 海洋声学技术实验室 的本地化字符串。
+        /// </summary>
+        public static string Home_Brand_LOAT {
+            get {
+                return ResourceManager.GetString("Home_Brand_LOAT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 命令行模式 的本地化字符串。
+        /// </summary>
+        public static string Home_Tile_Console {
+            get {
+                return ResourceManager.GetString("Home_Tile_Console", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 数据分析 的本地化字符串。
+        /// </summary>
+        public static string Home_Tile_Data {
+            get {
+                return ResourceManager.GetString("Home_Tile_Data", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 水声通信 的本地化字符串。
+        /// </summary>
+        public static string Home_Tile_Live {
+            get {
+                return ResourceManager.GetString("Home_Tile_Live", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 基本设置 的本地化字符串。
+        /// </summary>
+        public static string Home_Tile_Setup {
+            get {
+                return ResourceManager.GetString("Home_Tile_Setup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 4500米载人潜器声学显控程序 的本地化字符串。
+        /// </summary>
+        public static string Home_Title_ApplicationName {
+            get {
+                return ResourceManager.GetString("Home_Title_ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 载人潜器声学显控程序 的本地化字符串。
+        /// </summary>
+        public static string Mov4500_ApplicationName {
+            get {
+                return ResourceManager.GetString("Mov4500_ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 载人潜器声学显控程序正在运行 的本地化字符串。
+        /// </summary>
+        public static string Mov4500_RUNNING {
+            get {
+                return ResourceManager.GetString("Mov4500_RUNNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 通信机显控程序 的本地化字符串。
+        /// </summary>
+        public static string SPLASH_BAND {
+            get {
+                return ResourceManager.GetString("SPLASH_BAND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 与中国科学院声学研究所水声通信机配套使用 的本地化字符串。
+        /// </summary>
+        public static string SPLASH_BAND_DESCRIPTION {
+            get {
+                return ResourceManager.GetString("SPLASH_BAND_DESCRIPTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 海洋声学技术实验室 的本地化字符串。
+        /// </summary>
+        public static string SPLASH_COMPANY_NAME {
+            get {
+                return ResourceManager.GetString("SPLASH_COMPANY_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似  © 2015 中国科学院声学研究所  的本地化字符串。
+        /// </summary>
+        public static string SPLASH_COPY_RIGHT {
+            get {
+                return ResourceManager.GetString("SPLASH_COPY_RIGHT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 4500米载人潜器声学显控 的本地化字符串。
+        /// </summary>
+        public static string SPLASH_PRODUCT_NAME {
+            get {
+                return ResourceManager.GetString("SPLASH_PRODUCT_NAME", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 版权所有 的本地化字符串。
+        /// </summary>
+        public static string SPLASH_RIGHT_RESERVER {
+            get {
+                return ResourceManager.GetString("SPLASH_RIGHT_RESERVER", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Version 2.0 的本地化字符串。
+        /// </summary>
+        public static string SPLASH_VERSION {
+            get {
+                return ResourceManager.GetString("SPLASH_VERSION", resourceCulture);
             }
         }
     }

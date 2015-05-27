@@ -13,6 +13,7 @@
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <WarningLevel>4</WarningLevel>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>发布\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -25,7 +26,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -48,6 +48,10 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>
+    </StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="De.TorstenMandelkow.MetroChart">
       <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
@@ -60,6 +64,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -68,8 +73,13 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
-    <Reference Include="TinyMetroWpfLibrary">
+    <Reference Include="TinyMetroWpfLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\TinyMetroWpfLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TinyMetroWpfLibrary.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\TinyMetroWpfLibrary.Controls.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -80,16 +90,59 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AttachedProperty\AppBarButtonPropertys.cs" />
+    <Compile Include="AttachedProperty\BrushPropertys.cs" />
+    <Compile Include="AttachedProperty\ListBoxSelectBringIntoView.cs" />
+    <Compile Include="AttachedProperty\ScreenModelPropertys.cs" />
+    <Compile Include="Controls\TitleBarControl.xaml.cs">
+      <DependentUpon>TitleBarControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converters\DoubleMultiConverter.cs" />
+    <Compile Include="Converters\DoubleSumConverter.cs" />
+    <Compile Include="Converters\HideZeroConverter.cs" />
+    <Compile Include="Converters\HomePageMarginLeftConverter.cs" />
+    <Compile Include="Converters\VisibilityBoolConverter.cs" />
+    <Compile Include="Converters\VisibilityBoolToggleConverter.cs" />
+    <Compile Include="Converters\ZeroToVisibleConverter.cs" />
     <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
     <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
-    <Compile Include="Events\GoWaterTelPageBaseNavigationRequest.cs" />
+    <Compile Include="Events\GoDetailStatsNavigationRequest.cs" />
     <Compile Include="Events\LogEvent.cs" />
+    <Compile Include="Helpers\ResourcesHelper.cs" />
     <Compile Include="Models\SystemInfo.cs" />
+    <Compile Include="Splasher.cs" />
+    <Compile Include="SplashWindow.xaml.cs">
+      <DependentUpon>SplashWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ViewModel\HomePageViewModel.cs" />
     <Compile Include="ViewModel\SystemResourceViewModel.cs" />
+    <Compile Include="Views\HomePageView.xaml.cs">
+      <DependentUpon>HomePageView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SystemResourceView.xaml.cs">
       <DependentUpon>SystemResourceView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\MsgBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TitleBarControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\ControlStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Resources\SkinStyle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SplashWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\HomePageView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -136,9 +189,12 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Resource Include="Font\seguisym.ttf" />
+    <None Include="App.config" />
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -199,6 +255,10 @@
       <Project>{6b3ef1ba-0782-4e89-abd5-927c553cb0cf}</Project>
       <Name>BoonieBear.DeckUnit.Mov4500TraceService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.SysResourceLib\BoonieBear.DeckUnit.Resource.csproj">
+      <Project>{48baf198-55b8-4bcb-92f9-baa0a98b4fe9}</Project>
+      <Name>BoonieBear.DeckUnit.Resource</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.TraceFileService\BoonieBear.DeckUnit.TraceFileService.csproj">
       <Project>{56002669-156c-4002-9072-e4329e1d1b2c}</Project>
       <Name>BoonieBear.DeckUnit.TraceFileService</Name>
@@ -211,6 +271,15 @@
       <Project>{7fd46512-42b0-4ad2-89df-6f44a650018e}</Project>
       <Name>BoonieBear.DeckUnit.WaveBox</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\IACAS.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Work.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
