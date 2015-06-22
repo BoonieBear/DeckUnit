@@ -37,7 +37,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
                 {
                     return false;
                 }
-                if (_traceFile.CreateFile("GPS", TraceType.String, "Gps", "gps", @"\GPS") == false)
+                if (_traceFile.CreateFile("GPS", TraceType.String, "GPS", "gps", @"\GPS") == false)
                 {
                     return false;
                 }

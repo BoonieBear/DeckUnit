@@ -44,7 +44,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             
         }
 
-        public virtual void Register(IObserver<CustomEventArgs> observer)
+        public virtual void Register(Observer<CustomEventArgs> observer)
         {
             DoParse -= observer.Handle;
             DoParse+=observer.Handle;
@@ -55,7 +55,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             SerialServiceMode = mode;
         }
 
-        public virtual void UnRegister(IObserver<CustomEventArgs> observer)
+        public virtual void UnRegister(Observer<CustomEventArgs> observer)
         {
             DoParse -= observer.Handle;
         }

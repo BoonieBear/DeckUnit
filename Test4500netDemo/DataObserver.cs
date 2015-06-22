@@ -5,7 +5,7 @@ using BoonieBear.DeckUnit.CommLib.TCP;
 using BoonieBear.DeckUnit.ACMP;
 namespace Test4500netDemo
 {
-    public class ACMDataObserver : BoonieBear.DeckUnit.CommLib.IObserver<CustomEventArgs>
+    public class ACMDataObserver : Observer<CustomEventArgs>
     {
         public void Handle(object sender, CustomEventArgs e)
         {

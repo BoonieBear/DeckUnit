@@ -19,7 +19,7 @@ namespace BoonieBear.DeckUnit.Views
 
         private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            UnitCore.Instance = new UnitCore();
+            
             ProgressDialogController remote = null;
             var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
             Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
@@ -28,12 +28,12 @@ namespace BoonieBear.DeckUnit.Views
                 
             }))).ContinueWith(obj =>
             {
-                UnitCore.Instance.Init();
+                UnitCore.Instance.Start();
                 remote.SetIndeterminate();
                 //remote.SetCancelable(true);
                 Dispatcher.Invoke(new Action(() =>
                 {
-                    if (UnitCore.Instance.Initailed)
+                    if (UnitCore.Instance.ServiceOK)
                     {
                         remote.SetMessage("初始化成功!您现在可以使用甲板单元的所有功能");
                     }
@@ -45,7 +45,7 @@ namespace BoonieBear.DeckUnit.Views
                 Thread.Sleep(3000);
                 Dispatcher.Invoke(new Action(() => remote.CloseAsync().ContinueWith(x =>
                 {
-                    if (!UnitCore.Instance.Initailed)
+                    if (!UnitCore.Instance.ServiceOK)
                     {
                         //导航到设置界面，下面的是示例
                         UnitCore.Instance.EventAggregator.PublishMessage(new GoSystemResourceNavigationRequest());

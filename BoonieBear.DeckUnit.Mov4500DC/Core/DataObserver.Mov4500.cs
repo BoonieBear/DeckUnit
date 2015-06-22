@@ -2,7 +2,7 @@
 using BoonieBear.DeckUnit.CommLib;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
-    public class DeckUnitDataObserver:CommLib.IObserver<CustomEventArgs>
+    public class Mov4500DataObserver:Observer<CustomEventArgs>
     {
         public void Handle(object sender, CustomEventArgs e)
         {

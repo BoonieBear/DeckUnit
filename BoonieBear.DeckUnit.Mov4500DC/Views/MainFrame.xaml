@@ -1,4 +1,4 @@
-﻿<Metro:TransparentWindow
+﻿<metroControl:MetroWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
         xmlns:Metro="clr-namespace:TinyMetroWpfLibrary.Metro;assembly=TinyMetroWpfLibrary" 
@@ -8,18 +8,14 @@
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Mov4500UI.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        Title="水声通信机" Height="718" Width="1024"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized">
+        ShowTitleBar ="False"  ShowCloseButton =" True"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized" AllowsTransparency="True" MouseDoubleClick="MetroWindow_MouseDoubleClick">
     <Grid x:Name="grid">
 
         <Grid x:Name="FirstGrid">
-            <frames:AnimationFrame x:Name="ContentFrame"
-			
+            <Frame x:Name="ContentFrame"
 			NavigationUIVisibility="Hidden"
-			AnimationMode="Fade"
-            SlideorGrowDuration ="0:0:0.350 "
-			FadeDuration="0:0:0.150"
-			FadeOffset="0:0:0.050" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
-            </frames:AnimationFrame>
+            HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
+            </Frame>
         </Grid>
     </Grid>
-</Metro:TransparentWindow>
+</metroControl:MetroWindow>

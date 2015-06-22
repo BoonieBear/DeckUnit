@@ -50,7 +50,7 @@ namespace BoonieBear.DeckUnit
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            UnitCore.Instance.Dispose();
+            UnitCore.Instance.Stop();
         }
     }
 }

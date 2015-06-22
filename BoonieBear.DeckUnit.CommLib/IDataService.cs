@@ -8,8 +8,8 @@ namespace BoonieBear.DeckUnit.CommLib
     public interface ISerialService
     {
         bool Init(SerialPort serialPort);
-        void Register(IObserver<CustomEventArgs> observer);
-        void UnRegister(IObserver<CustomEventArgs> observer);
+        void Register(Observer<CustomEventArgs> observer);
+        void UnRegister(Observer<CustomEventArgs> observer);
         bool Start();
         bool Stop();
         SerialPort ReturnSerialPort();
@@ -17,7 +17,7 @@ namespace BoonieBear.DeckUnit.CommLib
         void OnParsed(CustomEventArgs eventArgs);
     }
 
-    public interface IObserver<in T>
+    public interface Observer<in T>
     {
         void Handle(Object sender, T e);
     }
@@ -25,8 +25,8 @@ namespace BoonieBear.DeckUnit.CommLib
     public interface IUDPService
     {
         bool Init(UdpClient udpClient);
-        void Register(IObserver<CustomEventArgs> observer);
-        void UnRegister(IObserver<CustomEventArgs> observer);
+        void Register(Observer<CustomEventArgs> observer);
+        void UnRegister(Observer<CustomEventArgs> observer);
         bool Start();
         void Stop();
 
@@ -38,8 +38,8 @@ namespace BoonieBear.DeckUnit.CommLib
     public interface ITCPClientService
     {
         bool Init(TcpClient tcpClient,IPAddress ip,int destport);
-        void Register(IObserver<CustomEventArgs> observer);
-        void UnRegister(IObserver<CustomEventArgs> observer);
+        void Register(Observer<CustomEventArgs> observer);
+        void UnRegister(Observer<CustomEventArgs> observer);
         void ConnectSync();
         bool Start();
         void Stop();

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using BoonieBear.DeckUnit.DAL;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.DAL
 {
     /// <summary>

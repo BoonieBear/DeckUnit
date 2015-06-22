@@ -25,5 +25,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
 
         }
+
+        private void MetroWindow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (this.WindowState == WindowState.Maximized)
+                this.WindowState = WindowState.Normal;
+            else
+            {
+                this.WindowState = WindowState.Maximized;
+            }
+        }
     }
 }

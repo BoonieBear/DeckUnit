@@ -26,8 +26,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI
                 MessageBox.Show(strErrMsg, strTitle);
                 return;
             }
+             
             this.DispatcherUnhandledException += Application_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+            Splasher.Splash = new SplashWindow();
+
+            Splasher.ShowSplash();
             /////
             ///加入比较耗费时间的载入操作
             /// 
@@ -37,7 +41,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             //基类单实例，给basecontroller赋值
             //basecontroller用的是基类接口
             Kernel.Instance = UnitKernal.Instance;
-            UnitCore.Instance = new UnitCore();
             // 初始化消息处理函数
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
@@ -63,8 +66,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            if (UnitCore.Instance.Initailed)
-                UnitCore.Instance.Dispose();
+            if (UnitCore.GetInstance().ServiceOK)
+                UnitCore.GetInstance().Stop();
         }
     }
 }

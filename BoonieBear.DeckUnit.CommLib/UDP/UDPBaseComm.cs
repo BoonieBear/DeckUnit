@@ -5,7 +5,7 @@ using System.Text;
 
 namespace BoonieBear.DeckUnit.CommLib.UDP
 {
-    public abstract class UDPBaseComm : IObserver<CustomEventArgs>
+    public abstract class UDPBaseComm : Observer<CustomEventArgs>
     {
         protected UdpClient _udpClient;
         protected int BroadCastPort = 10020;

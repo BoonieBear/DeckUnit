@@ -27,7 +27,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
 
 
 
-        class MyClass:CommLib.IObserver<CustomEventArgs>
+        class MyClass:CommLib.Observer<CustomEventArgs>
         {
             public void Handle(object sender, CustomEventArgs e)
             {

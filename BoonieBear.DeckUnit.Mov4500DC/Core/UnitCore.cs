@@ -2,262 +2,143 @@
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
+using BoonieBear.DeckUnit.ACMP;
+using BoonieBear.DeckUnit.CommLib.Properties;
+using BoonieBear.DeckUnit.LiveService;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Mov4500Conf;
 using BoonieBear.DeckUnit.Mov4500TraceService;
 using BoonieBear.DeckUnit.ICore;
+using BoonieBear.DeckUnit.BaseType;
+using BoonieBear.DeckUnit.Mov4500UI.Events;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     /// <summary>
-    /// 核心业务类，包括命令，通信服务，工作逻辑
+    /// 核心业务类，包括通信服务，数据解析，服务状态及一些其他的系统变量
     /// </summary>
-    class UnitCore : IUnitCore
+    class UnitCore
     {
+        private readonly static object SyncObject = new object();
         //静态接口，用于在程序域中任意位置操作UnitCore中的成员
-        public static IUnitCore Instance;
+        private static UnitCore _instance;
         //事件绑定接口，用于事件广播
         private IEventAggregator _eventAggregator;
-        private ISerialService _serialService;
-        private ITCPClientService _tcpShellService;
-        private ITCPClientService _tcpDataService;
-        private IUDPService _udpService;
+        //网络服务接口
+        private INetCore _iNetCore;
+        //文件服务接口
+        private IFileCore _iFileCore;
         private MovTraceService _unitTraceService;
-        private TcpClient _shelltcpClient ;
-        private TcpClient _datatcpClient ;
-        private UdpClient _udpClient;
-        private MovConf _deckUnitConf;
-        private bool _isWorking;
-        private bool _initialed;
-        private CommLib.IObserver<CustomEventArgs> _DataObserver;
-        /*
-        public bool Init()
+        //基础配置信息
+        private MovConf _mov4500Conf;
+        private CommConfInfo _commConf;
+        private Observer<CustomEventArgs> _observer; 
+        private bool _serviceStarted = false;
+        public string Error { get; private set; }
+        public MonitorMode WorkMode{get; private set;}
+        public MovTraceService UnitTraceService
         {
+            get { return _unitTraceService; }
+        }
+
+
+        public static UnitCore GetInstance()
+        {
+            lock (SyncObject)
+            {
+
+                return _instance ?? (_instance = new UnitCore());
+            }
+        }
+
+        protected UnitCore()
+        {
+            
+            LoadConfiguration();
+
+        }
+
+        public bool LoadConfiguration()
+        {
+            bool ret = true;
             try
             {
-                if (Initailed) throw new Exception("系统已经完成初始化");
-                //读取配置文件
-                string connstr = DeckConfigure.GetSqlString();
-                if (!TraceService.CreateService(connstr)) throw new Exception("数据存储服务无法初始化");
-                //大数据传输协议自带数据库接口，可以
-                //自动更新数据库，如果是通信网则使用ACNProtocol.Init()
-                var modemconfigure = DeckConfigure.GetModemConfigure();
-                if (modemconfigure==null)
-                    throw new Exception("无法读取配置信息(通信机)");
-                if (!DeckDataProtocol.Init(modemconfigure.ID, connstr)) throw new Exception("数据传输协议无法初始化！");
- 
-                var configure = DeckConfigure.GetCommConfInfo();
-                if (configure==null)
-                    throw new Exception("无法读取配置信息(通信)");
-                if (!CreateSerialService(configure)) throw new Exception("内部端口服务无法初始化");
-                if (!CreateUDPService(configure.TraceUDPPort)) throw new Exception("数据交换服务无法初始化");
-                if (!CreateTCPService(configure)) throw new Exception("指令交换服务无法初始化");
-                Initailed = true;
+                _mov4500Conf = MovConf.GetInstance();
+                _commConf = _mov4500Conf.GetCommConfInfo();
+                WorkMode = _mov4500Conf.GetMode();
+
             }
             catch (Exception ex)
             {
+                ret = false;
                 EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
-                Initailed = false;
-                
             }
-            return Initailed;
-
+            return ret;
         }
 
-        private bool CreateUDPService(int port)
+
+        public IEventAggregator EventAggregator
         {
-            if (_udpClient == null)
-                _udpClient = new UdpClient(port);
-            if (!UDPService.Init(_udpClient)) return false;
-            if (!UDPService.Start()) return false;
-            UDPService.Register(DataObserver);
-            return true;
+            get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
         }
 
-        public void Dispose()
+       
+
+        public INetCore INetCore
         {
-            TraceService.TearDownService();
-            
-            if (Initailed)
+            get { return _iNetCore ?? (_iNetCore = NetLiveService.GetInstance(_commConf, _observer)); }
+        }
+
+        public bool Start()
+        {
+            try
             {
-                SerialService.UnRegister(DataObserver);
-                SerialService.Stop();
-
-                TCPShellService.UnRegister(DataObserver);
-                TCPShellService.Stop();
-
-                TCPDataService.UnRegister(DataObserver);
-                TCPDataService.Stop();
-
-                UDPService.UnRegister(DataObserver);
-                UDPService.Stop();
+                INetCore.Initialize();
+                INetCore.Start();
+                _serviceStarted = INetCore.IsWorking;
+                Error = INetCore.Error;
+                return _serviceStarted;
             }
-            Initailed = false;
-        }
-
-        /// <summary>
-        /// tcp数据交换初始化
-        /// </summary>
-        /// <param name="configure"></param>
-        /// <returns></returns>
-        private bool CreateTCPService(CommConfInfo configure)
-        {
-            _shelltcpClient = new TcpClient {SendTimeout = 1000};
-            _datatcpClient = new TcpClient {SendTimeout = 1000};
-            if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(configure.LinkIP), configure.NetPort1) ||
-                (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(configure.LinkIP), configure.NetPort2)))
+            catch (Exception e)
+            {
+                Error = e.Message;
                 return false;
-            // 同步方法，会阻塞进程，调用init用task
-            TCPShellService.ConnectSync();
-            TCPDataService.ConnectSync();
-            if (!TCPShellService.Connected || !TCPDataService.Connected) return false;
-            TCPShellService.Register(DataObserver);
-            TCPDataService.Register(DataObserver);
-            return true;
-        }
-
-        /// <summary>
-        ///  初始化串口数据服务
-        /// </summary>
-        /// <param name="configure">通信参数</param>
-        /// <returns>成功or失败</returns>
-        private bool CreateSerialService(CommConfInfo configure)
-        {
-            if (!SerialService.Init(new SerialPort(configure.SerialPort)) || !SerialService.Start()) return false;
-            SerialService.Register(DataObserver);
-            return true;
-        }
-
-        #region 属性
-        public ISerialService SerialService 
-        {
-            get { return _serialService ?? (_serialService = (new ACNSerialServiceFactory()).CreateService()); }
-        }
-
-        public ITCPClientService TCPDataService
-        {
-            get
-            {
-                return _tcpDataService ?? (_tcpDataService = (new TCPDataServiceFactory()).CreateService());
             }
-        }
-
-        public ITCPClientService TCPShellService
-        {
-            get
-            {
-                return _tcpShellService ?? (_tcpShellService = (new TCPShellServiceFactory()).CreateService());
-            }
-        }
-
-        public IUDPService UDPService
-        {
-            get
-            {
-                return _udpService ?? (_udpService = (new UDPDataServiceFactory()).CreateService());
-            }
-        }
-
-        public UnitTraceService TraceService
-        {
-            get
-            {
-                return _unitTraceService ?? (_unitTraceService = new UnitTraceService());
-            }
-        }
-
-        public CommLib.IObserver<CustomEventArgs> DataObserver
-        {
-            get { return _DataObserver ?? (_DataObserver = new DeckUnitDataObserver()); }
+            
             
         }
 
-        public bool IsWorking
+        public void Stop()
         {
-            get { return _isWorking; }
-            set { _isWorking = value; }
+            if(_serviceStarted)
+                INetCore.Stop();
+            _serviceStarted = false;
+        }
+        public bool ServiceOK
+        {
+            get { return _serviceStarted; }
         }
 
-        public bool Initailed
+        public MovConf MovConfigueService
         {
-            get { return _initialed; }
-            set { _initialed = value; }
+            get { return _mov4500Conf; }
         }
 
-        public IEventAggregator EventAggregator
+        public Observer<CustomEventArgs> Observer
         {
-            get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
+            get { return _observer ?? (_observer = new Mov4500DataObserver()); }
+
         }
 
-        public DeckUnitConf DeckConfigure
+        public IFileCore IFileCore
         {
-            get { return _deckUnitConf ?? (_deckUnitConf = DeckUnitConf.GetInstance()); }
-        }
-        
-        #endregion*/
-
-        public bool Init()
-        {
-            throw new NotImplementedException();
+            get { return _iFileCore; }
+            set { _iFileCore = value; }
         }
 
-        public void Dispose()
+        public static UnitCore Instance
         {
-            GC.SuppressFinalize(this);
-        }
-
-        public ISerialService SerialService
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public ITCPClientService TCPDataService
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public ITCPClientService TCPShellService
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public IUDPService UDPService
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public CommLib.IObserver<CustomEventArgs> DataObserver
-        {
-            get { throw new NotImplementedException(); }
-        }
-
-        public bool IsWorking
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public bool Initailed
-        {
-            get
-            {
-                return true;
-            }
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public IEventAggregator EventAggregator
-        {
-            get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
+            get { return GetInstance(); }
         }
     }
 }

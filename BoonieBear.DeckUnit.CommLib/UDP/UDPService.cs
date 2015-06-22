@@ -47,12 +47,12 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
         {
             return _udpClient;
         }
-        public void Register(IObserver<CustomEventArgs> observer)
+        public void Register(Observer<CustomEventArgs> observer)
         {
             DoParse -= observer.Handle;
             DoParse += observer.Handle;
         }
-        public void UnRegister(IObserver<CustomEventArgs> observer)
+        public void UnRegister(Observer<CustomEventArgs> observer)
         {
             DoParse -= observer.Handle;
         }

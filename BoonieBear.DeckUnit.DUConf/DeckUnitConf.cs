@@ -5,6 +5,7 @@ using System.Text;
 using BoonieBear.DeckUnit.DAL.SqliteDAL;
 using TinyMetroWpfLibrary.Utility;
 using BoonieBear.DeckUnit.DAL;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.DUConf
 {
     public class DeckUnitConf

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace BoonieBear.DeckUnit.CommLib.TCP
 {
-    public abstract class TCPBaseComm:IObserver<CustomEventArgs>
+    public abstract class TCPBaseComm:Observer<CustomEventArgs>
     {
         protected NetworkStream _TCPStream;
         protected string _str;

@@ -71,6 +71,12 @@
     <Compile Include="SqliteDAL\SqliteSqlDAL.cs" />
     <Compile Include="SqliteDAL\SqliteHelperSQL.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.BaseType\BoonieBear.DeckUnit.BaseType.csproj">
+      <Project>{2a7a853c-6554-446f-8536-4928da33e666}</Project>
+      <Name>BoonieBear.DeckUnit.BaseType</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

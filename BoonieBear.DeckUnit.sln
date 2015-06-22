@@ -57,8 +57,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Protocols", "Protocols", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.UBP", "BoonieBear.DeckUnit.UBP\BoonieBear.DeckUnit.UBP.csproj", "{436A819B-CEE9-4FD7-BDC5-03111A5ED85E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataSourceService", "DataSourceService", "{5F128C97-A1D4-47B2-A9AB-1EDAE9D21041}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DataStorageService", "DataStorageService", "{5C9A4FAE-0A5E-41D4-93AE-0C1A4453EDB1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.Mov4500TraceService", "BoonieBear.DeckUnit.Mov4500TraceService\BoonieBear.DeckUnit.Mov4500TraceService.csproj", "{6B3EF1BA-0782-4E89-ABD5-927C553CB0CF}"
@@ -82,6 +80,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfWaveBoxTests", "WpfWaveBoxTests\WpfWaveBoxTests.csproj", "{108569AA-E2D3-4A39-92FA-1934AE120BE6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfReordingButtonTests", "WpfReordingButtonTests\WpfReordingButtonTests.csproj", "{090074B4-FAB8-4667-AAA9-13F4C611AB62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.BaseType", "BoonieBear.DeckUnit.BaseType\BoonieBear.DeckUnit.BaseType.csproj", "{2A7A853C-6554-446F-8536-4928DA33E666}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -399,6 +399,16 @@ Global
 		{090074B4-FAB8-4667-AAA9-13F4C611AB62}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{090074B4-FAB8-4667-AAA9-13F4C611AB62}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{090074B4-FAB8-4667-AAA9-13F4C611AB62}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -436,5 +446,6 @@ Global
 		{7FD46512-42B0-4AD2-89DF-6F44A650018E} = {01CA4779-1569-4FFC-A5E5-ACF651D65276}
 		{108569AA-E2D3-4A39-92FA-1934AE120BE6} = {2775A811-EF20-4DC6-A306-ACB6C18D3579}
 		{090074B4-FAB8-4667-AAA9-13F4C611AB62} = {2775A811-EF20-4DC6-A306-ACB6C18D3579}
+		{2A7A853C-6554-446F-8536-4928DA33E666} = {DB38C11D-FC0C-4FDB-9AAE-775F2F268546}
 	EndGlobalSection
 EndGlobal

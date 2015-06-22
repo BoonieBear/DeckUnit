@@ -65,6 +65,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -159,7 +160,7 @@
     </Compile>
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Core\Controllers\UnitNavigationController.cs" />
-    <Compile Include="Core\DataObserver.DeckUnit.cs" />
+    <Compile Include="Core\DataObserver.Mov4500.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\UnitKernal.cs" />
     <Compile Include="Helpers\LogHelper.cs" />
@@ -230,6 +231,10 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.ACMP\BoonieBear.DeckUnit.ACMP.csproj">
       <Project>{6ffcad15-3e47-44da-a462-5dc2871b17c0}</Project>
       <Name>BoonieBear.DeckUnit.ACMP</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.BaseType\BoonieBear.DeckUnit.BaseType.csproj">
+      <Project>{2a7a853c-6554-446f-8536-4928da33e666}</Project>
+      <Name>BoonieBear.DeckUnit.BaseType</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.CommLib\BoonieBear.DeckUnit.Comm.csproj">
       <Project>{b2127a13-6fe1-4b46-98ea-6f4bb565670c}</Project>

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace BoonieBear.DeckUnit.LiveService
+namespace BoonieBear.DeckUnit.FileService
 {
-    public class Class1
+    public class FileService
     {
     }
 }

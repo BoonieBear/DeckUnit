@@ -5,7 +5,7 @@ using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.DAL.SqliteDAL;
 using NUnit.Framework;
 using TinyMetroWpfLibrary.Utility;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
 {
     [TestFixture()]

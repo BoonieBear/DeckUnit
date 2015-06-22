@@ -9,7 +9,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
     /// <summary>
     /// 串口打包协议基类
     /// </summary>
-    public abstract class SerialBaseComm : IObserver<CustomEventArgs>
+    public abstract class SerialBaseComm : Observer<CustomEventArgs>
     {
         public SerialPort _serialPort;
         protected string _str;

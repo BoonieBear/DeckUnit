@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using BoonieBear.DeckUnit.DAL;
 using TinyMetroWpfLibrary.Utility;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.DAL.SqliteDAL
 {
     public class SqliteSqlDAL : ISqlDAL
