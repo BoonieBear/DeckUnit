@@ -35,6 +35,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             /////
             ///加入比较耗费时间的载入操作
             /// 
+            Thread.Sleep(3000);
             //  初始化框架
             //派生接口单实例
             UnitKernal.Instance = new UnitKernal();
@@ -44,7 +45,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             // 初始化消息处理函数
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
-            LogHelper.WriteLog("系统启动");
+            LogHelper.WriteLog("程序启动");
 
             base.OnStartup(e);
         }
@@ -66,7 +67,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI
 
         private void Application_Exit(object sender, ExitEventArgs e)
         {
-            if (UnitCore.GetInstance().ServiceOK)
+            LogHelper.WriteLog("程序关闭");
+            if (UnitCore.GetInstance().IsWorking)
                 UnitCore.GetInstance().Stop();
         }
     }

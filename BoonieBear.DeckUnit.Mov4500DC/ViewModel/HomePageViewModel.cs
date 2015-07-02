@@ -33,7 +33,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public void ExecuteStartLiveCapture(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            EventAggregator.PublishMessage(new GoSystemResourceNavigationRequest());
+            EventAggregator.PublishMessage(new GoLiveCaptureNavigationRequest());
         }
     }
 }

@@ -18,14 +18,7 @@
 	Title="MainPage">
     <Page.Resources>
         <Converters:HideZeroConverter x:Key="HideZeroConverter"/>
-        <sys:Double x:Key="scrollBarWidth">-152</sys:Double>
-        <sys:Double x:Key="TileItemWidth">250</sys:Double>
-        <sys:Double x:Key="TileItemHeight">120</sys:Double>
-        <sys:Double x:Key="Large">48</sys:Double>
-        <sys:Double x:Key="Big">36</sys:Double>
-        <sys:Double x:Key="Medium">22</sys:Double>
-        <sys:Double x:Key="Small">16</sys:Double>
-        <sys:Double x:Key="Tiny">11</sys:Double>
+        <ImageBrush x:Key="LiveImageBrush" ImageSource="{StaticResource LiveImageBackground}"/>
         
     </Page.Resources>
     <Controls:MetroContentControl >
@@ -41,17 +34,19 @@
             </Grid.ColumnDefinitions>
                 <!--Logo and title-->
                 <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="5"/>
-                    </Grid.RowDefinitions>
-
-                    <Grid  Grid.Row="0" Grid.Column="1" >
-                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                            <TextBlock Margin="40,0,0,0"  Text="{Binding Home_Title_ApplicationName, Mode=OneWay, Source={StaticResource Resources}}" FontWeight="Bold"  FontSize="{StaticResource Big}"/>
-                        </StackPanel>
-                    </Grid>
-                </Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                </Grid.RowDefinitions>
+                <ViewControls:TitleBarControl 
+                    Title="{Binding Home_Title_ApplicationName, Mode=OneWay, Source={StaticResource Resources}}"
+                    Grid.Row ="0"
+                    TitleImageSource="/Assets/IACAS.bmp"
+                    BackButtonVisibility="Collapsed"
+                    Grid.Column ="1"
+                    Grid.ColumnSpan ="2"
+                    HorizontalAlignment ="Stretch"/>
+            </Grid>
                 <!--Main area-->
                 <StackPanel Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <Grid TextBlock.FontSize="{StaticResource Small}" TextBlock.Foreground="White">
@@ -92,7 +87,7 @@
                                     <DropShadowBitmapEffect Color="Black" Direction="225"/>
                                 </Ellipse.BitmapEffect>
                             </Ellipse>
-                            <TextBlock Text="{Binding IncompleteTaskNumber}"
+                            <TextBlock Text="{Binding UnreadMessage}"
                                    FontSize="{StaticResource Medium}"
                                    FontWeight="Bold"
                                    HorizontalAlignment="Center"
@@ -151,7 +146,16 @@
                     </Grid>
                 </StackPanel>
                 <!--Brand info at bottom right corner-->
-                <Image Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left"  Width="226" Height="51" Source="/Assets/IACAS.bmp" Margin="20,0,20,0"/>
+            <Image Grid.Row="2" Grid.ColumnSpan="2" HorizontalAlignment="Left"  Width="266" Height="58" Source="/Assets/iacas.jpg" Margin="20,0,20,0" StretchDirection="UpOnly" Stretch="None">
+                <Image.OpacityMask>
+                    <RadialGradientBrush >
+                        <RadialGradientBrush.GradientStops>
+                            <GradientStop Offset="0.9" Color="#66D6C8C8"></GradientStop>
+                            <GradientStop Offset="1.0" Color="#00000000"></GradientStop>
+                        </RadialGradientBrush.GradientStops>
+                    </RadialGradientBrush>
+                </Image.OpacityMask>
+                </Image>
                 <StackPanel Grid.Row="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,10,20,0">
                     <TextBlock Text="{Binding Home_Brand, Mode=OneWay, Source={StaticResource Resources}}" FontSize="26" Foreground="White" HorizontalAlignment="Right"/>
                     <Rectangle Height="3" Fill="White" HorizontalAlignment="Right" Width="200"/>

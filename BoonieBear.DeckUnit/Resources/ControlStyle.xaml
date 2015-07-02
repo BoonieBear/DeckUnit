@@ -1205,6 +1205,61 @@
             </LinearGradientBrush>
         </ResourceDictionary>
     </metroChart:ResourceDictionaryCollection>
+    <!--AppBarButton  colours-->
+    <Color x:Key="AppBarItemBackgroundThemeColor" >#00FFFFFF</Color>
+    <Color x:Key="AppBarItemDisableForegroundThemeColor" >#66FFFFFF</Color>
+    <Color x:Key="AppBarItemForegroundThemeColor">#FFFFFFFF</Color>
+    <Color x:Key="AppBarItemPointerOverBackgroundThemeColor">#21FFFFFF</Color>
+    <Color x:Key="AppBarItemPointerOverForegroundThemeColor">#FFFFFFFF</Color>
+    <Color x:Key="AppBarItemPressedForegroundThemeColor">#FF000000</Color>
 
+    <SolidColorBrush x:Key="AppBarItemBackgroundThemeBrush" Color="{StaticResource AppBarItemBackgroundThemeColor}"/>
+    <SolidColorBrush x:Key="AppBarItemDisabledForegroundThemeBrush" Color="{StaticResource AppBarItemDisableForegroundThemeColor}"/>
+    <SolidColorBrush x:Key="AppBarItemForegroundThemeBrush" Color="{StaticResource AppBarItemForegroundThemeColor}"/>
+    <SolidColorBrush x:Key="AppBarItemPointerOverBackgroundThemeBrush" Color="{StaticResource AppBarItemPointerOverBackgroundThemeColor}"/>
+    <SolidColorBrush x:Key="AppBarItemPointerOverForegroundThemeBrush" Color="{StaticResource AppBarItemPointerOverForegroundThemeColor}"/>
+    <SolidColorBrush x:Key="AppBarItemPressedForegroundThemeBrush" Color="{StaticResource AppBarItemPressedForegroundThemeColor}"></SolidColorBrush>
+    <!--End AppBarButton  colours-->
     <system:String x:Key="TooltipFormat">"{0}:{1}%"</system:String>
+    <Style x:Key="AppBarButtonTextStyle" TargetType="ButtonBase">
+        <Setter Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+        <Setter Property="FontWeight" Value="Normal"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="AutomationProperties.ItemType" Value="App Bar Button"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ButtonBase">
+                    <Grid Width="40"  Height="40" Margin="0,0,0,0" HorizontalAlignment="Center">
+                        <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
+                        <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI" FontSize="53.333" Margin="-4,-19,0,0"/>
+                        <TextBlock Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=(AutomationProperties.AutomationId)}"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="BackgroundGlyph" Property="Foreground" Value="{StaticResource AppBarItemPointerOverBackgroundThemeBrush}"/>
+                            <Setter TargetName="Content" Property="TextBlock.Foreground"  Value="{StaticResource AppBarItemPointerOverForegroundThemeBrush}"/>
+                        </Trigger>
+
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="OutlineGlyph" Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+                            <Setter TargetName="BackgroundGlyph" Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
+                            <Setter TargetName="Content"  Property="TextBlock.Foreground" Value="{StaticResource AppBarItemPressedForegroundThemeBrush}"/>
+                        </Trigger>
+
+                        <Trigger  Property="IsEnabled" Value="False">
+                            <Setter TargetName="OutlineGlyph" Property="Foreground" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
+                            <Setter TargetName="Content"  Property="TextBlock.Foreground" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="BackAppBarButtonStyle" BasedOn="{StaticResource AppBarButtonTextStyle}" TargetType="Button">
+        <Setter Property="AutomationProperties.AutomationId" Value="&#xE112;"/>
+        <Setter Property="FontFamily" Value="Segoe UI"/>
+    </Style>
 </ResourceDictionary>

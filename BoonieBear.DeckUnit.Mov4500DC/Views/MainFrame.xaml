@@ -4,18 +4,89 @@
         xmlns:Metro="clr-namespace:TinyMetroWpfLibrary.Metro;assembly=TinyMetroWpfLibrary" 
         xmlns:commands="clr-namespace:TinyMetroWpfLibrary.Commands;assembly=TinyMetroWpfLibrary" 
         xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+        xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls" 
 		xmlns:frames="clr-namespace:TinyMetroWpfLibrary.Frames;assembly=TinyMetroWpfLibrary" 
+        xmlns:Converters="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Converters"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Mov4500UI.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton =" True"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized" AllowsTransparency="True" MouseDoubleClick="MetroWindow_MouseDoubleClick">
-    <Grid x:Name="grid">
+        ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized"  MouseDoubleClick="MetroWindow_MouseDoubleClick">
+    <metroControl:MetroWindow.Resources>
+        <Converters:WorkAreaWidthConverter x:Key="waw"/>
+        <Converters:WorkAreaHeightConverter x:Key="wah"/>
+        <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <Converters:DoubleMultiConverter x:Key="dmc"/>
+        <Converters:VisibilityBoolConverter x:Key="vbcvtr"/>
+        <Style TargetType="{x:Type ToggleButton}">
+            <Setter Property="Padding" Value="8,10"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+    </metroControl:MetroWindow.Resources>
 
-        <Grid x:Name="FirstGrid">
-            <Frame x:Name="ContentFrame"
+    <Grid x:Name="FirstGrid">
+        <Frame x:Name="ContentFrame"
 			NavigationUIVisibility="Hidden"
             HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
-            </Frame>
-        </Grid>
+        </Frame>
+        <!--About the Software Panel-->
+        <Controls:AnimationSlide  
+            Panel.ZIndex="90"
+                                     x:Name="AboutPanel"
+                                     IsOpen="False" 
+                                     IsAutoClose="True"   
+                                     Width="350" 
+                                     VerticalAlignment="Stretch"
+                                     Visibility= "Visible"
+                                     HorizontalAlignment="Right">
+            <Grid Background="#696969" TextBlock.FontSize="{StaticResource Small}">
+                <Grid.Resources>
+                    <Style x:Key="HyperlinkStyle" TargetType="Hyperlink">
+                        <Setter Property="Foreground" Value="Orange"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Grid.Resources>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <StackPanel Margin="20,20,10,20" Grid.Row="0">
+                    <Image Width="226" Height="51" Source="/Assets/iacas.jpg" HorizontalAlignment="Left"/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0" >
+                        <Image Width="50" Height="50" Source="{StaticResource AppIcon}" Margin="0,0,10,0"/>
+                        <TextBlock 
+                                   Text="{Binding Home_Title_ApplicationName, Mode=OneWay, Source={StaticResource Resources}}" 
+                                   FontSize="{StaticResource Medium}"
+                                   HorizontalAlignment="Left"
+                                   TextWrapping="Wrap"
+                                   MaxHeight="60"
+                                   Width="250"
+                                   Margin="0,0,20,0"/>
+                    </StackPanel>
+                    <TextBlock Margin="0,10,0,0" Text="{Binding Version}" TextWrapping="Wrap"/>
+                    <TextBlock Text="{Binding BuildNo}" TextWrapping="Wrap"/>
+                    <TextBlock />
+                    <TextBlock />
+
+                    <TextBlock Text="{Binding NetworkStatus}" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                    <TextBlock />
+                    
+                    <TextBlock Text="{Binding LastUpdateTime}" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                    <TextBlock />
+
+                    <TextBlock Text="{Binding ReceivebinaryDataCount}" TextWrapping="Wrap" HorizontalAlignment="Left"/>
+                    <TextBlock />
+
+                    <TextBlock Text="{Binding SPLASH_COPY_RIGHT, Mode=OneWay, Source={StaticResource Resources}}" TextWrapping="Wrap" Margin="0,10,0,0"/>
+                    <TextBlock Text="{Binding SPLASH_RIGHT_RESERVER, Mode=OneWay, Source={StaticResource Resources}}" TextWrapping="Wrap"/>
+                </StackPanel>
+
+            </Grid>
+        </Controls:AnimationSlide>
+        <Border Name="Overlay" Panel.ZIndex="100" HorizontalAlignment="Stretch"  Visibility="Collapsed" VerticalAlignment="Stretch" Background="{DynamicResource GrayBrush}" Opacity="0.7" />
     </Grid>
 </metroControl:MetroWindow>

@@ -9,6 +9,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
     {
         public MainFrameViewModel _mainFrameViewModel;
         public HomePageViewModel _homwPageViewModel;
+        public LiveCaptureViewModel _LiveCaptureViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -36,6 +37,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     _homwPageViewModel.Initialize();
                 }
                 return _homwPageViewModel;
+            }
+        }
+        public LiveCaptureViewModel LiveCaptureViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_LiveCaptureViewModel == null)
+                {
+                    _LiveCaptureViewModel = new LiveCaptureViewModel();
+                    _LiveCaptureViewModel.Initialize();
+                }
+                return _LiveCaptureViewModel;
             }
         }
     }

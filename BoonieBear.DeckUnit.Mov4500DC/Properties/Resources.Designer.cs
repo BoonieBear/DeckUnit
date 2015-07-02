@@ -70,6 +70,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
+        ///   查找类似 4500米载人潜器水声通信机-全局设置 的本地化字符串。
+        /// </summary>
+        public static string GLOBALSETTING_Title_Top {
+            get {
+                return ResourceManager.GetString("GLOBALSETTING_Title_Top", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 水声通信机 的本地化字符串。
         /// </summary>
         public static string Home_Brand {
@@ -133,6 +142,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
+        ///   查找类似 4500米载人潜器水声通信机-实时通信 的本地化字符串。
+        /// </summary>
+        public static string Live_Title_Top {
+            get {
+                return ResourceManager.GetString("Live_Title_Top", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 载人潜器声学显控程序 的本地化字符串。
         /// </summary>
         public static string Mov4500_ApplicationName {
@@ -147,6 +165,33 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         public static string Mov4500_RUNNING {
             get {
                 return ResourceManager.GetString("Mov4500_RUNNING", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 网络未连接 的本地化字符串。
+        /// </summary>
+        public static string NETWORK_DOWN {
+            get {
+                return ResourceManager.GetString("NETWORK_DOWN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 网络连接出错！ 的本地化字符串。
+        /// </summary>
+        public static string NETWORK_ERROR {
+            get {
+                return ResourceManager.GetString("NETWORK_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 网络已连接 的本地化字符串。
+        /// </summary>
+        public static string NETWORK_OK {
+            get {
+                return ResourceManager.GetString("NETWORK_OK", resourceCulture);
             }
         }
         

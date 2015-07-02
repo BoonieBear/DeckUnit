@@ -98,27 +98,41 @@
     <Compile Include="Controls\TitleBarControl.xaml.cs">
       <DependentUpon>TitleBarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\BoolReverseConverter.cs" />
+    <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DoubleMultiConverter.cs" />
     <Compile Include="Converters\DoubleSumConverter.cs" />
     <Compile Include="Converters\HideZeroConverter.cs" />
     <Compile Include="Converters\HomePageMarginLeftConverter.cs" />
     <Compile Include="Converters\VisibilityBoolConverter.cs" />
     <Compile Include="Converters\VisibilityBoolToggleConverter.cs" />
+    <Compile Include="Converters\WorkAreaHeightConverter.cs" />
+    <Compile Include="Converters\WorkAreaWidthConverter.cs" />
     <Compile Include="Converters\ZeroToVisibleConverter.cs" />
     <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
+    <Compile Include="Events\GoLiveCaptureNavigationRequest.cs" />
     <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
     <Compile Include="Events\GoDetailStatsNavigationRequest.cs" />
     <Compile Include="Events\LogEvent.cs" />
     <Compile Include="Helpers\ResourcesHelper.cs" />
+    <Compile Include="Models\Status.cs" />
     <Compile Include="Models\SystemInfo.cs" />
     <Compile Include="Splasher.cs" />
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\GlobalSettingViewModel.cs" />
     <Compile Include="ViewModel\HomePageViewModel.cs" />
+    <Compile Include="ViewModel\LiveCaptureViewModel.cs" />
     <Compile Include="ViewModel\SystemResourceViewModel.cs" />
+    <Compile Include="Views\GlobalSettingView.xaml.cs">
+      <DependentUpon>GlobalSettingView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePageView.xaml.cs">
       <DependentUpon>HomePageView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LiveCaptureView.xaml.cs">
+      <DependentUpon>LiveCaptureView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SystemResourceView.xaml.cs">
       <DependentUpon>SystemResourceView.xaml</DependentUpon>
@@ -135,6 +149,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Resources\Image.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Resources\SkinStyle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -143,7 +161,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\GlobalSettingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\HomePageView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LiveCaptureView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -277,14 +303,96 @@
       <Name>BoonieBear.DeckUnit.WaveBox</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Styles\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <Resource Include="Assets\IACAS.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\Work.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\iacas.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\feed_loader1.gif" />
+    <Resource Include="Assets\Finder.png" />
+    <Resource Include="Assets\ico_about_n.png" />
+    <Resource Include="Assets\ico_about_o.png" />
+    <Resource Include="Assets\ico_about_p.png" />
+    <Resource Include="Assets\ico_audio_80.png" />
+    <Resource Include="Assets\ico_calibrate_n.png" />
+    <Resource Include="Assets\ico_calibrate_o.png" />
+    <Resource Include="Assets\ico_calibrate_p.png" />
+    <Resource Include="Assets\ico_capture_n.png" />
+    <Resource Include="Assets\ico_capture_o.png" />
+    <Resource Include="Assets\ico_capture_p.png" />
+    <Resource Include="Assets\ico_chutil.png" />
+    <Resource Include="Assets\ico_client.png" />
+    <Resource Include="Assets\ico_coordinate.png" />
+    <Resource Include="Assets\ico_coordinate_n.png" />
+    <Resource Include="Assets\ico_coordinate_o.png" />
+    <Resource Include="Assets\ico_coordinate_p.png" />
+    <Resource Include="Assets\ico_detach_n.png" />
+    <Resource Include="Assets\ico_detach_o.png" />
+    <Resource Include="Assets\ico_detach_p.png" />
+    <Resource Include="Assets\ico_discovery_80.png" />
+    <Resource Include="Assets\ico_edit_n.png" />
+    <Resource Include="Assets\ico_edit_o.png" />
+    <Resource Include="Assets\ico_edit_p.png" />
+    <Resource Include="Assets\ico_floorplan_disable.png" />
+    <Resource Include="Assets\ico_floorplan_n.png" />
+    <Resource Include="Assets\ico_floorplan_o.png" />
+    <Resource Include="Assets\ico_floorplan_p.png" />
+    <Resource Include="Assets\ico_help_normal.png" />
+    <Resource Include="Assets\ico_help_over.png" />
+    <Resource Include="Assets\ico_help_press.png" />
+    <Resource Include="Assets\ico_hidden_n.png" />
+    <Resource Include="Assets\ico_hidden_o.png" />
+    <Resource Include="Assets\ico_hidden_p.png" />
+    <Resource Include="Assets\ico_info_n.png" />
+    <Resource Include="Assets\ico_info_o.png" />
+    <Resource Include="Assets\ico_info_p.png" />
+    <Resource Include="Assets\ico_lastseen.png" />
+    <Resource Include="Assets\ico_lock.png" />
+    <Resource Include="Assets\ico_moreoption_n.png" />
+    <Resource Include="Assets\ico_moreoption_o.png" />
+    <Resource Include="Assets\ico_moreoption_p.png" />
+    <Resource Include="Assets\ico_network.png" />
+    <Resource Include="Assets\ico_networkSSID.png" />
+    <Resource Include="Assets\ico_projects.png" />
+    <Resource Include="Assets\ico_quit_normal.png" />
+    <Resource Include="Assets\ico_quit_over.png" />
+    <Resource Include="Assets\ico_quit_press.png" />
+    <Resource Include="Assets\ico_report_n.png" />
+    <Resource Include="Assets\ico_report_o.png" />
+    <Resource Include="Assets\ico_report_p.png" />
+    <Resource Include="Assets\ico_restart_n.png" />
+    <Resource Include="Assets\ico_restart_o.png" />
+    <Resource Include="Assets\ico_restart_p.png" />
+    <Resource Include="Assets\ico_select_n.png" />
+    <Resource Include="Assets\ico_select_o.png" />
+    <Resource Include="Assets\ico_select_p.png" />
+    <Resource Include="Assets\ico_setting2_n.png" />
+    <Resource Include="Assets\ico_setting2_o.png" />
+    <Resource Include="Assets\ico_setting2_p.png" />
+    <Resource Include="Assets\ico_setting_normal.png" />
+    <Resource Include="Assets\ico_setting_over.png" />
+    <Resource Include="Assets\ico_setting_press.png" />
+    <Resource Include="Assets\ico_share_nromal.png" />
+    <Resource Include="Assets\ico_share_over.png" />
+    <Resource Include="Assets\ico_share_press.png" />
+    <Resource Include="Assets\ico_task.png" />
+    <Resource Include="Assets\ico_throughput.png" />
+    <Resource Include="Assets\ico_undo_n.png" />
+    <Resource Include="Assets\ico_undo_o.png" />
+    <Resource Include="Assets\ico_undo_p.png" />
+    <Resource Include="Assets\ico_zoomin_n.png" />
+    <Resource Include="Assets\ico_zoomin_o.png" />
+    <Resource Include="Assets\ico_zoomin_p.png" />
+    <Resource Include="Assets\ico_zoomout_n.png" />
+    <Resource Include="Assets\ico_zoomout_o.png" />
+    <Resource Include="Assets\ico_zoomout_p.png" />
+    <Resource Include="Assets\Logo.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

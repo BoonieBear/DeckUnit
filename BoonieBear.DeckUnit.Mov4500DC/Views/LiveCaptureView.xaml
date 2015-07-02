@@ -1,0 +1,46 @@
+﻿<Page x:Class="BoonieBear.DeckUnit.Mov4500UI.Views.LiveCaptureView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:k="clr-namespace:TinyMetroWpfLibrary.Controls.TouchKeyBoard;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:MetroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:ViewControls="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Controls"
+      xmlns:converters="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Converters"
+      xmlns:system="clr-namespace:System;assembly=mscorlib"
+      DataContext="{Binding LiveCaptureViewModel, Source={StaticResource ViewModelLocator}}"
+      Background="{StaticResource DefaultBackgroundBrush}"
+      mc:Ignorable="d" 
+      d:DesignHeight="718" d:DesignWidth="1024"
+	Title="LiveCaptureView">
+    <Page.Resources>
+        <converters:HideZeroConverter x:Key="HideZeroConverter"/>
+    </Page.Resources>
+    <Controls:MetroContentControl >
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="90"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <!--Logo and title-->
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="5"/>
+                </Grid.RowDefinitions>
+                <ViewControls:TitleBarControl 
+                    Title="{Binding Live_Title_Top, Mode=OneWay, Source={StaticResource Resources}}"
+                    Grid.Row ="0"
+                    Grid.Column ="0"
+                    Grid.ColumnSpan ="2"
+                    HorizontalAlignment ="Stretch"/>
+            </Grid>
+        </Grid>
+    </Controls:MetroContentControl>
+</Page>

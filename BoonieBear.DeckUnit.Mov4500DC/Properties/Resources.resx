@@ -120,6 +120,9 @@
   <data name="About_Version" xml:space="preserve">
     <value>Version {0}</value>
   </data>
+  <data name="GLOBALSETTING_Title_Top" xml:space="preserve">
+    <value>4500米载人潜器水声通信机-全局设置</value>
+  </data>
   <data name="Home_Brand" xml:space="preserve">
     <value>水声通信机</value>
   </data>
@@ -141,11 +144,23 @@
   <data name="Home_Title_ApplicationName" xml:space="preserve">
     <value>4500米载人潜器声学显控程序</value>
   </data>
+  <data name="Live_Title_Top" xml:space="preserve">
+    <value>4500米载人潜器水声通信机-实时通信</value>
+  </data>
   <data name="Mov4500_ApplicationName" xml:space="preserve">
     <value>载人潜器声学显控程序</value>
   </data>
   <data name="Mov4500_RUNNING" xml:space="preserve">
     <value>载人潜器声学显控程序正在运行</value>
+  </data>
+  <data name="NETWORK_DOWN" xml:space="preserve">
+    <value>网络未连接</value>
+  </data>
+  <data name="NETWORK_ERROR" xml:space="preserve">
+    <value>网络连接出错！</value>
+  </data>
+  <data name="NETWORK_OK" xml:space="preserve">
+    <value>网络已连接</value>
   </data>
   <data name="SPLASH_BAND" xml:space="preserve">
     <value>通信机显控程序</value>

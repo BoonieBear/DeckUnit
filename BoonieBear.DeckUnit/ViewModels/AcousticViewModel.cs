@@ -15,9 +15,8 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public override void Initialize()
         {
-            GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
-            GoDataPageCommand = RegisterCommand(ExecuteGoDataPageCommand, CanExecuteGoDataPageCommand, true);
-            
+            GoHomeCMD = RegisterCommand(ExecuteGoHomeCMD, CanExecuteGoHomeCMD, true);
+           
         }
 
 
@@ -32,49 +31,29 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         #endregion
 
-        #region GoBack Command
+        #region GoHomeCMD Command
 
 
-        public ICommand GoBackCommand
+        public ICommand GoHomeCMD
         {
-            get { return GetPropertyValue(() => GoBackCommand); }
-            set { SetPropertyValue(() => GoBackCommand, value); }
+            get { return GetPropertyValue(() => GoHomeCMD); }
+            set { SetPropertyValue(() => GoHomeCMD, value); }
         }
 
 
-        public void CanExecuteGoBackCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        public void CanExecuteGoHomeCMD(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
         }
 
 
-        public void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        public void ExecuteGoHomeCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             EventAggregator.PublishMessage(new GoBackNavigationRequest());
         }
 
         #endregion
 
-        #region GoDataPageCommand
-        public ICommand GoDataPageCommand
-        {
-            get { return GetPropertyValue(() => GoDataPageCommand); }
-            set { SetPropertyValue(() => GoDataPageCommand, value); }
-        }
-
-
-        private void CanExecuteGoDataPageCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
-        {
-            eventArgs.CanExecute = true;
-        }
-
-
-        private void ExecuteGoDataPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
-        {
-
-            EventAggregator.PublishMessage(new GoHistoryDataPageBaseNavigationRequest("历史数据"));
-        }
-    #endregion
-
+       
     }
 }

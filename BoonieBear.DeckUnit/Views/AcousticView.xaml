@@ -11,14 +11,19 @@
 	 d:DesignHeight="480" d:DesignWidth="640"
 	 Title="水声通信"  >
 
-    <Grid Background="{StaticResource LightColorBrush}">
+    <Grid Background="{StaticResource MainBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
-            <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"  Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/>
-        <metroControl:MetroAnimatedSingleRowTabControl  Grid.Row="1"  HorizontalContentAlignment="Center" HorizontalAlignment="Center"  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectedIndex="0" ScrollViewer.CanContentScroll="True" ScrollViewer.HorizontalScrollBarVisibility="Auto"/>
-
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding GoHomeCMD}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
+                </Button.Background>
+                </Button>
+                <TextBlock  Text="声学指令" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="34px"/>
+        </StackPanel>
+        
     </Grid>
 </controls:ContentPage>

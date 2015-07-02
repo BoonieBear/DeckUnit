@@ -7,14 +7,14 @@
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton =" False" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized">
+        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="480">
     <Grid x:Name="grid">
         <frames:AnimationFrame x:Name="ContentFrame"
 			Source="HomePageView.xaml" 
 			NavigationUIVisibility="Hidden"
 			AnimationMode="Fade"
-            SlideorGrowDuration ="0:0:0.020 "
-			FadeDuration="0:0:0.020"
-			FadeOffset="0:0:0.010" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
+            SlideorGrowDuration ="0:0:0.30 "
+			FadeDuration="0:0:0.20"
+			FadeOffset="0:0:0.20" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
     </Grid>
 </metroControl:MetroWindow>

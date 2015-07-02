@@ -36,7 +36,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             {
                 if (_vm == null)
                 {
-                    _vm = this.DataContext as MainFrameViewModel;
+                    _vm = MainFrameViewModel.pMainFrame;
+                     
                 }
                 return _vm;
             }
@@ -84,21 +85,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             this.IsOpen = true;
         }
 
-        //private void ShowAbout(object sender, RoutedEventArgs e)
-        //{
-        //    MainWindowView window = MainWindow as MainWindowView;
-        //    if (window != null)
-        //    {
-        //        window.ShowAboutPanel();
-        //    }
-        //}
+        private void ShowAbout(object sender, RoutedEventArgs e)
+        {
+            VM.ShowAbout();
+        }
         private void GoBack(object sender, RoutedEventArgs e)
         {
             VM.GoBack();
         }
-        private void DoHelp(object sender, RoutedEventArgs e)
+        private void GoCommandWin(object sender, RoutedEventArgs e)
         {
-            VM.DoHelp();
+            VM.GoCommandWin();
         }
         private void GoHome(object sender, RoutedEventArgs e)
         {
@@ -117,7 +114,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             VM.ExitProgram();
         }
 
-
         public Visibility BackButtonVisibility
         {
             get { return (Visibility)GetValue(BackButtonVisibilityProperty); }
@@ -128,6 +124,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
         public static readonly DependencyProperty BackButtonVisibilityProperty =
             DependencyProperty.Register("BackButtonVisibility", typeof(Visibility), typeof(TitleBarControl), new PropertyMetadata(Visibility.Visible));
 
+        public ImageSource TitleImageSource
+        {
+            get { return (ImageSource)GetValue(TitleImageSourceProperty); }
+            set { SetValue(TitleImageSourceProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for BackButtonVisibility.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty TitleImageSourceProperty =
+            DependencyProperty.Register("TitleImageSource", typeof(ImageSource), typeof(TitleBarControl), new PropertyMetadata(null));
 
 
         public string Title

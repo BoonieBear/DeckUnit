@@ -29,6 +29,7 @@ namespace BoonieBear.DeckUnit
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
             LogHelper.WriteLog("系统启动");
+            UnitCore Instance = UnitCore.GetInstance();
             base.OnStartup(e);
         }
 

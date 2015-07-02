@@ -17,7 +17,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
     /// <summary>
     /// 核心业务类，包括通信服务，数据解析，服务状态及一些其他的系统变量
     /// </summary>
-    class UnitCore
+    public class UnitCore
     {
         private readonly static object SyncObject = new object();
         //静态接口，用于在程序域中任意位置操作UnitCore中的成员
@@ -32,13 +32,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         //基础配置信息
         private MovConf _mov4500Conf;
         private CommConfInfo _commConf;
+        private string sLastUpdateTime;
         private Observer<CustomEventArgs> _observer; 
         private bool _serviceStarted = false;
         public string Error { get; private set; }
         public MonitorMode WorkMode{get; private set;}
         public MovTraceService UnitTraceService
         {
-            get { return _unitTraceService; }
+            get { return _unitTraceService ?? (_unitTraceService = new MovTraceService(WorkMode)); }
         }
 
 
@@ -114,7 +115,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 INetCore.Stop();
             _serviceStarted = false;
         }
-        public bool ServiceOK
+        public bool IsWorking
         {
             get { return _serviceStarted; }
         }
@@ -139,6 +140,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public static UnitCore Instance
         {
             get { return GetInstance(); }
+        }
+
+        public string LastUpdateTime
+        {
+            get { return sLastUpdateTime; }
+            set { sLastUpdateTime = value; }
         }
     }
 }

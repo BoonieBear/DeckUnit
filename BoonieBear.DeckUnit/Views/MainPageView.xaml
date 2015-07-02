@@ -30,18 +30,18 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DownLoadButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="VoiceTelButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
                 <SplineDoubleKeyFrame KeyTime="00:00:00.7" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="VoiceTelButton" Storyboard.TargetProperty ="IsEnabled">
+            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorModeButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
                 <SplineDoubleKeyFrame KeyTime="00:00:00.7" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorModeButton" Storyboard.TargetProperty ="IsEnabled">
+            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="RemoteControlButton">
@@ -50,10 +50,10 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="DownLoadButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="VoiceTelButton">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="MonitorButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="MonitorModeButton">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="HistoryButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
@@ -70,16 +70,16 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DownLoadButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="VoiceTelButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="VoiceTelButton" Storyboard.TargetProperty ="IsEnabled">
+            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorModeButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0"/>
             </DoubleAnimationUsingKeyFrames>
-            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="MonitorModeButton" Storyboard.TargetProperty ="IsEnabled">
+            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="RemoteControlButton">
@@ -88,10 +88,10 @@
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="DownLoadButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="VoiceTelButton">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="MonitorButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="MonitorModeButton">
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="HistoryButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
 
@@ -282,6 +282,7 @@
             <BeginStoryboard x:Name="MoveDeviceButtonsBottom_BeginStoryboard" Storyboard="{StaticResource MoveDeviceButtonsBottom}"/>
             <BeginStoryboard Storyboard="{StaticResource DisableModermStoryboard}"/>
             <BeginStoryboard Storyboard="{StaticResource EnableDeviceButtonStoryboard}"/>
+
         </EventTrigger>
         <EventTrigger RoutedEvent="ButtonBase.Click" SourceName ="OptionButton">
             <BeginStoryboard x:Name="MoveOptionStoryboard" Storyboard="{StaticResource MoveOptionButtonsBottom}"/>
@@ -1752,7 +1753,7 @@ Storyboard.TargetName="MyTextEffect"
                         </ModelVisual3D>
                     </ModelVisual3D>
                 </Viewport3D>
-                <Button x:Name="RemoteControlButton" Content ="声学指令" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontSize="14.667">
+                <Button x:Name="RemoteControlButton" Content ="声学指令" Command="{Binding GoAcousticViewCMD}" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1762,7 +1763,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                     <Button.Background>
-                        <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.chevron.left.png" Stretch="UniformToFill"/>
+                        <ImageBrush ImageSource="/Assets/appbar/appbar.chevron.left.png" Stretch="UniformToFill"/>
                     </Button.Background>
                 </Button>
                 <Button x:Name="DownLoadButton" Opacity="0" Content="远程下载" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="14.667">
@@ -1778,7 +1779,7 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush  Stretch="None" ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.chevron.left.png"/>
                     </Button.Background>
                 </Button>
-                <Button x:Name="MonitorButton" Command ="{Binding GoWaterTelPageCommand}" Opacity="0" Content="监控模式" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="14.667">
+                <Button x:Name="MonitorButton"  Opacity="0" Content="监控模式" Style="{StaticResource SimpleTransparentButtonStyle}" Width="80" Height="80" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="14.667">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>

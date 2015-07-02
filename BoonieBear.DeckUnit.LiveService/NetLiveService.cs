@@ -31,8 +31,12 @@ namespace BoonieBear.DeckUnit.LiveService
         {
             lock (SyncObject)
             {
-
-                return _netInstance ?? (_netInstance = new NetLiveService(conf, observer));
+                if (conf!=null)
+                    return _netInstance ?? (_netInstance = new NetLiveService(conf, observer));
+                else
+                {
+                    return null;
+                }
             }
         }
         private bool CreateUDPService(int port)

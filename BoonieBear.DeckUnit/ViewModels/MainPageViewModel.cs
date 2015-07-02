@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public override void Initialize()
         {
-            GoWaterTelPageCommand = RegisterCommand(ExecuteGoWaterTelPageCommand, CanExecuteGoWaterTelPageCommand, true);
+            GoAcousticViewCMD = RegisterCommand(ExecuteGoAcousticViewCMD, CanExecuteGoAcousticViewCMD, true);
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             AddPropertyChangedNotification(() => NowTime);
             var t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
@@ -65,26 +65,26 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         #endregion
 
-        #region GoWaterTelPageCommand 
+        #region GoAcousticViewCMD
 
 
-        public ICommand GoWaterTelPageCommand
+        public ICommand GoAcousticViewCMD
         {
-            get { return GetPropertyValue(() => GoWaterTelPageCommand); }
-            set { SetPropertyValue(() => GoWaterTelPageCommand, value); }
+            get { return GetPropertyValue(() => GoAcousticViewCMD); }
+            set { SetPropertyValue(() => GoAcousticViewCMD, value); }
         }
 
 
-        public void CanExecuteGoWaterTelPageCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        public void CanExecuteGoAcousticViewCMD(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
         }
 
 
-        public void ExecuteGoWaterTelPageCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        public void ExecuteGoAcousticViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             
-            EventAggregator.PublishMessage(new GoWaterTelPageBaseNavigationRequest("水声电话"));
+            EventAggregator.PublishMessage(new GoAcousticViewNavigationEvent());
         }
 
 

@@ -43,5 +43,5 @@
     <SolidColorBrush x:Key="Home_SettingsBackground" Color="#404040"/>
     <SolidColorBrush x:Key="Home_HelpBackground" Color="#262626"/>
     <SolidColorBrush x:Key="Home_ShareBackground" Color="#595959"/>
-    <ImageBrush x:Key="LiveImageBrush" ImageSource="/Assets/Work.png"/>
+    <SolidColorBrush x:Key="GrayBrush" Color="#FFD8D8D9"/>
 </ResourceDictionary>

@@ -18,6 +18,7 @@
 				<ResourceDictionary Source="/TinyMetroWpfLibrary.Controls;component/Styles/Colours.xaml"/>
                 <ResourceDictionary Source="Resources/ControlStyle.xaml"/>
                 <ResourceDictionary Source="Resources/SkinStyle.xaml"/>
+                <ResourceDictionary Source="Resources/Image.xaml"/>
                 <ResourceDictionary>
                     
                     <FontFamily x:Key="SegoeUISymbol">../Font/seguisym.ttf#Segoe UI Symbol</FontFamily>

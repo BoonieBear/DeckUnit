@@ -87,6 +87,8 @@
     <Compile Include="Core\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
+    <Compile Include="Events\GoAcousticViewNavigationEvent.cs" />
+    <Compile Include="Events\GoHomePageNavigationEvent.cs" />
     <Compile Include="ViewModels\ADViewModel.cs" />
     <Compile Include="ViewModels\DownLoadOverViewModel.cs" />
     <Compile Include="ViewModels\MonitorViewModel.cs" />

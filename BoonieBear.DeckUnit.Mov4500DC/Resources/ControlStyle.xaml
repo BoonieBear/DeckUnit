@@ -1461,9 +1461,9 @@
     </Style>
     <Style x:Key="AssistantAppBarButtonStyle" BasedOn="{StaticResource AppBarButtonImageStyle}" TargetType="Button">
         <Style.Resources>
-            <ImageBrush x:Key="Normal" ImageSource="{DynamicResource HelpNormal}"/>
-            <ImageBrush x:Key="Over" ImageSource="{DynamicResource HelpOver}"/>
-            <ImageBrush x:Key="Pressed" ImageSource="{DynamicResource HelpPressed}"/>
+            <ImageBrush x:Key="Normal" ImageSource="{DynamicResource RemoteNormal}"/>
+            <ImageBrush x:Key="Over" ImageSource="{DynamicResource RemoteOver}"/>
+            <ImageBrush x:Key="Pressed" ImageSource="{DynamicResource RemotePressed}"/>
         </Style.Resources>
         <Setter Property="adp:AppBarButtonPropertys.NormalBackground" Value="{StaticResource Normal}"/>
         <Setter Property="adp:AppBarButtonPropertys.OverBackground" Value="{StaticResource Over}"/>
@@ -1759,4 +1759,12 @@
         <Setter Property="AutomationProperties.AutomationId" Value="&#xE16C;"/>
         <Setter Property="AutomationProperties.Name" Value="{Binding AppBarButton_Annotation, Source={StaticResource Resources}}"/>
     </Style>
+    <system:Double x:Key="TileItemWidth">250</system:Double>
+    <system:Double x:Key="TileItemHeight">120</system:Double>
+    <system:Double x:Key="Large">48</system:Double>
+    <system:Double x:Key="Big">36</system:Double>
+    <system:Double x:Key="Medium">22</system:Double>
+    <system:Double x:Key="Small">16</system:Double>
+    <system:Double x:Key="Tiny">11</system:Double>
+
 </ResourceDictionary>
