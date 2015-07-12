@@ -23,12 +23,11 @@
 
     public enum ACNCommandMode
     {
-        //shell string
+        //shell string/loader
         CmdCharMode=0,
         //cmd,data
         CmdWithData = 1,
-        //loaderdata
-        LoaderDataMode=2,
+
         
     }
 

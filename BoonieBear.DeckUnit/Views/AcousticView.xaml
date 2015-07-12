@@ -1,13 +1,14 @@
-﻿<controls:ContentPage x:Class="BoonieBear.DeckUnit.Views.AcousticView"
+﻿<Page x:Class="BoonieBear.DeckUnit.Views.AcousticView"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
-      xmlns:controls="clr-namespace:BoonieBear.DeckUnit.Controls"
+      xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=AcousticViewModel}"
-      KeepAlive="True"
       mc:Ignorable="d" 
+      KeepAlive="True"
 	 d:DesignHeight="480" d:DesignWidth="640"
 	 Title="水声通信"  >
 
@@ -15,6 +16,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
             <Button Command="{Binding GoHomeCMD}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
@@ -24,6 +26,98 @@
                 </Button>
                 <TextBlock  Text="声学指令" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="34px"/>
         </StackPanel>
-        
+        <TabControl Grid.Row="1" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectIndex, Mode=OneWay}">
+                <TabItem >
+                    <ScrollViewer>
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="80"/>
+                                <RowDefinition Height="80"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="160"/>
+                            </Grid.ColumnDefinitions>
+                            <Button  Style="{DynamicResource SquareButtonStyle}" TextBlock.FontSize="24" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                                <TextBlock>
+                                    cmd1
+                                </TextBlock>
+                            </Button>
+                            <Button TextBlock.FontSize="24" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                                <TextBlock>
+                                    cmd1
+                                </TextBlock>
+                            </Button>
+                            <Button TextBlock.FontSize="24" Grid.Row="0" Grid.Column="2
+                                    " Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                                <TextBlock>
+                                    cmd1
+                                </TextBlock>
+                            </Button>
+                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                                <TextBlock>
+                                    cmd1
+                                </TextBlock>
+                            </Button>
+                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                                <TextBlock>
+                                    cmd1
+                                </TextBlock>
+                            </Button>
+                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="2" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                                <TextBlock>
+                                    cmd1
+                                </TextBlock>
+                            </Button>
+                        </Grid>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+                    <TabItem >
+                        <TextBlock FontSize="30"
+                                           Text="This is left content 1" />
+                    </TabItem>
+                <TabItem>
+                    <TextBlock FontSize="30"
+                                           Text="This is left content 2" />
+                </TabItem>
+            </TabControl>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <ToggleButton x:Name="NodeCMD" Margin="10,0,10,0"
+                                 IsChecked="{Binding IsNodeActive, Mode=OneWay}"
+                                 Content="节点指令"  
+                                 Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
+                                <i:Interaction.Triggers>
+                                    <i:EventTrigger EventName="Click">
+                                        <i:InvokeCommandAction Command="{Binding SelectNode}"/>
+                                    </i:EventTrigger>
+                                </i:Interaction.Triggers>   
+            </ToggleButton>
+            <ToggleButton Margin="10,0,10,0"
+                                 IsChecked="{Binding IsDeviceActive, Mode=OneWay}"
+                                
+                                 Content="设备指令"  
+                                 Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding SelectDevice}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ToggleButton>
+            <ToggleButton Margin="10,0,10,0"
+                                 IsChecked="{Binding IsNetActive, Mode=OneWay}"
+                                 
+                                 Content="网络指令"  
+                                 Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="Click">
+                        <i:InvokeCommandAction Command="{Binding SelectNet}"/>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </ToggleButton>
+            </StackPanel>
     </Grid>
-</controls:ContentPage>
+</Page>

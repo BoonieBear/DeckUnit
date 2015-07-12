@@ -12,9 +12,9 @@ namespace BoonieBear.DeckUnit.CommLib
         void UnRegister(Observer<CustomEventArgs> observer);
         bool Start();
         bool Stop();
-        SerialPort ReturnSerialPort();
         void ChangeMode(SerialServiceMode mode);
         void OnParsed(CustomEventArgs eventArgs);
+        SerialPort ReturnSerialPort();
     }
 
     public interface Observer<in T>

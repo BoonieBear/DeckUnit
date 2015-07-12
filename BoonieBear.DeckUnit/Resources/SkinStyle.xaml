@@ -33,4 +33,6 @@
         <Setter Property="FontSize" Value="22" />
         <Setter Property="HorizontalAlignment" Value="Center" />
     </Style>
+    <Color x:Key="GrayNormal">#FFBEBEBE</Color>
+    <SolidColorBrush x:Key="GrayNormalBrush" Color="{StaticResource GrayNormal}" />
 </ResourceDictionary>

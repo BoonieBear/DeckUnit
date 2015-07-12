@@ -61,8 +61,8 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                     err = "串口未打开";
                     return false;
                 }
-                var data = _str.ToCharArray();
-                _serialPort.Write(data, 0, data.Length);
+
+                _serialPort.Write(_str);
                 err = "发送成功";
                 return true;
             }

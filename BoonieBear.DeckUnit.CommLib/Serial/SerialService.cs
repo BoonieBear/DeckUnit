@@ -39,7 +39,6 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             catch (Exception exception)
             {
                 throw new Exception(exception.Message);
-                return false;
             }
             
         }

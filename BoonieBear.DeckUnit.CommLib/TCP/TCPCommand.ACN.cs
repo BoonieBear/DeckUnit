@@ -13,6 +13,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         public ACNTCPShellCommand(TcpClient tcpClient,string cmd)
         {
             if (!base.Init(tcpClient)) return;
+            cmd = cmd.TrimEnd('\n');
             base.GetMsg(cmd+"\r");
         }
 
@@ -39,21 +40,22 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             return SendData(out error);
         }
     }
+    public delegate void ReportProgressEvent(int i);
     //异步下载大数据，需要回传进度
     public class ACNTCPStreamCommand : TCPBaseComm
     {
         private Stream _filestream;
         private CustomEventArgs _args = new CustomEventArgs(null, null, 0, false, null, CallMode.NoneMode,null);
         private static readonly AutoResetEvent EAutoResetEvent = new AutoResetEvent(false);
-        private delegate void ReportProgressEvent(int i);
-        private event ReportProgressEvent ReportProgress;
+        
+        private  ReportProgressEvent ReportSendBytes;
         private const int TimeOut = 20000;
         private static readonly object Lockobject = new object();
-        public ACNTCPStreamCommand(TcpClient tcpClient,Stream stream,Action<int> progressAction)
+        public ACNTCPStreamCommand(TcpClient tcpClient,Stream stream,ReportProgressEvent sendBytesAction)
         {
             if (!base.Init(tcpClient)) return;
             _filestream = stream;
-            ReportProgress = new ReportProgressEvent(progressAction);
+            ReportSendBytes = sendBytesAction;
         }
 
         public override bool Send(out string error)
@@ -73,8 +75,8 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(numberOfBytesRead), 0, mySendBuffer, 2, 2);
                     base.LoadData(mySendBuffer);
-                    
-                    //ReportProgress(sendBytes);
+                    if(ReportSendBytes!=null)
+                        ReportSendBytes(sendBytes);
                     if (SendData(out error))
                     {
                         if (EAutoResetEvent.WaitOne(TimeOut))

@@ -9,6 +9,7 @@ using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.ICore;
+using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.UBP;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.UnitBoxTraceService;
@@ -24,7 +25,7 @@ namespace BoonieBear.DeckUnit.Core
     {
         private readonly static object SyncObject = new object();
         //静态接口，用于在程序域中任意位置操作UnitCore中的成员
-        private static UnitCore _instance;
+        private static UnitCore _instance = null;
         //事件绑定接口，用于事件广播
         private IEventAggregator _eventAggregator;
         //串口服务接口
@@ -38,10 +39,20 @@ namespace BoonieBear.DeckUnit.Core
         private DeckUnitConf _deckUnitConf;
         private CommConfInfo _commConf;
         private ModemConfigure _modemConf;
+        //程序基本信息
         private BaseInfo _baseInfo;
+        //数据处理观察类
         private Observer<CustomEventArgs> _observer;
+        //服务启动
         private bool _serviceStarted = false;
+        //错误信息
         public string Error { get; private set; }
+        //数据列表
+
+        //调试信息列表
+
+        //串口信息列表
+
         public UnitTraceService UnitTraceService
         {
             get { return _unitTraceService ?? (_unitTraceService = new UnitTraceService()); }
@@ -56,8 +67,6 @@ namespace BoonieBear.DeckUnit.Core
         }
         protected UnitCore()
         {
-            
-            LoadConfiguration();
 
         }
 
@@ -70,12 +79,20 @@ namespace BoonieBear.DeckUnit.Core
                 _modemConf = _deckUnitConf.GetModemConfigure();
                 _commConf = _deckUnitConf.GetCommConfInfo();
                 _baseInfo = _deckUnitConf.GetBaseInfo();
+                if(_deckUnitConf==null)
+                    throw new Exception("甲板单元配置信息丢失");
+                if (_modemConf == null)
+                    throw new Exception("通信机配置信息丢失");
+                if (_commConf == null)
+                    throw new Exception("通信配置信息丢失");
+                if (_baseInfo == null)
+                    throw new Exception("甲板单元基本信息丢失");
 
             }
             catch (Exception ex)
             {
                 ret = false;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
+                EventAggregator.PublishMessage(new LogEvent(ex, LogType.Error));
             }
             return ret;
         }
@@ -88,19 +105,23 @@ namespace BoonieBear.DeckUnit.Core
 
        
 
-        public INetCore INetCore
-        {
-            get { return _iNetCore ?? (_iNetCore = NetLiveService.GetInstance(_commConf, _observer)); }
-        }
-
+        
         public bool Start()
         {
             try
             {
-                INetCore.Initialize();
-                INetCore.Start();
-                _serviceStarted = INetCore.IsWorking;
-                Error = INetCore.Error;
+
+                if(LoadConfiguration()==false)
+                    return false;
+
+                if (NetEngine==null||CommEngine == null)
+                    return false;
+                NetEngine.Initialize();
+                NetEngine.Start();
+                CommEngine.Initialize();
+                CommEngine.Start();
+                _serviceStarted = NetEngine.IsWorking || CommEngine.IsWorking;
+                Error = NetEngine.Error;
                 return _serviceStarted;
             }
             catch (Exception e)
@@ -114,8 +135,14 @@ namespace BoonieBear.DeckUnit.Core
 
         public void Stop()
         {
-            if(_serviceStarted)
-                INetCore.Stop();
+            if (NetEngine!=null&&NetEngine.IsWorking)
+            {
+                NetEngine.Stop();
+            }
+            if (CommEngine != null && CommEngine.IsWorking)
+            {
+                CommEngine.Stop();
+            }
             _serviceStarted = false;
         }
         public bool ServiceOK
@@ -133,16 +160,20 @@ namespace BoonieBear.DeckUnit.Core
             get { return _observer ?? (_observer = new DeckUnitDataObserver()); }
 
         }
+        public INetCore NetEngine
+        {
+            get { return _iNetCore ?? (_iNetCore = NetLiveService.GetInstance(_commConf, Observer)); }
+        }
 
-        public IFileCore IFileCore
+        public IFileCore FileEngine
         {
             get { return _iFileCore; }
             set { _iFileCore = value; }
         }
 
-        public ICommCore ICommCore
+        public ICommCore CommEngine
         {
-            get { return _iCommCore ?? (_iCommCore = CommService.GetInstance(_commConf, _observer)); }
+            get { return _iCommCore ?? (_iCommCore = CommService.GetInstance(_commConf, Observer)); }
         }
 
         public static UnitCore Instance

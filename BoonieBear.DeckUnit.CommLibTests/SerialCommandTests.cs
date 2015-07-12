@@ -66,11 +66,11 @@ namespace BoonieBear.DeckUnit.CommLibTests
         {
             var auto = new AutoResetEvent(false); 
             var commfactory = new ACNSerialCommHexCommandFactory(AcnSerialsevice.ReturnSerialPort());
-            var setdebugmode = commfactory.CreateSerialComm(250, new byte[] { 0x01 }, null);
+            var setdebugmode = commfactory.CreateSerialComm(MSPHexBuilder.Pack250(true));
             AcnSerialsevice.Register(setdebugmode);
             Command.SendSerialAsync(setdebugmode).ContinueWith(t => AcnSerialsevice.UnRegister(setdebugmode));
             Thread.Sleep(500);
-            var serialcommand = commfactory.CreateSerialComm(247, new byte[] { 247 }, null);
+            var serialcommand = commfactory.CreateSerialComm(MSPHexBuilder.Pack247());
             AcnSerialsevice.Register(serialcommand);
             var ans = Command.SendSerialAsync(serialcommand);
 

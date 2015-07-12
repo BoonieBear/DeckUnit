@@ -1,7 +1,10 @@
-﻿using BoonieBear.DeckUnit.CommLib;
+﻿using System.IO;
+using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.BaseType;
+using System.Threading;
+using System.Threading.Tasks;
 namespace BoonieBear.DeckUnit.ICore
 {
     public interface ICore
@@ -23,6 +26,12 @@ namespace BoonieBear.DeckUnit.ICore
         ITCPClientService TCPShellService { get; }
         //UDP接收数据服务
         IUDPService UDPService { get; }
+
+        Task<bool> SendConsoleCMD(string cmd);
+
+        Task <bool> SendCMD(byte[] buf);
+        Task<bool> SendFile(Stream file);
+        int SendBytes { get;}
         /// <summary>
         /// 数据观察类，主要负责数据的解析和保存
         /// </summary>
@@ -34,6 +43,11 @@ namespace BoonieBear.DeckUnit.ICore
         
         //串口数据接收服务
         ISerialService SerialService { get; }
+        Task<bool> SendConsoleCMD(string cmd);
+        Task<bool> SendLoaderCMD(string cmd);
+        Task<bool> SendCMD(byte[] buf);
+
+        Task<bool> SendFile(Stream file);
         /// <summary>
         /// 数据观察类，主要负责数据的解析和保存
         /// </summary>

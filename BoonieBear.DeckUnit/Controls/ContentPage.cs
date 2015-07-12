@@ -17,13 +17,9 @@ namespace BoonieBear.DeckUnit.Controls
         }
         private void ContentPage_Loaded(object sender, RoutedEventArgs e)
         {
-            ChangeBottomBarVisibility(Visibility.Visible);
+
             
 
-        }
-        protected void ChangeBottomBarVisibility(Visibility v)
-        {
-            MainFrameViewModel.pMainFrame.IsShowBottomBar = v;
         }
 
         

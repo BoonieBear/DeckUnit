@@ -14,9 +14,9 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             _serialPort = serialPort;
         }
 
-        public SerialBaseComm CreateSerialComm(int id,byte[] bytes,string cmd)
+        public SerialBaseComm CreateSerialComm(byte[] bytes)
         {
-            return new ACNSerialHexCommand(_serialPort, id, bytes);
+            return new ACNSerialHexCommand(_serialPort, bytes);
         }
 
     }
@@ -31,9 +31,9 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             _serialPort = serialPort;
         }
 
-        public SerialBaseComm CreateSerialComm(ACNCommandMode mode, int id, byte[] bytes,string str)
+        public SerialBaseComm CreateSerialComm(string str)
         {
-            return new ACNSerialLoaderCommand(_serialPort,mode,str,bytes);
+            return new ACNSerialLoaderCommand(_serialPort,str);
         }
     }
     #endregion

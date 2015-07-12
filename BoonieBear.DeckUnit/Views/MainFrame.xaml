@@ -4,17 +4,183 @@
         xmlns:commands="clr-namespace:TinyMetroWpfLibrary.Commands;assembly=TinyMetroWpfLibrary" 
         xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
 		xmlns:frames="clr-namespace:TinyMetroWpfLibrary.Frames;assembly=TinyMetroWpfLibrary" 
-        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" x:Class="BoonieBear.DeckUnit.Views.MainFrame" 
-        DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
+        xmlns:Dialog="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
+        xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" 
+       xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
+       xmlns:Converter="clr-namespace:BoonieBear.DeckUnit.Converter" 
+       xmlns:TouchKeyBoard="clr-namespace:TinyMetroWpfLibrary.Controls.TouchKeyBoard;assembly=TinyMetroWpfLibrary.Controls" 
+       x:Class="BoonieBear.DeckUnit.Views.MainFrame"
+        Dialog:DialogParticipation.Register="{Binding}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
         ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="480">
+    <metroControl:MetroWindow.Resources>
+        <Converter:NotifyLevelToBrushConverter x:Key="NotifyLevelToBrushConverter"/>
+        <Converter:BooleanToModeConverter x:Key="BooleanToModeConverter"/>
+        <Converter:BooleanToWidthConverter x:Key="BooleanToWidthConverter"/>
+        <Converter:HideZeroConverter x:Key="HideZeroConverter"/>
+    </metroControl:MetroWindow.Resources>
+    <metroControl:MetroWindow.DataContext>
+        <Binding Path="MainFrameViewModel" Source="{StaticResource ViewModelLocator}"/>
+    </metroControl:MetroWindow.DataContext>
     <Grid x:Name="grid">
-        <frames:AnimationFrame x:Name="ContentFrame"
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <frames:AnimationFrame x:Name="ContentFrame" Grid.Row="0"
 			Source="HomePageView.xaml" 
 			NavigationUIVisibility="Hidden"
 			AnimationMode="Fade"
-            SlideorGrowDuration ="0:0:0.30 "
+			SlideorGrowDuration ="0:0:0.30 "
 			FadeDuration="0:0:0.20"
 			FadeOffset="0:0:0.20" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
+        <metroControl:WindowCommands Grid.Row="1" VerticalAlignment="Bottom" HorizontalAlignment="Right" Panel.ZIndex="99" Height="30">
+            <Button Click="LaunchDebugView" Width="40"
+				ToolTip="调试信息">
+                <Button.Background>
+                    <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.console.png" Stretch="UniformToFill" />
+                </Button.Background>
+            </Button>
+
+            <Button Click="LaunchDataView" Width="40"
+				ToolTip="全局设置" >
+                <Button.Background>
+                    <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.database.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <Grid Margin="-10,-5,0,0"
+                      HorizontalAlignment="Right" VerticalAlignment="Top"
+                      Width="25" Height="25"
+                      Visibility="{Binding RecvMessage, Converter={StaticResource HideZeroConverter}}">
+                <Ellipse Fill="Red">
+                    <Ellipse.BitmapEffect>
+                        <DropShadowBitmapEffect Color="Black" Direction="225"/>
+                    </Ellipse.BitmapEffect>
+                </Ellipse>
+                <TextBlock Text="{Binding RecvMessage}"
+                                   FontSize="14"
+                                   FontWeight="Bold"
+                                   HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"/>
+            </Grid>
+        </metroControl:WindowCommands>
+        <metroControl:FlyoutsControl x:Name="flyoutsControl">
+            <metroControl:Flyout x:Name="ConsoleFlyout"
+				Margin="0 0 0 0"
+				Header="节点命令行"
+				Position="Right" Width="640" Theme="Accent" >
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel Grid.Row="0" Orientation="Vertical" >
+                        <StackPanel  Orientation="Horizontal" Margin="0,5">
+                            <Button FontFamily="Microsoft YaHei UI" FontSize="14" Width ="80" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Command ="{Binding SwapMode}" 
+                                    Content="{Binding ModeType, Converter={StaticResource BooleanToModeConverter}}"  
+                                    Margin="0,0,3,0"/>
+                            <TextBox  x:Name ="NetTextBox" FontFamily="Microsoft YaHei UI" FontSize="14" Width ="{Binding ModeType, ConverterParameter=net, Converter={StaticResource BooleanToWidthConverter}}" 
+                                      Text="{Binding NetInput, Mode=TwoWay}" 
+                                      metroControl:TextBoxHelper.Watermark="网络" Margin="3,0" 
+                                      TouchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                      TouchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=NetTextBox}" 
+                                      TouchKeyBoard:TabKeyBoard.VerticalOffset="10"
+                                      TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
+                                      TouchKeyBoard:TabKeyBoard.Width="480"
+                                      TouchKeyBoard:TabKeyBoard.Type="Char" />
+                            <StackPanel  Width ="{Binding ModeType, ConverterParameter=comm, Converter={StaticResource BooleanToWidthConverter}}" Orientation="Horizontal" Margin="3,0">
+                                <TextBox x:Name ="CommTextBox" FontFamily="Microsoft YaHei UI" FontSize="14"  Width ="300" Text="{Binding CommInput, Mode=TwoWay}" 
+                                         metroControl:TextBoxHelper.Watermark="串口" 
+                                         Margin="0,0,3,0" 
+                                         TouchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                         TouchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=CommTextBox}"
+                                         TouchKeyBoard:TabKeyBoard.VerticalOffset="10"
+                                         TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
+                                         TouchKeyBoard:TabKeyBoard.Type="Char" 
+                                         TouchKeyBoard:TabKeyBoard.Width="480"/>
+                                <ToggleButton ToolTip ="串口进入loader模式" Height="30" Content  ="Loader"
+									IsChecked="{Binding LoaderMode}" />
+                            </StackPanel>
+                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="Microsoft YaHei UI" FontSize="14" />
+                        </StackPanel>
+                        <TextBox MinHeight ="120" FontFamily="Microsoft YaHei UI" FontSize="14" Text="{Binding ModeType, Mode=OneWay}" IsReadOnlyCaretVisible="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Orientation="Vertical">
+                        <StackPanel Orientation="Horizontal" Margin="0,5">
+                            <metroControl:SplitButton Width ="80" Margin="0,0,3,0" SelectedIndex="{Binding FilterIndex}">
+                                <metroControl:SplitButton.Items>
+                                    <MenuItem Header="空"/>
+                                    <MenuItem Header="网络层"/>
+                                    <MenuItem Header="物理层"/>
+                                    <MenuItem Header="链路层"/>
+                                    <MenuItem Header="网络监控"/>
+                                </metroControl:SplitButton.Items>
+                            </metroControl:SplitButton>
+                        </StackPanel>
+                        <ListBox MinHeight="100"/>
+                    </StackPanel>
+                </Grid>
+            </metroControl:Flyout>
+            <metroControl:Flyout x:Name="DataFlyout" Theme="Accent"
+				Margin="0 0 0 0"
+				Header="数据"
+				Position="Right" Width="640">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <StackPanel>
+                        <TextBlock Grid.Row="0"
+							Text="Something above the ScrollPanel" />
+                        <TextBlock Grid.Row="0"
+							Text="This Flyout animates its opacity when opening and closing." />
+                    </StackPanel>
+                    <ScrollViewer Grid.Row="1"
+						VerticalScrollBarVisibility="Auto">
+                        <StackPanel Orientation="Vertical">
+                            <TextBox x:Name="firstTB"
+								metroControl:TextBoxHelper.Watermark="TextBox 01" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 02" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 03" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 04" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 05" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 06" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 07" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 08" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 09" />
+                            <TextBox Margin="0,5,0,0"
+								metroControl:TextBoxHelper.Watermark="TextBox 10" />
+                        </StackPanel>
+                    </ScrollViewer>
+                    <UniformGrid Columns="2"
+						Grid.Row="2"
+						Margin="10">
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="10"
+							Content=" " />
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="10"
+							Content="Cancel" />
+                    </UniformGrid>
+                </Grid>
+            </metroControl:Flyout>
+        </metroControl:FlyoutsControl>
+        
+        <StatusBar Grid.Row="2" Style="{StaticResource MetroStatusBar}" Foreground="Black" Background="{Binding Level, Converter={StaticResource NotifyLevelToBrushConverter}}">
+            <StatusBarItem Content="{Binding StatusHeader, Mode=OneWay}"/>
+            <Separator Style="{StaticResource MetroStatusBarSeparator}" />
+            <StatusBarItem Content="{Binding StatusDescription, Mode=OneWay}"/>
+        </StatusBar>
     </Grid>
+
 </metroControl:MetroWindow>

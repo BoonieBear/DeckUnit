@@ -2,6 +2,7 @@
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.ICore;
+using BoonieBear.DeckUnit.ViewModels;
 using TinyMetroWpfLibrary.Controller;
 using TinyMetroWpfLibrary.EventAggregation;
 
@@ -55,7 +56,8 @@ namespace BoonieBear.DeckUnit.Core.Controllers
 
         public void Alert(string message)
         {
-            throw new System.NotImplementedException();
+            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "测试",
+                message);
         }
 
         public void BroadCast(string message)
@@ -71,9 +73,11 @@ namespace BoonieBear.DeckUnit.Core.Controllers
             {
                 case LogType.Error:
                     ErrorLog(message.Message, message.Ex);
+                    Alert(message.Message);
                     break;
                 case LogType.Warning:
                     WriteLog(message.Message);
+                    Alert(message.Message);
                     break;
                 default:
                     WriteLog(message.Message);

@@ -61,10 +61,39 @@
     <Reference Include="log4net">
       <HintPath>..\Tools\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="MahApps.Metro">
+    <Reference Include="MahApps.Metro, Version=0.11.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\MahApps.Metro.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.IO">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Runtime">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks">
+      <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.Threading.Tasks.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Interactivity, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml">
@@ -72,6 +101,13 @@
     </Reference>
     <Reference Include="TinyMetroWpfLibrary">
       <HintPath>..\Tools\TinyMetroWpfLibrary.dll</HintPath>
+    </Reference>
+    <Reference Include="TinyMetroWpfLibrary.Controls">
+      <HintPath>..\Tools\TinyMetroWpfLibrary.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="TinyMetroWpfLibrary.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\TinyMetroWpfLibrary.Utility.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
@@ -82,13 +118,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AutoFilterGridListView\BaseWPFHelpers.cs" />
+    <Compile Include="Controls\AutoFilterGridListView\FilterableListView.cs" />
+    <Compile Include="Controls\AutoFilterGridListView\SortableGridViewColumn.cs" />
+    <Compile Include="Controls\AutoFilterGridListView\SortableGridViewColumnHeader.cs" />
+    <Compile Include="Controls\AutoFilterGridListView\SortableListView.cs" />
     <Compile Include="Controls\ContentPage.cs" />
+    <Compile Include="Controls\ExpandableTreeListView.cs" />
     <Compile Include="Controls\TouchMoveScroll.cs" />
-    <Compile Include="Core\DataObserver.DeckUnit.cs" />
+    <Compile Include="Converter\BackgroundStripeConverter.cs" />
+    <Compile Include="Converter\BooleanToModeConverter.cs" />
+    <Compile Include="Converter\HideZeroConverter.cs" />
+    <Compile Include="Converter\ModeTypeToWidthConverter.cs" />
+    <Compile Include="Converter\NotifyLevelToBrushConverter.cs" />
+    <Compile Include="Models\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Events\GoAcousticViewNavigationEvent.cs" />
     <Compile Include="Events\GoHomePageNavigationEvent.cs" />
+    <Compile Include="Models\RecvData.cs" />
+    <Compile Include="Models\StatusNotify.cs" />
     <Compile Include="ViewModels\ADViewModel.cs" />
     <Compile Include="ViewModels\DownLoadOverViewModel.cs" />
     <Compile Include="ViewModels\MonitorViewModel.cs" />
@@ -165,6 +214,7 @@
     <None Include="log4net.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -186,6 +236,10 @@
     <Page Include="Resources\SkinStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Themes\Generic.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ADPage.xaml">
       <SubType>Designer</SubType>
@@ -293,6 +347,10 @@
     <Resource Include="Assets\MainPageButton\Toolbar Utilities Folder.png" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.ACNP\BoonieBear.DeckUnit.ACNP.csproj">
+      <Project>{61f9032e-ae3b-4fd8-988b-1cfa90c5b5b2}</Project>
+      <Name>BoonieBear.DeckUnit.ACNP</Name>
+    </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.BaseType\BoonieBear.DeckUnit.BaseType.csproj">
       <Project>{2a7a853c-6554-446f-8536-4928da33e666}</Project>
       <Name>BoonieBear.DeckUnit.BaseType</Name>
@@ -312,6 +370,10 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.DUConf\BoonieBear.DeckUnit.DUConf.csproj">
       <Project>{667c59e1-2d10-4687-a4d8-7b41bc3ee10c}</Project>
       <Name>BoonieBear.DeckUnit.DUConf</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.JsonUtils\BoonieBear.DeckUnit.JsonUtils.csproj">
+      <Project>{6d2207de-8c36-428a-bd96-614c75dd5a0c}</Project>
+      <Name>BoonieBear.DeckUnit.JsonUtils</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.LiveService\BoonieBear.DeckUnit.LiveService.csproj">
       <Project>{8340d7e7-7d37-4a6a-bc9f-db956bce9218}</Project>
@@ -340,6 +402,11 @@
     <Folder Include="Views\CommandView\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

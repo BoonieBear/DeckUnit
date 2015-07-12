@@ -45,7 +45,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                     err = "无法发送数据";
                     return false;
                 }
-                var data = Encoding.Default.GetBytes(_str);
+                var data = Encoding.ASCII.GetBytes(_str);
                 _TCPStream.Write(data, 0, data.Length);
                 err = "发送成功";
                 return true;

@@ -15,8 +15,7 @@ namespace BoonieBear.DeckUnit.Views
 
         private void MainformPage_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            MainFrameViewModel.pMainFrame.IsShowBottomBar = Visibility.Hidden;
-            MainFrameViewModel.pMainFrame.OptionPanelWidth = 0;
+
         }
 
 

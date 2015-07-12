@@ -1,0 +1,238 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<DirectedGraph GraphDirection="LeftToRight" xmlns="http://schemas.microsoft.com/vs/2009/dgml">
+  <Nodes>
+    <Node Id="Configuration\BoonieBear.DeckUnit.DUConf" Label="BoonieBear.DeckUnit.DUConf" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="Configuration\BoonieBear.DeckUnit.Mov4500Conf" Label="BoonieBear.DeckUnit.Mov4500Conf" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="DataStorageService\BoonieBear.DeckUnit.UnitBoxTraceService" Label="BoonieBear.DeckUnit.UnitBoxTraceService" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="DataStorageService\BoonieBear.DeckUnit.Mov4500TraceService" Label="BoonieBear.DeckUnit.Mov4500TraceService" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="Protocols\BoonieBear.DeckUnit.UBP" Label="BoonieBear.DeckUnit.UBP" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="Protocols\BoonieBear.DeckUnit.ACMP" Label="BoonieBear.DeckUnit.ACMP" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="Protocols\BoonieBear.DeckUnit.ACNP" Label="BoonieBear.DeckUnit.ACNP" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\BoonieBear.DeckUnit.BaseType" Label="BoonieBear.DeckUnit.BaseType" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\BoonieBear.DeckUnit.Resource" Label="BoonieBear.DeckUnit.Resource" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\BoonieBear.DeckUnit.ICore" Label="BoonieBear.DeckUnit.ICore" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\VoiceManager\BoonieBear.DeckUnit.WaveBox" Label="BoonieBear.DeckUnit.WaveBox" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\VoiceManager\BoonieBear.DeckUnit.VoiceManager" Label="BoonieBear.DeckUnit.VoiceManager" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\DataSource\BoonieBear.DeckUnit.FileService" Label="BoonieBear.DeckUnit.FileService" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\DataSource\BoonieBear.DeckUnit.LiveService" Label="BoonieBear.DeckUnit.LiveService" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\BoonieBear.DeckUnit.JsonUtils" Label="BoonieBear.DeckUnit.JsonUtils" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\DataStorage\BoonieBear.DeckUnit.DAL" Label="BoonieBear.DeckUnit.DAL" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\DataStorage\BoonieBear.DeckUnit.TraceFileService" Label="BoonieBear.DeckUnit.TraceFileService" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\BoonieBear.DeckUnit.Device" Label="BoonieBear.DeckUnit.Device" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="InternalModules\BoonieBear.DeckUnit.Comm" Label="BoonieBear.DeckUnit.Comm" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UI\BoonieBear.DeckUnit.Box" Label="BoonieBear.DeckUnit.Box" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UI\BoonieBear.DeckUnit.ADCP" Label="BoonieBear.DeckUnit.ADCP" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UI\BoonieBear.DeckUnit.BP" Label="BoonieBear.DeckUnit.BP" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UI\BoonieBear.DeckUnit.Mov4500UI" Label="BoonieBear.DeckUnit.Mov4500UI" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\WpfReordingButtonTests" Label="WpfReordingButtonTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\WpfWaveBoxTests" Label="WpfWaveBoxTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\BoonieBear.DeckUnit.TraceFileServiceTests" Label="BoonieBear.DeckUnit.TraceFileServiceTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\BoonieBear.DeckUnit.SysResourceLibTests" Label="BoonieBear.DeckUnit.SysResourceLibTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\BoonieBear.DeckUnit.Test4500netDemo" Label="BoonieBear.DeckUnit.Test4500netDemo" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\BoonieBear.DeckUnit.DALTests" Label="BoonieBear.DeckUnit.DALTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\BoonieBear.DeckUnit.CommLibTests" Label="BoonieBear.DeckUnit.CommLibTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+    <Node Id="UnitTest\BoonieBear.DeckUnit.UtilitiesTests" Label="BoonieBear.DeckUnit.UtilitiesTests" Category="项目" />
+    <Node Id="Microsoft.Bcl 1.1.8" Label="Microsoft.Bcl 1.1.8" Category="包" />
+    <Node Id="Microsoft.Bcl.Async 1.0.168" Label="Microsoft.Bcl.Async 1.0.168" Category="包" />
+    <Node Id="Microsoft.Bcl.Build 1.0.14" Label="Microsoft.Bcl.Build 1.0.14" Category="包" />
+  </Nodes>
+  <Links>
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="Configuration\BoonieBear.DeckUnit.DUConf" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="Configuration\BoonieBear.DeckUnit.Mov4500Conf" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="DataStorageService\BoonieBear.DeckUnit.UnitBoxTraceService" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="DataStorageService\BoonieBear.DeckUnit.Mov4500TraceService" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="Protocols\BoonieBear.DeckUnit.UBP" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="Protocols\BoonieBear.DeckUnit.ACMP" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="Protocols\BoonieBear.DeckUnit.ACNP" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\BoonieBear.DeckUnit.BaseType" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\BoonieBear.DeckUnit.Resource" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\BoonieBear.DeckUnit.ICore" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\VoiceManager\BoonieBear.DeckUnit.WaveBox" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\VoiceManager\BoonieBear.DeckUnit.VoiceManager" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\DataSource\BoonieBear.DeckUnit.FileService" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\DataSource\BoonieBear.DeckUnit.LiveService" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\BoonieBear.DeckUnit.JsonUtils" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\DataStorage\BoonieBear.DeckUnit.DAL" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\DataStorage\BoonieBear.DeckUnit.TraceFileService" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\BoonieBear.DeckUnit.Device" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="InternalModules\BoonieBear.DeckUnit.Comm" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UI\BoonieBear.DeckUnit.Box" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UI\BoonieBear.DeckUnit.ADCP" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UI\BoonieBear.DeckUnit.BP" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UI\BoonieBear.DeckUnit.Mov4500UI" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\WpfReordingButtonTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\WpfWaveBoxTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\BoonieBear.DeckUnit.TraceFileServiceTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\BoonieBear.DeckUnit.SysResourceLibTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\BoonieBear.DeckUnit.Test4500netDemo" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\BoonieBear.DeckUnit.DALTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\BoonieBear.DeckUnit.CommLibTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+    <Link Source="Microsoft.Bcl 1.1.8" Target="Microsoft.Bcl.Build 1.0.14" Category="程序包依赖项" />
+    <Link Source="Microsoft.Bcl.Async 1.0.168" Target="Microsoft.Bcl 1.1.8" Category="程序包依赖项" />
+    <Link Source="UnitTest\BoonieBear.DeckUnit.UtilitiesTests" Target="Microsoft.Bcl.Async 1.0.168" Category="安装的程序包" />
+  </Links>
+  <Categories>
+    <Category Id="项目" />
+    <Category Id="包" />
+  </Categories>
+  <Styles>
+    <Style TargetType="Node" GroupLabel="项目" ValueLabel="True">
+      <Condition Expression="HasCategory('项目')" />
+      <Setter Property="Background" Value="Blue" />
+    </Style>
+    <Style TargetType="Link" GroupLabel="程序包依赖项" ValueLabel="True">
+      <Condition Expression="HasCategory('程序包依赖项')" />
+      <Setter Property="Background" Value="Yellow" />
+    </Style>
+  </Styles>
+</DirectedGraph>

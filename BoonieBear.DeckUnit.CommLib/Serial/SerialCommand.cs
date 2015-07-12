@@ -14,11 +14,11 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         private static bool _haveReceData = false;
         private const int TimeOut = 2000;
         private static readonly object Lockobject = new object();
-        public ACNSerialHexCommand(SerialPort serialPort,int id,byte[] bytes)
+        public ACNSerialHexCommand(SerialPort serialPort,byte[] bytes)
         {
             _serialPort = serialPort;
-           
-            _nBytes = ACNProtocol.CommPackage(id, bytes);
+
+            _nBytes = bytes;
 
         }
   
@@ -89,44 +89,17 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
 
     public class ACNSerialLoaderCommand:SerialBaseComm
     {
-        ACNCommandMode _mode = ACNCommandMode.CmdCharMode;
-
-        public ACNSerialLoaderCommand(SerialPort serialPort, ACNCommandMode mode, string command, byte[] bytes)
+        public ACNSerialLoaderCommand(SerialPort serialPort, string command)
         {
             _serialPort = serialPort;
-            _mode = mode;
-            switch (mode)
-            {
-                case ACNCommandMode.CmdCharMode:
-                    base.GetMsg(command);
-                    break;
-                case ACNCommandMode.LoaderDataMode:
-                    _nBytes = new byte[bytes.Length];
-                    Array.Copy(bytes, _nBytes, bytes.Length);
-                    break;
-                default:
-                    break;
-            }
-
+            base.GetMsg(command);
 
         }
 
 
         public override bool Send(out string error)
         {
-            switch (_mode)
-            {
-                case ACNCommandMode.CmdCharMode:
-                    return SendMsg(out error);
-                    
-                case ACNCommandMode.LoaderDataMode:
-                    return SendData(out error);
-                    
-                default:
-                    return SendMsg(out error);
-                    
-            }
-            
+                return SendMsg(out error);
         }
         
        

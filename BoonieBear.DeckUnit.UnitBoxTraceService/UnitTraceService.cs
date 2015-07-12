@@ -8,6 +8,8 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
     {
         private DALTrace _dalTrace;//dal
         private ADFile _adFile;//trace file
+        private LogFile traceFile;
+        private LogFile shelLogFile;
         public string Error { get; set; }
         public string LogPath { get; set; }
 
@@ -29,11 +31,18 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             //create log directory
             string logPathDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
             LogPath = Environment.CurrentDirectory + @"\Log\" + logPathDate;
-            Directory.CreateDirectory(LogPath);
-            var debugPath = new DirectoryInfo(LogPath);
-            _adFile = new ADFile("LOG", ".dat");
+            string datapath = LogPath + @"\Data";
+            Directory.CreateDirectory(datapath);
+            var debugPath = new DirectoryInfo(datapath);
+            _adFile = new ADFile("Data", ".dat");
             _adFile.SetPath(debugPath);
+            string logpath = LogPath + @"\Record";
+            var recordPath = new DirectoryInfo(logpath);
+            shelLogFile = new LogFile("Shell", ".txt");
+            shelLogFile.SetPath(recordPath);
 
+            traceFile = new LogFile("Trace", ".txt");
+            traceFile.SetPath(recordPath);
             //setup sql
             _dalTrace = DALTrace.GetInstance(connectstr);
             if(_dalTrace.isLink)
@@ -49,6 +58,8 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             {
                 _dalTrace.CloseDAL();
                 _adFile.Close();
+                traceFile.Close();
+                shelLogFile.Close();
             }
             catch (Exception e)
             {
@@ -57,6 +68,46 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             }
 
             return isOK;
+        }
+
+        public bool WriteShell(string str)
+        {
+            if (shelLogFile.Create())
+            {
+                if (shelLogFile.Write(str) > 0)
+                {
+                    Error = "";
+                }
+                else
+                {
+                    Error = "写Shell文件失败！";
+                }
+            }
+            else
+            {
+                Error = "创建Shell文件失败！";
+            }
+            return false;
+        }
+
+        public bool WriteTrace(string str)
+        {
+            if (traceFile.Create())
+            {
+                if (traceFile.Write(str) > 0)
+                {
+                    Error = "";
+                }
+                else
+                {
+                    Error = "写Trace文件失败！";
+                }
+            }
+            else
+            {
+                Error = "创建Trace文件失败！";
+            }
+            return false;
         }
 
         public bool Save(CommandLog log, byte[] bytes)
@@ -68,17 +119,29 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                     _adFile.Close();
                     log.FilePath = FileName;
                     if (_dalTrace.isLink)
-                        return _dalTrace.SaveCommLog(log);
-                    Error = _dalTrace.Errormsg;
+                    {
+                        if (_dalTrace.SaveCommLog(log))
+                        {
+                            Error = "";
+                            return true;
+                        }
+                        else
+                        {
+                            Error = _dalTrace.Errormsg;
+                        }
+                            
+                    }
+                    else
+                        Error = "未连接数据库";
                 }
                 else
                 {
-                    Error = "写文件失败！";
+                    Error = "写Data文件失败！";
                 }
             }
             else
             {
-                Error = "创建文件失败！";
+                Error = "创建Data文件失败！";
             }
             return false;
             

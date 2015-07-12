@@ -790,7 +790,7 @@
     <SolidColorBrush x:Key="GlyphBrush" Color="#FFEFEFEF" />
     <SolidColorBrush x:Key="PressedBrush" Color="#FFEFEFEF" />
     <SolidColorBrush x:Key="HorizontalNormalBorderBrush" Color="#FF5A95B8" />
-    <!-- border is 0 -->
+  
     <SolidColorBrush x:Key="NormalBorderBrush" Color="#FFEFEFEF" />
 
     <Style x:Key="ScrollBarLineButton" TargetType="{x:Type RepeatButton}">
@@ -1205,61 +1205,169 @@
             </LinearGradientBrush>
         </ResourceDictionary>
     </metroChart:ResourceDictionaryCollection>
-    <!--AppBarButton  colours-->
-    <Color x:Key="AppBarItemBackgroundThemeColor" >#00FFFFFF</Color>
-    <Color x:Key="AppBarItemDisableForegroundThemeColor" >#66FFFFFF</Color>
-    <Color x:Key="AppBarItemForegroundThemeColor">#FFFFFFFF</Color>
-    <Color x:Key="AppBarItemPointerOverBackgroundThemeColor">#21FFFFFF</Color>
-    <Color x:Key="AppBarItemPointerOverForegroundThemeColor">#FFFFFFFF</Color>
-    <Color x:Key="AppBarItemPressedForegroundThemeColor">#FF000000</Color>
+  
 
-    <SolidColorBrush x:Key="AppBarItemBackgroundThemeBrush" Color="{StaticResource AppBarItemBackgroundThemeColor}"/>
-    <SolidColorBrush x:Key="AppBarItemDisabledForegroundThemeBrush" Color="{StaticResource AppBarItemDisableForegroundThemeColor}"/>
-    <SolidColorBrush x:Key="AppBarItemForegroundThemeBrush" Color="{StaticResource AppBarItemForegroundThemeColor}"/>
-    <SolidColorBrush x:Key="AppBarItemPointerOverBackgroundThemeBrush" Color="{StaticResource AppBarItemPointerOverBackgroundThemeColor}"/>
-    <SolidColorBrush x:Key="AppBarItemPointerOverForegroundThemeBrush" Color="{StaticResource AppBarItemPointerOverForegroundThemeColor}"/>
-    <SolidColorBrush x:Key="AppBarItemPressedForegroundThemeBrush" Color="{StaticResource AppBarItemPressedForegroundThemeColor}"></SolidColorBrush>
-    <!--End AppBarButton  colours-->
     <system:String x:Key="TooltipFormat">"{0}:{1}%"</system:String>
-    <Style x:Key="AppBarButtonTextStyle" TargetType="ButtonBase">
-        <Setter Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
-        <Setter Property="VerticalAlignment" Value="Stretch"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
-        <Setter Property="FontWeight" Value="Normal"/>
-        <Setter Property="FontSize" Value="20"/>
-        <Setter Property="AutomationProperties.ItemType" Value="App Bar Button"/>
+    
+    <Style TargetType="ToggleButton" x:Key="SingleSelectInMultiButtonStyle2">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="ButtonBase">
-                    <Grid Width="40"  Height="40" Margin="0,0,0,0" HorizontalAlignment="Center">
-                        <TextBlock x:Name="BackgroundGlyph" Text="&#xE0A8;" FontFamily="Segoe UI" FontSize="53.333" Margin="-4,-19,0,0" Foreground="{StaticResource AppBarItemBackgroundThemeBrush}"/>
-                        <TextBlock x:Name="OutlineGlyph" Text="&#xE0A7;" FontFamily="Segoe UI" FontSize="53.333" Margin="-4,-19,0,0"/>
-                        <TextBlock Name="Content" HorizontalAlignment="Center" Margin="-1,-1,0,0" VerticalAlignment="Center" Text="{Binding RelativeSource={RelativeSource AncestorType=Button}, Path=(AutomationProperties.AutomationId)}"/>
-                    </Grid>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Name="btn" >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="3"/>
+        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Name="btnItemStyle" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0" SnapsToDevicePixels="True" Margin="0">
+                            <TextBlock x:Name="ContentSite"  Margin="3" TextAlignment="Center"  Foreground="CornflowerBlue"  FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"   Text="{TemplateBinding Content}">
+            </TextBlock>
+        </Border>
+        <Rectangle Grid.Row="1" x:Name="SelectRect" Fill="Transparent">
+        </Rectangle>
+    </Grid>
+    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="btnItemStyle" Property="Background" Value="#ecf3f9" />
+            <Setter TargetName="SelectRect" Property="Fill" Value="#29458e" />
+        </Trigger>
+        <MultiTrigger>
+            <MultiTrigger.Conditions>
+                                <Condition Property="IsChecked" Value="False" />
+                <Condition Property="IsMouseOver" Value="True" />
+            </MultiTrigger.Conditions>
+            <MultiTrigger.Setters>
+                                <Setter TargetName="btnItemStyle" Property="Background" Value="#6381be" />
+                                <Setter TargetName="btnItemStyle" Property="BorderBrush" Value="#97acd4" />
+                                <Setter TargetName="btnItemStyle" Property="BorderThickness" Value="1,1,1,0" />
+            </MultiTrigger.Setters>
+        </MultiTrigger>
+    </ControlTemplate.Triggers>
+            </ControlTemplate>
+        </Setter.Value>
+    </Setter>
+</Style>
+
+    <Style TargetType="RadioButton" x:Key="SingleSelectInMultiButtonStyle">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RadioButton">
+                    <TextBlock Name="MainText"  VerticalAlignment="Bottom" Opacity="0.7" TextAlignment="Center"  Foreground="CornflowerBlue"  FontSize="24" FontWeight="Thin"  Text="{TemplateBinding Content}">
+                    </TextBlock>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter TargetName="BackgroundGlyph" Property="Foreground" Value="{StaticResource AppBarItemPointerOverBackgroundThemeBrush}"/>
-                            <Setter TargetName="Content" Property="TextBlock.Foreground"  Value="{StaticResource AppBarItemPointerOverForegroundThemeBrush}"/>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter TargetName="MainText" Property="Foreground" Value="Blue"/>
+                            <Setter TargetName="MainText" Property="FontSize" Value="24"/>
+                            <Setter TargetName="MainText"  Property="FontWeight" Value="SemiBold"/>
+                            <Setter TargetName="MainText"  Property="Opacity" Value="1"/>
                         </Trigger>
-
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="OutlineGlyph" Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
-                            <Setter TargetName="BackgroundGlyph" Property="Foreground" Value="{StaticResource AppBarItemForegroundThemeBrush}"/>
-                            <Setter TargetName="Content"  Property="TextBlock.Foreground" Value="{StaticResource AppBarItemPressedForegroundThemeBrush}"/>
-                        </Trigger>
-
-                        <Trigger  Property="IsEnabled" Value="False">
-                            <Setter TargetName="OutlineGlyph" Property="Foreground" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
-                            <Setter TargetName="Content"  Property="TextBlock.Foreground" Value="{StaticResource AppBarItemDisabledForegroundThemeBrush}"/>
+                        <Trigger Property="IsChecked" Value="False">
+                            <Setter TargetName="MainText" Property="Foreground" Value="CornflowerBlue"/>
+                            <Setter TargetName="MainText" Property="FontSize" Value="24"/>
+                            <Setter TargetName="MainText"  Property="FontWeight" Value="Thin"/>
+                            <Setter TargetName="MainText"  Property="Opacity" Value="0.7"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
-
             </Setter.Value>
         </Setter>
     </Style>
-    <Style x:Key="BackAppBarButtonStyle" BasedOn="{StaticResource AppBarButtonTextStyle}" TargetType="Button">
-        <Setter Property="AutomationProperties.AutomationId" Value="&#xE112;"/>
-        <Setter Property="FontFamily" Value="Segoe UI"/>
+    <!--Status bar-->
+    <Style x:Key="MetroStatusBarItem"
+           TargetType="{x:Type StatusBarItem}">
+        <Setter Property="BorderBrush"
+                Value="{DynamicResource IdealForegroundColorBrush}" />
+        <Setter Property="Padding"
+                Value="3" />
+        <Setter Property="HorizontalContentAlignment"
+                Value="Left" />
+        <Setter Property="VerticalContentAlignment"
+                Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type StatusBarItem}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource GrayBrush2}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
+    <Color x:Key="IdealForegroundColor">White</Color>
+    <SolidColorBrush x:Key="IdealForegroundColorBrush" Color="{StaticResource IdealForegroundColor}"  />
+    <SolidColorBrush x:Key="IdealForegroundDisabledBrush" Color="{StaticResource IdealForegroundColor}" Opacity="0.4" />
+    <SolidColorBrush x:Key="AccentSelectedColorBrush" Color="{StaticResource IdealForegroundColor}"  />
+    <!--80%-->
+    <Color x:Key="AccentColor">#CC119EDA</Color>
+    <Color x:Key="AccentGray">#5EC9C9C9</Color>
+    
+    <Style x:Key="MetroStatusBarSeparator"
+           TargetType="{x:Type Separator}">
+        <Setter Property="Background"
+                Value="{DynamicResource IdealForegroundColorBrush}" />
+        <Setter Property="MinWidth"
+                Value="1" />
+        <Setter Property="MinHeight"
+                Value="1" />
+        <Setter Property="Margin"
+                Value="2" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Separator}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            SnapsToDevicePixels="True" />
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="MetroStatusBar"
+           TargetType="{x:Type StatusBar}">
+        <Setter Property="FontFamily"
+                Value="Microsoft YaHei" />
+        <Setter Property="FontSize"
+                Value="18" />
+        <Setter Property="FontStyle"
+                Value="{DynamicResource {x:Static SystemFonts.StatusFontStyleKey}}" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type StatusBar}">
+                    <Border Name="Border"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Background="{TemplateBinding Background}"
+                            Padding="{TemplateBinding Padding}"
+                            SnapsToDevicePixels="True">
+                        <ItemsPresenter SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsEnabled"
+                                 Value="False">
+                            <Setter TargetName="Border"
+                                    Property="BorderBrush"
+                                    Value="{DynamicResource AccentGray}" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="ItemContainerStyle"
+                Value="{DynamicResource MetroStatusBarItem}" />
+    </Style>
+
+
 </ResourceDictionary>

@@ -56,6 +56,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
     <Reference Include="TinyMetroWpfLibrary.Utility">
       <HintPath>..\Tools\TinyMetroWpfLibrary.Utility.dll</HintPath>
     </Reference>
@@ -69,7 +70,6 @@
     <Compile Include="Serial\SerialCommand.cs" />
     <Compile Include="Serial\SerialService.cs" />
     <Compile Include="TCP\InterfaceTCP.cs" />
-    <Compile Include="TCP\TCPCommand.ACM.cs" />
     <Compile Include="TCP\TCPCommand.ACN.cs" />
     <Compile Include="TCP\TCPFactory.cs" />
     <Compile Include="TCP\TCPService.cs" />
@@ -93,6 +93,9 @@
       <Project>{6d2207de-8c36-428a-bd96-614c75dd5a0c}</Project>
       <Name>BoonieBear.DeckUnit.JsonUtils</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
