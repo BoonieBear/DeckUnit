@@ -10,11 +10,12 @@
   &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\TinyMetroWpfLibrary.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\MahApps.Metro.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\TinyMetroWpfLibrary.Controls.dll" /&gt;&#xD;
+  &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\CollectionMtLib.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
 	
 	
 	
 	
-	<s:Boolean x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=95D54947699343288D39A146098BAEB8/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=95D54947699343288D39A146098BAEB8/Name/@EntryValue">TransListToNodeWriteLineicTest</s:String>
-	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=95D54947699343288D39A146098BAEB8/XmlSerializedElements/@EntryValue">&lt;Session&gt;&lt;Elements /&gt;&lt;/Session&gt;</s:String></wpf:ResourceDictionary>
+	
+	
+	</wpf:ResourceDictionary>

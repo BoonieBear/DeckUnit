@@ -1,4 +1,5 @@
-﻿namespace BoonieBear.DeckUnit.ViewModels
+﻿using BoonieBear.DeckUnit.ViewModels.CommandViewModel;
+namespace BoonieBear.DeckUnit.ViewModels
 {
 
     public class UnitViewModelLocator
@@ -12,6 +13,7 @@
         private DownLoadOverViewModel _downLoadOverViewModel;
         private MonitorViewModel _monitorViewModel;
         private ADViewModel _adViewModel;
+        private SimpleViewModel _simpleViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -131,6 +133,19 @@
                     _adViewModel.Initialize();
                 }
                 return _adViewModel;
+            }
+        }
+        public SimpleViewModel SimpleViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_simpleViewModel == null)
+                {
+                    _simpleViewModel = new SimpleViewModel();
+                    _simpleViewModel.Initialize();
+                }
+                return _simpleViewModel;
             }
         }
     }

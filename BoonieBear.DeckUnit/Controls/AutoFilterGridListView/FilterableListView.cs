@@ -7,7 +7,8 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
-using BoonieBear.DeckUnit.Models;
+using BoonieBear.DeckUnit.DAL;
+
 namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
 {
     /// <summary>
@@ -256,7 +257,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
                     else
                     {   
                         bool containsNull = false;
-                        PropertyDescriptor filterPropDesc = TypeDescriptor.GetProperties(typeof(RecvData))[propertyName];
+                        PropertyDescriptor filterPropDesc = TypeDescriptor.GetProperties(typeof(CommandLog))[propertyName];
 
                         // iterate over all the objects in the list
                         foreach (Object item in Items)
@@ -316,8 +317,8 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
                 foreach (FilterStruct filter in currentFilters.Values)
                 {
                     // obtain the value for this property on the item under test
-                    PropertyDescriptor filterPropDesc = TypeDescriptor.GetProperties(typeof(RecvData))[filter.property];
-                    object itemValue = filterPropDesc.GetValue((RecvData)item);
+                    PropertyDescriptor filterPropDesc = TypeDescriptor.GetProperties(typeof(CommandLog))[filter.property];
+                    object itemValue = filterPropDesc.GetValue((CommandLog)item);
 
                     if (itemValue != null)
                     {

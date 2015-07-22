@@ -17,8 +17,8 @@ namespace BoonieBear.DeckUnit.ACNP
 
         private static Hashtable CmdTable = new Hashtable();//命令哈希表
         private static List<BitArray> CmdForSend = new List<BitArray>();//命令数据
-        private static List<UInt16> CmdNode = new List<UInt16>();//命令地址
-        private static List<UInt16> NodeFindOut = new List<UInt16>();//数据分组后的节点名集合
+        private static List<int> CmdNode = new List<int>();//命令地址
+        private static List<int> NodeFindOut = new List<int>();//数据分组后的节点名集合
 
         private static int index = 0;//累进解析器的下标位置。
         private static int packindex = 0;//累进打包器的下标位置
@@ -186,8 +186,8 @@ namespace BoonieBear.DeckUnit.ACNP
 
         }
 
-        //将相同目标节点通信网命令加入命令池，调用顺序：InitForPack->ACNBuilder.PackXXX()(AddPool)->Package
-        public static void AddPool(UInt16 ID)
+        //将相同目标节点通信网命令加入命令池，调用顺序：ACNBuilder.PackXXX()(AddPool)->Package
+        public static void AddPool(int ID)
         {
             CmdNode.Add(ID);
             CmdForSend.Add(data);

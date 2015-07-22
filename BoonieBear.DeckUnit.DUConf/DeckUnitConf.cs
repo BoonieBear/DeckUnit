@@ -39,7 +39,7 @@ namespace BoonieBear.DeckUnit.DUConf
 
         public string GetSqlString()
         {
-            string[] str = {"甲板单元", "数据库配置", "连接字符串"};
+            string[] str = {"数据库配置", "连接字符串"};
             return GetValue(str);
         }
 

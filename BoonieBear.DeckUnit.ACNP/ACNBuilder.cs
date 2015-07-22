@@ -12,7 +12,7 @@ namespace BoonieBear.DeckUnit.ACNP
     /// </summary>
     public class ACNBuilder
     {
-        public static void Pack002(UInt16 ID, Hashtable NodeInfo)
+        public static void Pack002(int ID, Hashtable NodeInfo)
         {
             int nodenum = NodeInfo.Keys.Count;
             int[] dat = new int[1];
@@ -30,7 +30,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Pack003(UInt16 ID, List<NeiborNodeinfo> NeiborNodeLst)
+        public static void Pack003(int ID, List<NeiborNodeinfo> NeiborNodeLst)
         {
             int[] dat = new int[1];
             int nodenum = NeiborNodeLst.Count;
@@ -53,7 +53,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Pack004(UInt16 ID, List<NetworkList> NetLst)//ID=0 广播
+        public static void Pack004(int ID, List<NetworkList> NetLst)//ID=0 广播
         {
             int[] dat = new int[1];
             int nodenum = NetLst.Count;
@@ -78,7 +78,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Pack006(UInt16 ID,List<RourteList> rourte)
+        public static void Pack006(int ID,List<RourteList> rourte)
         {
             int nodenum = rourte.Count;
             int[] dat = new int[1];
@@ -109,7 +109,7 @@ namespace BoonieBear.DeckUnit.ACNP
         }
 
         //路径安排
-        public static void Pack008(UInt16 ID,string[] nodename)
+        public static void Pack008(int ID,string[] nodename)
         {
             int[] dat = new int[1];
             int nodenum = nodename.Length;
@@ -126,7 +126,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Ping(UInt16 ID,string txt)
+        public static void Ping(int ID,string txt)
         {
             int[] dat = new int[1];
             byte[] bstr = System.Text.Encoding.Default.GetBytes(txt);
@@ -140,7 +140,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutArrayBit(bta);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack103(UInt16 ID)
+        public static void Pack103(int ID)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);
@@ -150,7 +150,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack105(UInt16 ID)
+        public static void Pack105(int ID)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);
@@ -160,7 +160,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack107(UInt16 ID, bool Rebuild)
+        public static void Pack107(int ID, bool Rebuild)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(21);
@@ -174,7 +174,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(dat, 1);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack109(UInt16 ID)
+        public static void Pack109(int ID)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);
@@ -184,7 +184,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack111(UInt16 ID, bool Rebuild)
+        public static void Pack111(int ID, bool Rebuild)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(21);
@@ -198,7 +198,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(dat, 1);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack113(UInt16 ID)
+        public static void Pack113(int ID)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);
@@ -208,7 +208,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack115(UInt16 ID,int CommIndex)
+        public static void Pack115(int ID,int CommIndex)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(28);
@@ -221,7 +221,7 @@ namespace BoonieBear.DeckUnit.ACNP
                 dat[0] = CommIndex;
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack117(UInt16 ID, int CommIndex)
+        public static void Pack117(int ID, int CommIndex)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(28);
@@ -235,7 +235,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Pack119(UInt16 ID,int CommIndex, bool bHex, string str)
+        public static void Pack119(int ID,int CommIndex, bool bHex, string str)
         {
             int[] dat = new int[1];
             if (bHex)
@@ -283,7 +283,7 @@ namespace BoonieBear.DeckUnit.ACNP
             }
             ACNProtocol.AddPool(ID);
         }
-        public static void Pack121(UInt16 ID)
+        public static void Pack121(int ID)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);
@@ -294,7 +294,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
         //通信制式开关
-        public static void Pack142(UInt16 ID, BitArray baCommType)
+        public static void Pack142(int ID, BitArray baCommType)
         {
             int[] dat = new int[1];
             ACNProtocol.Clear();
@@ -309,7 +309,7 @@ namespace BoonieBear.DeckUnit.ACNP
         }
 
         //设备数据定时回传开关
-        public static void Pack140(UInt16 ID, int iTimePeriod)
+        public static void Pack140(int ID, int iTimePeriod)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20 + 32);
@@ -324,7 +324,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
         //收发自动调节开关
-        public static void Pack141(UInt16 ID, int EmitAmp, int ReceGain)
+        public static void Pack141(int ID, int EmitAmp, int ReceGain)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20 + 16);
@@ -365,7 +365,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Pack200(UInt16 ID)
+        public static void Pack200(int ID)
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);

@@ -55,6 +55,9 @@
     <StartupObject>BoonieBear.DeckUnit.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CollectionMtLib">
+      <HintPath>..\Tools\CollectionMtLib.dll</HintPath>
+    </Reference>
     <Reference Include="De.TorstenMandelkow.MetroChart">
       <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
@@ -128,21 +131,27 @@
     <Compile Include="Controls\TouchMoveScroll.cs" />
     <Compile Include="Converter\BackgroundStripeConverter.cs" />
     <Compile Include="Converter\BooleanToModeConverter.cs" />
+    <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\HideZeroConverter.cs" />
     <Compile Include="Converter\ModeTypeToWidthConverter.cs" />
     <Compile Include="Converter\NotifyLevelToBrushConverter.cs" />
+    <Compile Include="Helps\PickerFilter.cs" />
     <Compile Include="Models\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Events\GoAcousticViewNavigationEvent.cs" />
     <Compile Include="Events\GoHomePageNavigationEvent.cs" />
-    <Compile Include="Models\RecvData.cs" />
     <Compile Include="Models\StatusNotify.cs" />
     <Compile Include="ViewModels\ADViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel\SimpleViewModel.cs" />
     <Compile Include="ViewModels\DownLoadOverViewModel.cs" />
+    <Compile Include="Events\GoSimplePage.cs" />
     <Compile Include="ViewModels\MonitorViewModel.cs" />
     <Compile Include="Views\ADPage.xaml.cs">
       <DependentUpon>ADPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandView\SimpleView.xaml.cs">
+      <DependentUpon>SimpleView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DownLoadOverView.xaml.cs">
       <DependentUpon>DownLoadOverView.xaml</DependentUpon>
@@ -242,6 +251,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ADPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandView\SimpleView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -397,10 +410,7 @@
       <SubType>Designer</SubType>
     </Resource>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModels\CommandViewModel\" />
-    <Folder Include="Views\CommandView\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

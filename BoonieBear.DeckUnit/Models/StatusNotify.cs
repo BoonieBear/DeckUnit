@@ -18,7 +18,7 @@ namespace BoonieBear.DeckUnit.Models
         public string Source { get; set; }
         public string Msg { get; set; }
         public NotifyLevel Level { get; set; }
-        StatusNotify(string source, string msg, NotifyLevel level)
+        public StatusNotify(string source, string msg, NotifyLevel level)
         {
             Source = source;
             Msg = msg;

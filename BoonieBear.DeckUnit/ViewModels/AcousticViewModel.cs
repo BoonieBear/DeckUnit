@@ -1,4 +1,5 @@
 ﻿using System.Windows.Input;
+using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
@@ -19,6 +20,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             SelectNode = RegisterCommand(ExecuteSelectNode, CanExecuteSelectNode, true);
             SelectDevice = RegisterCommand(ExecuteSelectDevice, CanExecuteSelectDevice, true);
             SelectNet = RegisterCommand(ExecuteSelectNet, CanExecuteSelectNet, true);
+            GoGetDeviceDataPage = RegisterCommand(ExecuteGoGetDeviceDataPage, CanExecuteGoGetDeviceDataPage, true);
         }
 
 
@@ -115,6 +117,31 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
         #endregion
 
+        #region node cmd
+
+        #endregion
+        #region device cmd
+
+        public ICommand GoGetDeviceDataPage
+        {
+            get { return GetPropertyValue(() => GoGetDeviceDataPage); }
+            set { SetPropertyValue(() => GoGetDeviceDataPage, value); }
+        }
+
+
+        public void CanExecuteGoGetDeviceDataPage(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        public  void ExecuteGoGetDeviceDataPage(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            EventAggregator.PublishMessage(new GoSimplePage("获取设备数据"));
+        }
+        #endregion
+        #region network
+        #endregion
         #region SelectDevice
         public ICommand SelectDevice
         {

@@ -14,7 +14,8 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         IHandleMessage<GoHistoryDataPageBaseNavigationRequest>,
         IHandleMessage<GoSystemResourceNavigationRequest>,
         IHandleMessage<GoAcousticViewNavigationEvent>,
-        IHandleMessage<GoHomePageNavigationEvent>
+        IHandleMessage<GoHomePageNavigationEvent>,
+        IHandleMessage<GoSimplePage>
 
     {
         public void Handle(GoWaterTelPageBaseNavigationRequest message)
@@ -38,9 +39,15 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         {
             NavigateToPage("Views/AcousticView.xaml");
         }
+
         public void Handle(GoHomePageNavigationEvent message)
         {
             NavigateToPage("Views/MainPageView.xaml");
+        }
+
+        public void Handle(GoSimplePage message)
+        {
+            NavigateToPage("Views/CommandView/SimpleView.xaml",message.Titile);
         }
     }
 }

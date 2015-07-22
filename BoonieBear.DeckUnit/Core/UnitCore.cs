@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
+using System.Text;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
 using BoonieBear.DeckUnit.CommLib.TCP;
@@ -47,12 +50,7 @@ namespace BoonieBear.DeckUnit.Core
         private bool _serviceStarted = false;
         //错误信息
         public string Error { get; private set; }
-        //数据列表
-
-        //调试信息列表
-
-        //串口信息列表
-
+ 
         public UnitTraceService UnitTraceService
         {
             get { return _unitTraceService ?? (_unitTraceService = new UnitTraceService()); }
@@ -92,7 +90,7 @@ namespace BoonieBear.DeckUnit.Core
             catch (Exception ex)
             {
                 ret = false;
-                EventAggregator.PublishMessage(new LogEvent(ex, LogType.Error));
+                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
             }
             return ret;
         }

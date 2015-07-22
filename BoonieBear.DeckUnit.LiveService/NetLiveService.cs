@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.IO;
+using System.Threading;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.CommLib;
@@ -159,8 +160,16 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public Task<bool> SendCMD(byte[] buf)
         {
-            var cmd = new ACNTCPDataCommand(_shelltcpClient, buf);
-            return Command.SendTCPAsync(cmd);
+            var ret = SendConsoleCMD("gd -n");
+            if (ret.Result)
+            {
+                TaskEx.Delay(100);
+                var cmd = new ACNTCPDataCommand(_shelltcpClient, buf);
+                return Command.SendTCPAsync(cmd);
+            }
+            return ret;
+
+
         }
 
         public async Task<bool> SendFile(Stream file)

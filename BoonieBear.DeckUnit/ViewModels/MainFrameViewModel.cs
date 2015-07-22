@@ -1,6 +1,10 @@
-﻿using System.Windows;
+﻿using System.Text;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
+using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.DAL;
+using BoonieBear.DeckUnit.Events;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.Frames;
 using TinyMetroWpfLibrary.ViewModel;
@@ -8,6 +12,7 @@ using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
+using CollectionMtLib;
 namespace BoonieBear.DeckUnit.ViewModels
 {
     /// <summary>
@@ -17,11 +22,15 @@ namespace BoonieBear.DeckUnit.ViewModels
     {
         public static MainFrameViewModel pMainFrame;
         private IDialogCoordinator _dialogCoordinator;
+
+        //数据来源节点号集合
+        public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<string> NodeCollMt { set; get; }
+        public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<string> TraceCollMt { set; get; }
+        public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<CommandLog> DataCollMt { set; get; }
         public override void Initialize()
         {
             base.Initialize();
             
-            GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             SwapMode = RegisterCommand(ExecuteSwapMode, CanExecuteSwapMode, true);
             pMainFrame = this;
             //绑定属性初始化
@@ -74,41 +83,38 @@ namespace BoonieBear.DeckUnit.ViewModels
             set { SetPropertyValue(() => CommInput, value); }
         }
 
-        public int FilterIndex
+        public int FilterIndex//-1表示空
         {
             get { return GetPropertyValue(() => FilterIndex); }
             set { SetPropertyValue(() => FilterIndex, value); }
+        }
+        public int Filterlayer//-1表示空
+        {
+            get { return GetPropertyValue(() => Filterlayer); }
+            set { SetPropertyValue(() => Filterlayer, value); }
         }
         public int RecvMessage
         {
             get { return GetPropertyValue(() => RecvMessage); }
             set { SetPropertyValue(() => RecvMessage, value); }
         }
-        
+        public string Shellstring
+        {
+            get { return GetPropertyValue(() => Shellstring); }
+            set { SetPropertyValue(() => Shellstring, value); }
+        }
+        public string Serialstring
+        {
+            get {return GetPropertyValue(() => Serialstring); }
+            set { SetPropertyValue(() => Serialstring, value); }
+        }
+        public bool LoaderMode
+        {
+            get { return GetPropertyValue(() => LoaderMode); }
+            set { SetPropertyValue(() => LoaderMode, value); }
+        }
         #endregion
 
-        #region GoBack Command
-
-
-        public ICommand GoBackCommand
-        {
-            get { return GetPropertyValue(() => GoBackCommand); }
-            set { SetPropertyValue(() => GoBackCommand, value); }
-        }
-
-
-        private void CanExecuteGoBackCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
-        {
-            eventArgs.CanExecute = true;
-        }
-
-
-        private void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
-        {
-
-        }
-
-        #endregion
 
         #region SwapMode CMD
         public ICommand SwapMode
@@ -150,6 +156,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             if (ModeType)
             {
+
             }
             else
             {
@@ -170,6 +177,8 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
         }
         #endregion
+
+        
     }
    
 }
