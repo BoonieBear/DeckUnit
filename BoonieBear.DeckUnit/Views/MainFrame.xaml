@@ -21,7 +21,12 @@
         <Converter:BooleanToModeConverter x:Key="BooleanToModeConverter"/>
         <Converter:BooleanToWidthConverter x:Key="BooleanToWidthConverter"/>
         <Converter:HideZeroConverter x:Key="HideZeroConverter"/>
-
+            <Dialog:CustomDialog x:Key="CustomInfoDialog"
+                                 Title="设备命令"
+                                 x:Name="CustomInfoDialog">
+                <TextBlock Height="30" Text=".。。。" x:Name="MessageTextBlock"
+                               Foreground="{DynamicResource AccentColorBrush}" />
+                </Dialog:CustomDialog>
         </ResourceDictionary>
     </Window.Resources>
     <metroControl:MetroWindow.DataContext>
@@ -110,7 +115,7 @@
                             </StackPanel>
                             <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="Microsoft YaHei UI" FontSize="14" />
                         </StackPanel>
-                        <TextBox x:Name ="DebugLog" MinHeight ="120" FontFamily="Microsoft YaHei UI" FontSize="14"  IsReadOnlyCaretVisible="True" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"/>
+                        <TextBox x:Name ="DebugLog" MinHeight ="120" FontFamily="Microsoft YaHei UI" FontSize="14" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Text="{Binding TraceCollMt}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="0,5">
@@ -126,7 +131,7 @@
                                 <ComboBoxItem Content =" 网络监控"/>
                             </ComboBox>
                         </StackPanel>
-                        <ListBox MinHeight="120"/>
+                        <ListBox MinHeight="120" ItemsSource="{Binding TraceCollMt}"/>
                     </StackPanel>
                 </Grid>
             </metroControl:Flyout>

@@ -41,35 +41,35 @@
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="160"/>
                             </Grid.ColumnDefinitions>
-                            <Button   TextBlock.FontSize="24" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button   FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNodeStatusPage}">
                                 <TextBlock>
-                                    cmd1
+                                    获取节点状态
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNodeInfoPage}">
                                 <TextBlock>
-                                    cmd1
+                                    获取节点信息
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="0" Grid.Column="2
-                                    " Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="2
+                                    " Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNodeInfoListPage}">
                                 <TextBlock>
-                                    cmd1
+                                    获取节点信息表
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNodeRoutePage}">
                                 <TextBlock>
-                                    cmd1
+                                    获取节点路由
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetRecvEmitPage}">
                                 <TextBlock>
-                                    cmd1
+                                    收发调节设置
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="2" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="2" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoComSchemaPage}">
                                 <TextBlock>
-                                    cmd1
+                                    通信制式设置
                                 </TextBlock>
                             </Button>
                         </Grid>
@@ -95,12 +95,12 @@
                                     获取设备数据
                                 </TextBlock>
                             </Button>
-                            <Button  TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" FontFamily="Microsoft YaHei">
+                            <Button  TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" FontFamily="Microsoft YaHei" Command="{Binding GoGetDeviceStatusPage}">
                                 <TextBlock>
                                     获取设备状态
                                 </TextBlock>
                             </Button>
-                            <Button   TextBlock.FontSize="20" Grid.Row="0" Grid.Column="2" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" FontFamily="Microsoft YaHei">
+                            <Button   TextBlock.FontSize="20" Grid.Row="0" Grid.Column="2" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" FontFamily="Microsoft YaHei" Command="{Binding GoDeviceBackSet}">
                                 <TextBlock>
                                     设备回传设置
                                 </TextBlock>
@@ -128,25 +128,25 @@
                                 <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="160"/>
                             </Grid.ColumnDefinitions>
-                            <Button  Style="{DynamicResource SquareButtonStyle}" TextBlock.FontSize="24" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button  Style="{DynamicResource SquareButtonStyle}" FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNeiborListPage}">
                                 <TextBlock>
-                                    cmd1
+                                   获取邻接点表
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNetListPage}">
                                 <TextBlock>
-                                    cmd1
+                                    获取网络表
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="0" Grid.Column="2
-                                    " Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="2
+                                    " Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNetSimpleListPage}">
                                 <TextBlock>
-                                    cmd1
+                                    获取网络简表
                                 </TextBlock>
                             </Button>
-                            <Button TextBlock.FontSize="24" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
                                 <TextBlock>
-                                    cmd1
+                                    全网复位
                                 </TextBlock>
                             </Button>
                         </Grid>

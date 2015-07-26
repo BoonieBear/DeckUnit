@@ -190,7 +190,7 @@ namespace BoonieBear.DeckUnit.ACNP
         public static void AddPool(int ID)
         {
             CmdNode.Add(ID);
-            CmdForSend.Add(data);
+            CmdForSend.Add(packdata);
         }
         //将通信网命令打包成网络或是串口数据包(171) 
         static public byte[] Package(bool bViaComm)

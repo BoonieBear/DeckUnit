@@ -14,6 +14,10 @@ namespace BoonieBear.DeckUnit.ViewModels
         private MonitorViewModel _monitorViewModel;
         private ADViewModel _adViewModel;
         private SimpleViewModel _simpleViewModel;
+        private DeviceBackSetViewModel _deviceBackSetViewModel;
+        private DeviceParaSetViewModel _deviceParaSetViewModel;
+        private NodeRecvEmitSetViewModel _nodeRecvEmitSetViewModel;
+        private NodeComSchemaViewModel _nodeComSchemaViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -146,6 +150,58 @@ namespace BoonieBear.DeckUnit.ViewModels
                     _simpleViewModel.Initialize();
                 }
                 return _simpleViewModel;
+            }
+        }
+        public DeviceBackSetViewModel DeviceBackSetViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_deviceBackSetViewModel == null)
+                {
+                    _deviceBackSetViewModel = new DeviceBackSetViewModel();
+                    _deviceBackSetViewModel.Initialize();
+                }
+                return _deviceBackSetViewModel;
+            }
+        }
+        public DeviceParaSetViewModel DeviceParaSetViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_deviceParaSetViewModel == null)
+                {
+                    _deviceParaSetViewModel = new DeviceParaSetViewModel();
+                    _deviceParaSetViewModel.Initialize();
+                }
+                return _deviceParaSetViewModel;
+            }
+        }
+        public NodeRecvEmitSetViewModel NodeRecvEmitSetViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_nodeRecvEmitSetViewModel == null)
+                {
+                    _nodeRecvEmitSetViewModel = new NodeRecvEmitSetViewModel();
+                    _nodeRecvEmitSetViewModel.Initialize();
+                }
+                return _nodeRecvEmitSetViewModel;
+            }
+        }
+        public NodeComSchemaViewModel NodeComSchemaViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_nodeComSchemaViewModel == null)
+                {
+                    _nodeComSchemaViewModel = new NodeComSchemaViewModel();
+                    _nodeComSchemaViewModel.Initialize();
+                }
+                return _nodeComSchemaViewModel;
             }
         }
     }

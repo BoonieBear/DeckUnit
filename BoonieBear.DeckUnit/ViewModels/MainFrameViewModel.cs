@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Text;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -24,14 +25,24 @@ namespace BoonieBear.DeckUnit.ViewModels
         private IDialogCoordinator _dialogCoordinator;
 
         //数据来源节点号集合
-        public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<string> NodeCollMt { set; get; }
-        public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<string> TraceCollMt { set; get; }
+        public List<string> NodeCollMt
+        {
+            get { return GetPropertyValue(() => NodeCollMt); }
+            set { SetPropertyValue(() => NodeCollMt, value); }
+        }
+
+        public List<string> TraceCollMt
+        {
+            get { return GetPropertyValue(() => TraceCollMt); }
+            set { SetPropertyValue(() => TraceCollMt, value); }
+        }
         public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<CommandLog> DataCollMt { set; get; }
         public override void Initialize()
         {
             base.Initialize();
-            
+            TraceCollMt = new List<string>();
             SwapMode = RegisterCommand(ExecuteSwapMode, CanExecuteSwapMode, true);
+            SendCMD = RegisterCommand(ExecuteSendCMD, CanExecuteSendCMD, true);
             pMainFrame = this;
             //绑定属性初始化
             AddPropertyChangedNotification(() => StatusHeader);
@@ -152,15 +163,15 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
 
-        private void ExecuteSendCMD(object sender, ExecutedRoutedEventArgs eventArgs)
+        private async void ExecuteSendCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             if (ModeType)
             {
-
+                await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
             }
             else
             {
-                
+                await UnitCore.Instance.CommEngine.SendConsoleCMD(CommInput);
 
             }
         }

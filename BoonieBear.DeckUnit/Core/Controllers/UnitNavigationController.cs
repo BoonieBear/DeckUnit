@@ -15,7 +15,11 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         IHandleMessage<GoSystemResourceNavigationRequest>,
         IHandleMessage<GoAcousticViewNavigationEvent>,
         IHandleMessage<GoHomePageNavigationEvent>,
-        IHandleMessage<GoSimplePage>
+        IHandleMessage<GoSimplePage>,
+        IHandleMessage<GoDeviceBackSetPage>,
+        IHandleMessage<GoDeviceParaSetPage>,
+        IHandleMessage<GoNodeRecvEmitSetPage>,
+        IHandleMessage<GoComSchemaEvent>
 
     {
         public void Handle(GoWaterTelPageBaseNavigationRequest message)
@@ -48,6 +52,24 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         public void Handle(GoSimplePage message)
         {
             NavigateToPage("Views/CommandView/SimpleView.xaml",message.Titile);
+        }
+        public void Handle(GoDeviceBackSetPage message)
+        {
+            NavigateToPage("Views/CommandView/DeviceBackSetView.xaml");
+        }
+        public void Handle(GoDeviceParaSetPage message)
+        {
+            NavigateToPage("Views/CommandView/DeviceParaSetView.xaml");
+        }
+
+        public void Handle(GoNodeRecvEmitSetPage message)
+        {
+            NavigateToPage("Views/CommandView/NodeRecvEmitSetView.xaml");
+        }
+
+        public void Handle(GoComSchemaEvent message)
+        {
+            NavigateToPage("Views/CommandView/NodeComSchema.xaml");
         }
     }
 }

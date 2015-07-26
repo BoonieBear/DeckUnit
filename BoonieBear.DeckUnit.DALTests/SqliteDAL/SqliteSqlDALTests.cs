@@ -330,7 +330,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             Debug.WriteLine(bi.Com2Device);
             Debug.WriteLine(bi.Com3Device);
             Debug.WriteLine(bi.ID.ToString());
-            Debug.WriteLine(bi.ModemType);
+            //Debug.WriteLine(bi.ModemType);
             Debug.WriteLine(bi.NetSwitch);
             Debug.WriteLine(bi.NodeType);
             Debug.WriteLine(bi.TransducerNum);
@@ -347,7 +347,6 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
                 ID = 12,
                 TransducerNum = 4,
                 TransmiterType = 0,
-                ModemType = 1,
                 Com2Device = 2,
                 Com3Device = 3,
                 NetSwitch = false,

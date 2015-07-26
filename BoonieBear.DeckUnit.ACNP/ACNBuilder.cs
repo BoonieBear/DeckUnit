@@ -365,7 +365,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
         }
 
-        public static void Pack200(int ID)
+        public static void Pack200()
         {
             int[] dat = new int[1];
             ACNProtocol.InitForPack(20);
@@ -374,7 +374,7 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 20;
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.Clear();//delete all cmd in cmd list
-            ACNProtocol.AddPool(ID);
+            ACNProtocol.AddPool(0);
         }
 
         

@@ -40,9 +40,9 @@ namespace BoonieBear.DeckUnit.Models
                         MainFrameViewModel.pMainFrame.TraceCollMt.Add(str);
                         if (MainFrameViewModel.pMainFrame.TraceCollMt.Count > 200)
                         {
-                            lock (MainFrameViewModel.pMainFrame.TraceCollMt.SyncRoot)
+                            //lock (MainFrameViewModel.pMainFrame.TraceCollMt.SyncRoot)
                             {
-                                MainFrameViewModel.pMainFrame.TraceCollMt.UnsafeRemoveAt(0);
+                                MainFrameViewModel.pMainFrame.TraceCollMt.RemoveAt(0);
                             }
                         }
                     }

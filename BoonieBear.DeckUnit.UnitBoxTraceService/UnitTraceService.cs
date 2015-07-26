@@ -34,14 +34,14 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             string datapath = LogPath + @"\Data";
             Directory.CreateDirectory(datapath);
             var debugPath = new DirectoryInfo(datapath);
-            _adFile = new ADFile("Data", ".dat");
+            _adFile = new ADFile("Data", "dat");
             _adFile.SetPath(debugPath);
             string logpath = LogPath + @"\Record";
             var recordPath = new DirectoryInfo(logpath);
-            shelLogFile = new LogFile("Shell", ".txt");
+            shelLogFile = new LogFile("Shell", "txt");
             shelLogFile.SetPath(recordPath);
 
-            traceFile = new LogFile("Trace", ".txt");
+            traceFile = new LogFile("Trace", "txt");
             traceFile.SetPath(recordPath);
             //setup sql
             _dalTrace = DALTrace.GetInstance(connectstr);

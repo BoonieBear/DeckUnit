@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Navigation;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
 using CollectionMtLib;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
 using System.Text;
 using TinyMetroWpfLibrary;
@@ -14,6 +16,8 @@ using TinyMetroWpfLibrary.ViewModel;
 using BoonieBear.DeckUnit.ACNP;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.Helps;
+using BoonieBear.DeckUnit.Views;
+using System.Windows.Controls;
 namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
 {
     public class SimpleViewModel : ViewModelBase
@@ -23,23 +27,26 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
         {
 
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
+            SendCMD = RegisterCommand(ExecuteSendCMD, CanExecuteSendCMD, true);
             ID=new List<FilterItem>();
             for (int i = 1; i < 64; i++)
             {
                 ID.Add(new FilterItem(i.ToString()));;
             }
             NodeID = ID[0];
-        }
-
-        public override void InitializePage(object extraData)
-        {
             ShowComm = false;
             ShowRebuild = false;
             CommSelect = 2;
             RebuildRequired = false;
             IsProcessing = false;
-            Title = extraData as string;
+        }
 
+        public override void InitializePage(object extraData)
+        {
+            
+            var title = extraData as string;
+            if (title != null)
+                Title = title;
             switch (Title)
             {
                 case "获取设备状态":
@@ -142,45 +149,69 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
 
         private async void ExecuteSendCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
+            bool ret = false;
+            IsProcessing = true;
+            Task<bool> result = null;
             switch (Title)
             {
                  case "获取设备状态":
-
+                    result = GetDeviceStatus();
                     break;
                 case "获取设备数据":
-                    await GetDeviceData();
+                    result = GetDeviceData();
                     break;
                 case "获取邻接点表":
-
+                    result = GetNeiborList();
                     break;
                 case "获取网络表":
-
+                    result = GetNetList();
                     break;
                 case "获取网络简表":
-
+                    result = GetSimpleNetList();
                     break;
                 case "获取节点状态":
-
+                    result = GetNodeStatus();
                     break;
                 case "获取节点信息":
-
+                    result = GetNodeInfo();
                     break;
                 case "获取节点信息表":
-
+                    result = GetNodeInfoList();
                     break;
                 case "获取节点路由":
-
+                    result = GetNodeRoute();
                     break;
                 default:
                     break;
             }
+            await result;
+            ret = result.Result;
+            IsProcessing = false;
+            if(ret==false)
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
+                UnitCore.Instance.NetEngine.Error);
+            else
+            {
+                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
+                dialog.Title = "设备命令";
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                    dialog);
+
+                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                textBlock.Text = "发送成功！";
+
+                await TaskEx.Delay(2000);
+
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,dialog);
+            }
         }
 
-        private  Task<bool> GetDeviceData()
+        private Task<bool> GetDeviceData()
         {
             ACNBuilder.Pack115(NodeID.num,CommSelect);
             var cmd = ACNProtocol.Package(false);
-            return UnitCore.Instance.NetEngine.SendCMD(cmd);
+            return  UnitCore.Instance.NetEngine.SendCMD(cmd);
+
         }
 
         private Task<bool> GetDeviceStatus()

@@ -123,7 +123,8 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
                     NetPort1 = reader.GetInt32(2),
                     NetPort2 = reader.GetInt32(3),
                     LinkIP = reader.GetString(4),
-                    TraceUDPPort = reader.GetInt32(5)
+                    TraceUDPPort = reader.GetInt32(5),
+                    DataUDPPort = reader.GetInt32(6)
                 };
                 return ci;
             }
@@ -315,12 +316,12 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
                     ID = rd.GetInt32(0),
                     TransmiterType = rd.GetInt32(1),
                     TransducerNum = rd.GetInt32(2),
-                    ModemType = rd.GetInt32(3),
-                    Com2Device = rd.GetInt32(4),
-                    Com3Device = rd.GetInt32(5),
-                    NetSwitch = (bool)rd.GetValue(6),
-                    NodeType = rd.GetInt32(7),
-                    AccessMode = rd.GetInt32(8),
+                    //ModemType = rd.GetInt32(3),
+                    Com2Device = rd.GetInt32(3),
+                    Com3Device = rd.GetInt32(4),
+                    NetSwitch = (bool)rd.GetValue(5),
+                    NodeType = rd.GetInt32(6),
+                    AccessMode = rd.GetInt32(7),
                 };
                 return ci;
             }
@@ -331,13 +332,13 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
         {
             string[] col =
             {
-                "ModemConf_ID", "ModemConf_TRANSMITERTYPE", "ModemConf_TRANSDUCERNUM", "ModemConf_MODEMTYPE",
+                "ModemConf_ID", "ModemConf_TRANSMITERTYPE", "ModemConf_TRANSDUCERNUM",
                 "ModemConf_COM2DEVICE","ModemConf_COM3DEVICE","ModemConf_NETSWITCH","ModemConf_NODETYPE","ModemConf_ACCESSMODE"
             };
 
             string[] values =
             {
-               modemConfigure.ID.ToString(),modemConfigure.TransmiterType.ToString(),modemConfigure.TransducerNum.ToString(),modemConfigure.ModemType.ToString(),
+               modemConfigure.ID.ToString(),modemConfigure.TransmiterType.ToString(),modemConfigure.TransducerNum.ToString(),
                modemConfigure.Com2Device.ToString(),modemConfigure.Com3Device.ToString(),modemConfigure.NetSwitch?"1":"0",modemConfigure.NodeType.ToString(),
                modemConfigure.AccessMode.ToString()
             };

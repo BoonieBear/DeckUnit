@@ -24,8 +24,6 @@ namespace BoonieBear.DeckUnit.ICore
         ITCPClientService TCPDataService { get; }
         //TCP客户端shell服务
         ITCPClientService TCPShellService { get; }
-        //UDP接收数据服务
-        IUDPService UDPService { get; }
 
         Task<bool> SendConsoleCMD(string cmd);
 

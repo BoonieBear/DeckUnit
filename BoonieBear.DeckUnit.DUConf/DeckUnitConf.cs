@@ -22,14 +22,14 @@ namespace BoonieBear.DeckUnit.DUConf
                 return _unitConf ?? (_unitConf = new DeckUnitConf());
             }
         }
-
+        public string Connectstring { get; set; }
         protected DeckUnitConf()
         {
             string MyExecPath = System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
             xmldoc = MyExecPath + "\\" + xmldoc;
-            string connstr = GetSqlString();
-            sqlDal = new SqliteSqlDAL(connstr);
+            Connectstring = GetSqlString();
+            sqlDal = new SqliteSqlDAL(Connectstring);
         }
 
         protected string GetValue(string[] str)

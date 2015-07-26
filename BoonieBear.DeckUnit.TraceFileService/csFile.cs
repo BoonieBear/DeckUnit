@@ -147,9 +147,10 @@ namespace BoonieBear.DeckUnit.TraceFileService
 		{
 		    if (file_name == null) throw new ArgumentNullException("file_name");
 		    try{
+                fileName = file_name;
                 ws = new StreamWriter(File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.Read));
                 ws.AutoFlush = true;
-				fileName = file_name;
+				
 				writeOpened = true;
 				return true;
 			}

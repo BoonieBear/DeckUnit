@@ -13,6 +13,7 @@ namespace BoonieBear.DeckUnit.BaseType
         public int NetPort2 { get; set; }
         public string LinkIP { get; set; }
         public int TraceUDPPort { get; set; }
+        public int DataUDPPort { get; set; }
 
     }
 
@@ -21,7 +22,7 @@ namespace BoonieBear.DeckUnit.BaseType
         public int ID { get; set; }
         public int TransmiterType { get; set; }
         public int TransducerNum { get; set; }
-        public int ModemType { get; set; }
+        //public int ModemType { get; set; }
         public int Com2Device { get; set; }
         public int Com3Device { get; set; }
         public bool NetSwitch { get; set; }

@@ -9,7 +9,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
 {
     public abstract class  UDPBaseService:IUDPService
     {
-        protected static UdpClient _udpClient;
+        protected UdpClient _udpClient;
 
         public static event EventHandler<CustomEventArgs> DoParse;
         private List<byte> _recvQueue = new List<byte>();
@@ -81,7 +81,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 {
                     var receiveBytes = _udpClient.Receive(ref remoteIpEndPoint);
 
-                    returnData = Encoding.Default.GetString(receiveBytes);
+                    returnData = Encoding.ASCII.GetString(receiveBytes);
                 }
                 catch (Exception exception)
                 {

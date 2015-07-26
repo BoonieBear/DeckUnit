@@ -135,20 +135,42 @@
     <Compile Include="Converter\HideZeroConverter.cs" />
     <Compile Include="Converter\ModeTypeToWidthConverter.cs" />
     <Compile Include="Converter\NotifyLevelToBrushConverter.cs" />
+    <Compile Include="Events\GoComSchemaEvent.cs" />
+    <Compile Include="Events\GoDeviceBackSetPage.cs" />
+    <Compile Include="Events\GoDeviceParaSetPage.cs" />
+    <Compile Include="Events\GoNodeRecvEmitSetPage.cs" />
     <Compile Include="Helps\PickerFilter.cs" />
+    <Compile Include="Helps\TreeHelper.cs" />
     <Compile Include="Models\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Events\GoAcousticViewNavigationEvent.cs" />
     <Compile Include="Events\GoHomePageNavigationEvent.cs" />
+    <Compile Include="Models\Item.cs" />
     <Compile Include="Models\StatusNotify.cs" />
     <Compile Include="ViewModels\ADViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel\DeviceBackSetViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel\DeviceParaSetViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel\NodeComSchemaViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel\NodeRecvEmitSetViewModel.cs" />
     <Compile Include="ViewModels\CommandViewModel\SimpleViewModel.cs" />
     <Compile Include="ViewModels\DownLoadOverViewModel.cs" />
     <Compile Include="Events\GoSimplePage.cs" />
     <Compile Include="ViewModels\MonitorViewModel.cs" />
     <Compile Include="Views\ADPage.xaml.cs">
       <DependentUpon>ADPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandView\DeviceBackSetView.xaml.cs">
+      <DependentUpon>DeviceBackSetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandView\DeviceParaSetView.xaml.cs">
+      <DependentUpon>DeviceParaSetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandView\NodeComSchema.xaml.cs">
+      <DependentUpon>NodeComSchema.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandView\NodeRecvEmitSetView.xaml.cs">
+      <DependentUpon>NodeRecvEmitSetView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CommandView\SimpleView.xaml.cs">
       <DependentUpon>SimpleView.xaml</DependentUpon>
@@ -251,6 +273,22 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\ADPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandView\DeviceBackSetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandView\DeviceParaSetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandView\NodeComSchema.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandView\NodeRecvEmitSetView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -410,7 +448,9 @@
       <SubType>Designer</SubType>
     </Resource>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\ff.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

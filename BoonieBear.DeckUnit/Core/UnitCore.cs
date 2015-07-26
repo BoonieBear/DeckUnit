@@ -50,7 +50,11 @@ namespace BoonieBear.DeckUnit.Core
         private bool _serviceStarted = false;
         //错误信息
         public string Error { get; private set; }
- 
+        //udp网络
+        private UdpClient _udpTraceClient;
+        private UdpClient _udpDataClient;
+        private IUDPService _udpTraceService;
+        private IUDPService _udpDataService;
         public UnitTraceService UnitTraceService
         {
             get { return _unitTraceService ?? (_unitTraceService = new UnitTraceService()); }
@@ -101,38 +105,78 @@ namespace BoonieBear.DeckUnit.Core
             get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
         }
 
-       
-
-        
+        public IUDPService UDPDataService
+        {
+            get
+            {
+                return _udpDataService ?? (_udpDataService = (new UDPDataServiceFactory()).CreateService());
+            }
+        }
+        public IUDPService UDPTraceService
+        {
+            get
+            {
+                return _udpTraceService ?? (_udpTraceService = (new UDPDebugServiceFactory()).CreateService());
+            }
+        }
+        private bool CreateUDPService()
+        {
+            if (!UDPTraceService.Start()) return false;
+            UDPTraceService.Register(Observer);
+            if (!UDPDataService.Start()) return false;
+            UDPDataService.Register(Observer);
+            return true;
+        }
+        private bool StopUDPService()
+        {
+            UDPTraceService.Stop();
+            UDPTraceService.UnRegister(Observer);
+            UDPDataService.Stop();
+            UDPDataService.UnRegister(Observer);
+            return true;
+        }
         public bool Start()
         {
             try
             {
-
+                
                 if(LoadConfiguration()==false)
                     return false;
-
-                if (NetEngine==null||CommEngine == null)
-                    return false;
-                NetEngine.Initialize();
-                NetEngine.Start();
-                CommEngine.Initialize();
-                CommEngine.Start();
-                _serviceStarted = NetEngine.IsWorking || CommEngine.IsWorking;
+                if (UnitTraceService.CreateService(DeckUnitConf.Connectstring))
+                if (_udpTraceClient == null)
+                    _udpTraceClient = new UdpClient(_commConf.TraceUDPPort);
+                if (!UDPTraceService.Init(_udpTraceClient)) throw new Exception("调试广播网络初始化失败");
+                if (_udpDataClient == null)
+                    _udpDataClient = new UdpClient(_commConf.DataUDPPort);
+                if (!UDPDataService.Init(_udpDataClient)) throw new Exception("调试数据网络初始化失败");
+                if (!CreateUDPService()) throw new Exception("启动广播网络失败");
+                if (NetEngine!=null)
+                {
+                    NetEngine.Initialize();
+                    NetEngine.Start();
+                }
+                if (CommEngine != null)
+                {
+                    CommEngine.Initialize();
+                    CommEngine.Start();
+                }
+                
+                _serviceStarted = NetEngine.IsWorking && CommEngine.IsWorking;
                 Error = NetEngine.Error;
                 return _serviceStarted;
             }
             catch (Exception e)
             {
-                Error = e.Message;
-                return false;
+                _serviceStarted = false;
+                EventAggregator.PublishMessage(new LogEvent(e.Message, LogType.Both));
             }
-            
-            
+            return _serviceStarted;
+
         }
 
         public void Stop()
         {
+            StopUDPService();
             if (NetEngine!=null&&NetEngine.IsWorking)
             {
                 NetEngine.Stop();
@@ -141,6 +185,7 @@ namespace BoonieBear.DeckUnit.Core
             {
                 CommEngine.Stop();
             }
+            StopUDPService();
             _serviceStarted = false;
         }
         public bool ServiceOK
