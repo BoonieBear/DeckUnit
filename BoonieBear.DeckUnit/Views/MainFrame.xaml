@@ -9,7 +9,11 @@
        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
        xmlns:Converter="clr-namespace:BoonieBear.DeckUnit.Converter" 
        xmlns:TouchKeyBoard="clr-namespace:TinyMetroWpfLibrary.Controls.TouchKeyBoard;assembly=TinyMetroWpfLibrary.Controls" 
-       xmlns:Converters="clr-namespace:TinyMetroWpfLibrary.Controls.Converters;assembly=TinyMetroWpfLibrary.Controls" 
+       xmlns:Converters="clr-namespace:TinyMetroWpfLibrary.Controls.Converters;assembly=TinyMetroWpfLibrary.Controls"
+       xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
+       xmlns:autolist ="clr-namespace:BoonieBear.DeckUnit.Controls.AutoFilterGridListView"
+        xmlns:CustomControl="clr-namespace:BoonieBear.DeckUnit.Controls"
+        xmlns:tree="clr-namespace:BoonieBear.DeckUnit.Controls.Tree"
        x:Class="BoonieBear.DeckUnit.Views.MainFrame"
         Dialog:DialogParticipation.Register="{Binding}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
@@ -21,6 +25,7 @@
         <Converter:BooleanToModeConverter x:Key="BooleanToModeConverter"/>
         <Converter:BooleanToWidthConverter x:Key="BooleanToWidthConverter"/>
         <Converter:HideZeroConverter x:Key="HideZeroConverter"/>
+        <Converter:TraceMessgaeFilterConverter x:Key="TraceMessgaeFilterConverter"/>
             <Dialog:CustomDialog x:Key="CustomInfoDialog"
                                  Title="设备命令"
                                  x:Name="CustomInfoDialog">
@@ -53,7 +58,7 @@
             </Button>
 
             <Button Click="LaunchDataView" Width="50"
-				ToolTip="全局设置" >
+				ToolTip="接收到的数据 " >
                 <Button.Background>
                     <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.database.png" Stretch="Uniform" />
                 </Button.Background>
@@ -115,23 +120,39 @@
                             </StackPanel>
                             <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="Microsoft YaHei UI" FontSize="14" />
                         </StackPanel>
-                        <TextBox x:Name ="DebugLog" MinHeight ="120" FontFamily="Microsoft YaHei UI" FontSize="14" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True" Text="{Binding TraceCollMt}"/>
+                        <TextBox x:Name ="DebugLog" MinHeight ="120" FontFamily="Microsoft YaHei UI" FontSize="14" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="0,5">
-                            <ComboBox Width ="200" 
-								metroControl:TextBoxHelper.ClearTextButton="True"
-								metroControl:TextBoxHelper.Watermark="请选择节点..." SelectedIndex="{Binding FilterIndex}"/>
+                             <TextBlock Text="选择显示的级别"/>
                             <ComboBox Width ="200" Margin="10,0,10,0" 
 								metroControl:TextBoxHelper.ClearTextButton="True"
-								metroControl:TextBoxHelper.Watermark="请选择过滤层..." SelectedIndex="{Binding Filterlayer}">
+								metroControl:TextBoxHelper.Watermark="请选择过滤层..." Text ="{Binding Filterlayer}">
                                 <ComboBoxItem Content =" 网络层"/>
                                 <ComboBoxItem Content =" 物理层"/>
                                 <ComboBoxItem Content =" 链路层"/>
                                 <ComboBoxItem Content =" 网络监控"/>
                             </ComboBox>
+                            <TextBlock Text="显示内容"/>
+                            <TextBox x:Name ="filterbox" Text="{Binding FilterString, Mode=TwoWay}" Width ="200" Margin="10,0,10,0" 
+								metroControl:TextBoxHelper.ClearTextButton="True"
+                                     TouchKeyBoard:TabKeyBoard.Placement="Top" 
+									TouchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=filterbox}"
+									TouchKeyBoard:TabKeyBoard.HorizontalOffset="-240"
+									TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									TouchKeyBoard:TabKeyBoard.Type="Num" 
+									TouchKeyBoard:TabKeyBoard.Width="480"/>
                         </StackPanel>
-                        <ListBox MinHeight="120" ItemsSource="{Binding TraceCollMt}"/>
+                        <ListBox MinHeight="120">
+                            <ListBox.ItemsSource>
+                                <MultiBinding Converter="{StaticResource TraceMessgaeFilterConverter}">
+                                    <Binding Path="Filterlayer"/>
+                                    <Binding Path="FilterString"/>
+                                     <Binding Path="TraceCollMt"/>       
+                                </MultiBinding>
+                                              
+                            </ListBox.ItemsSource>
+                        </ListBox>
                     </StackPanel>
                 </Grid>
             </metroControl:Flyout>
@@ -141,41 +162,66 @@
 				Position="Right" Width="640">
                 <Grid Margin="10">
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="400" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <autolist:FilterableListView Grid.Row="0" ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding DataCollMt}"
+                               FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" >
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
+                                <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
+                                <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
+                                <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
+                                <autolist:SortableGridViewColumn Header="命令ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
+                                    
+                            </GridView>
+                        </ListView.View>
+                    </autolist:FilterableListView>
+                    <UniformGrid Columns="1"
+						Grid.Row="2"
+						Margin="10">
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="10"
+							Content=" " />
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="10"
+							Content="Cancel" />
+                    </UniformGrid>
+                </Grid>
+            </metroControl:Flyout>
+            <metroControl:Flyout x:Name="DataViewFlyout" Theme="Accent"
+				Margin="0 0 0 0"
+				Header="详细数据"
+				Position="Right" Width="640">
+                <Grid Margin="10">
+                    <Grid.RowDefinitions>
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <StackPanel>
                         <TextBlock Grid.Row="0"
-							Text="Something above the ScrollPanel" />
-                        <TextBlock Grid.Row="0"
-							Text="This Flyout animates its opacity when opening and closing." />
-                    </StackPanel>
-                    <ScrollViewer Grid.Row="1"
-						VerticalScrollBarVisibility="Auto">
-                        <StackPanel Orientation="Vertical">
-                            <TextBox x:Name="firstTB"
-								metroControl:TextBoxHelper.Watermark="TextBox 01" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 02" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 03" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 04" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 05" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 06" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 07" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 08" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 09" />
-                            <TextBox Margin="0,5,0,0"
-								metroControl:TextBoxHelper.Watermark="TextBox 10" />
-                        </StackPanel>
-                    </ScrollViewer>
+							Text="{Binding DataRecvTime}" />
+                    <tree:TreeList x:Name="_tree" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="18">
+                        <tree:TreeList.View>
+                            <GridView>
+                                <GridView.Columns>
+                                    <GridViewColumn Width="400" Header="Name">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <tree:RowExpander/>
+                                                    <TextBlock Text="{Binding Text}"/>
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn Header="Type" Width="50" DisplayMemberBinding="{Binding Data}"/>
+                                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Description}"/>
+                                </GridView.Columns>
+                            </GridView>
+                        </tree:TreeList.View>
+                    </tree:TreeList>
                     <UniformGrid Columns="2"
 						Grid.Row="2"
 						Margin="10">

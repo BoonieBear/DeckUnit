@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -6,6 +7,8 @@ using System.Windows.Media;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.Helps;
+using BoonieBear.DeckUnit.JsonUtils;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.Frames;
 using TinyMetroWpfLibrary.ViewModel;
@@ -13,7 +16,6 @@ using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.Models;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using CollectionMtLib;
 namespace BoonieBear.DeckUnit.ViewModels
 {
     /// <summary>
@@ -24,23 +26,24 @@ namespace BoonieBear.DeckUnit.ViewModels
         public static MainFrameViewModel pMainFrame;
         private IDialogCoordinator _dialogCoordinator;
 
-        //数据来源节点号集合
-        public List<string> NodeCollMt
-        {
-            get { return GetPropertyValue(() => NodeCollMt); }
-            set { SetPropertyValue(() => NodeCollMt, value); }
-        }
-
         public List<string> TraceCollMt
         {
             get { return GetPropertyValue(() => TraceCollMt); }
             set { SetPropertyValue(() => TraceCollMt, value); }
         }
-        public CollectionMtWithAsyncObservableCollectionReadOnlyCopy<CommandLog> DataCollMt { set; get; }
+
+        public List<CommandLog> DataCollMt
+        {
+            get { return GetPropertyValue(() => DataCollMt); }
+            set { SetPropertyValue(() => DataCollMt, value); }
+        }
         public override void Initialize()
         {
             base.Initialize();
             TraceCollMt = new List<string>();
+
+            DataCollMt = new List<CommandLog>();
+           
             SwapMode = RegisterCommand(ExecuteSwapMode, CanExecuteSwapMode, true);
             SendCMD = RegisterCommand(ExecuteSendCMD, CanExecuteSendCMD, true);
             pMainFrame = this;
@@ -48,10 +51,38 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => StatusHeader);
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
+            
+            //datatree = new DataTreeModel(tree);
+            TraceCollMt.Add("12345[]46768");
+            TraceCollMt.Add("12345[]467[网络监控]68");
             StatusHeader = "水声通信机";
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
             ModeType = true;
+            var t = new CommandLog();
+            t.LogTime = DateTime.Now;
+            t.SourceID = 3;
+            t.DestID = 8;
+            t.CommID = 133;
+            DataCollMt.Add(t);
+            t = new CommandLog();
+            t.LogTime = DateTime.Now;
+            t.SourceID = 2;
+            t.DestID = 3;
+            t.CommID = 132;
+            DataCollMt.Add(t);
+            t = new CommandLog();
+            t.LogTime = DateTime.Now;
+            t.SourceID = 1;
+            t.DestID = 8;
+            t.CommID = 143;
+            DataCollMt.Add(t);
+        }
+
+        public DataTreeModel datatree
+        {
+            get { return GetPropertyValue(() => datatree); }
+            set { SetPropertyValue(() => datatree, value); }
         }
         public IDialogCoordinator DialogCoordinator
         {
@@ -94,12 +125,12 @@ namespace BoonieBear.DeckUnit.ViewModels
             set { SetPropertyValue(() => CommInput, value); }
         }
 
-        public int FilterIndex//-1表示空
+        public string FilterString//空格或者不填表示没有过滤项
         {
-            get { return GetPropertyValue(() => FilterIndex); }
-            set { SetPropertyValue(() => FilterIndex, value); }
+            get { return GetPropertyValue(() => FilterString); }
+            set { SetPropertyValue(() => FilterString, value); }
         }
-        public int Filterlayer//-1表示空
+        public string Filterlayer//
         {
             get { return GetPropertyValue(() => Filterlayer); }
             set { SetPropertyValue(() => Filterlayer, value); }
@@ -109,6 +140,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => RecvMessage); }
             set { SetPropertyValue(() => RecvMessage, value); }
         }
+        
         public string Shellstring
         {
             get { return GetPropertyValue(() => Shellstring); }

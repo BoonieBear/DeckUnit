@@ -7,7 +7,7 @@ using System.Windows.Navigation;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
-using CollectionMtLib;
+
 using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
 using System.Text;

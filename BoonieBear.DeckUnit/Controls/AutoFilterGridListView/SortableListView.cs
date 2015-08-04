@@ -71,7 +71,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
         ///
         protected override void OnInitialized(EventArgs e)
         {
-            Uri uri = new Uri("/Controls/FiterListViewDictionary.xaml", UriKind.Relative);
+            Uri uri = new Uri("/Controls/AutoFilterGridListView/FiterListViewDictionary.xaml", UriKind.Relative);
             dictionary = Application.LoadComponent(uri) as ResourceDictionary;
 
 
@@ -131,7 +131,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
         ///
         private void GridViewColumnHeaderClickedHandler(object sender, RoutedEventArgs e)
         {
-            Uri uri = new Uri("/Controls/FiterListViewDictionary.xaml", UriKind.Relative);
+            Uri uri = new Uri("/Controls/AutoFilterGridListView/FiterListViewDictionary.xaml", UriKind.Relative);
             ResourceDictionary dictionary = Application.LoadComponent(uri) as ResourceDictionary;
             
             GridViewColumnHeader headerClicked = e.OriginalSource as GridViewColumnHeader;

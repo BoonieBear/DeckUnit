@@ -1,17 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Net.Sockets;
-using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.ACNP;
-using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
+using BoonieBear.DeckUnit.JsonUtils;
+using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.ViewModels;
 using Newtonsoft.Json;
-using BoonieBear.DeckUnit.Events;
-using BoonieBear.DeckUnit.JsonUtils;
-using System.Diagnostics;
 using Newtonsoft.Json.Linq;
-namespace BoonieBear.DeckUnit.Models
+
+namespace BoonieBear.DeckUnit.Core
 {
     public class DeckUnitDataObserver:Observer<CustomEventArgs>
     {
@@ -74,13 +74,13 @@ namespace BoonieBear.DeckUnit.Models
                             var savedata = new CommandLog();
                             var javascript = (JObject)JsonConvert.DeserializeObject(str);
                             var json = (JObject)javascript["数据区"];
+                            savedata.LogTime = DateTime.Now;
                             savedata.CommID = Int16.Parse(json["ID"].ToString());
                             savedata.SourceID = Int16.Parse(((JObject)javascript["块"])["起始源地址"].ToString());
                             string nodeid = savedata.SourceID.ToString("D2");
-                            if(!MainFrameViewModel.pMainFrame.NodeCollMt.Contains(nodeid))
-                                MainFrameViewModel.pMainFrame.NodeCollMt.Add(nodeid);
                             savedata.DestID = Int16.Parse(((JObject)javascript["块"])["目的地址"].ToString());
-                            UnitCore.Instance.UnitTraceService.Save(savedata, bytes);
+                            if (UnitCore.Instance.UnitTraceService.Save(savedata, bytes))
+                                savedata.FilePath = UnitCore.Instance.UnitTraceService.FileName;
                             MainFrameViewModel.pMainFrame.DataCollMt.Add(savedata);
                         }
                     }

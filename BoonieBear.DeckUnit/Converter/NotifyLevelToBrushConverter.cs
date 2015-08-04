@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.Converter
             {
                 if ((value as NotifyLevel?)== null)
                 {
-                    return new SolidColorBrush(Colors.SkyBlue);
+                    return new SolidColorBrush(Colors.LightSkyBlue);
                 }
                 var level = (value as NotifyLevel?).Value;
                 switch (level)
@@ -24,7 +24,7 @@ namespace BoonieBear.DeckUnit.Converter
                     case NotifyLevel.Error:
                         return new SolidColorBrush(Colors.Crimson);
                     default:
-                        return new SolidColorBrush(Colors.SkyBlue);
+                        return new SolidColorBrush(Colors.LightSkyBlue);
                 }
             }
 

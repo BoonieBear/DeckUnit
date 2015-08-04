@@ -105,7 +105,7 @@
                                     设备回传设置
                                 </TextBlock>
                             </Button>
-                            <Button   TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" FontFamily="Microsoft YaHei">
+                            <Button   TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" FontFamily="Microsoft YaHei" Command="{Binding GoDeviceParaSet}">
                                 <TextBlock>
                                     设备参数设置
                                 </TextBlock>
@@ -144,7 +144,7 @@
                                     获取网络简表
                                 </TextBlock>
                             </Button>
-                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black">
+                            <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ResetNetwork}">
                                 <TextBlock>
                                     全网复位
                                 </TextBlock>

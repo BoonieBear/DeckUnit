@@ -55,9 +55,6 @@
     <StartupObject>BoonieBear.DeckUnit.App</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CollectionMtLib">
-      <HintPath>..\Tools\CollectionMtLib.dll</HintPath>
-    </Reference>
     <Reference Include="De.TorstenMandelkow.MetroChart">
       <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
@@ -126,26 +123,34 @@
     <Compile Include="Controls\AutoFilterGridListView\SortableGridViewColumn.cs" />
     <Compile Include="Controls\AutoFilterGridListView\SortableGridViewColumnHeader.cs" />
     <Compile Include="Controls\AutoFilterGridListView\SortableListView.cs" />
+    <Compile Include="Controls\Collection.cs" />
     <Compile Include="Controls\ContentPage.cs" />
-    <Compile Include="Controls\ExpandableTreeListView.cs" />
     <Compile Include="Controls\TouchMoveScroll.cs" />
+    <Compile Include="Controls\Tree\Converters.cs" />
+    <Compile Include="Controls\Tree\ITreeModel.cs" />
+    <Compile Include="Controls\Tree\RowExpander.cs" />
+    <Compile Include="Controls\Tree\TreeList.cs" />
+    <Compile Include="Controls\Tree\TreeListItem.cs" />
+    <Compile Include="Controls\Tree\TreeNode.cs" />
     <Compile Include="Converter\BackgroundStripeConverter.cs" />
     <Compile Include="Converter\BooleanToModeConverter.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\HideZeroConverter.cs" />
     <Compile Include="Converter\ModeTypeToWidthConverter.cs" />
     <Compile Include="Converter\NotifyLevelToBrushConverter.cs" />
+    <Compile Include="Converter\TraceMessgaeFilterConverter.cs" />
     <Compile Include="Events\GoComSchemaEvent.cs" />
     <Compile Include="Events\GoDeviceBackSetPage.cs" />
     <Compile Include="Events\GoDeviceParaSetPage.cs" />
     <Compile Include="Events\GoNodeRecvEmitSetPage.cs" />
     <Compile Include="Helps\PickerFilter.cs" />
     <Compile Include="Helps\TreeHelper.cs" />
-    <Compile Include="Models\DataObserver.DeckUnit.cs" />
+    <Compile Include="Core\DataObserver.DeckUnit.cs" />
     <Compile Include="Core\UnitCore.cs" />
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Events\GoAcousticViewNavigationEvent.cs" />
     <Compile Include="Events\GoHomePageNavigationEvent.cs" />
+    <Compile Include="Models\DataTreeModel.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\StatusNotify.cs" />
     <Compile Include="ViewModels\ADViewModel.cs" />
@@ -260,6 +265,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <Page Include="Controls\AutoFilterGridListView\FiterListViewDictionary.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Resources\ControlStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

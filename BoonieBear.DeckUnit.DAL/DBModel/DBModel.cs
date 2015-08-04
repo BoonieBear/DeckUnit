@@ -95,6 +95,7 @@ namespace BoonieBear.DeckUnit.DAL
     {
         public int LogID { get; set; }
         public DateTime LogTime { get; set; }
+
         public int CommID { get; set; }
         //数据类型，true:收到数据,false: 发送的命令
         public bool Type { get; set; }

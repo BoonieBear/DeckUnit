@@ -43,7 +43,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0"  Orientation="Horizontal">
-                <TextBlock Foreground ="SkyBlue" Text="请选择节点："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="50,0,0,0" />
+                <TextBlock Foreground ="DarkBlue" Text="请选择节点："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="50,0,0,0" />
                 <picker:ListPicker ItemsSource="{Binding ID}" Margin="{StaticResource WinMargin}"
 					DisplayMemberPath="Text" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedItem="{Binding NodeID, Mode=TwoWay}" Height="45" 
 					FullModeHeader="选择要接受命令的节点号">
@@ -55,11 +55,11 @@
                 </picker:ListPicker>
             </StackPanel>
             <StackPanel Grid.Row="1"  Orientation="Horizontal">
-                <TextBlock Foreground ="SkyBlue" Text="设备开关："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="50,0,0,0"/>
+                <TextBlock Foreground ="DarkBlue" Text="设备开关："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="50,0,0,0"/>
                 <metroControl:ToggleSwitchButton Width ="120"  Height="45" Margin="40,0" ThumbIndicatorWidth="60" IsChecked="{Binding Switch}"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" Visibility="{Binding Switch, Converter={StaticResource BooleanToVisibilityConverter}}">
-                <TextBlock Foreground ="SkyBlue" Text="回传间隔："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="50,0,0,0"/>
+                <TextBlock Foreground ="DarkBlue" Text="回传间隔："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="50,0,0,0"/>
                 <metroControl:NumericUpDown x:Name="numericUpDown" Height="45"  Width ="120" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="50,0" metroControl:TextBoxHelper.Watermark="秒为单位" FontSize="20" Value="{Binding Interval}" />
             </StackPanel>
         </Grid>

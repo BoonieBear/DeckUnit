@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.JsonUtils;
+using BoonieBear.DeckUnit.Models;
 using Microsoft.Win32;
 using TinyMetroWpfLibrary.Controller;
 using MahApps.Metro.Controls.Dialogs;
@@ -22,6 +25,23 @@ namespace BoonieBear.DeckUnit.Views
             //DataContext = MainFrameViewModel.pMainFrame;
             
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
+            this.DebugLog.Text = MainFrameViewModel.pMainFrame.Shellstring;
+            var strlStringses = new List<string[]>
+            {
+                new[] {"0", "块数", "3", ""},
+                new[] {"0", "块数1", "33", ""},
+                new[] {"1", "块数2", "33", ""},
+                new[] {"1", "块数3", "53", ""},
+                new[] {"1", "块数4", "43", ""},
+                new[] {"2", "块数5", "3", ""},
+                new[] {"3", "块数6", "32", ""},
+                new[] {"4", "块数7", "23", ""},
+                new[] {"3", "块数8", "3", ""},
+                new[] {"4", "块数9", "13", ""},
+                new[] {"2", "块数", "31", ""}
+            };
+            var tree = StringListToTree.TransListToNodeWriteLineic(strlStringses);
+            this._tree.Model = new DataTreeModel(tree);
         }
 
         private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -76,13 +96,22 @@ namespace BoonieBear.DeckUnit.Views
 
             flyout.IsOpen = !flyout.IsOpen;
         }
+        
         private void LaunchDebugView(object sender, System.Windows.RoutedEventArgs e)
         {
+            var flyout = this.flyoutsControl.Items[2] as Flyout;
+            flyout.IsOpen = false;
+            flyout = this.flyoutsControl.Items[1] as Flyout;
+            flyout.IsOpen = false;
             FlyOutView(0);
         }
 
         private void LaunchDataView(object sender, System.Windows.RoutedEventArgs e)
         {
+            var flyout = this.flyoutsControl.Items[2] as Flyout;
+            flyout.IsOpen = false;
+            flyout = this.flyoutsControl.Items[0] as Flyout;
+            flyout.IsOpen = false;
             FlyOutView(1);
         }
 
@@ -199,6 +228,13 @@ namespace BoonieBear.DeckUnit.Views
                 System.Windows.Application.Current.Shutdown();
             }
                 
+        }
+
+        private void FilterableListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var flyout = this.flyoutsControl.Items[2] as Flyout;
+            flyout.IsOpen = true;
+
         }
     }
 }

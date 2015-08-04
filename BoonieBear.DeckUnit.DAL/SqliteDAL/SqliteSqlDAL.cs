@@ -263,8 +263,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
                 if(reader.Read())
                     id = reader.GetInt32(0);
             }
-            var time = DateTime.UtcNow.ToString("s") ;
-            string[] values = { (id + 1).ToString(), time, commandLog.CommID.ToString(), commandLog.Type ? "1" : "0", commandLog.SourceID.ToString(), commandLog.DestID.ToString(),commandLog.FilePath };
+            string[] values = { (id + 1).ToString(), commandLog.LogTime.ToString("s"), commandLog.CommID.ToString(), commandLog.Type ? "1" : "0", commandLog.SourceID.ToString(), commandLog.DestID.ToString(), commandLog.FilePath };
             sqliteHelperSQL.InsertInto(_tableName[2], values);
             return id+1;
         }

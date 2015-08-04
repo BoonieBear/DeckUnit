@@ -98,6 +98,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
             public FilterItem(IComparable item)
             {
                 this.item = this.itemView = item;
+                
                 if (item == null)
                 {
                     itemView = "[empty]";
@@ -180,7 +181,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
         {
             base.OnInitialized(e);
 
-            Uri uri = new Uri("/Controls/FiterListViewDictionary.xaml", UriKind.Relative);
+            Uri uri = new Uri("/Controls/AutoFilterGridListView/FiterListViewDictionary.xaml", UriKind.Relative);
             dictionary = Application.LoadComponent(uri) as ResourceDictionary;
 
             // cast the ListView's View to a GridView
@@ -252,7 +253,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
                     // if this property is currently being filtered, provide an option to clear the filter.
                     if (IsPropertyFiltered(propertyName))
                     {
-                        filterList.Add(new FilterItem("[clear]"));
+                        filterList.Add(new FilterItem("[X]"));
                     }
                     else
                     {   
@@ -357,7 +358,7 @@ namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
                 return;
 
             // determine whether to clear the filter for this column
-            if (filterItem.ItemView.Equals("[clear]"))
+            if (filterItem.ItemView.Equals("[X]"))
             {
                 if (currentFilters.ContainsKey(currentFilterProperty))
                 {

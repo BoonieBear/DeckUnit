@@ -83,8 +83,10 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
 
                     returnData = Encoding.ASCII.GetString(receiveBytes);
                 }
-                catch (Exception exception)
+                catch (SocketException exception)
                 {
+                    if(exception.ErrorCode==0x2714)
+                        break;
                     error = exception.Message;
                     flag = false;
                 }
