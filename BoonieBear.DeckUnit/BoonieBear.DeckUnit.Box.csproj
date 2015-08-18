@@ -139,10 +139,19 @@
     <Compile Include="Converter\ModeTypeToWidthConverter.cs" />
     <Compile Include="Converter\NotifyLevelToBrushConverter.cs" />
     <Compile Include="Converter\TraceMessgaeFilterConverter.cs" />
+    <Compile Include="Events\GoCofigViewPage.cs" />
     <Compile Include="Events\GoComSchemaEvent.cs" />
+    <Compile Include="Events\GoConnectConfigViewEvent.cs" />
+    <Compile Include="Events\GoDebugViewPage.cs" />
     <Compile Include="Events\GoDeviceBackSetPage.cs" />
     <Compile Include="Events\GoDeviceParaSetPage.cs" />
+    <Compile Include="Events\GoGetNodeStatusViewEvent.cs" />
     <Compile Include="Events\GoNodeRecvEmitSetPage.cs" />
+    <Compile Include="Events\GoPingTestViewEvent.cs" />
+    <Compile Include="Events\GoRefreshNodeConfigViewEvent.cs" />
+    <Compile Include="Events\GoSetDateTimePage.cs" />
+    <Compile Include="Events\GoSetEnergyViewEvent.cs" />
+    <Compile Include="Events\NodeStatusInfo.cs" />
     <Compile Include="Helps\PickerFilter.cs" />
     <Compile Include="Helps\TreeHelper.cs" />
     <Compile Include="Core\DataObserver.DeckUnit.cs" />
@@ -150,6 +159,7 @@
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Events\GoAcousticViewNavigationEvent.cs" />
     <Compile Include="Events\GoHomePageNavigationEvent.cs" />
+    <Compile Include="Helps\Utility.cs" />
     <Compile Include="Models\DataTreeModel.cs" />
     <Compile Include="Models\Item.cs" />
     <Compile Include="Models\StatusNotify.cs" />
@@ -162,6 +172,14 @@
     <Compile Include="ViewModels\DownLoadOverViewModel.cs" />
     <Compile Include="Events\GoSimplePage.cs" />
     <Compile Include="ViewModels\MonitorViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\ConfigViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\ConnectConfigViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\DebugViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\GetNodeStatusViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\PingTestViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\RefreshNodeConfigViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\SetDateTimeViewModel.cs" />
+    <Compile Include="ViewModels\SetViewModel\SetEnergyInfoViewModel..cs" />
     <Compile Include="Views\ADPage.xaml.cs">
       <DependentUpon>ADPage.xaml</DependentUpon>
     </Compile>
@@ -218,6 +236,30 @@
     </Compile>
     <Compile Include="Views\MonitorPage.xaml.cs">
       <DependentUpon>MonitorPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\ConfigView.xaml.cs">
+      <DependentUpon>ConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\ConnectConfigView.xaml.cs">
+      <DependentUpon>ConnectConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\DebugView.xaml.cs">
+      <DependentUpon>DebugView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\GetNodeStatusView.xaml.cs">
+      <DependentUpon>GetNodeStatusView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\PingTestView.xaml.cs">
+      <DependentUpon>PingTestView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\RefreshNodeConfigView.xaml.cs">
+      <DependentUpon>RefreshNodeConfigView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\SetDateTimeView.xaml.cs">
+      <DependentUpon>SetDateTimeView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetView\SetEnergyInfoView.xaml.cs">
+      <DependentUpon>SetEnergyInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SystemResourceView.xaml.cs">
       <DependentUpon>SystemResourceView.xaml</DependentUpon>
@@ -326,6 +368,38 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\MonitorPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\ConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\ConnectConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\DebugView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\GetNodeStatusView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\PingTestView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\RefreshNodeConfigView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\SetDateTimeView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SetView\SetEnergyInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -460,6 +534,7 @@
   <ItemGroup>
     <Resource Include="Assets\ff.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
   <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">

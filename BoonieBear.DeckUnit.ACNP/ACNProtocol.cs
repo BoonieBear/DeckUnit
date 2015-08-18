@@ -299,7 +299,7 @@ namespace BoonieBear.DeckUnit.ACNP
             if (aaHeadCmd == null) throw new ArgumentNullException("协议无效！");
             var headbyte = Encoding.Default.GetBytes(head);
             var tailbyte = Encoding.Default.GetBytes(tail);
-            var buoyid = BuoyID.ToString(CultureInfo.CurrentCulture) + ",";
+            var buoyid = BuoyID.ToString(CultureInfo.InvariantCulture) + ",";
             var bytebuoyid = Encoding.Default.GetBytes(buoyid);
             var cmd = new byte[headbyte.Length + aaHeadCmd.Length + 4 + timelen];
             Buffer.BlockCopy(headbyte, 0, cmd, 0, headbyte.Length);

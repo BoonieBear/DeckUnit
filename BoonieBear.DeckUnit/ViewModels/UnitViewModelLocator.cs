@@ -1,4 +1,6 @@
 ﻿using BoonieBear.DeckUnit.ViewModels.CommandViewModel;
+using BoonieBear.DeckUnit.ViewModels.SetViewModel;
+
 namespace BoonieBear.DeckUnit.ViewModels
 {
 
@@ -18,6 +20,14 @@ namespace BoonieBear.DeckUnit.ViewModels
         private DeviceParaSetViewModel _deviceParaSetViewModel;
         private NodeRecvEmitSetViewModel _nodeRecvEmitSetViewModel;
         private NodeComSchemaViewModel _nodeComSchemaViewModel;
+        private ConfigViewModel _configViewModel;
+        private ConnectConfigViewModel _connectConfigViewModel;
+        private DebugViewModel _debugViewModel;
+        private GetNodeStatusViewModel _getNodeStatusViewModel;
+        private PingTestViewModel _pingTestViewModel;
+        private RefreshNodeConfigViewModel _refreshNodeConfigViewModel;
+        private SetEnergyInfoViewModel _setEnergyInfoViewModel;
+        private SetDateTimeViewModel _setDateTimeViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -195,13 +205,109 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             get
             {
-                // Creates the MainFrame ViewModel
                 if (_nodeComSchemaViewModel == null)
                 {
                     _nodeComSchemaViewModel = new NodeComSchemaViewModel();
                     _nodeComSchemaViewModel.Initialize();
                 }
                 return _nodeComSchemaViewModel;
+            }
+        }
+        public ConfigViewModel ConfigViewModel
+        {
+            get
+            {
+                if (_configViewModel == null)
+                {
+                    _configViewModel = new ConfigViewModel();
+                    _configViewModel.Initialize();
+                }
+                return _configViewModel;
+            }
+        }
+        public ConnectConfigViewModel ConnectConfigViewModel
+        {
+            get
+            {
+                if (_connectConfigViewModel == null)
+                {
+                    _connectConfigViewModel = new ConnectConfigViewModel();
+                    _connectConfigViewModel.Initialize();
+                }
+                return _connectConfigViewModel;
+            }
+        }
+        public DebugViewModel DebugViewModel
+        {
+            get
+            {
+                if (_debugViewModel == null)
+                {
+                    _debugViewModel = new DebugViewModel();
+                    _debugViewModel.Initialize();
+                }
+                return _debugViewModel;
+            }
+        }
+        public GetNodeStatusViewModel GetNodeStatusViewModel
+        {
+            get
+            {
+                if (_getNodeStatusViewModel == null)
+                {
+                    _getNodeStatusViewModel = new GetNodeStatusViewModel();
+                    _getNodeStatusViewModel.Initialize();
+                }
+                return _getNodeStatusViewModel;
+            }
+        }
+
+        public PingTestViewModel PingTestViewModel
+        {
+            get
+            {
+                if (_pingTestViewModel == null)
+                {
+                    _pingTestViewModel = new PingTestViewModel();
+                    _pingTestViewModel.Initialize();
+                }
+                return _pingTestViewModel;
+            }
+        }
+        public RefreshNodeConfigViewModel RefreshNodeConfigViewModel
+        {
+            get
+            {
+                if (_refreshNodeConfigViewModel == null)
+                {
+                    _refreshNodeConfigViewModel = new RefreshNodeConfigViewModel();
+                    _refreshNodeConfigViewModel.Initialize();
+                }
+                return _refreshNodeConfigViewModel;
+            }
+        }
+        public SetEnergyInfoViewModel SetEnergyInfoViewModel
+        {
+            get
+            {
+                if (_setEnergyInfoViewModel == null)
+                {
+                    _setEnergyInfoViewModel = new SetEnergyInfoViewModel();
+                    _setEnergyInfoViewModel.Initialize();
+                }
+                return _setEnergyInfoViewModel;
+            }
+        }
+        public SetDateTimeViewModel SetDateTimeViewModel
+        {
+            get
+            {
+                if (_setDateTimeViewModel == null)
+                {
+                    _setDateTimeViewModel = new SetDateTimeViewModel();
+                    _setDateTimeViewModel.Initialize();
+                }
+                return _setDateTimeViewModel;
             }
         }
     }

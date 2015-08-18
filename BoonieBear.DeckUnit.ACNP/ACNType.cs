@@ -647,7 +647,7 @@ namespace BoonieBear.DeckUnit.ACNP
         private UInt32 netswitch;
         private UInt32 emitnum;
         private UInt32 nodetype;
-
+        private UInt32 accessmode;
         public uint Buoyid
         {
             get { return buoyid; }
@@ -707,6 +707,13 @@ namespace BoonieBear.DeckUnit.ACNP
             get { return nodetype; }
             set { nodetype = value; }
         }
+
+        public uint Accessmode
+        {
+            get { return accessmode; }
+            set { accessmode = value; }
+        }
+
         //生成全部属性数据
         public string Contruct()
         {
@@ -733,8 +740,8 @@ namespace BoonieBear.DeckUnit.ACNP
                 strLat = "00" + strLat;
             }
             return Buoyid.ToString("00") + Nodeid.ToString("00") + strLang + strLat + Com2Device.ToString("0000") +
-            Com3Device.ToString("0000") + Emittype.ToString("00") + Netswitch.ToString("0000") +
-            Emitnum.ToString("0000") + Nodetype.ToString("0000");
+                   Com3Device.ToString("0000") + Emittype.ToString("00") + Netswitch.ToString("00") +
+                   Emitnum.ToString("00") + Nodetype.ToString("00") + Accessmode.ToString("00");
         }
         //解析,注：数据中没有网络开关和节点类型
         public bool Parse(string HexStr)

@@ -70,5 +70,19 @@ namespace BoonieBear.DeckUnit.DUConf
                 return sqlDal.GetAlarmConfigureList("");
             return null;
         }
+
+        public bool UpdateCommSet(CommConfInfo ciInfo)
+        {
+            if (sqlDal.LinkStatus)
+            {
+                sqlDal.UpdateCommConfInfo(ciInfo);
+                var newinfo = GetCommConfInfo();
+                if((newinfo.DataUDPPort == ciInfo.DataUDPPort)&&(newinfo.NetPort1 == ciInfo.NetPort1)&&(newinfo.NetPort2 == ciInfo.NetPort2)
+                    &&(newinfo.SerialPortRate == ciInfo.SerialPortRate)&&(newinfo.TraceUDPPort == ciInfo.TraceUDPPort)&&(newinfo.LinkIP == ciInfo.LinkIP)
+                    &&(newinfo.SerialPort == ciInfo.SerialPort))
+                    return true;
+            }
+            return false;
+        }
     }
 }

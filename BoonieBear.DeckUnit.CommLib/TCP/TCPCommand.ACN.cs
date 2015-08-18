@@ -45,7 +45,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
     public class ACNTCPStreamCommand : TCPBaseComm
     {
         private Stream _filestream;
-        private CustomEventArgs _args = new CustomEventArgs(null, null, 0, false, null, CallMode.NoneMode,null);
+        private CustomEventArgs _args = new CustomEventArgs(0, null, null, 0, false, null, CallMode.NoneMode,null);
         private static readonly AutoResetEvent EAutoResetEvent = new AutoResetEvent(false);
         
         private  ReportProgressEvent ReportSendBytes;

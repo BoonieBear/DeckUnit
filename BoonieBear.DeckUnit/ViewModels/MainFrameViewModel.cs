@@ -77,13 +77,9 @@ namespace BoonieBear.DeckUnit.ViewModels
             t.DestID = 8;
             t.CommID = 143;
             DataCollMt.Add(t);
+            
         }
 
-        public DataTreeModel datatree
-        {
-            get { return GetPropertyValue(() => datatree); }
-            set { SetPropertyValue(() => datatree, value); }
-        }
         public IDialogCoordinator DialogCoordinator
         {
             get { return _dialogCoordinator; }

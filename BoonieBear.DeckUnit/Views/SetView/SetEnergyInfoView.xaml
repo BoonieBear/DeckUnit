@@ -1,0 +1,149 @@
+﻿<Page x:Class="BoonieBear.DeckUnit.Views.SetView.SetEnergyInfoView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
+      xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+      xmlns:touchKeyBoard="clr-namespace:TinyMetroWpfLibrary.Controls.TouchKeyBoard;assembly=TinyMetroWpfLibrary.Controls"
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=SetEnergyInfoViewModel}"
+      mc:Ignorable="d" 
+      KeepAlive="True"
+	 d:DesignHeight="480" d:DesignWidth="640"
+	Title="SimpleView" x:Name="SimplePage">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MainBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <TextBlock  Text="修改电量" VerticalAlignment="Center" FontSize="34px"/>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="3,3,3,8">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Grid.Row="0" Grid.RowSpan="3" Grid.ColumnSpan="4" Header="48V电流状态（S）" FontSize="18" Margin="5,0" metroControl:ControlsHelper.HeaderFontSize="20"/>
+            <GroupBox Grid.Row="3" Grid.RowSpan="2" Grid.ColumnSpan="4" Header="单片机工作和休眠时间（H）" FontSize="18" Margin="5,0" metroControl:ControlsHelper.HeaderFontSize="20"/>
+            <GroupBox Grid.Row="5" Grid.RowSpan="4" Grid.ColumnSpan="4" Header="电源数据（mAH）" FontSize="18"  metroControl:ControlsHelper.HeaderFontSize="20" metroControl:ControlsHelper.PreserveTextCase="True" BorderThickness="1,1,1,0" Margin="5,5,5,0"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="低电流时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="LowBox" Grid.Row="1" Grid.Column="1" Text="{Binding LowTime}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-10"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=LowBox}" Margin="3"/>
+            <TextBlock Grid.Row="1" Grid.Column="2" Text="中电流时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="middleBox" Grid.Row="1" Grid.Column="3" Text="{Binding MiddleTime}"
+                     metroControl:TextBoxHelper.ClearTextButton="True"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-460"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=middleBox}" Margin="3,3,6,3"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="高电流时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="HighBox" Grid.Row="2" Grid.Column="1" Text="{Binding HighTime}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-10"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=HighBox}" Margin="3"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="休眠时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="SleepBox" Grid.Row="4" Grid.Column="1" Text="{Binding SleepTime}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-10"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=SleepBox}" Margin="3"/>
+            <TextBlock Grid.Row="4" Grid.Column="2" Text="休眠时间" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="WorkBox" Grid.Row="4" Grid.Column="3" Text="{Binding WorkTime}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-460"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Bottom" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=WorkBox}" Margin="3,3,6,3"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="3.3v电压" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="v33votageBox" Grid.Row="6" Grid.Column="1" Text="{Binding v33Votage}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-10"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Top" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=v33votageBox}" Margin="3"/>
+            <TextBlock Grid.Row="6" Grid.Column="2" Text="48v电压" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="v48votageBox" Grid.Row="6" Grid.Column="3" Text="{Binding v48Votage}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-460"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Top" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=v48votageBox}" Margin="3,3,6,3"/>
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="48v剩余电量" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="v48LeftBox" Grid.Row="7" Grid.Column="1" Text="{Binding v48Left}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-10"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Top" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=v48LeftBox}" Margin="3"/>
+            <TextBlock Grid.Row="7" Grid.Column="2" Text="48v已用电量" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="v48UsedBox" Grid.Row="7" Grid.Column="3" Text="{Binding v48Used}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-460"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Top" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=v48UsedBox}" Margin="3,3,6,3"/>
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="3v剩余电量" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="v3LeftBox" Grid.Row="8" Grid.Column="1" Text="{Binding v3Left}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-10"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Top" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=v3LeftBox}"  Margin="3"/>
+            <TextBlock Grid.Row="8" Grid.Column="2" Text="3v已用电量" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBox x:Name="v3UsedBox" Grid.Row="8" Grid.Column="3" Text="{Binding v3Used}"
+                     touchKeyBoard:TabKeyBoard.HorizontalOffset="-460"
+									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+									touchKeyBoard:TabKeyBoard.Width="480"
+                                    touchKeyBoard:TabKeyBoard.Placement="Top" 
+                                    touchKeyBoard:TabKeyBoard.Type="Num"
+                                    touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=v3UsedBox}" Margin="3,3,6,3"/>
+        </Grid>
+        <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Style="{StaticResource PerformanceProgressBar}"/>
+        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="设置" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+    </Grid>
+</Page>

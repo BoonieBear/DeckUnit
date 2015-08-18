@@ -7,7 +7,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
 {
     public class ACNSerialHexCommand : SerialBaseComm
     {
-        private  CustomEventArgs _args = new CustomEventArgs(null,null,0,false,null,CallMode.NoneMode,null);
+        private  CustomEventArgs _args = new CustomEventArgs(0, null,null,0,false,null,CallMode.NoneMode,null);
         private static readonly ReaderWriterLock MReaderWriterLock = new ReaderWriterLock();
         private static readonly AutoResetEvent EAutoResetEvent = new AutoResetEvent(false);
         private static readonly AutoResetEvent DAutoResetEvent = new AutoResetEvent(false);

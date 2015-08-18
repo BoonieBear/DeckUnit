@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
 using TinyMetroWpfLibrary.Controller;
 
@@ -37,7 +38,13 @@ namespace BoonieBear.DeckUnit
         {
 
             e.Handled = true;
-            LogHelper.ErrorLog(null, e.Exception);
+            if(App.Current.MainWindow.IsActive)
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(e.Exception.Message, LogType.Both));
+            else
+            {
+                LogHelper.ErrorLog(e.Exception.Message,e.Exception);
+            }
+
         }
 
         static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
@@ -45,7 +52,12 @@ namespace BoonieBear.DeckUnit
             var o = e.ExceptionObject as Exception;
             if (o != null)
             {
-                LogHelper.ErrorLog(null, o);
+                if (App.Current.MainWindow.IsActive)
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(o.Message, LogType.Both));
+                else
+                {
+                    LogHelper.ErrorLog(o.Message, o);
+                }
             }
         }
 

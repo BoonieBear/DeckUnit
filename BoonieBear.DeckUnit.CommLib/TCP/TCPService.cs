@@ -126,7 +126,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                             myCompleteMessage.AppendFormat("{0}",Encoding.Default.GetString(myReadBuffer, 0, numberOfBytesRead));
                         } while (stream.DataAvailable);
                         Debug.WriteLine(myCompleteMessage.ToString());
-                        var e = new CustomEventArgs(myCompleteMessage.ToString(), myReadBuffer, 0, true, null,
+                        var e = new CustomEventArgs(0, myCompleteMessage.ToString(), myReadBuffer, 0, true, null,
                         CallMode.NoneMode, client);
                         OnParsed(e);
                     }
@@ -135,7 +135,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             }
             catch (Exception exception)
             {
-                var e = new CustomEventArgs(null, null, 0, false, exception.Message, CallMode.ErrMode, client);
+                var e = new CustomEventArgs(0, null, null, 0, false, exception.Message, CallMode.ErrMode, client);
                 OnParsed(e);
             }
             finally
@@ -171,14 +171,14 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
 
                         }
                         while (numberOfBytesRead != packetLength);
-                        var e = new CustomEventArgs(null, myReadBuffer, packetLength, true, null, CallMode.DataMode, client);
+                        var e = new CustomEventArgs(0, null, myReadBuffer, packetLength, true, null, CallMode.DataMode, client);
                         OnParsed(e);
                     }
                 }
             }
             catch (Exception exception)
             {
-                var e = new CustomEventArgs(null, null, 0, false, exception.Message, CallMode.ErrMode, client);
+                var e = new CustomEventArgs(0, null, null, 0, false, exception.Message, CallMode.ErrMode, client);
                 OnParsed(e);
             }
             finally

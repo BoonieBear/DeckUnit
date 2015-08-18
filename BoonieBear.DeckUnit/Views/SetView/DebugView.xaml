@@ -1,0 +1,58 @@
+﻿<Page x:Class="BoonieBear.DeckUnit.Views.SetView.DebugView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
+      xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=DebugViewModel}"
+      mc:Ignorable="d" 
+      KeepAlive="True"
+	 d:DesignHeight="480" d:DesignWidth="640"
+	Title="SimpleView" x:Name="SimplePage">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MainBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <TextBlock  Text="调试选项" VerticalAlignment="Center" FontSize="34px"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <StackPanel Orientation="Vertical" >
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Foreground ="DarkBlue" Text="DSP上电"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="50,0,0,0"/>
+                    <metroControl:ToggleSwitchButton Width ="120"  Height="45" Margin="282,0" ThumbIndicatorWidth="60" Checked="DSPPowerOn_Checked" Unchecked="DSPPowerOff_Unchecked"/>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Foreground ="DarkBlue" Text="看门狗开关"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="50,0,0,0"/>
+                    <metroControl:ToggleSwitchButton Width ="120"  Height="45" Margin="248,0" ThumbIndicatorWidth="60" Checked="WatchDog_Checked" Unchecked="WatchDog_Unchecked"/>
+                </StackPanel>
+                <StackPanel  Orientation="Horizontal">
+                    <TextBlock Foreground ="DarkBlue" Text="调试开关"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="50,0,0,0"/>
+                    <metroControl:ToggleSwitchButton Width ="120"  Height="45" Margin="280,0" ThumbIndicatorWidth="60"  Checked="Debug_Checked" Unchecked="Debug_Unchecked"/>
+                </StackPanel>
+            </StackPanel>
+            
+        </Grid>
+        <StackPanel  Grid.Row ="1" VerticalAlignment="Bottom">
+            <Button Content="重启MSP430" Foreground ="DarkBlue" FontSize="26" FontFamily="Microsoft YaHei UI" BorderThickness="1,1" Height="60" VerticalAlignment="Bottom" Click="RebootButton_Click"/>
+            <Button Content="清空重启次数" Foreground ="DarkBlue" FontSize="26" FontFamily="Microsoft YaHei UI" BorderThickness="1,1" Height="60" Click="ClearRebootButton_Click"/>
+            <ProgressBar Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Style="{StaticResource PerformanceProgressBar}" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
+        </StackPanel>
+        
+        
+    </Grid>
+</Page>

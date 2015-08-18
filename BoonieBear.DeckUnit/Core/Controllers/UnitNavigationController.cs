@@ -19,7 +19,15 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         IHandleMessage<GoDeviceBackSetPage>,
         IHandleMessage<GoDeviceParaSetPage>,
         IHandleMessage<GoNodeRecvEmitSetPage>,
-        IHandleMessage<GoComSchemaEvent>
+        IHandleMessage<GoComSchemaEvent>,
+        IHandleMessage<GoSetDateTimePage>,
+        IHandleMessage<GoDebugViewPage>,
+        IHandleMessage<GoCofigViewPage>,
+        IHandleMessage<GoConnectConfigViewEvent>,
+        IHandleMessage<GoSetEnergyViewEvent>,
+        IHandleMessage<GoPingTestViewEvent>,
+        IHandleMessage<GoGetNodeStatusViewEvent>,
+        IHandleMessage<GoRefreshNodeConfigViewEvent>
 
     {
         public void Handle(GoWaterTelPageBaseNavigationRequest message)
@@ -70,6 +78,40 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         public void Handle(GoComSchemaEvent message)
         {
             NavigateToPage("Views/CommandView/NodeComSchema.xaml");
+        }
+        public void Handle(GoSetDateTimePage message)
+        {
+            NavigateToPage("Views/SetView/SetDateTimeView.xaml", message.Titile);
+        }
+        public void Handle(GoDebugViewPage message)
+        {
+            NavigateToPage("Views/SetView/DebugView.xaml");
+        }
+        public void Handle(GoCofigViewPage message)
+        {
+            NavigateToPage("Views/SetView/ConfigView.xaml");
+        }
+
+        public void Handle(GoConnectConfigViewEvent message)
+        {
+            NavigateToPage("Views/SetView/ConnectConfigView.xaml");
+        }
+
+        public void Handle(GoSetEnergyViewEvent message)
+        {
+            NavigateToPage("Views/SetView/SetEnergyInfoView.xaml");
+        }
+        public void Handle(GoPingTestViewEvent message)
+        {
+            NavigateToPage("Views/SetView/PingTestView.xaml");
+        }
+        public void Handle(GoGetNodeStatusViewEvent message)
+        {
+            NavigateToPage("Views/SetView/GetNodeStatusView.xaml");
+        }
+        public void Handle(GoRefreshNodeConfigViewEvent message)
+        {
+            NavigateToPage("Views/SetView/RefreshNodeConfigView.xaml");
         }
     }
 }

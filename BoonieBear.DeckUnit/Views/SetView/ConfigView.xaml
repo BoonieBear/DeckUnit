@@ -1,0 +1,75 @@
+﻿<Page x:Class="BoonieBear.DeckUnit.Views.SetView.ConfigView"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+      xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
+      xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      xmlns:Converter="clr-namespace:BoonieBear.DeckUnit.Converter"
+      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=ConfigViewModel}"
+      mc:Ignorable="d" 
+      KeepAlive="True"
+	 d:DesignHeight="480" d:DesignWidth="640"
+	Title="SimpleView" x:Name="SimplePage">
+    <Page.Resources>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+    </Page.Resources>
+
+    <Grid Background="{StaticResource MainBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="60"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <TextBlock  Text="基本设置" VerticalAlignment="Center" FontSize="34px"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <ScrollViewer>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <Grid >
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="80"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="160"/>
+                            <ColumnDefinition Width="160"/>
+                        </Grid.ColumnDefinitions>
+                        <Button  FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetDateView}">
+                            <TextBlock>
+                                    设置系统时间
+                            </TextBlock>
+                        </Button>
+                        <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetSleepView}">
+                            <TextBlock>
+                                    设置休眠时间
+                            </TextBlock>
+                        </Button>
+                        <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowSetADView}">
+                            <TextBlock>
+                                    设置AD门限
+                            </TextBlock>
+                        </Button>
+                        <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowWakeUpView}">
+                            <TextBlock>
+                                    设置唤醒时间
+                            </TextBlock>
+                        </Button>
+                        
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+
+        </Grid>
+        <ProgressBar Grid.Row ="2" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Style="{StaticResource PerformanceProgressBar}"/>
+    </Grid>
+</Page>

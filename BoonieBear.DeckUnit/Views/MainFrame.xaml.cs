@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
@@ -26,22 +28,7 @@ namespace BoonieBear.DeckUnit.Views
             
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
             this.DebugLog.Text = MainFrameViewModel.pMainFrame.Shellstring;
-            var strlStringses = new List<string[]>
-            {
-                new[] {"0", "块数", "3", ""},
-                new[] {"0", "块数1", "33", ""},
-                new[] {"1", "块数2", "33", ""},
-                new[] {"1", "块数3", "53", ""},
-                new[] {"1", "块数4", "43", ""},
-                new[] {"2", "块数5", "3", ""},
-                new[] {"3", "块数6", "32", ""},
-                new[] {"4", "块数7", "23", ""},
-                new[] {"3", "块数8", "3", ""},
-                new[] {"4", "块数9", "13", ""},
-                new[] {"2", "块数", "31", ""}
-            };
-            var tree = StringListToTree.TransListToNodeWriteLineic(strlStringses);
-            this._tree.Model = new DataTreeModel(tree);
+            
         }
 
         private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -49,7 +36,7 @@ namespace BoonieBear.DeckUnit.Views
 
             ProgressDialogController remote = null;
             UnitCore.Instance.Start();
-            UnitCore.Instance.EventAggregator.PublishMessage(new GoAcousticViewNavigationEvent());
+            UnitCore.Instance.EventAggregator.PublishMessage(new GoSetEnergyViewEvent());
             /*
             var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
             Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
@@ -232,9 +219,93 @@ namespace BoonieBear.DeckUnit.Views
 
         private void FilterableListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            var strlStringses = new List<string[]>
+            {
+                new[] {"0", "块数", "3", ""},
+                new[] {"0", "块数1", "33", ""},
+                new[] {"1", "块数2", "33", ""},
+                new[] {"1", "块数3", "53", ""},
+                new[] {"1", "块数4", "43", ""},
+                new[] {"2", "块数5", "3", ""},
+                new[] {"3", "块数6", "32", ""},
+                new[] {"4", "块数7", "23", ""},
+                new[] {"3", "块数8", "3", ""},
+                new[] {"4", "块数9", "13", ""},
+                new[] {"2", "块数", "31", ""}
+            };
+            var tree = StringListToTree.TransListToNodeWriteLineic(strlStringses);
+            var datatree = new DataTreeModel(tree);
+            this._tree.Model = datatree;
             var flyout = this.flyoutsControl.Items[2] as Flyout;
             flyout.IsOpen = true;
 
+        }
+
+        private async void SetADBtn(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var newdialog = (BaseMetroDialog) App.Current.MainWindow.Resources["SetADDialog"];
+            var NumericUpDown = newdialog.FindChild<NumericUpDown>("ADNumUp");
+            var cmd = MSPHexBuilder.Pack255((int)NumericUpDown.Value);
+            var result = UnitCore.Instance.CommEngine.SendCMD(cmd);
+            await result;
+            var ret = result.Result;
+            if(ret==false)
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
+                UnitCore.Instance.NetEngine.Error);
+            else
+            {
+                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
+                dialog.Title = "设备命令";
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                    dialog);
+
+                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                textBlock.Text = "发送成功！";
+
+                await TaskEx.Delay(2000);
+
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,dialog);
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, newdialog);
+            }
+        }
+
+        private async void CloseSetAD(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["SetADDialog"]);
+        }
+
+        private async void SetWakeBtn(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var newdialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SetWakeUpDialog"];
+            var NumericUpDown1 = newdialog.FindChild<NumericUpDown>("Com2WakeNumUp");
+            var NumericUpDown2 = newdialog.FindChild<NumericUpDown>("Com3WakeNumUp");
+            var cmd = MSPHexBuilder.Pack248((int)NumericUpDown1.Value, (int)NumericUpDown2.Value);
+            var result = UnitCore.Instance.CommEngine.SendCMD(cmd);
+            await result;
+            var ret = result.Result;
+            if (ret == false)
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
+                UnitCore.Instance.NetEngine.Error);
+            else
+            {
+                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
+                dialog.Title = "设备命令";
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                    dialog);
+
+                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                textBlock.Text = "发送成功！";
+
+                await TaskEx.Delay(2000);
+
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, newdialog);
+            }
+        }
+
+        private async void CloseWakeTimeBtn(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["SetWakeUpDialog"]);
         }
     }
 }

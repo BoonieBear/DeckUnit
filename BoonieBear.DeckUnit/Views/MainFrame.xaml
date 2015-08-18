@@ -17,7 +17,7 @@
        x:Class="BoonieBear.DeckUnit.Views.MainFrame"
         Dialog:DialogParticipation.Register="{Binding}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="480" Closing="MetroWindow_Closing">
+        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="480" Closing="MetroWindow_Closing" IsWindowDraggable="False">
     <Window.Resources>
         <ResourceDictionary>
         <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -31,7 +31,40 @@
                                  x:Name="CustomInfoDialog">
                 <TextBlock Height="30" Text=".。。。" x:Name="MessageTextBlock"
                                Foreground="{DynamicResource AccentColorBrush}" />
-                </Dialog:CustomDialog>
+            </Dialog:CustomDialog>
+            <Dialog:CustomDialog x:Key="SetADDialog"
+                                 Title="设置AD门限"
+                                 x:Name="SetADDialog">
+                <StackPanel Orientation="Vertical">
+                    <metroControl:NumericUpDown x:Name="ADNumUp" Value="39"  Foreground="{DynamicResource AccentColorBrush}"/>
+                    <UniformGrid>
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="确定" Click="SetADBtn" />
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="取消" Click="CloseSetAD" />
+                    </UniformGrid>
+                </StackPanel>              
+            </Dialog:CustomDialog>
+            <Dialog:CustomDialog x:Key="SetWakeUpDialog"
+                                 Title="设置AD门限"
+                                 x:Name="SetWakeUpDialog">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="串口2唤醒时间"/>
+                    <metroControl:NumericUpDown x:Name="Com2WakeNumUp" Value="60"  Foreground="{DynamicResource AccentColorBrush}"/>
+                    <TextBlock Text="串口3唤醒时间"/>
+                    <metroControl:NumericUpDown x:Name="Com3WakeNumUp" Value="60"  Foreground="{DynamicResource AccentColorBrush}"/>
+                    <UniformGrid>
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="确定" Click="SetWakeBtn" />
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="取消" Click="CloseWakeTimeBtn" />
+                    </UniformGrid>
+                </StackPanel>
+            </Dialog:CustomDialog>
         </ResourceDictionary>
     </Window.Resources>
     <metroControl:MetroWindow.DataContext>
@@ -202,7 +235,7 @@
                     </Grid.RowDefinitions>
                         <TextBlock Grid.Row="0"
 							Text="{Binding DataRecvTime}" />
-                    <tree:TreeList x:Name="_tree" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="18">
+                    <tree:TreeList x:Name="_tree" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Visible" FontSize="18" >
                         <tree:TreeList.View>
                             <GridView>
                                 <GridView.Columns>

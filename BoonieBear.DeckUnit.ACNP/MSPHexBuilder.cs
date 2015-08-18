@@ -18,9 +18,9 @@ namespace BoonieBear.DeckUnit.ACNP
             return ACNProtocol.CommPackage(255, cmd);
         }
 
-        public static byte[] Pack254(PWState pwState)
+        public static byte[] Pack254(Power48VState pw48State, MSPWorkState mspWorkState,PWState pwState )
         {
-            return ACNProtocol.CommPackage(254, StringHexConverter.ConvertHexToChar(pwState.Contruct()));
+            return ACNProtocol.CommPackage(254, StringHexConverter.ConvertHexToChar(pw48State.Contruct()+mspWorkState.Contruct()+pwState.Contruct()));
         }
         public static byte[] Pack253(ModermConfig mconfig)
         {

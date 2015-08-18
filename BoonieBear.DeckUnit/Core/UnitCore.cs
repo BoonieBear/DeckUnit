@@ -5,6 +5,8 @@ using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
+using System.Threading;
+using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
 using BoonieBear.DeckUnit.CommLib.TCP;
@@ -69,7 +71,7 @@ namespace BoonieBear.DeckUnit.Core
         }
         protected UnitCore()
         {
-
+            ACNProtocol.Init(0);
         }
 
         public bool LoadConfiguration()
@@ -150,17 +152,19 @@ namespace BoonieBear.DeckUnit.Core
                     _udpDataClient = new UdpClient(_commConf.DataUDPPort);
                 if (!UDPDataService.Init(_udpDataClient)) throw new Exception("调试数据网络初始化失败");
                 if (!CreateUDPService()) throw new Exception("启动广播网络失败");
-                if (NetEngine!=null)
-                {
-                    NetEngine.Initialize();
-                    NetEngine.Start();
-                }
                 if (CommEngine != null)
                 {
                     CommEngine.Initialize();
                     CommEngine.Start();
+                    var cmd = MSPHexBuilder.Pack250(true);
+                    CommEngine.SendCMD(cmd);//进入调试模式，开启网络
+                    Thread.Sleep(500);//wait dsp
                 }
-                
+                if (NetEngine != null)
+                {
+                    NetEngine.Initialize();
+                    NetEngine.Start();
+                }
                 _serviceStarted = NetEngine.IsWorking && CommEngine.IsWorking;
                 Error = NetEngine.Error;
                 return _serviceStarted;
@@ -176,7 +180,6 @@ namespace BoonieBear.DeckUnit.Core
 
         public void Stop()
         {
-            StopUDPService();
             if (NetEngine!=null&&NetEngine.IsWorking)
             {
                 NetEngine.Stop();

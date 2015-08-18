@@ -5,6 +5,7 @@ using System.Net.Sockets;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
+using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.JsonUtils;
 using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.ViewModels;
@@ -57,7 +58,7 @@ namespace BoonieBear.DeckUnit.Core
                             MainFrameViewModel.pMainFrame.Serialstring.Remove(0, 1024);
                     }
                 }
-                else if (e.Mode == CallMode.DataMode)
+                else if (e.Mode == CallMode.DataMode||e.ID==170)//网络数据或串口转发
                 {
                     var bytes = new byte[e.DataBufferLength];
                     Buffer.BlockCopy(e.DataBuffer, 0, bytes, 0, e.DataBufferLength);
@@ -89,6 +90,13 @@ namespace BoonieBear.DeckUnit.Core
                         UnitCore.Instance.EventAggregator.PublishMessage(new StatusNotify("数据解析",ex.Message,NotifyLevel.Warning));
                     }
  
+                }
+                else if (e.Mode == CallMode.CommData)
+                {
+                    var bytes = new byte[e.DataBufferLength];
+                    Buffer.BlockCopy(e.DataBuffer, 0, bytes, 0, e.DataBufferLength);
+                    if (e.ID == 12)
+                        UnitCore.Instance.EventAggregator.PublishMessage(new NodeStatusInfo(e.Outstring, bytes));
                 }
             }
             else
