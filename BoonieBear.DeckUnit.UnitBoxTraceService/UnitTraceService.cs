@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using BoonieBear.DeckUnit.TraceFileService;
 using BoonieBear.DeckUnit.DAL;
@@ -12,7 +13,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
         private LogFile shelLogFile;
         public string Error { get; set; }
         public string LogPath { get; set; }
-
+        public bool IsOK { get; set; }
         public string FileName
         {
             get
@@ -25,7 +26,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             }
         }
 
-        public bool CreateService(string connectstr="")
+        public bool CreateService(string connectstr = "")
         {
 
             //create log directory
@@ -45,10 +46,15 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             traceFile.SetPath(recordPath);
             //setup sql
             _dalTrace = DALTrace.GetInstance(connectstr);
-            if(_dalTrace.isLink)
-                return true;
-            Error = _dalTrace.Errormsg;
-            return false;
+            if (_dalTrace.isLink)
+                IsOK = true;
+            else
+            {
+                Error = _dalTrace.Errormsg;
+                IsOK = false;
+            }
+            return IsOK;
+
         }
 
         public bool TearDownService()
@@ -145,6 +151,46 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             }
             return false;
             
+        }
+
+        public List<CommandLog> GetCommandList(DateTime from, DateTime to)
+        {
+            if (_dalTrace.isLink)
+            {
+                return _dalTrace.GetCommLog(from, to);
+            }
+                
+            else
+                Error = "未连接数据库";
+            return null;
+        }
+        public CommandLog GetCommandAt(int id)
+        {
+            if (_dalTrace.isLink)
+                return _dalTrace.GetCommLogAt(id);
+            else
+                  Error = "未连接数据库";
+            return null;
+        }
+
+        public void DeleteCommandLog(DateTime from, DateTime to)
+        {
+            var idlst = new List<int>();
+            if (_dalTrace.isLink)
+            {
+                var lst = GetCommandList(from, to);
+                foreach (var cmd in lst)
+                {
+                    if (_dalTrace.DeleteCommLog(cmd.LogID) == false)
+                    {
+                        Error = _dalTrace.Errormsg;
+                        break;
+                    }
+                }
+
+            }
+            else
+                Error = "未连接数据库";
         }
     }
 }

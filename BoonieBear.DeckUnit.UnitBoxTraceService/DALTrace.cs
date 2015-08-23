@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using BoonieBear.DeckUnit.DAL;
@@ -57,11 +58,74 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                 _sqldal.Close();
         }
 
+        public bool DeleteCommLog(int id)
+        {
+            try
+            {
+                if (_sqldal.LinkStatus)
+                {
+                    _sqldal.DeleteLog(id); 
+                    return true;
+                }
+                    
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+            }
+            return false;
+            
+        }
         public bool SaveCommLog(CommandLog commandLog)
         {
-            if (_sqldal.LinkStatus)
-                return (_sqldal.AddLog(commandLog)>0);
+            try
+            {
+                if (_sqldal.LinkStatus)
+                    return (_sqldal.AddLog(commandLog) > 0);
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+            }
             return false;
+        }
+        public List<CommandLog> GetCommLog(DateTime from, DateTime to)
+        {
+            try
+            {
+                if (_sqldal.LinkStatus)
+                {
+                    if (from.CompareTo(to) >= 0) //等于或晚于to时间
+                    {
+                        return _sqldal.GetLogLst("");
+                    }
+                    else
+                    {
+                        return _sqldal.GetLogLst("LogTime>='" + from.ToString("s") + "' AND " + "LogTime<='" + to.ToString("s") + "'");
+                    }
+                }
+                    
+                
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+            }
+            return null;
+        }
+        public CommandLog GetCommLogAt(int id)
+        {
+            try
+            {
+                if (_sqldal.LinkStatus)
+                    return _sqldal.GetCommandLog(id);
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+            }
+            
+            return null;
         }
     }
 }

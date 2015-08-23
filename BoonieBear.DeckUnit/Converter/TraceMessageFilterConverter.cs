@@ -7,7 +7,7 @@ using System.Windows.Data;
 using System.Globalization;
 namespace BoonieBear.DeckUnit.Converter
 {
-    class TraceMessgaeFilterConverter : IMultiValueConverter
+    class TraceMessageFilterConverter : IMultiValueConverter
     {
         private string str;
         private string layer;

@@ -258,7 +258,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
         public int AddLog(CommandLog commandLog)
         {
             int id = 0;
-            using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT COUNT(*) FROM " + _tableName[2]))
+            using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT MAX(LogID) FROM " + _tableName[2]))
             {
                 if(reader.Read())
                     id = reader.GetInt32(0);

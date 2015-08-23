@@ -21,9 +21,6 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void Initialize()
         {
             GoHomeCMD = RegisterCommand(ExecuteGoHomeCMD, CanExecuteGoHomeCMD, true);
-            SelectNode = RegisterCommand(ExecuteSelectNode, CanExecuteSelectNode, true);
-            SelectDevice = RegisterCommand(ExecuteSelectDevice, CanExecuteSelectDevice, true);
-            SelectNet = RegisterCommand(ExecuteSelectNet, CanExecuteSelectNet, true);
             GoGetDeviceDataPage = RegisterCommand(ExecuteGoGetDeviceDataPage, CanExecuteGoGetDeviceDataPage, true);
             GoGetDeviceStatusPage = RegisterCommand(ExecuteGoGetDeviceStatusPage, CanExecuteGoGetDeviceStatusPage, true);
             GoGetNodeStatusPage = RegisterCommand(ExecuteGoGetNodeStatusPage, CanExecuteGoGetNodeStatusPage, true);
@@ -59,8 +56,17 @@ namespace BoonieBear.DeckUnit.ViewModels
             set
             {
                 SetPropertyValue(() => IsNodeActive, value);
-                if (value==true)
+                if (value == true)
+                {
+                    IsDeviceActive = false;
+                    IsNetActive = false;
                     SelectIndex = 0;
+                }
+                else
+                {
+                    if (IsDeviceActive == false && IsNetActive==false)
+                        IsNodeActive = true;
+                }
             }
         }
         public bool IsDeviceActive
@@ -70,7 +76,16 @@ namespace BoonieBear.DeckUnit.ViewModels
             {
                 SetPropertyValue(() => IsDeviceActive, value);
                 if (value == true)
+                {
+                    IsNodeActive = false;
+                    IsNetActive = false;
                     SelectIndex = 1;
+                }
+                else
+                {
+                    if (IsNodeActive == false && IsNetActive == false)
+                        IsDeviceActive = true;
+                }
             }
         }
         public bool IsNetActive
@@ -80,7 +95,16 @@ namespace BoonieBear.DeckUnit.ViewModels
             {
                 SetPropertyValue(() => IsNetActive, value);
                 if (value == true)
+                {
+                    IsNodeActive = false;
+                    IsDeviceActive = false;
                     SelectIndex = 2;
+                }
+                else
+                {
+                    if (IsNodeActive == false && IsDeviceActive == false)
+                        IsNetActive = true;
+                }
             }
         }
         public int SelectIndex
@@ -113,27 +137,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         #endregion
 
-        #region SelectNode
-        public ICommand SelectNode
-        {
-            get { return GetPropertyValue(() => SelectNode); }
-            set { SetPropertyValue(() => SelectNode, value); }
-        }
-
-
-        public void CanExecuteSelectNode(object sender, CanExecuteRoutedEventArgs eventArgs)
-        {
-            eventArgs.CanExecute = true;
-        }
-
-
-        public void ExecuteSelectNode(object sender, ExecutedRoutedEventArgs eventArgs)
-        {
-            IsNodeActive = true;
-            IsDeviceActive = false;
-            IsNetActive = false;
-        }
-        #endregion
+       
 
         #region node cmd
         public ICommand GoGetNodeStatusPage
@@ -411,48 +415,6 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
         #endregion
 
-        #region SelectDevice
-        public ICommand SelectDevice
-        {
-            get { return GetPropertyValue(() => SelectDevice); }
-            set { SetPropertyValue(() => SelectDevice, value); }
-        }
 
-
-        public void CanExecuteSelectDevice(object sender, CanExecuteRoutedEventArgs eventArgs)
-        {
-            eventArgs.CanExecute = true;
-        }
-
-
-        public void ExecuteSelectDevice(object sender, ExecutedRoutedEventArgs eventArgs)
-        {
-            IsNodeActive = false;
-            IsDeviceActive = true;
-            IsNetActive = false;
-        }
-        #endregion
-
-        #region SelectNet
-        public ICommand SelectNet
-        {
-            get { return GetPropertyValue(() => SelectNet); }
-            set { SetPropertyValue(() => SelectNet, value); }
-        }
-
-
-        public void CanExecuteSelectNet(object sender, CanExecuteRoutedEventArgs eventArgs)
-        {
-            eventArgs.CanExecute = true;
-        }
-
-
-        public void ExecuteSelectNet(object sender, ExecutedRoutedEventArgs eventArgs)
-        {
-            IsNodeActive = false;
-            IsDeviceActive = false;
-            IsNetActive = true;
-        }
-        #endregion
     }
 }

@@ -859,7 +859,7 @@
     </Style>
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Grid Width="45" >
+        <Grid Width="65" >
             <Grid.RowDefinitions>
                 <RowDefinition MaxHeight="17"/>
                 <RowDefinition Height="0.00001*"/>
@@ -960,11 +960,11 @@
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Width" Value="Auto"/>
-                <Setter Property="Height" Value="15" />
+                <Setter Property="Height" Value="35" />
                 <Setter Property="Template" Value="{StaticResource HorizontalScrollBar}" />
             </Trigger>
             <Trigger Property="Orientation" Value="Vertical">
-                <Setter Property="Width" Value="15"/>
+                <Setter Property="Width" Value="35"/>
                 <Setter Property="Height" Value="Auto" />
                 <Setter Property="Template" Value="{StaticResource VerticalScrollBar}" />
             </Trigger>

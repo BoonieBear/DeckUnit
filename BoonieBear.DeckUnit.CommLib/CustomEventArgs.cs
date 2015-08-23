@@ -6,10 +6,22 @@ namespace BoonieBear.DeckUnit.CommLib
     {
         public CustomEventArgs(int id, string outstring, byte[] buf, int length, bool parseOK, string errorMsg, CallMode callmode, object callSrc)
         {
-            if (length > 0)
+            if (callmode==CallMode.DataMode)
             {
-                DataBuffer = new byte[length+4];
-                Buffer.BlockCopy(buf, 0, DataBuffer, 0, 4+length);//包头长度4，包括ID和长度
+                if (length>0)
+                {
+                    DataBuffer = new byte[length+4];
+                    Buffer.BlockCopy(buf, 0, DataBuffer, 0, 4+length);//包头长度4，包括ID和长度
+                }
+            }
+            else
+            {
+                if (length>0)
+                {
+                    DataBuffer = new byte[length];
+                    Buffer.BlockCopy(buf, 0, DataBuffer, 0, length);
+                        
+                }
             }
             ID = id;
             Outstring = outstring;

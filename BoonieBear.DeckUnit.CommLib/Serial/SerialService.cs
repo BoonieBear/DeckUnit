@@ -89,13 +89,19 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         private void _SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var nCount = _serialPort.BytesToRead;
+            if (nCount < 16)
+            {
+                Thread.Sleep(50);
+                return;
+            }
             for (int i = nCount - 1; i >= 0; i--)
             {
                 _recvQueue.Add((byte)_serialPort.ReadByte());
+                CheckQueue(ref _recvQueue);
             }
-            CheckQueue(ref _recvQueue);
+            
             //等一会攒数据
-            Thread.Sleep(200);
+            Thread.Sleep(50);
         }
 
         protected abstract void CheckQueue(ref List<byte> lstBytes);
@@ -122,7 +128,6 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             switch (SerialServiceMode)
             {
                 case SerialServiceMode.HexMode:
-                    
                     while (strcmd.Contains("EB90")&&strcmd.Contains("END"))
                     {
                         Debug.WriteLine(strcmd);
@@ -166,9 +171,11 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                 //MainForm.pMainForm.BuoyChoice.SelectedIndex = int.Parse(BuoyID);
                 if (str[1] == "03")
                 {
+                    Debug.WriteLine("收到应答包");
                     if (str[3] == "Y")
                     {
                         var error = "命令发送成功";
+                        
                         var e = new CustomEventArgs(0, hexString, bytes, 0, true, error, CallMode.AnsMode, _serialPort);
                         OnParsed(e);
                         //校验正确
@@ -258,6 +265,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                         }
                         else
                         {
+                            mode = CallMode.CommData;
                             var hexStr = StringHexConverter.ConvertCharToHex(data, data.Length);
                             var info = new StringBuilder();
                             if (id == 20)//浮标返回

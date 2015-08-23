@@ -156,36 +156,24 @@
         </TabControl>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
             <ToggleButton x:Name="NodeCMD" Margin="10,0,10,0"
-                                 IsChecked="{Binding IsNodeActive, Mode=OneWay}"
+                                 IsChecked="{Binding IsNodeActive, Mode=TwoWay}"
                                  Content="节点指令"  
                                  Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
-                                <i:Interaction.Triggers>
-                                    <i:EventTrigger EventName="Click">
-                                        <i:InvokeCommandAction Command="{Binding SelectNode}"/>
-                                    </i:EventTrigger>
-                                </i:Interaction.Triggers>   
+                                
             </ToggleButton>
             <ToggleButton Margin="10,0,10,0"
-                                 IsChecked="{Binding IsDeviceActive, Mode=OneWay}"
+                                 IsChecked="{Binding IsDeviceActive, Mode=TwoWay}"
                                 
                                  Content="设备指令"  
                                  Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <i:InvokeCommandAction Command="{Binding SelectDevice}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+                
             </ToggleButton>
             <ToggleButton Margin="10,0,10,0"
-                                 IsChecked="{Binding IsNetActive, Mode=OneWay}"
+                                 IsChecked="{Binding IsNetActive, Mode=TwoWay}"
                                  
                                  Content="网络指令"  
                                  Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
-                <i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Click">
-                        <i:InvokeCommandAction Command="{Binding SelectNet}"/>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>
+                
             </ToggleButton>
             </StackPanel>
     </Grid>

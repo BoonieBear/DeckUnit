@@ -129,7 +129,7 @@ namespace BoonieBear.DeckUnit.LiveService
             IsWorking = false;
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
-            if (!CreateTCPService(_commConf)) throw new Exception("命令服务无法初始化");
+            if (!CreateTCPService(_commConf)) throw new Exception("通信服务无法初始化");
             IsWorking = true;
         }
 

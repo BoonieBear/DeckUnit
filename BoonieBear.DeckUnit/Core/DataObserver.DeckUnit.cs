@@ -23,12 +23,13 @@ namespace BoonieBear.DeckUnit.Core
             {
                 if (e.Mode == CallMode.NoneMode)
                 {
-                    str = e.Outstring;
+                    str = e.Outstring+"\n";
                     var tcpsrc = e.CallSrc as TcpClient;
                     if (tcpsrc != null) //网络shell
                     {
                         UnitCore.Instance.UnitTraceService.WriteShell(str);
                         MainFrameViewModel.pMainFrame.Shellstring+= str;
+                        
                         if (MainFrameViewModel.pMainFrame.Shellstring.Length > 1024)
                         {
                             MainFrameViewModel.pMainFrame.Shellstring.Remove(0, 256);
@@ -48,12 +49,13 @@ namespace BoonieBear.DeckUnit.Core
                         }
                     }
                 }
-                else if (e.Mode == CallMode.LoaderMode)
+                else if (e.Mode == CallMode.LoaderMode||e.Mode == CallMode.AnsMode)
                 {
                     var src = e.CallSrc as SerialPort;
-                    if (src != null) //loader mode, 没有存储需求
+                    if (src != null) //loader/Ans mode, 没有存储需求
                     {
-                        MainFrameViewModel.pMainFrame.Serialstring += str;
+                        str = e.Outstring + "\n";
+                        MainFrameViewModel.pMainFrame.Serialstring += str; 
                         if (MainFrameViewModel.pMainFrame.Serialstring.Length > 4096)
                             MainFrameViewModel.pMainFrame.Serialstring.Remove(0, 1024);
                     }
@@ -83,6 +85,7 @@ namespace BoonieBear.DeckUnit.Core
                             if (UnitCore.Instance.UnitTraceService.Save(savedata, bytes))
                                 savedata.FilePath = UnitCore.Instance.UnitTraceService.FileName;
                             MainFrameViewModel.pMainFrame.DataCollMt.Add(savedata);
+                            MainFrameViewModel.pMainFrame.RecvMessage = "数据接收时间："+savedata.LogTime;
                         }
                     }
                     catch (Exception ex)

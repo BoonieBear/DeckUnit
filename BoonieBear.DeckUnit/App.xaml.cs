@@ -18,6 +18,17 @@ namespace BoonieBear.DeckUnit
             DispatcherUnhandledException += Application_DispatcherUnhandledException;
             AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
         }
+        private static DispatcherOperationCallback exitFrameCallback = new DispatcherOperationCallback(ExitFrame);
+        public static void DoEvents()
+        {
+            DispatcherFrame nestedFrame = new DispatcherFrame();
+            DispatcherOperation exitOperation = Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Background, exitFrameCallback, nestedFrame);
+            Dispatcher.PushFrame(nestedFrame);
+            if (exitOperation.Status !=DispatcherOperationStatus.Completed)
+            {
+                exitOperation.Abort();
+            }
+        }
         protected override void OnStartup(StartupEventArgs e)
         {
             //  初始化框架
@@ -60,7 +71,13 @@ namespace BoonieBear.DeckUnit
                 }
             }
         }
-
+        private static Object ExitFrame(Object state)
+        {
+            DispatcherFrame frame = state as
+            DispatcherFrame;
+            frame.Continue = false;
+            return null;
+        }
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             UnitCore.Instance.Stop();

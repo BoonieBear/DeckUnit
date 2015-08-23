@@ -115,13 +115,12 @@ namespace BoonieBear.DeckUnit.LiveService
             var cmd = commfactory.CreateSerialComm(buf);
             SerialService.Register(cmd);
             var ret = Command.SendSerialAsync(cmd);
-            if (await ret)
+            await ret;
+            SerialService.UnRegister(cmd);
+            if (ret.Result)
             {
-                return await Command.RecvSerialAsync(cmd).ContinueWith(x =>
-                {
-                    SerialService.UnRegister(cmd);
-                    return x.Result.ParseOK;
-                });
+                SerialService.UnRegister(cmd);
+                return true;
             }
             return false;
         }

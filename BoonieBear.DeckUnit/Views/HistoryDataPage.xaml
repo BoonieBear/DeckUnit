@@ -3,8 +3,11 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:metroControl="http://metro.mahapps.com/winfx/xaml/controls"
       xmlns:controls1="clr-namespace:BoonieBear.DeckUnit.Controls"
+      xmlns:autolist ="clr-namespace:BoonieBear.DeckUnit.Controls.AutoFilterGridListView"
+      xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+      xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=HistoryDataPageViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
@@ -13,10 +16,76 @@
     <Grid Background="{StaticResource MainBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
+            <RowDefinition Height="60"/>
             <RowDefinition/>
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0"  Text="{Binding Title}" Style="{StaticResource WinTextLargeStyle}"/> 
-
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <TextBlock  Text="历史数据" VerticalAlignment="Center" FontSize="34px"/>
+            <Button  Visibility="{Binding RefreshVisble}" Command="{Binding FetchingData }" Height="40"  Width="40" VerticalAlignment="Center" Margin="10" RenderTransformOrigin="0.5,0.5">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/appbar/appbar.refresh.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <metroControl:ProgressRing IsActive="{Binding IsFetching}" Margin="10,0"  IsLarge="False" Height="40"  Width="40"/>
+        </StackPanel>
+        <UniformGrid Grid.Row="1" Columns="3">
+            <DatePicker SelectedDate="{Binding SelectedFromDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <TextBlock Text=">>" FontSize="34" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <DatePicker SelectedDate="{Binding SelectedToDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </UniformGrid>
+        <TabControl Grid.Row="2" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectIndex, Mode=OneWay}">
+            <TabItem >
+                <ScrollViewer>
+                    <autolist:FilterableListView x:Name="DataListView"  ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding DataCollMt}"
+                               FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" >
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
+                                <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
+                                <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
+                                <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
+                                <autolist:SortableGridViewColumn Header="ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
+                            </GridView>
+                        </ListView.View>
+                    </autolist:FilterableListView>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem >
+                <ScrollViewer>
+                    <autolist:FilterableListView ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding CMDCollMt}"
+                               FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" >
+                        <ListView.View>
+                            <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
+                                <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
+                                <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
+                                <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
+                                <autolist:SortableGridViewColumn Header="命令ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
+                            </GridView>
+                        </ListView.View>
+                    </autolist:FilterableListView>
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <ToggleButton x:Name="NodeCMD" Margin="10,0,10,0"
+                                 IsChecked="{Binding IsDataActive, Mode=TwoWay}"
+                                 Content="接收数据"  
+                                 Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
+                
+            </ToggleButton>
+            <ToggleButton Margin="10,0,10,0"
+                                 IsChecked="{Binding IsCmdActive, Mode=TwoWay}"
+                                 Content="发送指令"  
+                                 Style="{StaticResource SingleSelectInMultiButtonStyle2}" VerticalAlignment="Center">
+                
+            </ToggleButton>
+        </StackPanel>
     </Grid>
-    </Page>
+</Page>

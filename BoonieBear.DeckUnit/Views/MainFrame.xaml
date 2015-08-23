@@ -25,7 +25,8 @@
         <Converter:BooleanToModeConverter x:Key="BooleanToModeConverter"/>
         <Converter:BooleanToWidthConverter x:Key="BooleanToWidthConverter"/>
         <Converter:HideZeroConverter x:Key="HideZeroConverter"/>
-        <Converter:TraceMessgaeFilterConverter x:Key="TraceMessgaeFilterConverter"/>
+            <Converter:MultiDebugStringConverter x:Key="MultiDebugStringConverter"/>
+            <Converter:TraceMessageFilterConverter x:Key="TraceMessgaeFilterConverter"/>
             <Dialog:CustomDialog x:Key="CustomInfoDialog"
                                  Title="设备命令"
                                  x:Name="CustomInfoDialog">
@@ -126,7 +127,7 @@
                         <StackPanel  Orientation="Horizontal" Margin="0,5">
                             <Button FontFamily="Microsoft YaHei UI" FontSize="14" Width ="80" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Command ="{Binding SwapMode}" 
 								Content="{Binding ModeType, Converter={StaticResource BooleanToModeConverter}}"  
-								Margin="0,0,3,0" Click="Button_Click"/>
+								Margin="0,0,3,0"/>
                             <TextBox  x:Name ="NetTextBox" FontFamily="Microsoft YaHei UI" FontSize="14" Width ="{Binding ModeType, ConverterParameter=net, Converter={StaticResource BooleanToWidthConverter}}" 
 								Text="{Binding NetInput, Mode=TwoWay}" 
 								metroControl:TextBoxHelper.Watermark="网络" Margin="3,0" 
@@ -145,15 +146,23 @@
 									TouchKeyBoard:TabKeyBoard.VerticalOffset="10"
 									TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									TouchKeyBoard:TabKeyBoard.Type="Char" 
-									TouchKeyBoard:TabKeyBoard.Width="480"/>
+									TouchKeyBoard:TabKeyBoard.Width="480" IsEnabled="{Binding ModeType}"/>
                                 <ToggleButton x:Name ="LoadcheckButton" ToolTip ="串口进入loader模式" Height="30" Content  ="Loader"
 									IsChecked="{Binding LoaderMode}" Click="ToggleButton_Click" />
                                 <Button  ToolTip ="选择固件" Height="30" Width="40" Content  ="..."
 									Visibility="{Binding LoaderMode, Converter={StaticResource BoolToVisibilityConverter}}" Click="SelectFileButton_Click" />
                             </StackPanel>
-                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="Microsoft YaHei UI" FontSize="14" />
+                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="Microsoft YaHei UI" FontSize="14" IsEnabled="{Binding ModeType}" />
                         </StackPanel>
-                        <TextBox x:Name ="DebugLog" MinHeight ="120" FontFamily="Microsoft YaHei UI" FontSize="14" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" IsReadOnly="True"/>
+                        <TextBox x:Name ="DebugLog" Height ="120" FontFamily="Microsoft YaHei UI" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                            <TextBox.Text>
+                                <MultiBinding Converter="{StaticResource MultiDebugStringConverter}">
+                                    <Binding Path="ModeType"/>
+                                    <Binding Path="Shellstring"/>
+                                    <Binding Path="Serialstring"/>
+                                </MultiBinding>
+                            </TextBox.Text>
+                        </TextBox>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Orientation="Vertical">
                         <StackPanel Orientation="Horizontal" Margin="0,5">
@@ -206,7 +215,7 @@
                                 <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
                                 <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
                                 <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
-                                <autolist:SortableGridViewColumn Header="命令ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
+                                <autolist:SortableGridViewColumn Header="ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
                                     
                             </GridView>
                         </ListView.View>

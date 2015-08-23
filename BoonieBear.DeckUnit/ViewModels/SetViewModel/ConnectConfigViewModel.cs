@@ -26,6 +26,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             CommInfo = SerialPort.GetPortNames().ToList();
             SelectComm = 0;
             IPaddr = 100;
+            
         }
 
         public override void InitializePage(object extraData)
@@ -37,6 +38,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                 IPaddr = int.Parse(ip.Substring(ip.LastIndexOf(".") + 1));
             }
         }
+
         public bool IsProcessing
         {
             get { return GetPropertyValue(() => IsProcessing); }

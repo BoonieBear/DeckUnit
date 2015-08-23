@@ -26,17 +26,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         public static MainFrameViewModel pMainFrame;
         private IDialogCoordinator _dialogCoordinator;
 
-        public List<string> TraceCollMt
-        {
-            get { return GetPropertyValue(() => TraceCollMt); }
-            set { SetPropertyValue(() => TraceCollMt, value); }
-        }
-
-        public List<CommandLog> DataCollMt
-        {
-            get { return GetPropertyValue(() => DataCollMt); }
-            set { SetPropertyValue(() => DataCollMt, value); }
-        }
+        
         public override void Initialize()
         {
             base.Initialize();
@@ -51,41 +41,37 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => StatusHeader);
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
-            
-            //datatree = new DataTreeModel(tree);
-            TraceCollMt.Add("12345[]46768");
-            TraceCollMt.Add("12345[]467[网络监控]68");
-            StatusHeader = "水声通信机";
+
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
             ModeType = true;
-            var t = new CommandLog();
-            t.LogTime = DateTime.Now;
-            t.SourceID = 3;
-            t.DestID = 8;
-            t.CommID = 133;
-            DataCollMt.Add(t);
-            t = new CommandLog();
-            t.LogTime = DateTime.Now;
-            t.SourceID = 2;
-            t.DestID = 3;
-            t.CommID = 132;
-            DataCollMt.Add(t);
-            t = new CommandLog();
-            t.LogTime = DateTime.Now;
-            t.SourceID = 1;
-            t.DestID = 8;
-            t.CommID = 143;
-            DataCollMt.Add(t);
-            
+            DataRecvTime = "数据接收时间：---";
+
+        }
+        #region 绑定属性
+
+        public List<string> TraceCollMt
+        {
+            get { return GetPropertyValue(() => TraceCollMt); }
+            set { SetPropertyValue(() => TraceCollMt, value); }
         }
 
+        public List<CommandLog> DataCollMt
+        {
+            get { return GetPropertyValue(() => DataCollMt); }
+            set { SetPropertyValue(() => DataCollMt, value); }
+        }
+        public string DataRecvTime
+        {
+            get { return GetPropertyValue(() => DataRecvTime); }
+            set { SetPropertyValue(() => DataRecvTime, value); }
+        }
         public IDialogCoordinator DialogCoordinator
         {
             get { return _dialogCoordinator; }
             set { _dialogCoordinator = value; }
         }
-        #region 绑定属性
+        
         public string StatusHeader
         {
             get { return GetPropertyValue(() => StatusHeader); }
@@ -131,7 +117,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => Filterlayer); }
             set { SetPropertyValue(() => Filterlayer, value); }
         }
-        public int RecvMessage
+        public string RecvMessage
         {
             get { return GetPropertyValue(() => RecvMessage); }
             set { SetPropertyValue(() => RecvMessage, value); }
@@ -199,7 +185,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
             else
             {
-                await UnitCore.Instance.CommEngine.SendConsoleCMD(CommInput);
+              //  await UnitCore.Instance.CommEngine.SendConsoleCMD(CommInput);//没有这个应用
 
             }
         }
@@ -216,6 +202,8 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
         }
         #endregion
+
+
 
         
     }

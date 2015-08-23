@@ -2,15 +2,11 @@
 {
     class GoHistoryDataPageBaseNavigationRequest
     {
-        private string _titile;
-		public GoHistoryDataPageBaseNavigationRequest(string titile)
+
+		public GoHistoryDataPageBaseNavigationRequest()
 		{
-		    _titile = titile;
+
 		}
 
-        public string Titile
-        {
-            get { return _titile; }
-        }
     }
 }

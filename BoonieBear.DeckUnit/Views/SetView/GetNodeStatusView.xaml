@@ -31,7 +31,7 @@
             <TextBlock  Text="读取状态" VerticalAlignment="Center" FontSize="34px"/>
         </StackPanel>
         <ScrollViewer Grid.Row="1">
-            <TextBlock Text="{Binding Info}" FontSize="22"/>
+            <TextBlock Text="{Binding Info}" FontSize="22" FontFamily="Microsoft YaHei UI" Margin="5"/>
         </ScrollViewer>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}" VerticalAlignment="Bottom"/>

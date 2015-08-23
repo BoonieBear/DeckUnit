@@ -38,8 +38,7 @@ namespace BoonieBear.DeckUnit.Core.Controllers
 
         public void Handle(GoHistoryDataPageBaseNavigationRequest message)
         {
-            NavigateToPage("Views/HistoryDataPage.xaml", message.Titile);
-            Application.Current.Properties["message"] = message.Titile;
+            NavigateToPage("Views/HistoryDataPage.xaml");
 
         }
 

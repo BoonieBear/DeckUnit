@@ -83,7 +83,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             result = UnitCore.Instance.CommEngine.SendCMD(cmd);
             await result;
             var ret = result.Result;
-            IsProcessing = false;
+            
             if (ret == false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
                 UnitCore.Instance.CommEngine.Error);
@@ -92,6 +92,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                 await TaskEx.Delay(1000);
                 //等待数据更新
             }
+            IsProcessing = false;
         }
         #endregion
 

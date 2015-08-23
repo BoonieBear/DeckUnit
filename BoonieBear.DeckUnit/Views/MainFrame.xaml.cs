@@ -27,7 +27,7 @@ namespace BoonieBear.DeckUnit.Views
             //DataContext = MainFrameViewModel.pMainFrame;
             
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
-            this.DebugLog.Text = MainFrameViewModel.pMainFrame.Shellstring;
+            //this.DebugLog.Text = MainFrameViewModel.pMainFrame.Shellstring;
             
         }
 
@@ -36,7 +36,7 @@ namespace BoonieBear.DeckUnit.Views
 
             ProgressDialogController remote = null;
             UnitCore.Instance.Start();
-            UnitCore.Instance.EventAggregator.PublishMessage(new GoSetEnergyViewEvent());
+            UnitCore.Instance.EventAggregator.PublishMessage(new GoGetNodeStatusViewEvent());
             /*
             var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
             Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
@@ -100,20 +100,6 @@ namespace BoonieBear.DeckUnit.Views
             flyout = this.flyoutsControl.Items[0] as Flyout;
             flyout.IsOpen = false;
             FlyOutView(1);
-        }
-
-        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            var vm = DataContext as MainFrameViewModel;
-            if(vm!=null)
-                if (vm.ModeType)
-                {
-                    this.DebugLog.Text = vm.Serialstring;
-                }
-                else
-                {
-                    this.DebugLog.Text = vm.Shellstring;
-                }
         }
 
         private async void ToggleButton_Click(object sender, System.Windows.RoutedEventArgs e)

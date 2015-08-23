@@ -47,8 +47,6 @@
                 <TextBlock Foreground ="DarkBlue" Text="IP"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="50,0,0,0"/>
                 <metroControl:NumericUpDown x:Name="ThirdIPValueNum"  StringFormat ="192-168-2-{0}" FontSize="24" Value="{Binding IPaddr}" Maximum="254" Minimum="1" Foreground="{DynamicResource AccentColorBrush}" Margin="120,29,0,39" Height="52" Width="242" />
             </StackPanel>
-
-
         </Grid>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}" VerticalAlignment="Bottom"/>
