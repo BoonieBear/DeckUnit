@@ -70,6 +70,6 @@
 
         </Grid>
         <ProgressBar Grid.Row ="2" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Style="{StaticResource PerformanceProgressBar}"/>
+                     Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom" />
     </Grid>
 </Page>

@@ -50,7 +50,7 @@
             <Button Content="重启MSP430" Foreground ="DarkBlue" FontSize="26" FontFamily="Microsoft YaHei UI" BorderThickness="1,1" Height="60" VerticalAlignment="Bottom" Click="RebootButton_Click"/>
             <Button Content="清空重启次数" Foreground ="DarkBlue" FontSize="26" FontFamily="Microsoft YaHei UI" BorderThickness="1,1" Height="60" Click="ClearRebootButton_Click"/>
             <ProgressBar Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Style="{StaticResource PerformanceProgressBar}" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
+                     Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
         </StackPanel>
         
         

@@ -70,9 +70,9 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             lock (Lockobject)
             {
                 _args = e;
-                if (_args.Mode.Equals(CallMode.AnsMode))
+                if (_args.Mode.Equals(CallMode.AnsMode) || _args.Mode.Equals(CallMode.ErrMode))
                 {
-                    Debug.WriteLine("recv CallMode.AnsMode");
+                    Debug.WriteLine("recv CallMode.AnsMode or ErrMode");
                     EAutoResetEvent.Set();
                 }
                 if (_args.Mode.Equals(CallMode.DataMode))

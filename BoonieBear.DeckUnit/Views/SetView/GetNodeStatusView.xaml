@@ -34,7 +34,7 @@
             <TextBlock Text="{Binding Info}" FontSize="22" FontFamily="Microsoft YaHei UI" Margin="5"/>
         </ScrollViewer>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Style="{StaticResource PerformanceProgressBar}" VerticalAlignment="Bottom"/>
+                     Style="{StaticResource PerformanceProgressBar}"  Foreground="Black" VerticalAlignment="Bottom"/>
         <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="刷新" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
     </Grid>
 </Page>

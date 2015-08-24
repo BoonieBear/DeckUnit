@@ -89,7 +89,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         private void _SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var nCount = _serialPort.BytesToRead;
-            if (nCount < 16)
+            if (SerialServiceMode==SerialServiceMode.HexMode && nCount < 16)
             {
                 Thread.Sleep(50);
                 return;
@@ -100,8 +100,6 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                 CheckQueue(ref _recvQueue);
             }
             
-            //等一会攒数据
-            Thread.Sleep(50);
         }
 
         protected abstract void CheckQueue(ref List<byte> lstBytes);
@@ -414,11 +412,13 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                                 flag = false;
                                 mode = CallMode.ErrMode;
                                 error = "链路数据错误：" + exception.Message;
+                                var e = new CustomEventArgs(0, null, data, data.Length, flag, error, mode, _serialPort);
+                                OnParsed(e);
                             }
                             finally
                             {
 
-                                var e = new CustomEventArgs(12, info.ToString(), data, data.Length, flag, error, mode, _serialPort);
+                                var e = new CustomEventArgs(id, info.ToString(), data, data.Length, flag, error, mode, _serialPort);
                                 OnParsed(e);
                             }
 

@@ -1219,7 +1219,7 @@
             <RowDefinition Height="3"/>
         </Grid.RowDefinitions>
                         <Border Grid.Row="0" Name="btnItemStyle" Background="Transparent" BorderBrush="Transparent" BorderThickness="0" CornerRadius="0" SnapsToDevicePixels="True" Margin="0">
-                            <TextBlock x:Name="ContentSite"  Margin="3" TextAlignment="Center"  Foreground="CornflowerBlue"  FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"   Text="{TemplateBinding Content}">
+                            <TextBlock x:Name="ContentSite"  Margin="3" TextAlignment="Center"  Foreground="DarkBlue"  FontSize="24" VerticalAlignment="Center" HorizontalAlignment="Center"   Text="{TemplateBinding Content}">
             </TextBlock>
         </Border>
         <Rectangle Grid.Row="1" x:Name="SelectRect" Fill="Transparent">
@@ -1247,30 +1247,6 @@
     </Setter>
 </Style>
 
-    <Style TargetType="RadioButton" x:Key="SingleSelectInMultiButtonStyle">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="RadioButton">
-                    <TextBlock Name="MainText"  VerticalAlignment="Bottom" Opacity="0.7" TextAlignment="Center"  Foreground="CornflowerBlue"  FontSize="24" FontWeight="Thin"  Text="{TemplateBinding Content}">
-                    </TextBlock>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="True">
-                            <Setter TargetName="MainText" Property="Foreground" Value="Blue"/>
-                            <Setter TargetName="MainText" Property="FontSize" Value="24"/>
-                            <Setter TargetName="MainText"  Property="FontWeight" Value="SemiBold"/>
-                            <Setter TargetName="MainText"  Property="Opacity" Value="1"/>
-                        </Trigger>
-                        <Trigger Property="IsChecked" Value="False">
-                            <Setter TargetName="MainText" Property="Foreground" Value="CornflowerBlue"/>
-                            <Setter TargetName="MainText" Property="FontSize" Value="24"/>
-                            <Setter TargetName="MainText"  Property="FontWeight" Value="Thin"/>
-                            <Setter TargetName="MainText"  Property="Opacity" Value="0.7"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
     <!--Status bar-->
     <Style x:Key="MetroStatusBarItem"
            TargetType="{x:Type StatusBarItem}">

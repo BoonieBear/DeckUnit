@@ -71,7 +71,7 @@
     <metroControl:MetroWindow.DataContext>
         <Binding Path="MainFrameViewModel" Source="{StaticResource ViewModelLocator}"/>
     </metroControl:MetroWindow.DataContext>
-    <Grid x:Name="grid">
+    <Grid x:Name="grid" Background="{StaticResource MainBackGround}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="40"/>
@@ -278,7 +278,7 @@
             </metroControl:Flyout>
         </metroControl:FlyoutsControl>
 
-        <StatusBar Grid.Row="2" Style="{StaticResource MetroStatusBar}" Foreground="Black" Background="{Binding Level, Converter={StaticResource NotifyLevelToBrushConverter}}">
+        <StatusBar Visibility="{Binding IsStartPage}" Grid.Row="2" Style="{StaticResource MetroStatusBar}" Foreground="Black" Background="{Binding Level, Converter={StaticResource NotifyLevelToBrushConverter}}">
             <StatusBarItem Content="{Binding StatusHeader, Mode=OneWay}"/>
             <Separator Style="{StaticResource MetroStatusBarSeparator}" />
             <StatusBarItem Content="{Binding StatusDescription, Mode=OneWay}"/>

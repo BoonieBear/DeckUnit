@@ -119,7 +119,11 @@ namespace BoonieBear.DeckUnit.Views
                 MessageDialogStyle.AffirmativeAndNegative, LoaderCheck);
                 if (result == MessageDialogResult.Affirmative)
                 {
-                    UnitCore.Instance.CommEngine.SerialService.ChangeMode(SerialServiceMode.LoaderMode);
+                    var cmd = MSPHexBuilder.Pack242();
+                    var ret = UnitCore.Instance.CommEngine.SendCMD(cmd);
+                    await ret;
+                    if(ret.Result)
+                        UnitCore.Instance.CommEngine.SerialService.ChangeMode(SerialServiceMode.LoaderMode);
                 }
                 else
                 {

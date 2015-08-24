@@ -41,7 +41,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => StatusHeader);
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
-
+            IsStartPage= Visibility.Visible;
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
             ModeType = true;
@@ -137,6 +137,11 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             get { return GetPropertyValue(() => LoaderMode); }
             set { SetPropertyValue(() => LoaderMode, value); }
+        }
+        public Visibility IsStartPage
+        {
+            get { return GetPropertyValue(() => IsStartPage); }
+            set { SetPropertyValue(() => IsStartPage, value); }
         }
         #endregion
 

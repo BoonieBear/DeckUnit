@@ -538,7 +538,7 @@ namespace BoonieBear.DeckUnit.ACNP
 
         public string Contruct()
         {
-            return sleeptime.ToString("00000") + worktime.ToString("00000");
+            return sleeptime.ToString("000000") + worktime.ToString("000000");
         }
 
         public bool Parse(string HexStr)

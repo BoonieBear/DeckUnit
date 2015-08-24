@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.ACNP
         public static byte[] Pack255(int adlevel)
         {
             byte[] cmd = new byte[1];
-            cmd[0] = (byte)adlevel;
+            cmd[0] = Convert.ToByte(adlevel.ToString(),16);
             return ACNProtocol.CommPackage(255, cmd);
         }
 

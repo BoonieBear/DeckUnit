@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Events;
@@ -28,6 +29,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public override void InitializePage(object extraData)
         {
+            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Collapsed;
         }
 
         #endregion
