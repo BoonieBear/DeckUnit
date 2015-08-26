@@ -24,7 +24,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         public int _bitsPerSample = 16;
         public int _SampleByte = 2;
         public ArrayList _fftLeftSpect = new ArrayList();
-
+        private int slide=5;
         private bool bFFT = false;
         private Bitmap canvas;
 
@@ -39,7 +39,7 @@ namespace BoonieBear.DeckUnit.WaveBox
             _bitsPerSample = BitsPerSample;
             _SampleByte = _bitsPerSample / 8;
             ShowFFT = EnableFFT;
-            canvas = new Bitmap(1000,300);
+            canvas = new Bitmap(2048,300);
         }
 
         
@@ -138,7 +138,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                 p[x] = new System.Drawing.Point(x, y);
                 
             }
-            offScreenDC.DrawLines(pen,p);
+            offScreenDC.DrawCurve(pen, p,0.5f);
             // Clean up
             ImageBox.Source = BitmapToImageSource(canvas);
             offScreenDC.Dispose();
@@ -218,13 +218,13 @@ namespace BoonieBear.DeckUnit.WaveBox
                 unsafe
                 {
                     //move rect to left
-                    for (int x = 0; x < width - len; x++)
+                    for (int x = 0; x < width - len * slide; x++)
                     {
                         byte* pixel = (byte*) data.Scan0.ToPointer();
                         pixel += 4*x;
                         for (int y = 0; y < height; y++, pixel += offset)
                         {
-                            byte* pixelsrc = pixel + 4*len;
+                            byte* pixelsrc = pixel + 4 * len * slide;
 
                             pixel[0] = pixelsrc[0];
                             pixel[1] = pixelsrc[1];
@@ -241,26 +241,28 @@ namespace BoonieBear.DeckUnit.WaveBox
                     {
                         double distance = ((double) ((double[]) _fftLeftSpect[len - x - 1]).Length*Fmax/SamplesPerSecond*
                                            2/(double) (height));
-                        byte* pixel = (byte*) data.Scan0.ToPointer();
-                        pixel += stride - 4*(x + 1);
-                        for (int y = 0; y < height; y++, pixel += offset)
+                        for (int i = 0; i < slide; i++)
                         {
-
-                            double amplitude =
-                                ((double[]) _fftLeftSpect[len - x - 1])[(int) (distance*(height - 1 - y))];
-
-                            int color = GetColor(min, max, range, amplitude);
-                            if (color > 255) //最强db点
+                            byte* pixel = (byte*)data.Scan0.ToPointer();
+                            pixel += stride - 4 * (i+1+x* slide);
+                            for (int y = 0; y < height; y++, pixel += offset)
                             {
 
-                            }
-                            pixel[0] = (byte) color;
-                            pixel[1] = (byte) 0;
-                            pixel[2] = (byte) color;
-                            pixel[3] = (byte) color;
-                            pixel += stride;
-                        }
+                                double amplitude =
+                                    ((double[])_fftLeftSpect[len - x - 1])[(int)(distance * (height - 1 - y))];
 
+                                int color = GetColor(min, max, range, amplitude);
+                                if (color > 255) //最强db点
+                                {
+
+                                }
+                                pixel[0] = (byte)color;
+                                pixel[1] = (byte)0;
+                                pixel[2] = (byte)color;
+                                pixel[3] = (byte)color;
+                                pixel += stride;
+                            }
+                        }
                     }
 
                     _fftLeftSpect.Clear();
