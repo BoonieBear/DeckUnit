@@ -111,8 +111,8 @@
 									</TransformGroup>
 								</Grid.RenderTransform>
 								<Grid.RowDefinitions>
-									<RowDefinition Height="0.507*"/>
-									<RowDefinition Height="0.493*"/>
+									<RowDefinition Height="0.527*"/>
+									<RowDefinition Height="0.473*"/>
 								</Grid.RowDefinitions>
 								<Border Opacity="0" HorizontalAlignment="Stretch" x:Name="glow" Width="Auto" Grid.RowSpan="2" CornerRadius="4,4,4,4" RenderTransformOrigin="0.5,0.5">
 									<Border.RenderTransform>
@@ -138,7 +138,7 @@
 										</RadialGradientBrush>
 									</Border.Background>
 								</Border>
-								<ContentPresenter x:Name="contentPresenter"   Grid.RowSpan="1" RenderTransformOrigin="0.5,0.5"  Height="20" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="18,20.499,0,-25" Grid.Row="1">
+								<ContentPresenter x:Name="contentPresenter"   Grid.RowSpan="1" RenderTransformOrigin="0.5,0.5"  Height="20" Width="Auto" FlowDirection="LeftToRight" IsHitTestVisible="False" Margin="18,0,0,5" Grid.Row="0">
 									<ContentPresenter.RenderTransform>
 										<TransformGroup>
 											<ScaleTransform/>

@@ -3,6 +3,7 @@ using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Controller;
 using TinyMetroWpfLibrary.EventAggregation;
 
@@ -56,8 +57,10 @@ namespace BoonieBear.DeckUnit.Core.Controllers
 
         public void Alert(string message)
         {
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "好的";
             MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
-                message);
+                message,MessageDialogStyle.Affirmative,md);
         }
 
         public void BroadCast(string message)

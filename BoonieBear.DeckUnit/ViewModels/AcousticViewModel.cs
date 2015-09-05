@@ -1,6 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System;
+using System.Windows.Input;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
@@ -410,6 +412,13 @@ namespace BoonieBear.DeckUnit.ViewModels
             {
                 ACNBuilder.Pack200();
                 var cmd = ACNProtocol.Package(false);
+                var cl = new CommandLog();
+                cl.DestID = 0;
+                cl.SourceID = (int)ACNProtocol.SourceID;
+                cl.LogTime = DateTime.Now;
+                cl.CommID = 200;
+                cl.Type = false;
+                UnitCore.Instance.UnitTraceService.Save(cl, cmd);
                 await UnitCore.Instance.NetEngine.SendCMD(cmd);
             }
         }

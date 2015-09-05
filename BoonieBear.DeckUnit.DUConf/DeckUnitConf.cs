@@ -29,7 +29,7 @@ namespace BoonieBear.DeckUnit.DUConf
                 System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
             xmldoc = MyExecPath + "\\" + xmldoc;
             Connectstring = GetSqlString();
-            sqlDal = new SqliteSqlDAL(Connectstring);
+            sqlDal = SqliteSqlDAL.GetInstance(Connectstring);
         }
 
         protected string GetValue(string[] str)
@@ -80,6 +80,19 @@ namespace BoonieBear.DeckUnit.DUConf
                 if((newinfo.DataUDPPort == ciInfo.DataUDPPort)&&(newinfo.NetPort1 == ciInfo.NetPort1)&&(newinfo.NetPort2 == ciInfo.NetPort2)
                     &&(newinfo.SerialPortRate == ciInfo.SerialPortRate)&&(newinfo.TraceUDPPort == ciInfo.TraceUDPPort)&&(newinfo.LinkIP == ciInfo.LinkIP)
                     &&(newinfo.SerialPort == ciInfo.SerialPort))
+                    return true;
+            }
+            return false;
+        }
+        public bool UpdateModemSet(ModemConfigure mfInfo)
+        {
+            if (sqlDal.LinkStatus)
+            {
+                sqlDal.UpdateModemConfigure(mfInfo);
+                var newinfo = GetModemConfigure();
+                if ((newinfo.ID == mfInfo.ID) && (newinfo.NetSwitch == mfInfo.NetSwitch) && (newinfo.NodeType == mfInfo.NodeType)
+                    && (newinfo.TransducerNum == mfInfo.TransducerNum) && (newinfo.TransmiterType == mfInfo.TransmiterType) && (newinfo.AccessMode == mfInfo.AccessMode)
+                    && (newinfo.Com2Device == mfInfo.Com2Device) && (newinfo.Com3Device == mfInfo.Com3Device))
                     return true;
             }
             return false;

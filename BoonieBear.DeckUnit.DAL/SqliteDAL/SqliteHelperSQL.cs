@@ -101,12 +101,15 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
         /// <returns></returns>
         public SQLiteDataReader ExecuteQuery(string sqlQuery)
         {
-            _dbCommand = _dbConnection.CreateCommand();
-            
-            _dbCommand.CommandText = sqlQuery;
-            //Debug.WriteLine(sqlQuery);
-            _reader = _dbCommand.ExecuteReader();
-           
+            lock (_dbConnection)
+            {
+                _dbCommand = _dbConnection.CreateCommand();
+
+                _dbCommand.CommandText = sqlQuery;
+                //Debug.WriteLine(sqlQuery);
+                _reader = _dbCommand.ExecuteReader();
+
+            }
             return _reader; 
             
         }

@@ -15,11 +15,11 @@ using System.Windows.Shapes;
 namespace BoonieBear.DeckUnit.Views
 {
     /// <summary>
-    /// DownLoadOverView.xaml 的交互逻辑
+    /// DownLoadedView.xaml 的交互逻辑
     /// </summary>
-    public partial class DownLoadOverView : Page
+    public partial class DownLoadedView : Page
     {
-        public DownLoadOverView()
+        public DownLoadedView()
         {
             InitializeComponent();
         }

@@ -115,18 +115,21 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             {
                 using (client = o as TcpClient)
                 {
+                    var myCompleteMessage = new StringBuilder();
+                    var myReadBuffer = new byte[2048];
+                    var stream = client.GetStream();
                     while (client.Connected)
                     {
-                        var myCompleteMessage = new StringBuilder();
-                        var myReadBuffer = new byte[2048];
-                        var stream = client.GetStream();
+                        myCompleteMessage.Clear();
+                        Array.Clear(myReadBuffer,0,2048);
                         do
                         {
+                            Thread.Sleep(50);
                             var numberOfBytesRead = stream.Read(myReadBuffer, 0, myReadBuffer.Length);
                             myCompleteMessage.AppendFormat("{0}",Encoding.Default.GetString(myReadBuffer, 0, numberOfBytesRead));
-                        } while (stream.DataAvailable);
+                        } while (stream.DataAvailable || !myCompleteMessage.ToString().Contains("\n"));
                         Debug.WriteLine(myCompleteMessage.ToString());
-                        var e = new CustomEventArgs(0, myCompleteMessage.ToString(), myReadBuffer, 0, true, null,
+                        var e = new CustomEventArgs(0, myCompleteMessage.ToString(), null, 0, true, null,
                         CallMode.NoneMode, client);
                         OnParsed(e);
                     }

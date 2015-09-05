@@ -177,7 +177,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             foreach (var item in fanpanel.Children)
             {
                 Button btn = item as Button;
-                if (btn.Name == "MoreButton" && btn.IsMouseOver)
+                if (btn.Name == "TestButton" && btn.IsMouseOver)
                 {
                     return;
                 }

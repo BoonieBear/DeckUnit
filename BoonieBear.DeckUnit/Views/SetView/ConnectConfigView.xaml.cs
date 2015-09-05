@@ -23,5 +23,6 @@ namespace BoonieBear.DeckUnit.Views.SetView
         {
             InitializeComponent();
         }
+
     }
 }

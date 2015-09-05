@@ -10,7 +10,6 @@ namespace BoonieBear.DeckUnit.Core.Controllers
     /// BaseController已完成系统基础导航信息以及一些空间消息处理机制。
     /// </summary>
     internal class UnitNavigationController : BaseController,
-        IHandleMessage<GoWaterTelPageBaseNavigationRequest>,
         IHandleMessage<GoHistoryDataPageBaseNavigationRequest>,
         IHandleMessage<GoSystemResourceNavigationRequest>,
         IHandleMessage<GoAcousticViewNavigationEvent>,
@@ -27,14 +26,12 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         IHandleMessage<GoSetEnergyViewEvent>,
         IHandleMessage<GoPingTestViewEvent>,
         IHandleMessage<GoGetNodeStatusViewEvent>,
-        IHandleMessage<GoRefreshNodeConfigViewEvent>
-
+        IHandleMessage<GoRefreshNodeConfigViewEvent>,
+        IHandleMessage<GoDownLoadingViewEvent>,
+        IHandleMessage<GoNewTaskViewEvent>,
+        IHandleMessage<GoADCPDataViewEvent>,
+        IHandleMessage<GoTaskListViewEvent>
     {
-        public void Handle(GoWaterTelPageBaseNavigationRequest message)
-        {
-            NavigateToPage("Views/WaterTelView.xaml",message.Titile);
-            Application.Current.Properties["message"] = message.Titile;
-        }
 
         public void Handle(GoHistoryDataPageBaseNavigationRequest message)
         {
@@ -112,5 +109,25 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         {
             NavigateToPage("Views/SetView/RefreshNodeConfigView.xaml");
         }
+
+        public void Handle(GoDownLoadingViewEvent message)
+        {
+            NavigateToPage("Views/DownLoadingView.xaml",message);
+        }
+
+        public void Handle(GoADCPDataViewEvent message)
+        {
+            NavigateToPage("Views/ADCPDataView.xaml", message);
+        }
+
+        public void Handle(GoNewTaskViewEvent message)
+        {
+            NavigateToPage("Views/NewTaskPage.xaml");
+        }
+        public void Handle(GoTaskListViewEvent message)
+        {
+            NavigateToPage("Views/DownLoadedView.xaml");
+        }
+        
     }
 }

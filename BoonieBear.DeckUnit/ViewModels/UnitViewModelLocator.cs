@@ -11,8 +11,9 @@ namespace BoonieBear.DeckUnit.ViewModels
         private AcousticViewModel _acousticViewModel;
         private HistoryDataPageViewModel _historyDataPageViewModel;
         private SystemResourceViewModel _systemResourceViewModel;
-        private DownLoadPageViewModel _downLoadPageViewModel;
-        private DownLoadOverViewModel _downLoadOverViewModel;
+        private NewTaskPageViewModel _newTaskPageViewModel;
+        private DownLoadingViewModel _downLoadingViewModel;
+        private DownLoadedViewModel _downLoadedViewModel;
         private MonitorViewModel _monitorViewModel;
         private ADViewModel _adViewModel;
         private SimpleViewModel _simpleViewModel;
@@ -28,6 +29,8 @@ namespace BoonieBear.DeckUnit.ViewModels
         private RefreshNodeConfigViewModel _refreshNodeConfigViewModel;
         private SetEnergyInfoViewModel _setEnergyInfoViewModel;
         private SetDateTimeViewModel _setDateTimeViewModel;
+        private ADCPDataViewModel _adcpDataViewModel ;
+
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -101,28 +104,28 @@ namespace BoonieBear.DeckUnit.ViewModels
                 return _systemResourceViewModel;
             }
         }
-        public DownLoadPageViewModel DownLoadPageViewModel
+        public NewTaskPageViewModel NewTaskPageViewModel
         {
             get
             {
-                if (_downLoadPageViewModel == null)
+                if (_newTaskPageViewModel == null)
                 {
-                    _downLoadPageViewModel = new DownLoadPageViewModel();
-                    _downLoadPageViewModel.Initialize();
+                    _newTaskPageViewModel = new NewTaskPageViewModel();
+                    _newTaskPageViewModel.Initialize();
                 }
-                return _downLoadPageViewModel;
+                return _newTaskPageViewModel;
             }
         }
-        public DownLoadOverViewModel DownLoadOverViewModel
+        public DownLoadingViewModel DownLoadingViewModel
         {
             get
             {
-                if (_downLoadOverViewModel == null)
+                if (_downLoadingViewModel == null)
                 {
-                    _downLoadOverViewModel = new DownLoadOverViewModel();
-                    _downLoadOverViewModel.Initialize();
+                    _downLoadingViewModel = new DownLoadingViewModel();
+                    _downLoadingViewModel.Initialize();
                 }
-                return _downLoadOverViewModel;
+                return _downLoadingViewModel;
             }
         }
         public MonitorViewModel MonitorViewModel
@@ -308,6 +311,30 @@ namespace BoonieBear.DeckUnit.ViewModels
                     _setDateTimeViewModel.Initialize();
                 }
                 return _setDateTimeViewModel;
+            }
+        }
+        public DownLoadedViewModel DownLoadedViewModel
+        {
+            get
+            {
+                if (_downLoadedViewModel == null)
+                {
+                    _downLoadedViewModel = new DownLoadedViewModel();
+                    _downLoadedViewModel.Initialize();
+                }
+                return _downLoadedViewModel;
+            }
+        }
+        public ADCPDataViewModel ADCPDataViewModel
+        {
+            get
+            {
+                if (_adcpDataViewModel == null)
+                {
+                    _adcpDataViewModel = new ADCPDataViewModel();
+                    _adcpDataViewModel.Initialize();
+                }
+                return _adcpDataViewModel;
             }
         }
     }

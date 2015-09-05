@@ -35,7 +35,7 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
         public void CreateNewTaskTest()
         {
             DeckDataProtocol.Init(sid, dbstring);
-            var id = DeckDataProtocol.StartNewTask(62, 3, TaskType.Reset, null);
+            var id = DeckDataProtocol.CreateNewTask(62, 3, TaskType.BackToWork, null);
             Assert.Greater(id,0);
             
         }

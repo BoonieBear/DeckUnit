@@ -41,11 +41,9 @@ namespace BoonieBear.DeckUnit.ACNP
         /// <summary>
         /// 初始化协议参数
         /// </summary>
-        static public void Init(UInt16 ID)
+        static public void Init(int ID)
         {
-            if (_Initialed)
-                return;
-            SourceID = ID;
+            SourceID = (ushort)ID;
             BuoyID = "00";
             Port = 2;
             BlockIndex = 0;
@@ -56,6 +54,7 @@ namespace BoonieBear.DeckUnit.ACNP
             NodeFindOut.Clear();
             CmdTable.Clear();
             //命令hash
+            ACNWebHashtableID.Clear();
             ACNWebHashtableID.Add(0, "结束标识");
             ACNWebHashtableID.Add(1, "分段标识");
             ACNWebHashtableID.Add(2, "节点信息表");
@@ -106,6 +105,7 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNWebHashtableID.Add(206, "扩展网络路由命令");
             /////////////////////////////////////////////////////
             //MSP特殊命令
+            ACNCommandID.Clear();
             ACNCommandID.Add(255, "设置AD门限");
             ACNCommandID.Add(254, "将430能量数据写入FLASH");
             ACNCommandID.Add(253, "串口2、3，GPS，DSP配置命令");
@@ -167,6 +167,7 @@ namespace BoonieBear.DeckUnit.ACNP
             CmdNode.Clear();
             NodeFindOut.Clear();
             CmdTable.Clear();
+            ClearParseList();
         }
         static public void InitForPack(int bitlen)
         {

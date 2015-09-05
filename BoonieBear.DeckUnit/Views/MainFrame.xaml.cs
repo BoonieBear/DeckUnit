@@ -15,6 +15,7 @@ using MahApps.Metro.Controls.Dialogs;
 using MahApps.Metro.Controls;
 using System.IO;
 using BoonieBear.DeckUnit.ViewModels;
+using BoonieBear.DeckUnit.DAL;
 namespace BoonieBear.DeckUnit.Views
 {
 
@@ -36,7 +37,7 @@ namespace BoonieBear.DeckUnit.Views
 
             ProgressDialogController remote = null;
             UnitCore.Instance.Start();
-            UnitCore.Instance.EventAggregator.PublishMessage(new GoGetNodeStatusViewEvent());
+            UnitCore.Instance.EventAggregator.PublishMessage(new GoHomePageNavigationEvent());
             /*
             var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
             Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
@@ -209,25 +210,38 @@ namespace BoonieBear.DeckUnit.Views
 
         private void FilterableListView_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            var strlStringses = new List<string[]>
+
+            try
             {
-                new[] {"0", "块数", "3", ""},
-                new[] {"0", "块数1", "33", ""},
-                new[] {"1", "块数2", "33", ""},
-                new[] {"1", "块数3", "53", ""},
-                new[] {"1", "块数4", "43", ""},
-                new[] {"2", "块数5", "3", ""},
-                new[] {"3", "块数6", "32", ""},
-                new[] {"4", "块数7", "23", ""},
-                new[] {"3", "块数8", "3", ""},
-                new[] {"4", "块数9", "13", ""},
-                new[] {"2", "块数", "31", ""}
-            };
-            var tree = StringListToTree.TransListToNodeWriteLineic(strlStringses);
-            var datatree = new DataTreeModel(tree);
-            this._tree.Model = datatree;
-            var flyout = this.flyoutsControl.Items[2] as Flyout;
-            flyout.IsOpen = true;
+                CommandLog cl = (CommandLog)DataListView.SelectedItem;
+                if (cl == null)
+                    return;
+                var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                var br = new BinaryReader(fr);
+                UnitCore.Instance.AcnMutex.WaitOne();
+                ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
+                if (ACNProtocol.Parse())
+                {
+                    var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
+                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    var datatree = new DataTreeModel(tree);
+                    this._tree.Model = datatree;
+                    MainFrameViewModel.pMainFrame.DataRecvTime = cl.LogTime.ToString();
+                    var flyout = this.flyoutsControl.Items[2] as Flyout;
+                    flyout.IsOpen = true;
+                }
+                else
+                {
+                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
+                }
+            }
+            catch (Exception ex)
+            {
+                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+            }
+            
 
         }
 
@@ -239,9 +253,11 @@ namespace BoonieBear.DeckUnit.Views
             var result = UnitCore.Instance.CommEngine.SendCMD(cmd);
             await result;
             var ret = result.Result;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "好的";
             if(ret==false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
-                UnitCore.Instance.NetEngine.Error);
+                UnitCore.Instance.NetEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
                 var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
@@ -273,9 +289,11 @@ namespace BoonieBear.DeckUnit.Views
             var result = UnitCore.Instance.CommEngine.SendCMD(cmd);
             await result;
             var ret = result.Result;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "好的";
             if (ret == false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
-                UnitCore.Instance.NetEngine.Error);
+                UnitCore.Instance.NetEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
                 var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
@@ -297,5 +315,55 @@ namespace BoonieBear.DeckUnit.Views
         {
             await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["SetWakeUpDialog"]);
         }
+
+        private void DebugLog_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            DebugLog.ScrollToEnd();
+        }
+
+        private void filterbox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            filterbox.ScrollToEnd();
+        }
+
+        private void DataListView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            try
+            {
+                CommandLog cl = (CommandLog)DataListView.SelectedItem;
+                if (cl == null)
+                    return;
+                var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
+                var br = new BinaryReader(fr);
+                UnitCore.Instance.AcnMutex.WaitOne();
+                ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
+                if (ACNProtocol.Parse())
+                {
+                    var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
+                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    var datatree = new DataTreeModel(tree);
+                    this._tree.Model = datatree;
+                    MainFrameViewModel.pMainFrame.DataRecvTime = cl.LogTime.ToString();
+                    var flyout = this.flyoutsControl.Items[2] as Flyout;
+                    flyout.IsOpen = true;
+                }
+                else
+                {
+                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
+                }
+            }
+            catch (Exception ex)
+            {
+                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+            }
+        }
+
+        private void DataListView_PreviewMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+  
+        }
+
     }
 }

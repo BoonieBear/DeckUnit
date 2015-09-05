@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO.Ports;
 
 namespace BoonieBear.DeckUnit.CommLib
 {
@@ -6,12 +7,31 @@ namespace BoonieBear.DeckUnit.CommLib
     {
         public CustomEventArgs(int id, string outstring, byte[] buf, int length, bool parseOK, string errorMsg, CallMode callmode, object callSrc)
         {
-            if (callmode==CallMode.DataMode)
+            var src = callSrc as SerialPort;
+            DataBufferLength = length;
+            if (callmode == CallMode.DataMode)
             {
-                if (length>0)
+                
+                if (src != null) //串口转发
                 {
-                    DataBuffer = new byte[length+4];
-                    Buffer.BlockCopy(buf, 0, DataBuffer, 0, 4+length);//包头长度4，包括ID和长度
+                    if (length > 0)
+                    {
+                        DataBuffer = new byte[length + 4];
+                        UInt16 uid = 0xEE01; //与网络包格式一致
+                        Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, DataBuffer, 0, 2);
+                        Buffer.BlockCopy(BitConverter.GetBytes(length), 0, DataBuffer, 2, 2);
+                        Buffer.BlockCopy(buf, 0, DataBuffer, 4, length); //包头长度4，包括ID和长度
+                        DataBufferLength = DataBuffer.Length;
+                    }
+                }
+                else //网络
+                {
+                    if (length > 0)
+                    {
+                        DataBuffer = new byte[length+4];
+                        Buffer.BlockCopy(buf, 0, DataBuffer, 0, length + 4);
+                        DataBufferLength = DataBuffer.Length;
+                    }
                 }
             }
             else
@@ -25,7 +45,7 @@ namespace BoonieBear.DeckUnit.CommLib
             }
             ID = id;
             Outstring = outstring;
-            DataBufferLength = length;
+            
             ParseOK = parseOK;
             ErrorMsg = errorMsg;
             Mode = callmode;

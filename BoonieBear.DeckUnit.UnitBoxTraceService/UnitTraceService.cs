@@ -78,7 +78,10 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
 
         public bool WriteShell(string str)
         {
-            if (shelLogFile.Create())
+            bool bCreate = shelLogFile.WriteOpened;
+            if (!bCreate)
+                bCreate = shelLogFile.Create();
+            if (bCreate)
             {
                 if (shelLogFile.Write(str) > 0)
                 {
@@ -163,6 +166,58 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             else
                 Error = "未连接数据库";
             return null;
+        }
+
+        public List<Task> GetTaskList(DateTime from, DateTime to)
+        {
+            if (_dalTrace.isLink)
+            {
+                return _dalTrace.GetTaskList(from, to);
+            }
+
+            else
+                Error = "未连接数据库";
+            return null;
+        }
+
+        public Task GetTask(Int64 TaskID)
+        {
+            if (_dalTrace.isLink)
+            {
+                return _dalTrace.GetTaskAt(TaskID);
+            }
+
+            else
+                Error = "未连接数据库";
+            return null;
+        }
+        public bool DeleteTask(Int64 TaskID,bool deleteData)
+        {
+            bool ret = true;
+            if (_dalTrace.isLink)
+            {
+                var task = GetTask(TaskID);
+                if (_dalTrace.DeleteTaskAt(TaskID))
+                {
+                    try
+                    {
+                        if (deleteData)
+                            System.IO.Directory.Delete(task.FilePath, true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ret = false;
+                        Error = ex.Message;
+                    }
+                }
+
+                else
+                    Error = "删除任务失败";
+            }
+
+            else
+                Error = "未连接数据库";
+            return ret;
         }
         public CommandLog GetCommandAt(int id)
         {

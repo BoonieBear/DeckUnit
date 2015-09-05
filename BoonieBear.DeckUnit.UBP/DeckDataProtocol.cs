@@ -10,16 +10,19 @@ namespace BoonieBear.DeckUnit.UBP
     //数据包类型
     public enum PackType
     {
-        Task = 0,//任务包
-        Ack = 1,//确认包
-        Data = 2,//数据包
+        Task = 64,//任务包
+        Ack = 65,//确认包
+        Data = 66,//数据包
 
     }
     //任务类型，相当于命令ID
     public enum TaskType
     {
-        ReadParameter = 0,
-        Reset = 1,
+        Normal = 1,
+        FetchBetweenSpanTime = 2,
+        Fetch=3,
+        BackToWork=4,
+
     }
     //任务确认包中的状态信息
     public enum TaskState
@@ -74,7 +77,7 @@ namespace BoonieBear.DeckUnit.UBP
         /// <summary>
         /// 当前工作的任务
         /// </summary>
-        private static Task WorkingTask { get; set; }
+        public static Task WorkingTask { get; set; }
         /// <summary>
         /// 协议初始化
         /// </summary>
@@ -86,16 +89,17 @@ namespace BoonieBear.DeckUnit.UBP
             
             if (System.IO.File.Exists(dbPath))
             {
+                ID = id;
                 if (_sqlite != null)
                     return true;
-                ID = id;
                 TmpDataPath = @"..\TmpDir\";
                 Directory.CreateDirectory(TmpDataPath);
                 DBFile = dbPath;
+                WorkingTask = null;
                 SecondTicks = 0;
                 DALFactory.Connectstring = "Data Source=" + DBFile + ";Pooling=True";
                 _sqlite = DALFactory.CreateDAL(DBType.Sqlite);
-                
+                return true;
             }
             return false;
         }
@@ -108,7 +112,7 @@ namespace BoonieBear.DeckUnit.UBP
         
 
         /// <summary>
-        /// 停止当前任务，关闭数据库
+        /// 停止当前任务，不关闭数据库
         /// </summary>
         public static void Stop()
         {
@@ -123,18 +127,30 @@ namespace BoonieBear.DeckUnit.UBP
                     _sqlite.UpdateTask(WorkingTask);
                 }
             }
-            if (totalTimer!=null)
+            if (totalTimer != null)
                 totalTimer.Dispose();
-            WorkingTask = null;
-            if (_sqlite!=null)
+            
+            
+        }
+        /// <summary>
+        /// 关闭协议类
+        /// </summary>
+        public static void Dispose()
+        {
+            if (WorkingTask != null)
+                Stop();
+            if (_sqlite != null)
                 _sqlite.Close();
+            WorkingTask = null;
         }
         /// <summary>
         /// 生成一个新任务
         /// </summary>
         /// <returns>任务ID号，出错了返回-1</returns>
-        public static Int64 StartNewTask(int destid, int destcomm, TaskType eTaskType, byte[] paraBytes)
+        public static Int64 CreateNewTask(int destid, int destcomm, TaskType eTaskType, byte[] paraBytes)
         {
+            WorkingTask = null;
+            SecondTicks = 0;
             var id = CreateTaskID(destid);
             if (id> 0)
             {
@@ -145,7 +161,7 @@ namespace BoonieBear.DeckUnit.UBP
                 task.DestID = destid;
                 task.DestPort = destcomm;
                 task.CommID = (int)eTaskType;
-                task.ErrIndex = new BitArray(32);
+                task.ErrIndex = new BitArray(8);
                 
                 if(paraBytes!=null)
                 {
@@ -168,16 +184,21 @@ namespace BoonieBear.DeckUnit.UBP
                 if (ret < 1)
                     return -2;
                 WorkingTask = task;
-                totalTimer = new Timer(TaskTimerTick,null,0,1000);
-         
+
                 TmpDataPath = Directory.CreateDirectory(TmpDataPath + id).FullName;
                 Debug.WriteLine(TmpDataPath);
             }
             
             return id;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="serialId"></param>
+        /// <returns></returns>
         public static Int64 ContinueTask(Int64 serialId)
         {
+            WorkingTask = null;
             if (Directory.Exists(TmpDataPath + serialId))
             {
                 TmpDataPath += serialId.ToString();
@@ -188,6 +209,7 @@ namespace BoonieBear.DeckUnit.UBP
                 WorkingTask.LastTime = DateTime.UtcNow;
                 WorkingTask.TaskState = (int) TaskStage.Begin;
                 _sqlite.UpdateTask(WorkingTask);
+                SecondTicks = 0;
                 totalTimer = new Timer(TaskTimerTick, null, 0, 1000);
                 return serialId;
             }
@@ -199,7 +221,7 @@ namespace BoonieBear.DeckUnit.UBP
         private static Int64 CreateTaskID(int destid)
         {
             var nowTime = DateTime.Now.ToString("yyyyMMddHHmmss");
-            var strid = nowTime + ID.ToString("D2") + destid.ToString("D2");
+            var strid = ID.ToString("D2") + destid.ToString("D2") + nowTime;
             long id = 0;
             if (Int64.TryParse(strid, out id))
                 return id;
@@ -221,9 +243,6 @@ namespace BoonieBear.DeckUnit.UBP
             if (tsk.HasPara)
                 byteslength += tsk.ParaBytes.Length;
             var bytes = new byte[byteslength];
-            UInt16 uid = 0xEE01;
-            Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, bytes, 0, 2);//头
-            Buffer.BlockCopy(BitConverter.GetBytes(byteslength), 0, bytes, 2, 2);//长度
             Buffer.BlockCopy(BitConverter.GetBytes((int)PackType.Task), 0, bytes, 4, 1);//任务包类型
             Buffer.BlockCopy(BitConverter.GetBytes(ID), 0, bytes, 5, 1);//源ID
             Buffer.BlockCopy(BitConverter.GetBytes(tsk.DestID), 0, bytes, 6, 1);//目的id
@@ -275,13 +294,13 @@ namespace BoonieBear.DeckUnit.UBP
                             _sqlite.UpdateTask(WorkingTask);
                             return TaskStage.Waiting;
                         case TaskState.End://更新数据库errorbit
-                            WorkingTask.ErrIndex = new BitArray(new[] { BitConverter.ToInt32(bytes, 2) });
+                            WorkingTask.ErrIndex = new BitArray(bytes[2]);
                             _sqlite.UpdateTask(WorkingTask);
                             return TaskStage.Continue;
                         case TaskState.Success:
-                            if (BitConverter.ToInt32(bytes, 2) != 0) //有错误包
+                            if (bytes[2] != 0) //有错误包
                             {
-                                WorkingTask.ErrIndex = new BitArray(new[] { BitConverter.ToInt32(bytes, 2) });
+                                WorkingTask.ErrIndex = new BitArray(bytes[2]);
                                 _sqlite.UpdateTask(WorkingTask);
                                 return TaskStage.Continue;
                             }

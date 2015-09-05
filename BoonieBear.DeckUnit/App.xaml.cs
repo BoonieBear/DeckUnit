@@ -13,6 +13,7 @@ namespace BoonieBear.DeckUnit
     /// </summary>
     public partial class App : Application
     {
+        public static bool IsExit = false;
         public App()
         {
             DispatcherUnhandledException += Application_DispatcherUnhandledException;
@@ -47,7 +48,8 @@ namespace BoonieBear.DeckUnit
 
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
-
+            if (App.IsExit)
+                return;
             e.Handled = true;
             if(App.Current.MainWindow.IsActive)
                 UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(e.Exception.Message, LogType.Both));
@@ -60,6 +62,8 @@ namespace BoonieBear.DeckUnit
 
         static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
+            if (App.IsExit)
+                return;
             var o = e.ExceptionObject as Exception;
             if (o != null)
             {
@@ -80,6 +84,7 @@ namespace BoonieBear.DeckUnit
         }
         private void Application_Exit(object sender, ExitEventArgs e)
         {
+            IsExit = true;
             UnitCore.Instance.Stop();
         }
     }

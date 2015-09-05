@@ -14,6 +14,7 @@ using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 using System.IO.Ports;
+using System.Windows;
 namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
 {
     public class ConnectConfigViewModel : ViewModelBase
@@ -26,7 +27,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             CommInfo = SerialPort.GetPortNames().ToList();
             SelectComm = 0;
             IPaddr = 100;
-            
+            ID = 1;
         }
 
         public override void InitializePage(object extraData)
@@ -36,6 +37,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                 SelectComm = CommInfo.IndexOf(DeckUnitConf.GetInstance().GetCommConfInfo().SerialPort);
                 var ip = DeckUnitConf.GetInstance().GetCommConfInfo().LinkIP;
                 IPaddr = int.Parse(ip.Substring(ip.LastIndexOf(".") + 1));
+                ID = DeckUnitConf.GetInstance().GetModemConfigure().ID;
             }
         }
 
@@ -56,6 +58,11 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
         {
             get { return GetPropertyValue(() => IPaddr); }
             set { SetPropertyValue(() => IPaddr, value); }
+        }
+        public int ID
+        {
+            get { return GetPropertyValue(() => ID); }
+            set { SetPropertyValue(() => ID, value); }
         }
         public List<string> CommInfo
         {
@@ -97,23 +104,61 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
         {
             IsProcessing = true;
             var cominfo = DeckUnitConf.GetInstance().GetCommConfInfo();
+            var moderm = DeckUnitConf.GetInstance().GetModemConfigure();
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            md.NegativeButtonText = "取消";
             if (CommInfo.Count > 0&&cominfo!=null)
             {
+                if ((cominfo.SerialPort != CommInfo[SelectComm]) || (cominfo.LinkIP != "192.168.2." + IPaddr.ToString()) ||
+                    (moderm.ID != ID)) //有改变
+                {
+                    MessageDialogResult result = await  MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "改变设置",
+                    "选择确定将重新配置系统，程序将自动重启", MessageDialogStyle.AffirmativeAndNegative, md);
+                    if (result != MessageDialogResult.Affirmative)//取消
+                    {
+                        IsProcessing = false;
+                        return;
+                    }
+                                     
+                }
+                else
+                {
+                    var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
+                    dialog.Title = "设置命令";
+                    await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                        dialog);
+
+                    var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                    textBlock.Text = "没有任何改变项，当前连接不变！";
+
+                    await TaskEx.Delay(1000);
+                    IsProcessing = false;
+                    await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+                    return;
+                }
                 cominfo.SerialPort = CommInfo[SelectComm];
-                cominfo.LinkIP = "192.169.2." + IPaddr.ToString();
+                cominfo.LinkIP = "192.168.2." + IPaddr.ToString();
+                moderm.ID = ID;
                 bool ret = false;
                 string err = string.Empty;
+                
                 try
                 {
-                    ret = DeckUnitConf.GetInstance().UpdateCommSet(cominfo);
+                    ret = (DeckUnitConf.GetInstance().UpdateCommSet(cominfo) &&
+                           DeckUnitConf.GetInstance().UpdateModemSet(moderm));
+                    if (ret == false)
+                        err = "写入数据库失败！";
                 }
                 catch (Exception ex)
                 {
+                    ret = false;
                     err = ex.Message;
                 }
+                
                 if (ret == false)
                     await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置失败",
-                    err);
+                    err,MessageDialogStyle.Affirmative,md);
                 else
                 {
                     var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
@@ -127,12 +172,14 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                     await TaskEx.Delay(2000);
 
                     await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+                    System.Windows.Forms.Application.Restart();
+                    Application.Current.Shutdown();
                 }
             }
             else
             {
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "无法设置串口",
-                "当前系统不存在串口或无法存储串口");
+                "串口不存在或没有已保存的设置",MessageDialogStyle.Affirmative,md);
             }
             IsProcessing = false;
         }

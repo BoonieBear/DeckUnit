@@ -5,6 +5,7 @@ using System.Text;
 using BoonieBear.DeckUnit.ACNP;
 using System.Collections;
 using TinyMetroWpfLibrary.Utility;
+
 namespace BoonieBear.DeckUnit.ACNP
 {
     /// <summary>
@@ -376,7 +377,25 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.Clear();//delete all cmd in cmd list
             ACNProtocol.AddPool(0);
         }
+        /// <summary>
+        /// 任务包打包
+        /// </summary>
+        /// <param name="taskcmd">任务包类型64，115</param>
 
+        public static void PackTask(int ID,int taskcmd, byte[] taskpackage)
+        {
+            int[] dat = new int[1];
+            ACNProtocol.InitForPack(20 + taskpackage.Length*8);
+            dat[0] = taskcmd;
+            ACNProtocol.OutPutIntBit(dat, 8);
+
+            dat[0] = 20 + taskpackage.Length*8;
+            ACNProtocol.OutPutIntBit(dat, 12);
+            int[] pak = new int[(int)Math.Ceiling((double)taskpackage.Length/4)];
+            Buffer.BlockCopy(taskpackage, 0, pak, 0, taskpackage.Length);
+            ACNProtocol.OutPutIntBit(pak, taskpackage.Length*8);
+            ACNProtocol.AddPool(ID);
+        }
         
     }
 }

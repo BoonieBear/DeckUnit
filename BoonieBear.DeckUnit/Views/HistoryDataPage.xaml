@@ -18,10 +18,10 @@
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
             <RowDefinition/>
-            <RowDefinition Height="60"/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -41,36 +41,33 @@
         </UniformGrid>
         <TabControl Grid.Row="2" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectIndex, Mode=OneWay}">
             <TabItem >
-                <ScrollViewer>
                     <autolist:FilterableListView x:Name="DataListView"  ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding DataCollMt}"
                                FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
-                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" >
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" MouseLeftButtonDown="DataListView_MouseLeftButtonDown" >
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
-                                <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
+                                <autolist:SortableGridViewColumn Width ="240" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
                                 <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
                                 <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
                                 <autolist:SortableGridViewColumn Header="ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
                             </GridView>
                         </ListView.View>
                     </autolist:FilterableListView>
-                </ScrollViewer>
+ 
             </TabItem>
             <TabItem >
-                <ScrollViewer>
-                    <autolist:FilterableListView ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding CMDCollMt}"
+                <autolist:FilterableListView x:Name="CMDListView" ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding CMDCollMt}"
                                FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
-                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" >
-                        <ListView.View>
-                            <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
-                                <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
-                                <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
-                                <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
-                                <autolist:SortableGridViewColumn Header="命令ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
-                            </GridView>
-                        </ListView.View>
-                    </autolist:FilterableListView>
-                </ScrollViewer>
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="CMDListView_SelectionChanged" MouseLeftButtonDown="CMDListView_MouseLeftButtonDown" >
+                    <ListView.View>
+                        <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
+                            <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
+                            <autolist:SortableGridViewColumn Header="源节点" SortPropertyName="SourceID" DisplayMemberBinding="{Binding Path=SourceID}" />
+                            <autolist:SortableGridViewColumn Header="目的节点" SortPropertyName="DestID" DisplayMemberBinding="{Binding Path=DestID}" />
+                            <autolist:SortableGridViewColumn Header="命令ID" SortPropertyName="CommID" DisplayMemberBinding="{Binding Path=CommID}" />
+                        </GridView>
+                    </ListView.View>
+                </autolist:FilterableListView>
             </TabItem>
         </TabControl>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top">

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -22,8 +23,8 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             FetchingData = RegisterCommand(ExecuteFetchingData, CanExecuteFetchingData, true);
-            DataCollMt = new List<CommandLog>();
-            CMDCollMt = new List<CommandLog>();
+            DataCollMt = new ObservableCollection<CommandLog>();
+            CMDCollMt = new ObservableCollection<CommandLog>();
             IsDataActive = true;
             IsCmdActive = false;
             IsFetching = false;
@@ -56,7 +57,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => SelectedToDate); }
             set { SetPropertyValue(() => SelectedToDate, value); }
         }
-        
+
         public Visibility RefreshVisble
         {
             get { return GetPropertyValue(() => RefreshVisble); }
@@ -98,12 +99,12 @@ namespace BoonieBear.DeckUnit.ViewModels
                 }
             }
         }
-        public List<CommandLog> DataCollMt
+        public ObservableCollection<CommandLog> DataCollMt
         {
             get { return GetPropertyValue(() => DataCollMt); }
             set { SetPropertyValue(() => DataCollMt, value); }
         }
-        public List<CommandLog> CMDCollMt
+        public ObservableCollection<CommandLog> CMDCollMt
         {
             get { return GetPropertyValue(() => CMDCollMt); }
             set { SetPropertyValue(() => CMDCollMt, value); }
@@ -153,7 +154,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
 
-        public async void ExecuteFetchingData(object sender, ExecutedRoutedEventArgs eventArgs)
+        public void ExecuteFetchingData(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             IsFetching = true;
             RefreshVisble = Visibility.Collapsed;
@@ -180,7 +181,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
             SelectIndex = 1;
             SelectIndex = 0;//控件不能自己刷新，需要切换一下，下一步需改进
-            
+            IsDataActive = true;
             IsFetching = false;
             RefreshVisble = Visibility.Visible;
         }

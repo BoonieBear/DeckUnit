@@ -154,7 +154,7 @@
                             </StackPanel>
                             <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="Microsoft YaHei UI" FontSize="14" IsEnabled="{Binding ModeType}" />
                         </StackPanel>
-                        <TextBox x:Name ="DebugLog" Height ="120" FontFamily="Microsoft YaHei UI" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True">
+                        <TextBox x:Name ="DebugLog" Height ="140" FontFamily="Microsoft YaHei UI" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="DebugLog_TextChanged">
                             <TextBox.Text>
                                 <MultiBinding Converter="{StaticResource MultiDebugStringConverter}">
                                     <Binding Path="ModeType"/>
@@ -183,9 +183,9 @@
 									TouchKeyBoard:TabKeyBoard.HorizontalOffset="-240"
 									TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									TouchKeyBoard:TabKeyBoard.Type="Num" 
-									TouchKeyBoard:TabKeyBoard.Width="480"/>
+									TouchKeyBoard:TabKeyBoard.Width="480" TextChanged="filterbox_TextChanged"/>
                         </StackPanel>
-                        <ListBox MinHeight="120">
+                        <ListBox MinHeight="100">
                             <ListBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource TraceMessgaeFilterConverter}">
                                     <Binding Path="Filterlayer"/>
@@ -207,9 +207,9 @@
                         <RowDefinition Height="400" />
                         <RowDefinition Height="Auto" />
                     </Grid.RowDefinitions>
-                    <autolist:FilterableListView Grid.Row="0" ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding DataCollMt}"
+                    <autolist:FilterableListView x:Name="DataListView" Grid.Row="0" ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding DataCollMt}"
                                FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
-                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" >
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectionChanged="FilterableListView_SelectionChanged" MouseLeftButtonDown="DataListView_MouseLeftButtonDown" PreviewMouseLeftButtonDown="DataListView_PreviewMouseLeftButtonDown">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
                                 <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>
@@ -220,16 +220,6 @@
                             </GridView>
                         </ListView.View>
                     </autolist:FilterableListView>
-                    <UniformGrid Columns="1"
-						Grid.Row="2"
-						Margin="10">
-                        <Button Style="{DynamicResource SquareButtonStyle}"
-							Margin="10"
-							Content=" " />
-                        <Button Style="{DynamicResource SquareButtonStyle}"
-							Margin="10"
-							Content="Cancel" />
-                    </UniformGrid>
                 </Grid>
             </metroControl:Flyout>
             <metroControl:Flyout x:Name="DataViewFlyout" Theme="Accent"
@@ -248,7 +238,7 @@
                         <tree:TreeList.View>
                             <GridView>
                                 <GridView.Columns>
-                                    <GridViewColumn Width="400" Header="Name">
+                                    <GridViewColumn Width="400" Header="名称">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
@@ -258,30 +248,21 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn Header="Type" Width="50" DisplayMemberBinding="{Binding Data}"/>
-                                    <GridViewColumn Header="Data" Width="100" DisplayMemberBinding="{Binding Description}"/>
+                                    <GridViewColumn Header="数据" Width="80" DisplayMemberBinding="{Binding Data}"/>
+                                    <GridViewColumn Header="描述" Width="120" DisplayMemberBinding="{Binding Description}"/>
                                 </GridView.Columns>
                             </GridView>
                         </tree:TreeList.View>
                     </tree:TreeList>
-                    <UniformGrid Columns="2"
-						Grid.Row="2"
-						Margin="10">
-                        <Button Style="{DynamicResource SquareButtonStyle}"
-							Margin="10"
-							Content=" " />
-                        <Button Style="{DynamicResource SquareButtonStyle}"
-							Margin="10"
-							Content="Cancel" />
-                    </UniformGrid>
+                    
                 </Grid>
             </metroControl:Flyout>
         </metroControl:FlyoutsControl>
 
         <StatusBar Visibility="{Binding IsStartPage}" Grid.Row="2" Style="{StaticResource MetroStatusBar}" Foreground="Black" Background="{Binding Level, Converter={StaticResource NotifyLevelToBrushConverter}}">
-            <StatusBarItem Content="{Binding StatusHeader, Mode=OneWay}"/>
+            <StatusBarItem FontSize ="18" Width="100" Content="{Binding StatusHeader, Mode=OneWay}"/>
             <Separator Style="{StaticResource MetroStatusBarSeparator}" />
-            <StatusBarItem Content="{Binding StatusDescription, Mode=OneWay}"/>
+            <StatusBarItem FontSize ="18" Content="{Binding StatusDescription, Mode=OneWay}"/>
         </StatusBar>
     </Grid>
 

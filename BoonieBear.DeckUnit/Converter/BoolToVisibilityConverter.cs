@@ -11,13 +11,22 @@ namespace BoonieBear.DeckUnit.Converter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (true == (bool)value )
+            bool boolValue = (bool)value;
+            if (boolValue == null || boolValue == false)
             {
-                return Visibility.Visible;
+                string isCollapsed = parameter as string;
+                if (isCollapsed != null && isCollapsed == "Collapsed")
+                {
+                    return Visibility.Collapsed;
+                }
+                else
+                {
+                    return Visibility.Hidden;
+                }
             }
             else
             {
-                return Visibility.Hidden;
+                return Visibility.Visible;
             }
         }
 

@@ -1,4 +1,4 @@
-﻿<Page x:Class="BoonieBear.DeckUnit.Views.SetView.PingTestView"
+﻿<Page
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,15 +6,21 @@
       xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
       xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
       xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
-      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
-      DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=PingTestViewModel}"
+      xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+      xmlns:touchKeyBoard="clr-namespace:TinyMetroWpfLibrary.Controls.TouchKeyBoard;assembly=TinyMetroWpfLibrary.Controls"
+      xmlns:Converter="clr-namespace:BoonieBear.DeckUnit.Converter" x:Class="BoonieBear.DeckUnit.Views.SetView.PingTestView"
       mc:Ignorable="d" 
       KeepAlive="True"
 	 d:DesignHeight="480" d:DesignWidth="640"
 	Title="SimpleView" x:Name="SimplePage">
     <Page.Resources>
+        <Converter:IndexToBooleanConverter x:Key="IndexToBooleanConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
+
+    <Page.DataContext>
+        <Binding Path="PingTestViewModel" Source="{StaticResource ViewModelLocator}"/>
+    </Page.DataContext>
 
     <Grid Background="{StaticResource MainBackGround}">
         <Grid.RowDefinitions>
@@ -23,7 +29,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -36,13 +42,54 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0"  Orientation="Horizontal">
-
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
+                <TextBlock Foreground ="DarkBlue" Text="目标节点："  VerticalAlignment="Center" FontSize="36" Margin="15,0,0,0" />
+                <picker:ListPicker ItemsSource="{Binding ID}" Margin="10,38"
+					DisplayMemberPath="Text" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedItem="{Binding NodeID, Mode=TwoWay}" Height="44" 
+					FullModeHeader="选择要接受命令的节点号">
+                    <picker:ListPicker.FullModeItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Text}" FontSize="24" Margin="{StaticResource WinMargin}"/>
+                        </DataTemplate>
+                    </picker:ListPicker.FullModeItemTemplate>
+                </picker:ListPicker>
             </StackPanel>
-
+            <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
+                <ComboBox x:Name="ModeBox" Width ="200" Margin="10,38" 
+					metroControl:TextBoxHelper.Watermark="测试数据" SelectionChanged="ComboBox_SelectionChanged" SelectedIndex="{Binding index}">
+                    <ComboBoxItem Content ="小数据（10字节）"/>
+                    <ComboBoxItem Content ="中等数据（252字节）"/>
+                    <ComboBoxItem Content ="最大数据（480字节）"/>
+                    <ComboBoxItem Content ="自定义"/>
+                </ComboBox>
+            </StackPanel>
+            <TextBox x:Name="CMDTextBox"  TextWrapping="Wrap" Grid.Row="1" Grid.Column="0" metroControl:TextBoxHelper.ClearTextButton="{Binding index, Converter={StaticResource IndexToBooleanConverter}}"  IsReadOnly="True" Text="{Binding PingCMD}"
+				metroControl:TextBoxHelper.Watermark="发送数据"
+				touchKeyBoard:TabKeyBoard.Placement="Bottom" 
+				touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=CMDTextBox}"
+				touchKeyBoard:TabKeyBoard.HorizontalOffset="0"
+				touchKeyBoard:TabKeyBoard.Type="Char" 
+				touchKeyBoard:TabKeyBoard.Width="480" 
+				touchKeyBoard:TabKeyBoard.IsEnabled="{Binding index, Converter={StaticResource IndexToBooleanConverter}}" FontFamily="Microsoft YaHei UI" FontSize="18" VerticalScrollBarVisibility="Auto" TextAlignment="Justify" TextChanged="CMDTextBox_TextChanged" Margin="10,0"/>
+            <TextBox x:Name="RecvTextBox" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1"  IsReadOnly="True" 
+                     Text="{Binding PingDATA}" FontFamily="Microsoft YaHei UI" FontSize="18" VerticalScrollBarVisibility="Auto" 
+                     HorizontalAlignment="Right" Width="300" Margin="0,0,10,0" metroControl:TextBoxHelper.Watermark="接收数据" TextChanged="RecvTextBox_TextChanged"/>
+        <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
+                <TextBlock x:Name ="sendlength" Text="" VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+                <TextBlock x:Name ="sendltime"  VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18" Text="{Binding StartTime}"/>
+            </StackPanel>
+            <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical">
+                <TextBlock x:Name ="recvlength" Text="" VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+                <TextBlock x:Name ="recvltime"  VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18" Text="{Binding RecvTime}"/>
+            </StackPanel>
+            
         </Grid>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom"/>
-        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="设置" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+			Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom"/>
+        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="测试" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
     </Grid>
 </Page>

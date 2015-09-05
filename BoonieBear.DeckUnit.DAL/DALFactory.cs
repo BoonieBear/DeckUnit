@@ -26,9 +26,9 @@ namespace BoonieBear.DeckUnit.DAL
             switch (dbType)
             {
                 case DBType.Sqlite:
-                    return new SqliteSqlDAL(connectstring);
+                    return SqliteSqlDAL.GetInstance(connectstring);
                 default:
-                    return new SqliteSqlDAL(connectstring);
+                    return SqliteSqlDAL.GetInstance(connectstring);
             }
         }
     }

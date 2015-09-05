@@ -19,12 +19,12 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoHomeCMD}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+            <Button Command="{Binding GoHomeCMD}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
                 </Button>
-                <TextBlock  Text="声学指令" VerticalAlignment="Center" FontFamily="Segoe UI" FontSize="34px"/>
+            <TextBlock  Text="声学指令" VerticalAlignment="Center" FontFamily="Microsoft YaHei"  FontSize="34px"/>
         </StackPanel>
         <TabControl Grid.Row="1" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectIndex, Mode=OneWay}">
                 <TabItem >

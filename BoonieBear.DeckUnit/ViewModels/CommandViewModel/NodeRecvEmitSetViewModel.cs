@@ -7,6 +7,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Helps;
 using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
@@ -109,13 +110,22 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
             IsProcessing = true;
             ACNBuilder.Pack141(NodeID.num,EmitAutoClose?EmitGain:0,RecvAutoClose?RecvGain:0);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 141;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
             await result;
             var ret = result.Result;
             IsProcessing = false;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "好的";
             if (ret == false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
-                UnitCore.Instance.NetEngine.Error);
+                UnitCore.Instance.NetEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
                 var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];

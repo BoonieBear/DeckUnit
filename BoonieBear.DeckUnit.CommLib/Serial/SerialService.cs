@@ -141,6 +141,12 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                             queue.RemoveRange(0, endindex);
                             ParseOnHexMode(buf,payload);
                         }
+                        else
+                        {
+                            strcmd = strcmd.Remove(0, eb90index);
+                            //删除无法识别的字符
+                            queue.RemoveRange(0, eb90index);
+                        }
                     }
                     
                     break;
@@ -218,47 +224,10 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                         }
                         //处理数据分为特殊命令和dsp数据
                         var mode = CallMode.DataMode;
-                        if (id == 170)
-                        {
-                            /*
-                            MSPDataFile.OpenFile(MainForm.pMainForm.SerialRecvPathInfo);
-                            string DataFilename = MSPDataFile.adfile.fileName;
-                            MSPDataFile.BinaryWrite(data);
-                            MSPDataFile.close();
-                            WriteCommWriteLine("收到DSP转发数据。");
-                            */
-                            string error = null;
-                            var flag = false;
-                            
-                            try
-                            {
-
-                                ACNProtocol.GetDataForParse(data);
-                                if (ACNProtocol.Parse())
-                                {
-                                    hexString = StringListToTree.LstToJson(ACNProtocol.parselist);
-                                    flag = true;
-                                }
-                                else
-                                {
-                                    error = ACNProtocol.Errormessage;
-                                    mode = CallMode.ErrMode;
-                                    flag = false;
-                                }
-                                
-                            }
-                            catch (Exception exception)
-                            {
-                                error = exception.Message;
-                                mode = CallMode.ErrMode;
-                                flag = false;
-                            }
-                            finally
-                            {
-                                var e = new CustomEventArgs(170, hexString, data, data.Length, flag, error, mode, _serialPort);
-
-                                OnParsed(e);
-                            }
+                        if (id == 170)//后面会和网络数据一起解析
+                        {   
+                            var e = new CustomEventArgs(170, null, data, data.Length, true, null, mode, _serialPort);
+                            OnParsed(e);
 
                         }
                         else

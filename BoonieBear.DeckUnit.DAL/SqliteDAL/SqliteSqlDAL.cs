@@ -9,6 +9,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
     public class SqliteSqlDAL : ISqlDAL
     {
         private SqliteHelperSQL sqliteHelperSQL;
+        private static SqliteSqlDAL Instance=null;
         private bool _linkStatus = false;
 
         private string[] _tableName =
@@ -16,12 +17,19 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             "AlarmConfInfo", "BasicInfo",  "CommandLog", "CommConfInfo",
              "ModemConfInfo", "TaskInfo"
         };
-        public SqliteSqlDAL(string connectionString)
+        public static SqliteSqlDAL GetInstance(string connectionString)
         {
-            sqliteHelperSQL = new SqliteHelperSQL(connectionString);
-            _linkStatus = sqliteHelperSQL.Linked;
+            return Instance ?? (Instance = new SqliteSqlDAL(connectionString));
         }
 
+        private SqliteSqlDAL(string connectionString)
+        {
+            if (sqliteHelperSQL == null)
+            {
+                sqliteHelperSQL = new SqliteHelperSQL(connectionString);
+            }
+            _linkStatus = sqliteHelperSQL.Linked;
+        }
         public void Close()
         {
             if (sqliteHelperSQL!=null)
@@ -258,9 +266,15 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
         public int AddLog(CommandLog commandLog)
         {
             int id = 0;
+            int count = 0;
+            using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT COUNT(*) FROM " + _tableName[2]))
+            {
+                if (reader.Read() && reader.HasRows)
+                    count = reader.GetInt32(0);
+            }
             using (var reader = sqliteHelperSQL.ExecuteQuery("SELECT MAX(LogID) FROM " + _tableName[2]))
             {
-                if(reader.Read())
+                if (reader.Read() && count>0)
                     id = reader.GetInt32(0);
             }
             string[] values = { (id + 1).ToString(), commandLog.LogTime.ToString("s"), commandLog.CommID.ToString(), commandLog.Type ? "1" : "0", commandLog.SourceID.ToString(), commandLog.DestID.ToString(), commandLog.FilePath };

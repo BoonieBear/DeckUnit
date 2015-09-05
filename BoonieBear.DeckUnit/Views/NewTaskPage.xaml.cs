@@ -17,9 +17,9 @@ namespace BoonieBear.DeckUnit.Views
     /// <summary>
     /// DownLoadPage.xaml 的交互逻辑
     /// </summary>
-    public partial class DownLoadPage : Page
+    public partial class NewTaskPage : Page
     {
-        public DownLoadPage()
+        public NewTaskPage()
         {
             InitializeComponent();
         }

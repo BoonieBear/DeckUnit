@@ -55,10 +55,11 @@ namespace BoonieBear.DeckUnit.LiveService
             // 同步方法，会阻塞进程，调用init用task
             TCPShellService.ConnectSync();
             TCPDataService.ConnectSync();
-            if (!TCPShellService.Connected || !TCPDataService.Connected) return false;
             TCPShellService.Register(NetDataObserver);
             TCPDataService.Register(NetDataObserver);
-            return true;
+            if (TCPShellService.Connected&&TCPShellService.Start()&&TCPDataService.Connected&&TCPDataService.Start())
+                return true;
+            return false;
         }
 
         protected NetLiveService(CommConfInfo conf, Observer<CustomEventArgs> observer)
@@ -129,7 +130,7 @@ namespace BoonieBear.DeckUnit.LiveService
             IsWorking = false;
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
-            if (!CreateTCPService(_commConf)) throw new Exception("通信服务无法初始化");
+            if (!CreateTCPService(_commConf)) throw new Exception("通信服务无法启动");
             IsWorking = true;
         }
 
@@ -146,7 +147,7 @@ namespace BoonieBear.DeckUnit.LiveService
             if (ret.Result)
             {
                 TaskEx.Delay(100);
-                var cmd = new ACNTCPDataCommand(_shelltcpClient, buf);
+                var cmd = new ACNTCPDataCommand(_datatcpClient, buf);
                 return Command.SendTCPAsync(cmd);
             }
             return ret;

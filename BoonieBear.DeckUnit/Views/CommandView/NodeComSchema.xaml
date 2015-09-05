@@ -34,7 +34,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>

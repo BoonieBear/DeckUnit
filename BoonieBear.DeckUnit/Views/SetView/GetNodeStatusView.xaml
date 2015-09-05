@@ -23,15 +23,15 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="20"  Width="20" VerticalAlignment="Center" Margin="20">
+            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
             </Button>
             <TextBlock  Text="读取状态" VerticalAlignment="Center" FontSize="34px"/>
         </StackPanel>
-        <ScrollViewer Grid.Row="1">
-            <TextBlock Text="{Binding Info}" FontSize="22" FontFamily="Microsoft YaHei UI" Margin="5"/>
+        <ScrollViewer  Grid.Row="1">
+            <TextBlock  Text="{Binding Info}" FontSize="22" FontFamily="Microsoft YaHei UI" Margin="5"/>
         </ScrollViewer>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}"  Foreground="Black" VerticalAlignment="Bottom"/>

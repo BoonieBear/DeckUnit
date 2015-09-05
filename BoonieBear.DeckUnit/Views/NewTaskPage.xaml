@@ -1,0 +1,78 @@
+﻿<Page
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:Converter="clr-namespace:BoonieBear.DeckUnit.Converter" x:Class="BoonieBear.DeckUnit.Views.NewTaskPage"
+      mc:Ignorable="d" 
+      d:DesignHeight="480" d:DesignWidth="640"
+	    Title="创建新任务">
+
+    <Page.Resources>
+        <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Page.Resources>
+    <Page.DataContext>
+        <Binding Path="NewTaskPageViewModel" Source="{StaticResource ViewModelLocator}"/>
+    </Page.DataContext>
+
+    <Grid Background="{StaticResource MainBackGround}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"/>
+            <RowDefinition/>
+            <RowDefinition Height="40"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
+            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+                <Button.Background>
+                    <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
+                </Button.Background>
+            </Button>
+            <TextBlock  Text="新任务" VerticalAlignment="Center" FontFamily="Microsoft YaHei"  FontSize="34px"/>
+        </StackPanel>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="80"/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <StackPanel Grid.Row ="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+                <TextBlock Text="目标节点:" FontSize="22px" VerticalAlignment="Center"/>
+                <controls:NumericUpDown Width="150" Value="{Binding DestID}" FontSize="22px" VerticalAlignment="Center" Margin="20,0,0,0"/>
+            </StackPanel>
+            <StackPanel Grid.Row ="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+                <TextBlock Text="目标节点:" FontSize="22px" VerticalAlignment="Center"/>
+                <ComboBox x:Name="ModeBox" Width ="160" Margin="20,20" 
+					controls:TextBoxHelper.Watermark="目标端口" SelectedIndex="{Binding CommIndex}">
+                    <ComboBoxItem Content ="Com2"/>
+                    <ComboBoxItem Content ="Com3"/>
+                </ComboBox>
+            </StackPanel>
+            <StackPanel Grid.Row ="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
+                <TextBlock Text="任务类型:" FontSize="22px" VerticalAlignment="Center"/>
+                <ComboBox Width ="200" Margin="20,20" 
+					controls:TextBoxHelper.Watermark="类型选择"  SelectedIndex="{Binding TypeIndex}">
+                    <ComboBoxItem Content ="1：wew"/>
+                    <ComboBoxItem Content ="2：特点时间段数据"/>
+                    <ComboBoxItem Content ="3：抽取数据"/>
+                    <ComboBoxItem Content ="4：ADCP继续工作"/>
+                </ComboBox>
+            </StackPanel>
+            <UniformGrid Grid.Row="2" Grid.ColumnSpan="2">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="起始时间:" FontSize="22px" VerticalAlignment="Center"/>
+                    <DatePicker SelectedDate="{Binding SelectedFromDate}" Width="240" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="结束时间:" FontSize="22px" VerticalAlignment="Center"/>
+                    <DatePicker SelectedDate="{Binding SelectedToDate}" Width="240" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+            </UniformGrid>
+        </Grid>
+        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="创建" Command="{Binding CreateTask}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+    </Grid>
+</Page>

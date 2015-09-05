@@ -15,7 +15,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
         [SetUp()]
         public void SqliteSqlDALTest()
         {
-            Sqliteman = new SqliteSqlDAL("Data Source=default.dudb;Pooling=True");
+            Sqliteman = SqliteSqlDAL.GetInstance("Data Source=default.dudb;Pooling=True");
         }
 
         [TearDown]

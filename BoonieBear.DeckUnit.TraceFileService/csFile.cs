@@ -47,7 +47,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
 	    {
             string timestring = CreateNonBlankTimeString();
 
-            return Di.FullName + header + timestring + "." + ext;
+            return Di.FullName +"\\"+ header + timestring + "." + ext;
 	    }
 
 	    public string CreateNonBlankTimeString()

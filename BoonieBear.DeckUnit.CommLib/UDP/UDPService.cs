@@ -144,7 +144,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                     else
                     {
                         flag = false;
-                        break;
+                        return;
                     }
                 
                 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -30,9 +31,9 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void Initialize()
         {
             base.Initialize();
-            TraceCollMt = new List<string>();
+            TraceCollMt = new ObservableCollection<string>();
 
-            DataCollMt = new List<CommandLog>();
+            DataCollMt = new ObservableCollection<CommandLog>();
            
             SwapMode = RegisterCommand(ExecuteSwapMode, CanExecuteSwapMode, true);
             SendCMD = RegisterCommand(ExecuteSendCMD, CanExecuteSendCMD, true);
@@ -42,6 +43,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
             IsStartPage= Visibility.Visible;
+            StatusHeader = "甲板单元";
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
             ModeType = true;
@@ -50,13 +52,13 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
         #region 绑定属性
 
-        public List<string> TraceCollMt
+        public ObservableCollection<string> TraceCollMt
         {
             get { return GetPropertyValue(() => TraceCollMt); }
             set { SetPropertyValue(() => TraceCollMt, value); }
         }
 
-        public List<CommandLog> DataCollMt
+        public ObservableCollection<CommandLog> DataCollMt
         {
             get { return GetPropertyValue(() => DataCollMt); }
             set { SetPropertyValue(() => DataCollMt, value); }
@@ -117,12 +119,11 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => Filterlayer); }
             set { SetPropertyValue(() => Filterlayer, value); }
         }
-        public string RecvMessage
+        public int RecvMessage
         {
             get { return GetPropertyValue(() => RecvMessage); }
             set { SetPropertyValue(() => RecvMessage, value); }
         }
-        
         public string Shellstring
         {
             get { return GetPropertyValue(() => Shellstring); }

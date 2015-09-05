@@ -24,6 +24,10 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             set { connectstring = value; }
         }
 
+        public ISqlDAL SqlDal
+        {
+            get { return _sqldal; }
+        }
         public static DALTrace GetInstance(string connstring="")
         {
             if (connstring!="")
@@ -125,6 +129,60 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                 Errormsg = e.Message;
             }
             
+            return null;
+        }
+        public Task GetTaskAt(Int64 id)
+        {
+            try
+            {
+                if (_sqldal.LinkStatus)
+                    return _sqldal.GetTask(id);
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+            }
+
+            return null;
+        }
+        public bool DeleteTaskAt(Int64 id)
+        {
+            bool ret = true;
+            try
+            {
+                if (_sqldal.LinkStatus)
+                    _sqldal.DeleteTask(id);
+            }
+            catch (Exception e)
+            {
+                ret = false;
+                Errormsg = e.Message;
+            }
+
+            return ret;
+        }
+        public List<Task> GetTaskList(DateTime from, DateTime to)
+        {
+            try
+            {
+                if (_sqldal.LinkStatus)
+                {
+                    if (from.CompareTo(to) >= 0) //等于或晚于to时间
+                    {
+                        return _sqldal.GetTaskLst("");
+                    }
+                    else
+                    {
+                        return _sqldal.GetTaskLst("StarTime>='" + from.ToString("s") + "' AND " + "StarTime<='" + to.ToString("s") + "'");
+                    }
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+            }
             return null;
         }
     }

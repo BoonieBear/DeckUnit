@@ -187,9 +187,11 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
             await result;
             ret = result.Result;
             IsProcessing = false;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "好的";
             if(ret==false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
-                UnitCore.Instance.NetEngine.Error);
+                UnitCore.Instance.NetEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
                 var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
@@ -210,6 +212,13 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
         {
             ACNBuilder.Pack115(NodeID.num,CommSelect);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 115;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return  UnitCore.Instance.NetEngine.SendCMD(cmd);
 
         }
@@ -218,6 +227,13 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
         {
             ACNBuilder.Pack117(NodeID.num, CommSelect);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 117;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
 
@@ -225,42 +241,91 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
         {
             ACNBuilder.Pack111(NodeID.num, RebuildRequired);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 111;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         private Task<bool> GetNetList()
         {
             ACNBuilder.Pack107(NodeID.num, RebuildRequired);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 107;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         private Task<bool> GetSimpleNetList()
         {
             ACNBuilder.Pack109(NodeID.num);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 109;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         private Task<bool> GetNodeStatus()
         {
             ACNBuilder.Pack121(NodeID.num);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 121;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         private Task<bool> GetNodeInfo()
         {
             ACNBuilder.Pack103(NodeID.num);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 103;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         private Task<bool> GetNodeInfoList()
         {
             ACNBuilder.Pack105(NodeID.num);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 105;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         private Task<bool> GetNodeRoute()
         {
             ACNBuilder.Pack113(NodeID.num);
             var cmd = ACNProtocol.Package(false);
+            var cl = new CommandLog();
+            cl.DestID = NodeID.num;
+            cl.SourceID = (int)ACNProtocol.SourceID;
+            cl.LogTime = DateTime.Now;
+            cl.CommID = 113;
+            cl.Type = false;
+            UnitCore.Instance.UnitTraceService.Save(cl, cmd);
             return UnitCore.Instance.NetEngine.SendCMD(cmd);
         }
         #endregion

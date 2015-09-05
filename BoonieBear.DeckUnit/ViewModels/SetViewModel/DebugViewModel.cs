@@ -27,7 +27,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
 
         public override void InitializePage(object extraData)
         {
-            throw new NotImplementedException();
+
         }
         //命令处理中
         public bool IsProcessing

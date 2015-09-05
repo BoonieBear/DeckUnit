@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Ports;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
@@ -57,6 +59,7 @@ namespace BoonieBear.DeckUnit.Core
         private UdpClient _udpDataClient;
         private IUDPService _udpTraceService;
         private IUDPService _udpDataService;
+        public Mutex AcnMutex { get; set; }//全局acn解析锁
         public UnitTraceService UnitTraceService
         {
             get { return _unitTraceService ?? (_unitTraceService = new UnitTraceService()); }
@@ -71,7 +74,7 @@ namespace BoonieBear.DeckUnit.Core
         }
         protected UnitCore()
         {
-            ACNProtocol.Init(0);
+            AcnMutex = new Mutex();
         }
 
         public bool LoadConfiguration()
@@ -144,7 +147,9 @@ namespace BoonieBear.DeckUnit.Core
                 
                 if(LoadConfiguration()==false)
                     return false;
-                if (UnitTraceService.CreateService(DeckUnitConf.Connectstring))
+                ACNProtocol.Init(_modemConf.ID);
+                if (UnitTraceService.CreateService(DeckUnitConf.Connectstring) == false || DeckDataProtocol.Init(_modemConf.ID, "default.dudb") == false)
+                     throw new Exception("基础服务初始化失败");
                 if (_udpTraceClient == null)
                     _udpTraceClient = new UdpClient(_commConf.TraceUDPPort);
                 if (!UDPTraceService.Init(_udpTraceClient)) throw new Exception("调试广播网络初始化失败");
@@ -158,7 +163,8 @@ namespace BoonieBear.DeckUnit.Core
                     CommEngine.Start();
                     var cmd = MSPHexBuilder.Pack250(true);
                     CommEngine.SendCMD(cmd);//进入调试模式，开启网络
-                    Thread.Sleep(500);//wait dsp
+                    Thread.Sleep(500);
+                    CheckAddrAvailable(500); //wait dsp start network
                 }
                 if (NetEngine != null)
                 {
@@ -177,9 +183,40 @@ namespace BoonieBear.DeckUnit.Core
             return _serviceStarted;
 
         }
+        /// <summary>
+        /// 测试通信机IP是否可以ping，测试三次，成功即返回true，不成功返回false
+        /// </summary>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        private bool CheckAddrAvailable(int timeout)
+        {
+            var ipaddr = IPAddress.Parse(_commConf.LinkIP);
+            Ping p = new Ping();
+            try
+            {
+                PingReply pr;
+                for (int i = 0; i < 4; i++)
+                {
+                    pr = p.Send(ipaddr, timeout);
+                    if (pr.Status == IPStatus.Success)
+                    {
+                        Debug.WriteLine("ping ok!");
+                        return true;
+                    }
+                    Debug.WriteLine("ping timeout!");
 
+                }
+                return false;
+            }
+            catch
+            {
+                return false;
+            }
+            
+        }
         public void Stop()
         {
+            DeckDataProtocol.Dispose();
             if (NetEngine!=null&&NetEngine.IsWorking)
             {
                 NetEngine.Stop();
