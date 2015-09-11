@@ -751,7 +751,7 @@ namespace BoonieBear.DeckUnit.ACNP
                                                     default:
                                                         index -= 8;//后退8个bit
                                                         byte[] b1 = GetByteValueFromBit(len - 36);
-                                                        AddtoList("3", "设备数据", StringHexConverter.ConvertCharToHex(b1, b1.Length), Encoding.Default.GetString(b1));
+                                                        AddtoList("3", "数据回复", StringHexConverter.ConvertCharToHex(b1, b1.Length), Encoding.Default.GetString(b1));
                                                     
                                                         break;
                                                 }

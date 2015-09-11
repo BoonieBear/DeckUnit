@@ -16,6 +16,7 @@ using TinyMetroWpfLibrary.ViewModel;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.Models;
 using MahApps.Metro.Controls;
+using BoonieBear.DeckUnit.BaseType;
 using MahApps.Metro.Controls.Dialogs;
 namespace BoonieBear.DeckUnit.ViewModels
 {

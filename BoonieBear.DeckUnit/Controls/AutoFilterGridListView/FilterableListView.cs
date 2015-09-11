@@ -8,7 +8,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Input;
 using BoonieBear.DeckUnit.DAL;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.Controls.AutoFilterGridListView
 {
     /// <summary>

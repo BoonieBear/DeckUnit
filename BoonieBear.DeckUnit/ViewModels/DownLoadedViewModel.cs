@@ -9,6 +9,7 @@ using BoonieBear.DeckUnit.DAL;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.ViewModels
 {
     public class DownLoadedViewModel:ViewModelBase
@@ -17,7 +18,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             FetchingData = RegisterCommand(ExecuteFetchingData, CanExecuteFetchingData, true);
-            ListCollMt = new List<Task>();
+            ListCollMt = new List<BDTask>();
             IsFetching = false;
             SelectedFromDate = DateTime.Today;
             SelectedToDate = DateTime.Today;
@@ -43,20 +44,20 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => RefreshVisble); }
             set { SetPropertyValue(() => RefreshVisble, value); }
         }
-        public List<Task> ListCollMt
+        public List<BDTask> ListCollMt
         {
             get { return GetPropertyValue(() => ListCollMt); }
             set { SetPropertyValue(() => ListCollMt, value); }
         }
-        public Task SelectedTask
+        public BDTask SelectedBdTask
         {
-            get { return GetPropertyValue(() => SelectedTask); }
+            get { return GetPropertyValue(() => SelectedBdTask); }
             set
             {
-                SetPropertyValue(() => SelectedTask, value);
-                if (SelectedTask != null)
+                SetPropertyValue(() => SelectedBdTask, value);
+                if (SelectedBdTask != null)
                 {
-                    EventAggregator.PublishMessage(new GoDownLoadingViewEvent(SelectedTask));
+                    EventAggregator.PublishMessage(new GoDownLoadingViewEvent(SelectedBdTask));
                 }
             }
         }

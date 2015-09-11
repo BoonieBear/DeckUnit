@@ -8,6 +8,7 @@ using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
+using BoonieBear.DeckUnit.BaseType;
 using System.Windows.Threading;
 
 namespace BoonieBear.DeckUnit.ViewModels

@@ -42,11 +42,11 @@ namespace BoonieBear.DeckUnit.DAL
     }
     public interface ITask
     {
-        int AddTask(Task task);
-        void UpdateTask(Task task);
+        int AddTask(BDTask bdTask);
+        void UpdateTask(BDTask bdTask);
         void DeleteTask(Int64 id);
-        Task GetTask(Int64 id);
-        List<Task> GetTaskLst(string strWhere);
+        BDTask GetTask(Int64 id);
+        List<BDTask> GetTaskLst(string strWhere);
     }
     public interface IModemConfigure
     {

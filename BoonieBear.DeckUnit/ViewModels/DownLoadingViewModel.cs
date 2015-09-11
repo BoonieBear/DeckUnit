@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.UBP;
 using MahApps.Metro.Controls.Dialogs;
@@ -11,15 +14,17 @@ using TinyMetroWpfLibrary.EventAggregation;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 using BoonieBear.DeckUnit.Events;
-using Task = BoonieBear.DeckUnit.DAL.Task;
-
+using TinyMetroWpfLibrary.Utility;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.ViewModels
 {
-    public class DownLoadingViewModel:ViewModelBase,IHandleMessage<UpdateCurrentTask>
+    public class DownLoadingViewModel : ViewModelBase, BoonieBear.DeckUnit.UBP.BDObserver<EventArgs>
     {
-        private Task currentTask;
+        private BDTask _currentBdTask;
         public override void Initialize()
         {
+            CmdId = 1;
+            DeckDataProtocol.AddCallBack(this);
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             GoDataCommand = RegisterCommand(ExecuteGoDataCommand, CanExecuteGoDataCommand, true);
             StartTaskCommand = RegisterCommand(ExecuteStartTaskCommand, CanExecuteStartTaskCommand, true);
@@ -31,13 +36,13 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public override void InitializePage(object extraData)
         {
-            currentTask = extraData as Task;
-            if (currentTask == null)
+            _currentBdTask = extraData as BDTask;
+            if (_currentBdTask == null)
                 return;
-            TaskID = currentTask.TaskID;
-            DestID = currentTask.DestID;
-            CmdID = currentTask.CommID;
-            StarTime = currentTask.StarTime;
+            TaskID = _currentBdTask.TaskID;
+            DestID = _currentBdTask.DestID;
+            CmdId = _currentBdTask.CommID;
+            StarTime = _currentBdTask.StarTime;
         }
 
 
@@ -57,10 +62,33 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => DestID); }
             set { SetPropertyValue(() => DestID, value); }
         }
-        public  int CmdID
+        public int CmdId
         {
-            get { return GetPropertyValue(() => CmdID); }
-            set { SetPropertyValue(() => CmdID, value); }
+            get { return CmdId; }
+            set
+            {
+                CmdId = value;
+                switch (CmdId)
+                {
+                    case 1:
+                        CmdIDDesc = "@SP";
+                        break;
+                    case 2:
+                        CmdIDDesc = "时间段索取-" + Encoding.Default.GetString(_currentBdTask.ParaBytes);
+                        break;
+                    case 3:
+                        CmdIDDesc = "抽取索取-"+ Encoding.Default.GetString(_currentBdTask.ParaBytes);
+                        break;
+                    case 4:
+                        CmdIDDesc = "ADCP继续工作";
+                        break;
+                }
+            }
+        }
+        public string CmdIDDesc
+        {
+            get { return GetPropertyValue(() => CmdIDDesc); }
+            set { SetPropertyValue(() => CmdIDDesc, value); }
         }
         public  double RetryRate
         {
@@ -137,15 +165,15 @@ namespace BoonieBear.DeckUnit.ViewModels
         private void CanExecuteGoDataCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
-            if(currentTask!=null)
-                if(currentTask.TaskState!=(int) TaskStage.Finish)
+            if(_currentBdTask!=null)
+                if(_currentBdTask.TaskStage!=(int) TaskStage.Finish)
                     eventArgs.CanExecute = false;
         }
 
 
         private  void ExecuteGoDataCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            EventAggregator.PublishMessage(new GoADCPDataViewEvent(currentTask));
+            EventAggregator.PublishMessage(new GoADCPDataViewEvent(_currentBdTask));
         }
         public ICommand DeleteTaskCommand
         {
@@ -164,9 +192,9 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private async void ExecuteDeleteTaskCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            if (currentTask != null)
+            if (_currentBdTask != null)
             {
-                if (UnitCore.Instance.UnitTraceService.DeleteTask(currentTask.TaskID,false))
+                if (UnitCore.Instance.UnitTraceService.DeleteTask(_currentBdTask.TaskID,false))
                 {
                     EventAggregator.PublishMessage(new GoTaskListViewEvent());
                 }
@@ -196,10 +224,10 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void ExecuteStopTaskCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            if (currentTask != null&&currentTask.TaskState==(int)UBP.TaskStage.Continue)
+            if (_currentBdTask != null&&_currentBdTask.TaskStage==(int)UBP.TaskStage.Continue)
             {
                 DeckDataProtocol.Stop();
-                EventAggregator.PublishMessage(new UpdateCurrentTask());
+                IUpdateTaskHandle(null, null);
             }
         }
         public ICommand StartTaskCommand
@@ -207,6 +235,8 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => StartTaskCommand); }
             set { SetPropertyValue(() => StartTaskCommand, value); }
         }
+
+        
 
 
         private void CanExecuteStartTaskCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
@@ -219,11 +249,12 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private async void ExecuteStartTaskCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            if (currentTask != null)
+            if (_currentBdTask != null)
             {
                 if(TaskState=="UNSTART")
-                    if (DeckDataProtocol.ContinueTask(currentTask.TaskID) == currentTask.TaskID)
+                    if (DeckDataProtocol.StartTask(_currentBdTask.TaskID) == _currentBdTask.TaskID)//正确开始任务
                     {
+                        
                         var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
                         dialog.Title = "开始任务";
                         await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
@@ -240,24 +271,21 @@ namespace BoonieBear.DeckUnit.ViewModels
                         var md = new MetroDialogSettings();
                         md.AffirmativeButtonText = "好的";
                         await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "错误",
-                        UnitCore.Instance.NetEngine.Error, MessageDialogStyle.Affirmative, md);
+                        "任务开始失败", MessageDialogStyle.Affirmative, md);
                         TaskState = "UNSTART";
                         IsWorking = false;
                     }
-                EventAggregator.PublishMessage(new UpdateCurrentTask());
+                    IUpdateTaskHandle(null, null);
             }
         }
-        /// <summary>
-        /// 收到数据后观察者通知currenttask更新
-        /// </summary>
-        /// <param name="message"></param>
-        public async void Handle(UpdateCurrentTask message)
+        //状态更新：超时回调加操作动作
+        public async void IUpdateTaskHandle(object sender, EventArgs e)
         {
-            currentTask = DeckDataProtocol.WorkingTask;
-            switch (currentTask.TaskState)
+            _currentBdTask = DeckDataProtocol.WorkingBdTask;
+            switch (_currentBdTask.TaskStage)
             {
                 case -1:
-                    TaskStatus = "任务失败";
+                    TaskStatus = "任务失败，错误码="+DeckDataProtocol.ErrorCode.ToString();
                     IsWorking = false;
                     TaskState = "STOP";
                     var md = new MetroDialogSettings();
@@ -272,20 +300,30 @@ namespace BoonieBear.DeckUnit.ViewModels
                     break;
                 case 1:
                     TaskStatus = "等待数据";
-                    TaskState = "WORKING";
-                    IsWorking = true;
+                    TaskState = "STOP";
+                    IsWorking = false;
                     break;
                 case 2:
-                    TaskStatus = "传输数据中";
+                    TaskStatus = "正在唤醒设备";
+                    TaskState = "STOP";
+                    IsWorking = false;
+                    break;
+                case 3:
+                    TaskStatus = "数据准备完毕";
                     TaskState = "WORKING";
                     IsWorking = true;
                     break;
-                case 3:
+                case 4:
+                    TaskStatus = "数据传输中……";
+                    TaskState = "WORKING";
+                    IsWorking = true;
+                    break;
+                case 5:
                     TaskStatus = "暂停";
                     TaskState = "STOP";
                     IsWorking = false;
                     break;
-                case 4:
+                case 6:
                     TaskStatus = "任务完成";
                     TaskState = "COMPLETED";
                     IsWorking = false;
@@ -296,17 +334,19 @@ namespace BoonieBear.DeckUnit.ViewModels
                     IsWorking = false;
                     break;
             }
-            LastTime = currentTask.LastTime;
-            TotalSeconds = currentTask.TotolTime;
-            RecvBytes = currentTask.RecvBytes;
-            var rtor = currentTask.ErrIndex.GetEnumerator();
-            var errindex = 0;
-            while (rtor.MoveNext())
-            {
-                if ((bool) rtor.Current)
-                    errindex++;
-            }
-            RetryRate = (double)errindex/8;
+            LastTime = _currentBdTask.LastTime;
+            TotalSeconds = _currentBdTask.TotolTime;
+            RecvBytes = _currentBdTask.RecvBytes;
+            RetryRate = (double)_currentBdTask.ErrIdxStr.Split(';').Count() / 7;
         }
+        /// <summary>
+        /// 收到数据后观察者通知currenttask更新
+        /// </summary>
+        /// <param name="message"></param>
+        public async void Handle(UpdateCurrentTask message)
+        {
+            
+        }
+        
     }
 }

@@ -16,6 +16,7 @@ using MahApps.Metro.Controls;
 using System.IO;
 using BoonieBear.DeckUnit.ViewModels;
 using BoonieBear.DeckUnit.DAL;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.Views
 {
 

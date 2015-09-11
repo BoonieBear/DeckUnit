@@ -21,7 +21,7 @@ using BoonieBear.DeckUnit.JsonUtils;
 using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.ViewModels;
 using MahApps.Metro.Controls;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.Views
 {
     public partial class HistoryDataPage

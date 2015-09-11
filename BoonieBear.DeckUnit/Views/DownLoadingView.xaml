@@ -41,7 +41,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
                 <TextBlock Text="命令类型:" FontSize="22px" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding CmdID}" FontSize="22px" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding CmdIDDesc}" FontSize="22px" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TextBlock Text="创建时间:" FontSize="22px" VerticalAlignment="Center"/>

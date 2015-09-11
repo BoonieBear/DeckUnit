@@ -18,6 +18,7 @@ using System.Threading.Tasks;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.Views;
 using System.Windows.Controls;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
 {
     public class SimpleViewModel : ViewModelBase

@@ -7,5 +7,9 @@ namespace BoonieBear.DeckUnit.Events
 {
     public class UpdateCurrentTask
     {
+        public UpdateCurrentTask()
+        {
+
+        }
     }
 }

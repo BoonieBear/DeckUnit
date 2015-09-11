@@ -43,15 +43,10 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
         public void ContinueTaskTest()
         {
             DeckDataProtocol.Init(sid, dbstring);
-            var id = DeckDataProtocol.ContinueTask(201404151359100162);
+            var id = DeckDataProtocol.StartTask(201404151359100162);
             Assert.AreEqual(201404151359100162, id);
         }
-        [Test()]
-        public void TaskPackageTest()
-        {
-            DeckDataProtocol.Init(sid, dbstring);
-            Assert.NotNull(DeckDataProtocol.TaskPackage(201404151359100162));
-        }
+        
 
         
         [TestCase( new Byte[]{1,0}, ExpectedResult = TaskStage.Continue,TestName = "ParseOK")]
@@ -61,10 +56,10 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
         [TestCase(new Byte[] { 1, 4,0,0,0,0 }, ExpectedResult = TaskStage.Finish, TestName = "ParseFinished")]
         [TestCase(new Byte[] { 1, 4, 1, 0, 0, 0 }, ExpectedResult = TaskStage.Continue, TestName = "ParseFinishedButHasError")]
         [TestCase(new Byte[] { 2, 0,1,1,0,1 }, ExpectedResult = TaskStage.Continue, TestName = "ParseData")]
-        [TestCase(new Byte[] { 3, 2 }, ExpectedResult = TaskStage.Undefine, TestName = "ParseUndefine")]
+        [TestCase(new Byte[] { 3, 2 }, ExpectedResult = TaskStage.Failed, TestName = "ParseUndefine")]
         public TaskStage ParseDataTest(byte[] bytes)
         {
-            DeckDataProtocol.ContinueTask(201404161625160162);
+            DeckDataProtocol.StartTask(201404161625160162);
             string err;
             return DeckDataProtocol.ParseData(bytes, out err);
         }
@@ -78,7 +73,7 @@ namespace BoonieBear.DeckUnit.CommLibTests.Protocol
         public void BuildFileTest()
         {
             string err;
-            DeckDataProtocol.ContinueTask(201404161625160162);
+            DeckDataProtocol.StartTask(201404161625160162);
             Assert.IsTrue(DeckDataProtocol.BuildFile(201404161625160162, out err));
         }
     }

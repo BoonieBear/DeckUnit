@@ -45,18 +45,18 @@
                 <controls:NumericUpDown Width="150" Value="{Binding DestID}" FontSize="22px" VerticalAlignment="Center" Margin="20,0,0,0"/>
             </StackPanel>
             <StackPanel Grid.Row ="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
-                <TextBlock Text="目标节点:" FontSize="22px" VerticalAlignment="Center"/>
+                <TextBlock Text="设备端口" FontSize="22px" VerticalAlignment="Center"/>
                 <ComboBox x:Name="ModeBox" Width ="160" Margin="20,20" 
 					controls:TextBoxHelper.Watermark="目标端口" SelectedIndex="{Binding CommIndex}">
-                    <ComboBoxItem Content ="Com2"/>
-                    <ComboBoxItem Content ="Com3"/>
+                    <ComboBoxItem Content ="COM2"/>
+                    <ComboBoxItem Content ="COM3"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Grid.Row ="1" Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                 <TextBlock Text="任务类型:" FontSize="22px" VerticalAlignment="Center"/>
                 <ComboBox Width ="200" Margin="20,20" 
 					controls:TextBoxHelper.Watermark="类型选择"  SelectedIndex="{Binding TypeIndex}">
-                    <ComboBoxItem Content ="1：wew"/>
+                    <ComboBoxItem Content ="1：@SP"/>
                     <ComboBoxItem Content ="2：特点时间段数据"/>
                     <ComboBoxItem Content ="3：抽取数据"/>
                     <ComboBoxItem Content ="4：ADCP继续工作"/>

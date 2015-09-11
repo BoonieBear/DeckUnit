@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 
-namespace BoonieBear.DeckUnit.DAL
+namespace BoonieBear.DeckUnit.BaseType
 {
     /// <summary>
     /// 数据库实体类
@@ -106,16 +106,16 @@ namespace BoonieBear.DeckUnit.DAL
 
     
 
-    public class Task
+    public class BDTask
     {
         public long TaskID { get; set; }
-        public int TaskState { get; set; }
+        public int TaskStage { get; set; }
         public int SourceID { get; set; }
         public int DestID { get; set; }
 
         public int DestPort { get; set; }
         public int CommID { get; set; }
-        public BitArray ErrIndex { get; set; }
+        public int TotalPkg { get; set; }
         public bool HasPara { get; set; }
         public byte[] ParaBytes { get; set; }
         public DateTime StarTime { get; set; }
@@ -127,6 +127,6 @@ namespace BoonieBear.DeckUnit.DAL
         /// </summary>
         public string FilePath { get; set; }
         public bool IsParsed { get; set; }
-        public string JSON { get; set; }
+        public string ErrIdxStr { get; set; }//例子0;2;1;4;6
     }
 }

@@ -141,9 +141,9 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
         [Test()]
         public void AddTaskTest()
         {
-            var task = new Task();
+            var task = new BDTask();
             task.TaskID = 201404101212150113;
-            task.TaskState= 1;
+            task.TaskStage= 1;
             task.SourceID = 1;
             task.DestID = 7;
             task.DestPort = 3;
@@ -154,7 +154,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
                 false,true, false, true, false, true, false, true, false, true, false, true, false, true, false, true,
                 false,
             };
-            task.ErrIndex = new BitArray(b);
+            task.TotalPkg = 123;
             task.HasPara = true;
             task.ParaBytes = new byte[]{12,15};
             task.StarTime = DateTime.UtcNow;
@@ -163,16 +163,16 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             task.RecvBytes = 12222;
             task.FilePath = "log\\re\\re";
             task.IsParsed = false;
-            task.JSON = "";
+            task.ErrIdxStr = "";
             Assert.GreaterOrEqual(Sqliteman.AddTask(task), 1);
         }
 
         [Test()]
         public void UpdateTaskTest()
         {
-            var task = new Task();
+            var task = new BDTask();
             task.TaskID = 201404140000000131;
-            task.TaskState = 1;
+            task.TaskStage = 1;
             task.SourceID = 1;
             task.DestID = 7;
             task.DestPort = 3;
@@ -182,7 +182,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
                 true, false, true, false, true, false, true, false, true, false, true, false, true, false, true,
                 false,
             };
-            task.ErrIndex = new BitArray(b);
+            task.TotalPkg = 123;
             task.HasPara = true;
             task.ParaBytes = new byte[] { 12, 15 };
             task.StarTime = DateTime.UtcNow;
@@ -191,7 +191,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             task.RecvBytes = 243435;
             task.FilePath = "log\\re\\re";
             task.IsParsed = false;
-            task.JSON = "2222222222";
+            task.ErrIdxStr = "2222222222";
             Sqliteman.UpdateTask(task);
         }
 
@@ -207,16 +207,14 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
         {
             var task = Sqliteman.GetTask(201404140000000131);
             if(task==null)
-                Assert.Pass("No Task!");
+                Assert.Pass("No BDTask!");
             Debug.WriteLine(task.TaskID);
-            Debug.WriteLine(task.TaskState);
+            Debug.WriteLine(task.TaskStage);
             Debug.WriteLine(task.SourceID);
             Debug.WriteLine(task.DestID);
             Debug.WriteLine(task.DestPort);
             Debug.WriteLine(task.CommID);
-            int[] a = {0};
-            task.ErrIndex.CopyTo(a, 0);
-            Debug.WriteLine(a[0]);
+ 
             Debug.WriteLine(task.HasPara);
             Debug.WriteLine(StringHexConverter.ConvertCharToHex(task.ParaBytes, task.ParaBytes.Length));
             Debug.WriteLine(task.StarTime.AddHours(8));
@@ -226,7 +224,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             Debug.WriteLine(task.FilePath);
 
             Debug.WriteLine(task.IsParsed);
-            Debug.WriteLine(task.JSON);
+            Debug.WriteLine(task.ErrIdxStr);
             Assert.Pass();
         }
 
@@ -238,14 +236,12 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
             {
                 Debug.WriteLine("//////////////////////////////////");
                 Debug.WriteLine(task.TaskID);
-                Debug.WriteLine(task.TaskState);
+                Debug.WriteLine(task.TaskStage);
                 Debug.WriteLine(task.SourceID);
                 Debug.WriteLine(task.DestID);
                 Debug.WriteLine(task.DestPort);
                 Debug.WriteLine(task.CommID);
-                int[] a = { 0 };
-                task.ErrIndex.CopyTo(a, 0);
-                Debug.WriteLine(a[0]);
+
                 Debug.WriteLine(task.HasPara);
                 Debug.WriteLine(StringHexConverter.ConvertCharToHex(task.ParaBytes, task.ParaBytes.Length));
                 Debug.WriteLine(task.StarTime.AddHours(8));
@@ -255,7 +251,7 @@ namespace BoonieBear.DeckUnit.DALTests.SqliteDAL
                 Debug.WriteLine(task.FilePath);
 
                 Debug.WriteLine(task.IsParsed);
-                Debug.WriteLine(task.JSON);
+                Debug.WriteLine(task.ErrIdxStr);
             }
             Assert.Pass();
         }

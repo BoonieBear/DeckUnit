@@ -14,7 +14,7 @@ using BoonieBear.DeckUnit.ViewModels;
 using Newtonsoft.Json;
 using System.Windows.Threading;
 using Newtonsoft.Json.Linq;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.Core
 {
     public class DeckUnitDataObserver:Observer<CustomEventArgs>

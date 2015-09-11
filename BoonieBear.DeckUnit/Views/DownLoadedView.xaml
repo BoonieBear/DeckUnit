@@ -40,7 +40,7 @@
                 <ScrollViewer>
                     <autolist:FilterableListView x:Name="DataListView"  ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding ListCollMt}"
                                FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
-                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectedItem="{Binding SelectedTask}">
+                                FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectedItem="{Binding SelectedBdTask}">
                         <ListView.View>
                             <GridView ColumnHeaderContainerStyle="{StaticResource ColumnHeaderStyle}">
                                 <autolist:SortableGridViewColumn Width ="200" Header="时间" SortPropertyName="LogTime" DisplayMemberBinding="{Binding Path=LogTime}"/>

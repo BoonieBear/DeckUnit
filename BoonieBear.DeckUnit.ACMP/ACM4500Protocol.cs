@@ -6,7 +6,6 @@ namespace BoonieBear.DeckUnit.ACMP
 {
     public class ACM4500Protocol
     {
-        private static readonly Hashtable ACMCommandID = new Hashtable();
         private static byte[] dataBytes;//打包数据
         private static byte[] decodeBytes;//解调数据
         
@@ -36,13 +35,12 @@ namespace BoonieBear.DeckUnit.ACMP
 
         public static void Init()
         {
-            ACMCommandID.Add(124,(Action)Parse124);
             CommPara.Type = DataType.MPSK;
             CommPara.LinkOrient = true;
 
         }
         /// <summary>
-        /// 得到解调数据
+        /// 将要解调数据包加入队列，收到结束包后调用parse解调
         /// </summary>
         /// <param name="bytes"></param>
         public static void GetBytes(byte[] bytes)
@@ -90,9 +88,7 @@ namespace BoonieBear.DeckUnit.ACMP
             try
             {
                 id = BitConverter.ToInt16(decodeBytes, 0);
-                //命令列表中存在ID，则处理，不存在，则返回ID，外部处理
-                if (ACMCommandID.ContainsKey(id))
-                    Task.Factory.StartNew((Action)ACMCommandID[id]);
+
                 return id;
             }
             catch (Exception e)

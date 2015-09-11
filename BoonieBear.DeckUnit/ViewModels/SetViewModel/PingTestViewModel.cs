@@ -15,7 +15,7 @@ using TinyMetroWpfLibrary.EventAggregation;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 using BoonieBear.DeckUnit.Events;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
 {
     public class PingTestViewModel : ViewModelBase, IHandleMessage<PingNotifyEvent>

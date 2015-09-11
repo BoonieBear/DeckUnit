@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Xml.Serialization;
 using BoonieBear.DeckUnit.DAL;
-
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.UnitBoxTraceService
 {
     /// <summary>
@@ -131,7 +131,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             
             return null;
         }
-        public Task GetTaskAt(Int64 id)
+        public BDTask GetTaskAt(Int64 id)
         {
             try
             {
@@ -161,7 +161,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
 
             return ret;
         }
-        public List<Task> GetTaskList(DateTime from, DateTime to)
+        public List<BDTask> GetTaskList(DateTime from, DateTime to)
         {
             try
             {

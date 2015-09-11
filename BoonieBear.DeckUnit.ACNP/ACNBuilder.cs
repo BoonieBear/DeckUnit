@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using BoonieBear.DeckUnit.ACNP;
 using System.Collections;
 using TinyMetroWpfLibrary.Utility;
-
+using BoonieBear.DeckUnit.ACNP;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.ACNP
 {
     /// <summary>
@@ -380,21 +380,90 @@ namespace BoonieBear.DeckUnit.ACNP
         /// <summary>
         /// 任务包打包
         /// </summary>
-        /// <param name="taskcmd">任务包类型64，115</param>
+        /// <param name="task">任务包类型64，115</param>
 
-        public static void PackTask(int ID,int taskcmd, byte[] taskpackage)
+        public static void PackTask(BDTask task,bool bNew, int lastpkgid)
         {
-            int[] dat = new int[1];
-            ACNProtocol.InitForPack(20 + taskpackage.Length*8);
-            dat[0] = taskcmd;
-            ACNProtocol.OutPutIntBit(dat, 8);
+            if (bNew)
+            {
+                int[] dat = new int[4];
+                int length = 20 + 8 + 8 + 64;//不包括参数
+                if (task.CommID == 2)
+                    length += 8*8;
+                if (task.CommID == 3)
+                    length += 6*8;
+                ACNProtocol.InitForPack(length);
+                dat[0] = 115;
+                ACNProtocol.OutPutIntBit(dat, 8);
+                dat[0] = length;
+                ACNProtocol.OutPutIntBit(dat, 12);
+                dat[0] = task.DestPort;
+                ACNProtocol.OutPutIntBit(dat, 8);
+                dat[0] = task.CommID;
+                ACNProtocol.OutPutIntBit(dat, 8);
+                var bytes = BitConverter.GetBytes(task.TaskID);
+                Buffer.BlockCopy(bytes,0,dat,0,4);
+                ACNProtocol.OutPutIntBit(dat, 64);
+                if (task.CommID == 2)
+                {
+                    var buf = new int[4];
+                    Buffer.BlockCopy(task.ParaBytes,0,buf,0,8);
+                    ACNProtocol.OutPutIntBit(buf, 64);
+                    ACNProtocol.AddPool(task.DestID);
+                }
 
-            dat[0] = 20 + taskpackage.Length*8;
-            ACNProtocol.OutPutIntBit(dat, 12);
-            int[] pak = new int[(int)Math.Ceiling((double)taskpackage.Length/4)];
-            Buffer.BlockCopy(taskpackage, 0, pak, 0, taskpackage.Length);
-            ACNProtocol.OutPutIntBit(pak, taskpackage.Length*8);
-            ACNProtocol.AddPool(ID);
+                if (task.CommID == 3)
+                {
+                    var buf = new int[3];
+                    Buffer.BlockCopy(task.ParaBytes, 0, buf, 0, 6);
+                    ACNProtocol.OutPutIntBit(buf, 48);
+                    ACNProtocol.AddPool(task.DestID);
+                }
+                
+            }
+            else//继续
+            {
+                int[] dat = new int[4];
+                int length = 20 + 64;//不包括参数
+                if (task.ErrIdxStr != null)
+                {
+                    string[] split = task.ErrIdxStr.Split(';');
+                    length += split.Count()*8;
+                }
+
+                ACNProtocol.InitForPack(length);
+                dat[0] = 115;
+                ACNProtocol.OutPutIntBit(dat, 8);
+                dat[0] = length;
+                ACNProtocol.OutPutIntBit(dat, 12);
+                dat[0] = task.DestPort;
+                ACNProtocol.OutPutIntBit(dat, 8);
+                dat[0] = task.CommID;
+                ACNProtocol.OutPutIntBit(dat, 8);
+                var bytes = BitConverter.GetBytes(task.TaskID);
+                Buffer.BlockCopy(bytes, 0, dat, 0, 4);
+                ACNProtocol.OutPutIntBit(dat, 64);
+                if (lastpkgid == -1) //尚未接收到数据，不需要添加重传包
+                {
+                    ACNProtocol.AddPool(task.DestID);
+                }
+                else
+                {
+                    if (task.ErrIdxStr != null)
+                    {
+                        string[] split = task.ErrIdxStr.Split(';');
+                        foreach (var strid in split)
+                        {
+                            dat[0] = int.Parse(strid);
+                            if(dat[0]!=0)
+                                ACNProtocol.OutPutIntBit(dat, 16);    
+                        }
+                        
+                    }
+                    ACNProtocol.AddPool(task.DestID);
+                }
+            }
+            
         }
         
     }

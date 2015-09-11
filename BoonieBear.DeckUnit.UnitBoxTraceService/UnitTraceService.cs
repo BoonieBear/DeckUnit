@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using BoonieBear.DeckUnit.TraceFileService;
 using BoonieBear.DeckUnit.DAL;
+using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.UnitBoxTraceService
 {
     public class UnitTraceService
@@ -168,7 +169,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             return null;
         }
 
-        public List<Task> GetTaskList(DateTime from, DateTime to)
+        public List<BDTask> GetTaskList(DateTime from, DateTime to)
         {
             if (_dalTrace.isLink)
             {
@@ -180,7 +181,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             return null;
         }
 
-        public Task GetTask(Int64 TaskID)
+        public BDTask GetTask(Int64 TaskID)
         {
             if (_dalTrace.isLink)
             {

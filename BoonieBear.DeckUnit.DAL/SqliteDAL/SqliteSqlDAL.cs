@@ -158,15 +158,13 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
            
         }
 
-        public int AddTask(Task task)
+        public int AddTask(BDTask bdTask)
         {
-            var b = new[] {0}; 
-            task.ErrIndex.CopyTo(b,0);
             string[] values =
             {
-                task.TaskID.ToString(), task.TaskState.ToString(),task.SourceID.ToString(),task.DestID.ToString(),task.DestPort.ToString(),task.CommID.ToString(),
-                b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,(task.ParaBytes==null)?0:task.ParaBytes.Length),
-                task.StarTime.ToString("s"),task.TotolTime.ToString(),task.LastTime.ToString("s"),task.RecvBytes.ToString(),task.FilePath,task.IsParsed?"1":"0",task.JSON,
+                bdTask.TaskID.ToString(), bdTask.TaskStage.ToString(),bdTask.SourceID.ToString(),bdTask.DestID.ToString(),bdTask.DestPort.ToString(),bdTask.CommID.ToString(),
+                bdTask.TotalPkg.ToString(),bdTask.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(bdTask.ParaBytes,(bdTask.ParaBytes==null)?0:bdTask.ParaBytes.Length),
+                bdTask.StarTime.ToString("s"),bdTask.TotolTime.ToString(),bdTask.LastTime.ToString("s"),bdTask.RecvBytes.ToString(),bdTask.ErrIdxStr,
             };
             using (sqliteHelperSQL.InsertInto(_tableName[5], values))
             {
@@ -178,21 +176,20 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             }
         }
 
-        public void UpdateTask(Task task)
+        public void UpdateTask(BDTask bdTask)
         {
             string[] col =
             {
                 "TaskInfo_ID", "TaskInfo_STATE", "TaskInfo_SOURCEID", "TaskInfo_DESTID","TaskInfo_DESTPORT","TaskInfo_COMMDID",
-                "TaskInfo_ERRINDEX","TaskInfo_ISPARA","TaskInfo_PARA","TaskInfo_STARTTIME","TaskInfo_TOTALTIME","TaskInfo_LASTENDTIME","TaskInfo_RECVBYTES",
-                "TaskInfo_DATAPATH","TaskInfo_ISPARSED","TaskInfo_STRUCTDATA",
+                "TaskInfo_TOTALPKG","TaskInfo_ISPARA","TaskInfo_PARA","TaskInfo_STARTTIME","TaskInfo_TOTALTIME","TaskInfo_LASTENDTIME","TaskInfo_RECVBYTES",
+                "TaskInfo_DATAPATH","TaskInfo_ISPARSED","TaskInfo_ERRORINDEX",
             };
-            var b = new[] { 0};
-            task.ErrIndex.CopyTo(b, 0);
+
             string[] values =
             {
-                task.TaskID.ToString(), task.TaskState.ToString(),task.SourceID.ToString(),task.DestID.ToString(),task.DestPort.ToString(),task.CommID.ToString(),
-                b[0].ToString(),task.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(task.ParaBytes,task.ParaBytes.Length),
-                task.StarTime.ToString("s"),task.TotolTime.ToString(),task.LastTime.ToString("s"),task.RecvBytes.ToString(),task.FilePath,task.IsParsed?"1":"0",task.JSON,
+                bdTask.TaskID.ToString(), bdTask.TaskStage.ToString(),bdTask.SourceID.ToString(),bdTask.DestID.ToString(),bdTask.DestPort.ToString(),bdTask.CommID.ToString(),
+                bdTask.TotalPkg.ToString(),bdTask.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(bdTask.ParaBytes,bdTask.ParaBytes.Length),
+                bdTask.StarTime.ToString("s"),bdTask.TotolTime.ToString(),bdTask.LastTime.ToString("s"),bdTask.RecvBytes.ToString(),bdTask.FilePath,bdTask.IsParsed?"1":"0",bdTask.ErrIdxStr,
             };
 
             sqliteHelperSQL.UpdateInto(_tableName[5], col, values, "", "");
@@ -205,7 +202,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             sqliteHelperSQL.Delete(_tableName[5], col, val);
         }
 
-        public Task GetTask(long id)
+        public BDTask GetTask(long id)
         {
 
             var lst = GetTaskLst("TaskInfo_ID = " + id.ToString());
@@ -215,22 +212,22 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
 
         }
 
-        public List<Task> GetTaskLst(string strWhere)
+        public List<BDTask> GetTaskLst(string strWhere)
         {
-            var tasklist = new List<Task>();
+            var tasklist = new List<BDTask>();
 
             var reader = sqliteHelperSQL.SelectWhere(_tableName[5], strWhere);
             while (reader.Read())
             {
-                var al = new Task();
+                var al = new BDTask();
                 {
                     al.TaskID = reader.GetInt64(0);
-                    al.TaskState = reader.GetInt32(1);
+                    al.TaskStage = reader.GetInt32(1);
                     al.SourceID = reader.GetInt32(2);
                     al.DestID = reader.GetInt32(3);
                     al.DestPort = reader.GetInt32(4);
                     al.CommID = reader.GetInt32(5);
-                    al.ErrIndex = new BitArray(new[]{reader.GetInt32(6)});
+                    al.TotalPkg = reader.GetInt32(6);
                     al.HasPara = (bool) reader.GetValue(7);
                     al.ParaBytes = StringHexConverter.ConvertHexToChar(reader.GetString(8));
                     al.StarTime = reader.GetDateTime(9);
@@ -239,7 +236,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
                     al.RecvBytes = reader.GetInt32(12);
                     al.FilePath = reader.GetString(13);
                     al.IsParsed = (bool) reader.GetValue(14);
-                    al.JSON = reader.GetString(15);
+                    al.ErrIdxStr = reader.GetString(15);
                 };
                 tasklist.Add(al);
             }

@@ -14,6 +14,7 @@ using BoonieBear.DeckUnit.Helps;
 using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
+using BoonieBear.DeckUnit.BaseType;
 using BoonieBear.DeckUnit.Models;
 namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
 {
