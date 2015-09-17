@@ -164,7 +164,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
             {
                 bdTask.TaskID.ToString(), bdTask.TaskStage.ToString(),bdTask.SourceID.ToString(),bdTask.DestID.ToString(),bdTask.DestPort.ToString(),bdTask.CommID.ToString(),
                 bdTask.TotalPkg.ToString(),bdTask.HasPara?"1":"0", StringHexConverter.ConvertCharToHex(bdTask.ParaBytes,(bdTask.ParaBytes==null)?0:bdTask.ParaBytes.Length),
-                bdTask.StarTime.ToString("s"),bdTask.TotolTime.ToString(),bdTask.LastTime.ToString("s"),bdTask.RecvBytes.ToString(),bdTask.ErrIdxStr,
+                bdTask.StarTime.ToString("s"),bdTask.TotolTime.ToString(),bdTask.LastTime.ToString("s"),bdTask.RecvBytes.ToString(),bdTask.FilePath,bdTask.IsParsed?"1":"0",bdTask.ErrIdxStr,
             };
             using (sqliteHelperSQL.InsertInto(_tableName[5], values))
             {

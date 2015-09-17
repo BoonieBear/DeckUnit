@@ -56,4 +56,29 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
            
         }
     }
+    public class ACMDataBroadCast : UDPBaseComm
+    {
+        private byte[] _bytes;
+
+        public ACMDataBroadCast(UdpClient udpClient, byte[] bytes)
+        {
+            if (!base.Init(udpClient)) return;
+            _bytes = new byte[bytes.Length];
+            Array.Copy(bytes, _bytes, bytes.Length);
+        }
+
+        public override bool Send(IPAddress ip, int port)
+        {
+           
+            return SendTo(ip, port, _bytes);
+           
+        }
+
+        public override bool BroadCast()
+        {
+
+           return BroadCast(_bytes);
+           
+        }
+    }
 }

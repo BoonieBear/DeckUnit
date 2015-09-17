@@ -9,30 +9,19 @@ namespace BoonieBear.DeckUnit.CommLib
         {
             var src = callSrc as SerialPort;
             DataBufferLength = length;
-            if (callmode == CallMode.DataMode)
+            if (callmode == CallMode.DataMode&&src != null)//串口转发
             {
-                
-                if (src != null) //串口转发
+
+                if (length > 0)
                 {
-                    if (length > 0)
-                    {
-                        DataBuffer = new byte[length + 4];
-                        UInt16 uid = 0xEE01; //与网络包格式一致
-                        Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, DataBuffer, 0, 2);
-                        Buffer.BlockCopy(BitConverter.GetBytes(length), 0, DataBuffer, 2, 2);
-                        Buffer.BlockCopy(buf, 0, DataBuffer, 4, length); //包头长度4，包括ID和长度
-                        DataBufferLength = DataBuffer.Length;
-                    }
+                    DataBuffer = new byte[length + 4];
+                    UInt16 uid = 0xEE01; //与网络包格式一致
+                    Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, DataBuffer, 0, 2);
+                    Buffer.BlockCopy(BitConverter.GetBytes(length), 0, DataBuffer, 2, 2);
+                    Buffer.BlockCopy(buf, 0, DataBuffer, 4, length); //包头长度4，包括ID和长度
+                    DataBufferLength = DataBuffer.Length;
                 }
-                else //网络
-                {
-                    if (length > 0)
-                    {
-                        DataBuffer = new byte[length+4];
-                        Buffer.BlockCopy(buf, 0, DataBuffer, 0, length + 4);
-                        DataBufferLength = DataBuffer.Length;
-                    }
-                }
+
             }
             else
             {

@@ -30,4 +30,14 @@ namespace BoonieBear.DeckUnit.BaseType
         public int AccessMode { get; set; }
 
     }
+
+    public class MovConfInfo
+    {
+        public int Mode { get; set; }
+        public int SailPort { get; set; }
+        public int GPSPort { get; set; }
+        public int USBLPort { get; set; }
+        public int BroadCastPort { get; set; }
+
+    }
 }

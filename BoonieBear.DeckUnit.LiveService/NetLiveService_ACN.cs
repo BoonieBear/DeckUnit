@@ -14,7 +14,7 @@ using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.BaseType;
 namespace BoonieBear.DeckUnit.LiveService
 {
-    public class NetLiveService:INetCore
+    public class NetLiveService_ACN:INetCore
     {
         private readonly static object SyncObject = new object();
         private static INetCore _netInstance;
@@ -23,7 +23,12 @@ namespace BoonieBear.DeckUnit.LiveService
 
         private TcpClient _shelltcpClient;
         private TcpClient _datatcpClient;
-        
+
+        //udp网络
+        private UdpClient _udpTraceClient;
+        private UdpClient _udpDataClient;
+        private IUDPService _udpTraceService;
+        private IUDPService _udpDataService;
         private CommConfInfo _commConf;
         private Observer<CustomEventArgs> _DataObserver;
         public string Error { get; set; }
@@ -36,7 +41,7 @@ namespace BoonieBear.DeckUnit.LiveService
             lock (SyncObject)
             {
                 if (conf!=null)
-                    return _netInstance ?? (_netInstance = new NetLiveService(conf, observer));
+                    return _netInstance ?? (_netInstance = new NetLiveService_ACN(conf, observer));
                 else
                 {
                     return null;
@@ -62,13 +67,42 @@ namespace BoonieBear.DeckUnit.LiveService
             return false;
         }
 
-        protected NetLiveService(CommConfInfo conf, Observer<CustomEventArgs> observer)
+        protected NetLiveService_ACN(CommConfInfo conf,Observer<CustomEventArgs> observer)
         {
             _commConf = conf;
             _DataObserver = observer;
         }
 
-    
+        public IUDPService UDPDataService
+        {
+            get
+            {
+                return _udpDataService ?? (_udpDataService = (new UDPDataServiceFactory()).CreateService());
+            }
+        }
+        public IUDPService UDPTraceService
+        {
+            get
+            {
+                return _udpTraceService ?? (_udpTraceService = (new UDPDebugServiceFactory()).CreateService());
+            }
+        }
+        private bool CreateUDPService()
+        {
+            if (!UDPTraceService.Start()) return false;
+            UDPTraceService.Register(NetDataObserver);
+            if (!UDPDataService.Start()) return false;
+            UDPDataService.Register(NetDataObserver);
+            return true;
+        }
+        private bool StopUDPService()
+        {
+            UDPTraceService.Stop();
+            UDPTraceService.UnRegister(NetDataObserver);
+            UDPDataService.Stop();
+            UDPDataService.UnRegister(NetDataObserver);
+            return true;
+        }
 
         public ITCPClientService TCPDataService
         {
@@ -106,6 +140,12 @@ namespace BoonieBear.DeckUnit.LiveService
             if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort1) ||
                 (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
                 throw new Exception("通信网络初始化失败");
+            if (_udpTraceClient == null)
+                _udpTraceClient = new UdpClient(_commConf.TraceUDPPort);
+            if (!UDPTraceService.Init(_udpTraceClient)) throw new Exception("调试广播网络初始化失败");
+            if (_udpDataClient == null)
+                _udpDataClient = new UdpClient(_commConf.DataUDPPort);
+            if (!UDPDataService.Init(_udpDataClient)) throw new Exception("调试数据网络初始化失败");
             IsInitialize = true;
         }
 
@@ -119,6 +159,8 @@ namespace BoonieBear.DeckUnit.LiveService
 
                 TCPDataService.UnRegister(NetDataObserver);
                 TCPDataService.Stop();
+                StopUDPService();
+
 
             }
             IsWorking = false;
@@ -131,6 +173,7 @@ namespace BoonieBear.DeckUnit.LiveService
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
             if (!CreateTCPService(_commConf)) throw new Exception("通信服务无法启动");
+            if (!CreateUDPService()) throw new Exception("启动广播网络失败");
             IsWorking = true;
         }
 
@@ -178,6 +221,12 @@ namespace BoonieBear.DeckUnit.LiveService
             SendBytes = i;
         }
 
-       
+
+
+
+        public Task<bool> BroadCast(byte[] buf)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

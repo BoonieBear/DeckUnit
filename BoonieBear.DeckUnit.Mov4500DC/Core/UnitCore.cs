@@ -2,8 +2,10 @@
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.CommLib.Properties;
+using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.LiveService;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.CommLib;
@@ -31,12 +33,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         private MovTraceService _unitTraceService;
         //基础配置信息
         private MovConf _mov4500Conf;
+        private MovConfInfo _movConfInfo;
         private CommConfInfo _commConf;
-        private string sLastUpdateTime;
         private Observer<CustomEventArgs> _observer; 
         private bool _serviceStarted = false;
         public string Error { get; private set; }
         public MonitorMode WorkMode{get; private set;}
+        public Mutex ACMMutex { get; set; }//全局解析锁
+
+        
         public MovTraceService UnitTraceService
         {
             get { return _unitTraceService ?? (_unitTraceService = new MovTraceService(WorkMode)); }
@@ -55,7 +60,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         protected UnitCore()
         {
             
-            LoadConfiguration();
+            ACMMutex = new Mutex();
 
         }
 
@@ -66,8 +71,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             {
                 _mov4500Conf = MovConf.GetInstance();
                 _commConf = _mov4500Conf.GetCommConfInfo();
-                WorkMode = _mov4500Conf.GetMode();
-
+                _movConfInfo = _mov4500Conf.GetMovConfInfo();
+                WorkMode = (MonitorMode)Enum.Parse(typeof(MonitorMode),_movConfInfo.Mode.ToString());
             }
             catch (Exception ex)
             {
@@ -83,17 +88,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
         }
 
-       
+        
 
         public INetCore INetCore
         {
-            get { return _iNetCore ?? (_iNetCore = NetLiveService.GetInstance(_commConf, _observer)); }
+            get { return _iNetCore ?? (_iNetCore = NetLiveService_ACM.GetInstance(_commConf,_movConfInfo, _observer)); }
         }
 
         public bool Start()
         {
             try
             {
+                if(!LoadConfiguration()) throw new Exception("无法读取基本配置");
                 INetCore.Initialize();
                 INetCore.Start();
                 _serviceStarted = INetCore.IsWorking;
@@ -140,12 +146,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public static UnitCore Instance
         {
             get { return GetInstance(); }
-        }
-
-        public string LastUpdateTime
-        {
-            get { return sLastUpdateTime; }
-            set { sLastUpdateTime = value; }
         }
     }
 }

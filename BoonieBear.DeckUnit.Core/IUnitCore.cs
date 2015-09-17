@@ -29,6 +29,7 @@ namespace BoonieBear.DeckUnit.ICore
 
         Task <bool> SendCMD(byte[] buf);
         Task<bool> SendFile(Stream file);
+        Task<bool> BroadCast(byte[] buf);
         int SendBytes { get;}
         /// <summary>
         /// 数据观察类，主要负责数据的解析和保存

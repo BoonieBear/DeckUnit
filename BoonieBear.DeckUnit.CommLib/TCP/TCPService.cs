@@ -174,7 +174,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
 
                         }
                         while (numberOfBytesRead != packetLength);
-                        var e = new CustomEventArgs(0, null, myReadBuffer, packetLength, true, null, CallMode.DataMode, client);
+                        var e = new CustomEventArgs(0, null, myReadBuffer, packetLength+4, true, null, CallMode.DataMode, client);
                         OnParsed(e);
                     }
                 }
@@ -200,9 +200,5 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
     public class ACMDataService:ACNTCPDataService
     { }
 
-    /// <summary>
-    /// 甲板单元继承通信网的通信方式
-    /// </summary>
-    public class DeckUnitService:ACNTCPDataService
-    { }
+    
 }

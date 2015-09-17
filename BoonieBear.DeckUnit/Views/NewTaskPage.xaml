@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:controls="http://metro.mahapps.com/winfx/xaml/controls"
+      xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
       xmlns:Converter="clr-namespace:BoonieBear.DeckUnit.Converter" x:Class="BoonieBear.DeckUnit.Views.NewTaskPage"
       mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
@@ -42,7 +43,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row ="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                 <TextBlock Text="目标节点:" FontSize="22px" VerticalAlignment="Center"/>
-                <controls:NumericUpDown Width="150" Value="{Binding DestID}" FontSize="22px" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <controls:NumericUpDown Width="150" Value="{Binding DestID}" Minimum ="1" Maximum="63" FontSize="22px" VerticalAlignment="Center" Margin="20,0,0,0"/>
             </StackPanel>
             <StackPanel Grid.Row ="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                 <TextBlock Text="设备端口" FontSize="22px" VerticalAlignment="Center"/>
@@ -62,16 +63,51 @@
                     <ComboBoxItem Content ="4：ADCP继续工作"/>
                 </ComboBox>
             </StackPanel>
-            <UniformGrid Grid.Row="2" Grid.ColumnSpan="2">
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+            <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Text="起始时间:" FontSize="22px" VerticalAlignment="Center"/>
-                    <DatePicker SelectedDate="{Binding SelectedFromDate}" Width="240" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <picker:DatePicker 
+            FullModeHeader="选择日期"
+            IsTouchSelectionEnabled="True" 
+            Value="{Binding SelectedFromDate, Mode=TwoWay}" Width="120"/>
+                    <picker:TimePicker 
+            FullModeHeader="选择时间"
+            IsTouchSelectionEnabled="True"
+            Value="{Binding SelectedFromTime, Mode=TwoWay}" Width="120" Margin="30,0,0,0"/>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Text="结束时间:" FontSize="22px" VerticalAlignment="Center"/>
-                    <DatePicker SelectedDate="{Binding SelectedToDate}" Width="240" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    <picker:DatePicker 
+            FullModeHeader="选择日期"
+            IsTouchSelectionEnabled="True" 
+            Value="{Binding SelectedToDate, Mode=TwoWay}" Width="120"/>
+                    <picker:TimePicker 
+            FullModeHeader="选择时间"
+            IsTouchSelectionEnabled="True"
+            Value="{Binding SelectedToTime, Mode=TwoWay}" Width="120" Margin="30,0,0,0"/>
                 </StackPanel>
-            </UniformGrid>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition3, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <TextBlock Text="数据时间:" FontSize="22px" VerticalAlignment="Center"/>
+                    <picker:DatePicker 
+            FullModeHeader="选择日期"
+            IsTouchSelectionEnabled="True" 
+            Value="{Binding SelectedFetchDate, Mode=TwoWay}" Width="120"/>
+                    <picker:TimePicker 
+            FullModeHeader="选择时间"
+            IsTouchSelectionEnabled="True"
+            Value="{Binding SelectedFetchTime, Mode=TwoWay}" Width="120" Margin="30,0,0,0"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Visibility="{Binding ShowCondition3, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10,0,0,0" >
+                    <TextBlock Text="抽取间隔:" FontSize="22px" VerticalAlignment="Center"/>
+                    <controls:NumericUpDown x:Name="IntervalDown"  FontSize="24" Value="{Binding SamplingInterval}"  Minimum="1" Maximum="99"  Width ="150"   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="10,0,0,0">
+                    <TextBlock Text="抽取数量:" FontSize="22px" VerticalAlignment="Center"/>
+                    <controls:NumericUpDown x:Name="SampleLengthDown"  FontSize="24" Value="{Binding SamplingNum}"  Minimum="1" Maximum="99"  Width ="150"   HorizontalAlignment="Center" VerticalAlignment="Center" />
+                </StackPanel>
+            </StackPanel>
+            </StackPanel>
         </Grid>
         <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="创建" Command="{Binding CreateTask}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
     </Grid>

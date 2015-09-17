@@ -38,7 +38,7 @@ namespace BoonieBear.DeckUnit.Views
 
             ProgressDialogController remote = null;
             UnitCore.Instance.Start();
-            UnitCore.Instance.EventAggregator.PublishMessage(new GoHomePageNavigationEvent());
+            UnitCore.Instance.EventAggregator.PublishMessage(new GoNewTaskViewEvent());
             /*
             var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
             Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>

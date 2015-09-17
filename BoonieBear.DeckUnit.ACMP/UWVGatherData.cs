@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace BoonieBear.DeckUnit.ACMP
 {
@@ -22,7 +23,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private Switchdata _switchdata;
         private Adcpdata _adcpdata;
         private string _msg;
-        private List<string> _msghistory =new List<string>();
+        private byte[] img = new byte[MovGlobalVariables.ImgSize];
         private UWVGatherData()
         {
             _bpdata = new Bpdata();
@@ -35,98 +36,83 @@ namespace BoonieBear.DeckUnit.ACMP
             _switchdata = new Switchdata();
             _adcpdata = new Adcpdata();
         }
-
-        public void Add(object obj, Mov4500Type mType)
+        /// <summary>
+        /// 将UDP接收到数据和文字，图像数据加入各个数据结构里
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <param name="mDataType"></param>
+        public void Add(byte[] bytes, Mov4500DataType mDataType)
         {
-            switch (mType)
+            switch (mDataType)
             {
-                case Mov4500Type.SUBPOST:
-                    var subposition = obj as Subposition;
-                    if (subposition != null)
-                        _subposition = subposition;
+                case Mov4500DataType.SUBPOST:
+                    _subposition.Parse(bytes);
                     break;
-                case Mov4500Type.BP:
-                    var bpdata = obj as Bpdata;
-                    if (bpdata != null)
-                        _bpdata = bpdata;
+                case Mov4500DataType.BP:
+                    _bpdata.Parse(bytes);
                     break;
-                case Mov4500Type.BSSS:
-                    var bsssdata = obj as Bsssdata;
-                    if (bsssdata != null)
-                        _bsssdata = bsssdata;
+                case Mov4500DataType.BSSS:
+                    _bsssdata.Parse(bytes);
                     break;
-                case Mov4500Type.ADCP:
-                    var adcpdata = obj as Adcpdata;
-                    if (adcpdata != null)
-                        _adcpdata = adcpdata;
+                case Mov4500DataType.ADCP:
+                    _adcpdata.Parse(bytes);
                     break;
-                case Mov4500Type.CTD:
-                    var ctddata = obj as Ctddata;
-                    if (ctddata != null)
-                        _ctddata = ctddata;
+                case Mov4500DataType.CTD:
+                    _ctddata.Parse(bytes);
                     break;
-                case Mov4500Type.LIFESUPPLY:
-                    var lifesupply = obj as Lifesupply;
-                    if (lifesupply != null)
-                        _lifesupply = lifesupply;
+                case Mov4500DataType.LIFESUPPLY:
+                    _lifesupply.Parse(bytes);
                     break;
-                case Mov4500Type.ENERGY:
-                    var energysys = obj as Energysys;
-                    if (energysys != null)
-                        _energysys = energysys;
+                case Mov4500DataType.ENERGY:
+                    _energysys.Parse(bytes);
                     break;
-                case Mov4500Type.SWITCH:
-                    var switchdata = obj as Switchdata;
-                    if (switchdata != null)
-                        _switchdata = switchdata;
+                case Mov4500DataType.ALERT:
+                    _alertdata.Parse(bytes);
                     break;
-                case Mov4500Type.ALERT:
-                    var alertdata = obj as Alertdata;
-                    if (alertdata != null)
-                        _alertdata = alertdata;
-                    break;
-                case Mov4500Type.WORD:
-                    var msg = obj as string;
+                case Mov4500DataType.WORD://发一次要清空一次
+                    var msg = Encoding.Default.GetString(bytes);
                     if (msg != null)
                     {
-                        _msg = msg;
-                        Msghistory.Add(msg);
+                        Msg = msg;
                     }
                     break;
-                case Mov4500Type.IMAGE:
-
+                case Mov4500DataType.IMAGE://发一次要清空一次
+                    Buffer.BlockCopy(bytes, 0, img, 0, bytes.Length);//bytes.Length要小于img尺寸
                     break;
                 default:
                     throw new Exception("undefined data type!");
             }
         }
-        internal byte[] Package(DataType mType)
+        internal byte[] Package(ModuleType mType)
         {
             Array.Clear(_mfskBytes,0,_mfskBytes.Length);
             Array.Clear(_mpskBytes,0,_mpskBytes.Length);
             switch (mType)
             {
-                case DataType.MFSK:
+                case ModuleType.MFSK:
+                    return _mfskBytes;
                     break;
-                case DataType.MPSK:
+                case ModuleType.MPSK:
+                    return _mpskBytes;
                     break;
                 default:
-                    throw new Exception("undefined modulation type!");
+                    throw new Exception("未定义的调制类型！");
             }
-            return _mfskBytes;
+            return null;
         }
         public byte[] PackageMFSKBytes
         {
-            get { return Package(DataType.MFSK); }
+            get { return Package(ModuleType.MFSK); }
         }
         public byte[] PackageMPSKBytes
         {
-            get { return Package(DataType.MPSK); }
+            get { return Package(ModuleType.MPSK); }
         }
 
-        public List<string> Msghistory
+        public string Msg
         {
-            get { return _msghistory; }          
+            get { return _msg; }
+            set { _msg = value; }
         }
 
         public static UWVGatherData GetInstance()

@@ -2,19 +2,37 @@
 
 namespace BoonieBear.DeckUnit.ACMP
 {
+    /// <summary>
+    /// 用来管理母船各种数据的收集，打包，解析
+    /// </summary>
     public class ShipGatherData
     {
         private readonly static object SyncObject = new object();
         private static ShipGatherData _shipGatherData;
         private int SubPostNum = 5;
-        private SubLatest5Post _subLatest5Post;
+        private SubLatestPost _subLatestPost;
+        private Sysposition _sysposition;//最后一个位置信息,用来显示
+        private string _msg;
         private byte[] _packageBytes = new byte[MovGlobalVariables.ShipMFSKSize];
 
         private ShipGatherData()
         {
-            _subLatest5Post = new SubLatest5Post();
+            _subLatestPost = new SubLatestPost(SubPostNum);
+            _sysposition=new Sysposition();
         }
-        
+
+        public string Msg
+        {
+            get { return _msg; }
+            set { _msg = value; }
+        }
+
+        public Sysposition Sysposition
+        {
+            get { return _sysposition; }
+            set { _sysposition = value; }
+        }
+
         public static ShipGatherData GetInstance()
         {
             lock (SyncObject)
@@ -22,14 +40,11 @@ namespace BoonieBear.DeckUnit.ACMP
                 return _shipGatherData ?? (_shipGatherData = new ShipGatherData());
             }
         }
-        public void Add(object obj, Mov4500Type mType)
+        public void Add(object obj, Mov4500DataType mDataType)
         {
-            switch (mType)
+            switch (mDataType)
             {
-                case Mov4500Type.ALLPOST:
-                    break;
-                case Mov4500Type.WORD:
-                    break;
+                
                 default:
                     throw new Exception("undefined data type!");
             }

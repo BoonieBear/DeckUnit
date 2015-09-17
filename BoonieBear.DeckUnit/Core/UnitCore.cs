@@ -54,11 +54,7 @@ namespace BoonieBear.DeckUnit.Core
         private bool _serviceStarted = false;
         //错误信息
         public string Error { get; private set; }
-        //udp网络
-        private UdpClient _udpTraceClient;
-        private UdpClient _udpDataClient;
-        private IUDPService _udpTraceService;
-        private IUDPService _udpDataService;
+        
         public Mutex AcnMutex { get; set; }//全局acn解析锁
         public UnitTraceService UnitTraceService
         {
@@ -110,36 +106,7 @@ namespace BoonieBear.DeckUnit.Core
             get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
         }
 
-        public IUDPService UDPDataService
-        {
-            get
-            {
-                return _udpDataService ?? (_udpDataService = (new UDPDataServiceFactory()).CreateService());
-            }
-        }
-        public IUDPService UDPTraceService
-        {
-            get
-            {
-                return _udpTraceService ?? (_udpTraceService = (new UDPDebugServiceFactory()).CreateService());
-            }
-        }
-        private bool CreateUDPService()
-        {
-            if (!UDPTraceService.Start()) return false;
-            UDPTraceService.Register(Observer);
-            if (!UDPDataService.Start()) return false;
-            UDPDataService.Register(Observer);
-            return true;
-        }
-        private bool StopUDPService()
-        {
-            UDPTraceService.Stop();
-            UDPTraceService.UnRegister(Observer);
-            UDPDataService.Stop();
-            UDPDataService.UnRegister(Observer);
-            return true;
-        }
+        
         public bool Start()
         {
             try
@@ -150,13 +117,7 @@ namespace BoonieBear.DeckUnit.Core
                 ACNProtocol.Init(_modemConf.ID);
                 if (UnitTraceService.CreateService(DeckUnitConf.Connectstring) == false || DeckDataProtocol.Init(_modemConf.ID, "default.dudb") == false)
                      throw new Exception("基础服务初始化失败");
-                if (_udpTraceClient == null)
-                    _udpTraceClient = new UdpClient(_commConf.TraceUDPPort);
-                if (!UDPTraceService.Init(_udpTraceClient)) throw new Exception("调试广播网络初始化失败");
-                if (_udpDataClient == null)
-                    _udpDataClient = new UdpClient(_commConf.DataUDPPort);
-                if (!UDPDataService.Init(_udpDataClient)) throw new Exception("调试数据网络初始化失败");
-                if (!CreateUDPService()) throw new Exception("启动广播网络失败");
+                
                 if (CommEngine != null)
                 {
                     CommEngine.Initialize();
@@ -225,7 +186,6 @@ namespace BoonieBear.DeckUnit.Core
             {
                 CommEngine.Stop();
             }
-            StopUDPService();
             _serviceStarted = false;
         }
         public bool ServiceOK
@@ -245,7 +205,7 @@ namespace BoonieBear.DeckUnit.Core
         }
         public INetCore NetEngine
         {
-            get { return _iNetCore ?? (_iNetCore = NetLiveService.GetInstance(_commConf, Observer)); }
+            get { return _iNetCore ?? (_iNetCore = NetLiveService_ACN.GetInstance(_commConf, Observer)); }
         }
 
         public IFileCore FileEngine

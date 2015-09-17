@@ -41,7 +41,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ACM4500Protocol.cs" />
-    <Compile Include="Mov4500Type.cs" />
+    <Compile Include="Mov4500DataType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShipGatherData.cs" />
     <Compile Include="UWVGatherData.cs" />

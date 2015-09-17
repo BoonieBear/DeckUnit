@@ -157,4 +157,128 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
             }
         }
     }
+    /// <summary>
+    /// 4500接收外部广播数据服务1：避碰，ADCP，航控，
+    /// </summary>
+    public class ACMUWAService : UDPBaseService
+    {
+        protected override void ListensenUDP()
+        {
+            var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            var flag = true;
+            byte[] buffer = null;
+            string error = string.Empty;
+            var mode = CallMode.Sail;
+            while (flag)
+            {
+                try
+                {
+                    buffer = _udpClient.Receive(ref remoteIpEndPoint);
+
+                }
+                catch (SocketException exception)
+                {
+                    if (exception.ErrorCode != 0x2714) //程序关闭
+                    {
+                        error = exception.Message;
+                        mode = CallMode.ErrMode;
+                        flag = false;
+                    }
+                    else
+                    {
+                        flag = false;
+                        return;
+                    }
+
+                }
+                finally
+                {
+                    var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode, _udpClient);
+                    OnParsed(e);
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// 4500接收外部广播数据服务2：USBL
+    /// </summary>
+    public class ACMUSBLService : UDPBaseService
+    {
+        protected override void ListensenUDP()
+        {
+            var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            var flag = true;
+            byte[] buffer = null;
+            string error = string.Empty;
+            var mode = CallMode.USBL;
+            while (flag)
+            {
+                try
+                {
+                    buffer = _udpClient.Receive(ref remoteIpEndPoint);
+                }
+                catch (SocketException exception)
+                {
+                    if (exception.ErrorCode != 0x2714) //程序关闭
+                    {
+                        error = exception.Message;
+                        mode = CallMode.ErrMode;
+                        flag = false;
+                    }
+                    else
+                    {
+                        flag = false;
+                        return;
+                    }
+
+                }
+                finally
+                {
+                    var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode, _udpClient);
+                    OnParsed(e);
+                }
+            }
+        }
+    }
+    /// <summary>
+    /// 4500接收外部广播数据服务2：GPS
+    /// </summary>
+    public class ACMGPSService : UDPBaseService
+    {
+        protected override void ListensenUDP()
+        {
+            var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
+            var flag = true;
+            byte[] buffer = null;
+            string error = string.Empty;
+            var mode = CallMode.GPS;
+            while (flag)
+            {
+                try
+                {
+                    buffer = _udpClient.Receive(ref remoteIpEndPoint);
+                }
+                catch (SocketException exception)
+                {
+                    if (exception.ErrorCode != 0x2714) //程序关闭
+                    {
+                        error = exception.Message;
+                        mode = CallMode.ErrMode;
+                        flag = false;
+                    }
+                    else
+                    {
+                        flag = false;
+                        return;
+                    }
+
+                }
+                finally
+                {
+                    var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode, _udpClient);
+                    OnParsed(e);
+                }
+            }
+        }
+    }
 }

@@ -83,6 +83,75 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
             return cominfo;
         }
 
+        /// <summary>
+        /// 获取航控广播端口
+        /// </summary>
+        /// <returns></returns>
+        public int GetSailPort()
+        {
+            string[] str = { "Mov", "UDP", "Sail" };
+            int port = 3000;
+            int.TryParse(GetValue(str),out port);
+            if (port == 0)
+                port = 3000;
+            return port;
+        }
+        /// <summary>
+        /// 获取GPS广播端口
+        /// </summary>
+        /// <returns></returns>
+        public int GetGPSPort()
+        {
+            string[] str = { "Mov", "UDP", "GPS" };
+            int port = 5000;
+            int.TryParse(GetValue(str),out port);
+            if (port == 0)
+                port = 5000;
+            return port;
+        }
+        // <summary>
+        /// 获取USBL广播端口
+        /// </summary>
+        /// <returns></returns>
+        public int GetUSBLPort()
+        {
+            string[] str = { "Mov", "UDP", "USBL" };
+            int port = 2000;
+            int.TryParse(GetValue(str),out port);
+            if (port == 0)
+                port = 2000;
+            return port;
+        }
+        // <summary>
+        /// 获取mov广播端口
+        /// </summary>
+        /// <returns></returns>
+        public int GetMovPort()
+        {
+            string[] str = { "Mov", "UDP", "Mov" };
+            int port = 4000;
+            int.TryParse(GetValue(str),out port);
+            if (port == 0)
+                port = 4000;
+            return port;
+        }
+        public MovConfInfo GetMovConfInfo()
+        {
+            var Movinfo = new MovConfInfo();
+            try
+            {
+                Movinfo.GPSPort = GetGPSPort();
+                Movinfo.Mode = (int)GetMode();
+                Movinfo.USBLPort = GetUSBLPort();
+                Movinfo.SailPort = GetSailPort();
+                Movinfo.BroadCastPort = GetMovPort();
+            }
+            catch (Exception)
+            {
 
+                return null;
+            }
+            return Movinfo;
+        }
     }
 }

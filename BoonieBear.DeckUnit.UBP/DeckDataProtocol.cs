@@ -207,19 +207,21 @@ namespace BoonieBear.DeckUnit.UBP
                 
                 if(paraBytes!=null)
                 {
-                        task.HasPara = true;
-                        paraBytes.CopyTo(task.ParaBytes, 0);
+                    task.HasPara = true;
+                    task.ParaBytes = new byte[paraBytes.Length];
+                    paraBytes.CopyTo(task.ParaBytes, 0);
                 }
                 else
                 {
                     task.HasPara = false;
-                    task.ParaBytes = new byte[0];
+                    task.ParaBytes = null;
                 }
                 task.StarTime = DateTime.UtcNow;
                 task.TotolTime = 0;
                 task.LastTime = DateTime.UtcNow;
                 task.RecvBytes = 0;
-                task.FilePath = "";
+                TmpDataPath = Directory.CreateDirectory(TmpDataPath + id).FullName;
+                task.FilePath = TmpDataPath;
                 task.IsParsed = false;
                 task.ErrIdxStr = "";
                 var ret = _sqlite.AddTask(task);
@@ -227,7 +229,7 @@ namespace BoonieBear.DeckUnit.UBP
                     return -2;
                 WorkingBdTask = task;
                 ExpectPkgList = new[] { 0, 1, 2, 3, 4, 5, 6 };
-                TmpDataPath = Directory.CreateDirectory(TmpDataPath + id).FullName;
+                
                 Debug.WriteLine(TmpDataPath);
             }
             

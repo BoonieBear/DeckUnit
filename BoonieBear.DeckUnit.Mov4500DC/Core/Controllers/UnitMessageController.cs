@@ -64,6 +64,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
         #endregion
 
         #region IHandle
+        //负责写入记录文件
         public void Handle(LogEvent message)
         {
             switch (message.Type)

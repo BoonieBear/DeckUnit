@@ -41,4 +41,25 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
             return new ACNDataUDPService();
         }
     }
+    public class ACMUWAServiceFactory : IUDPServiceFactory
+    {
+        public IUDPService CreateService()
+        {
+            return new ACMUWAService();
+        }
+    }
+    public class ACMUSBLServiceFactory : IUDPServiceFactory
+    {
+        public IUDPService CreateService()
+        {
+            return new ACMUSBLService();
+        }
+    }
+    public class ACMGPSServiceFactory : IUDPServiceFactory
+    {
+        public IUDPService CreateService()
+        {
+            return new ACMGPSService();
+        }
+    }
 }

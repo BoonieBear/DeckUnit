@@ -12,7 +12,10 @@
     <DataPort>10011</DataPort>
     <Broadcast>10040</Broadcast>
   </Net>
-  <NetCardConfig>
-    <SelectCard>Intel(R) Wireless-N 7260</SelectCard>
-  </NetCardConfig>
+  <UDP>
+    <Sail>3000</Sail>
+    <Mov>4000</Mov>
+    <USBL>2000</USBL>
+    <GPS>5000</GPS>
+  </UDP>
 </Mov>

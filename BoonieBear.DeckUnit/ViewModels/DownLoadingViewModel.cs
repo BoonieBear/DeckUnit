@@ -339,14 +339,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             RecvBytes = _currentBdTask.RecvBytes;
             RetryRate = (double)_currentBdTask.ErrIdxStr.Split(';').Count() / 7;
         }
-        /// <summary>
-        /// 收到数据后观察者通知currenttask更新
-        /// </summary>
-        /// <param name="message"></param>
-        public async void Handle(UpdateCurrentTask message)
-        {
-            
-        }
+        
         
     }
 }

@@ -63,7 +63,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CommService.cs" />
-    <Compile Include="NetLiveService.cs" />
+    <Compile Include="NetLiveService_ACM.cs" />
+    <Compile Include="NetLiveService_ACN.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

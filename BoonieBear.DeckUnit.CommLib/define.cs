@@ -21,6 +21,10 @@
         CommData=3,
         LoaderMode =4,
         ErrMode = 5,
+        /// 4500中出现的调用模式，都是从UDP接收而来
+        GPS=6,
+        USBL=7,
+        Sail=8,//潜器中udp接收到的数据
     }
 
     public enum ACNCommandMode

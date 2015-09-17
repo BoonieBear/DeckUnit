@@ -12,7 +12,7 @@ namespace BoonieBear.DeckUnit.Converter
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             bool boolValue = (bool)value;
-            if (boolValue == null || boolValue == false)
+            if (boolValue == false)
             {
                 string isCollapsed = parameter as string;
                 if (isCollapsed != null && isCollapsed == "Collapsed")

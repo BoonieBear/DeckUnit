@@ -70,6 +70,7 @@
     <Compile Include="Serial\SerialCommand.cs" />
     <Compile Include="Serial\SerialService.cs" />
     <Compile Include="TCP\InterfaceTCP.cs" />
+    <Compile Include="TCP\TCPCommand.ACM.cs" />
     <Compile Include="TCP\TCPCommand.ACN.cs" />
     <Compile Include="TCP\TCPFactory.cs" />
     <Compile Include="TCP\TCPService.cs" />
