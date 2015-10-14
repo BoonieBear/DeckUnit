@@ -34,7 +34,7 @@
                        Margin="20,0,10,0"/>
             <!--Version-->
             <StackPanel Orientation="Horizontal" Grid.Row="1">
-                <!--<Rectangle Fill="{DynamicResource StartCharMapBrush}" Width="30" Height="40" HorizontalAlignment="Left"/>-->
+                <Rectangle Fill="{DynamicResource StartCharMapBrush}" Width="30" Height="40" HorizontalAlignment="Left"/>
                 <TextBlock Text="{Binding Version, Mode=OneWay}" FontSize="30" Margin="20,0,0,0"/>
             </StackPanel>
             <!--Copyright, company and rights reserved-->

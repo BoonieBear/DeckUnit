@@ -47,7 +47,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
                 if(AcnSerialsevice.Start())
                 {
                     
-                    Assert.IsTrue(SendcommandAsync(AcnSerialsevice));
+                    Assert.IsTrue(Sendcommandasync(AcnSerialsevice));
                 }
                 else
                 {
@@ -62,7 +62,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
         }
 
 
-        bool SendcommandAsync(ISerialService AcnSerialsevice)
+        bool Sendcommandasync(ISerialService AcnSerialsevice)
         {
             var auto = new AutoResetEvent(false); 
             var commfactory = new ACNSerialCommHexCommandFactory(AcnSerialsevice.ReturnSerialPort());
@@ -78,7 +78,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
             {
                 if (t.Result)
                 {
-                    RecvAsync(serialcommand, auto);
+                    Recvasync(serialcommand, auto);
                 }
                 else
                 {
@@ -89,7 +89,7 @@ namespace BoonieBear.DeckUnit.CommLibTests
             });
             return auto.WaitOne(3000);
         }
-        static void RecvAsync(SerialBaseComm serialcommand,AutoResetEvent auto)
+        static void Recvasync(SerialBaseComm serialcommand,AutoResetEvent auto)
         {
             var task = Command.RecvSerialAsync(serialcommand);
             task.ContinueWith(t =>

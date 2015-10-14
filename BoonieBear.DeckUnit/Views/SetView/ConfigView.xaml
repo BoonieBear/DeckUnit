@@ -58,7 +58,7 @@
                                     设置AD门限
                             </TextBlock>
                         </Button>
-                        <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowWakeUpView}">
+                        <Button TextBlock.FontSize="20" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowWakeUpView}" FontFamily="Microsoft YaHei">
                             <TextBlock>
                                     设置唤醒时间
                             </TextBlock>

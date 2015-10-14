@@ -17,6 +17,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition Height="60"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
             <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
@@ -37,7 +38,7 @@
             <TextBlock Text=">>" FontSize="34" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <DatePicker SelectedDate="{Binding SelectedToDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
         </UniformGrid>
-                <ScrollViewer>
+        <ScrollViewer Grid.Row="3">
                     <autolist:FilterableListView x:Name="DataListView"  ItemContainerStyle="{DynamicResource ListViewItemStyle}" ItemsSource="{Binding ListCollMt}"
                                FilterButtonActiveStyle="{StaticResource filterButtonActive}"           
                                 FilterButtonInactiveStyle="{StaticResource filterButtonInactive}" FontSize="18" SelectedItem="{Binding SelectedBdTask}">

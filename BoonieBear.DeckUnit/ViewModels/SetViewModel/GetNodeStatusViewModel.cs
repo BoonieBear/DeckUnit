@@ -90,7 +90,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                 UnitCore.Instance.CommEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
-                await TaskEx.Delay(1000);
+                //await TaskEx.Delay(1000);
                 //等待数据更新
             }
             IsProcessing = false;
