@@ -24,12 +24,12 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+            <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
             </Button>
-            <TextBlock  Text="新任务" VerticalAlignment="Center" FontFamily="Microsoft YaHei"  FontSize="34px"/>
+            <TextBlock  Text="新任务" VerticalAlignment="Center" FontFamily="SimSun"  FontSize="34px"/>
         </StackPanel>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -109,6 +109,6 @@
             </StackPanel>
             </StackPanel>
         </Grid>
-        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="创建" Command="{Binding CreateTask}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="创建" Command="{Binding CreateTask}" FontFamily="SimSun" FontSize="18"/>
     </Grid>
 </Page>

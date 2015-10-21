@@ -24,7 +24,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+            <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -38,7 +38,7 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel Grid.Row="0"  Orientation="Horizontal">
-                <TextBlock Foreground ="DarkBlue" Text="请选择节点："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="20,0,0,0" />
+                <TextBlock Foreground ="Black" Text="请选择节点："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="20,0,0,0" />
                 <picker:ListPicker ItemsSource="{Binding ID}" Margin="{StaticResource WinMargin}"
                            DisplayMemberPath="Text" Width="120" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedItem="{Binding NodeID, Mode=TwoWay}" Height="45" 
                 FullModeHeader="选择要接受命令的节点号">
@@ -50,19 +50,19 @@
                 </picker:ListPicker>
             </StackPanel>
             <StackPanel Grid.Row="1"  Orientation="Horizontal" >
-                <TextBlock Foreground ="DarkBlue" Text="串口参数："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36" Margin="20,0,0,0" />
+                <TextBlock Foreground ="Black" Text="串口参数："  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32" Margin="20,0,0,0" />
                 <ComboBox Width ="120"  Height="45" FontSize="16" SelectedIndex="{Binding CommSelect}">
                     <ComboBoxItem Content ="com0" />
                     <ComboBoxItem Content ="com1"/>
                     <ComboBoxItem Content ="com2"/>
                     <ComboBoxItem Content ="com3"/>
                 </ComboBox>
-                <TextBlock Foreground ="DarkBlue" Text="Hex发送：" Margin="20,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="36"/>
+                <TextBlock Foreground ="Black" Text="Hex发送：" Margin="20,0,0,0"  HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="32"/>
                 <metroControl:ToggleSwitchButton Width ="120"  Height="45" ThumbIndicatorWidth="60" IsChecked="{Binding bHex}">
                 </metroControl:ToggleSwitchButton>
             </StackPanel>
             <StackPanel Grid.Row="2" Orientation="Horizontal" >
-                <TextBox IsEnabled ="{Binding bHex}" Text="{Binding Para}" x:Name ="ParaTextBox" FontFamily="Microsoft YaHei" FontSize="20" Margin="20,10" Width="600"
+                <TextBox IsEnabled ="{Binding bHex}" Text="{Binding Para}" x:Name ="ParaTextBox" FontFamily="SimSun" FontSize="20" Margin="20,10" Width="600"
                          touchKeyBoard:TabKeyBoard.HorizontalOffset="20"
 									touchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									touchKeyBoard:TabKeyBoard.Width="480"
@@ -72,6 +72,6 @@
         </Grid>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom"/>
-        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="发送" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="18"/>
     </Grid>
 </Page>

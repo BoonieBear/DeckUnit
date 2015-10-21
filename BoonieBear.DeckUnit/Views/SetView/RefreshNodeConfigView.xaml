@@ -24,7 +24,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+            <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -47,23 +47,23 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="浮标号" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
+                    <TextBlock Text="浮标号" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
                     <metroControl:NumericUpDown x:Name="BuoyUpDown"  FontSize="24" Value="{Binding BuoyID}"  Minimum="0"  Width ="150"   Margin ="70,0" Height="45" />
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Text="节点号" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
+                    <TextBlock Text="节点号" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
                     <metroControl:NumericUpDown x:Name="IDUpDown"  FontSize="24" Value="{Binding ID}"  Minimum="0"  Width ="150"   Margin ="65,0" Height="45" />
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="节点类型" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <ComboBox VerticalAlignment="Center" FontSize="24" Width ="150"   Margin ="45,0" SelectedIndex="{Binding NodeType}" Height="45">
+                    <TextBlock Text="节点类型"  Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <ComboBox FontFamily="SimSun" VerticalAlignment="Center" FontSize="24" Width ="150"   Margin ="45,0" SelectedIndex="{Binding NodeType}" Height="45">
                         <ComboBoxItem Content ="静态节点"/>
                         <ComboBoxItem x:Name="DynamicNode" Content ="动态节点"/>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Text="接入模式" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <ComboBox Width ="150"   Margin ="40,0" FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" Height="45"
+                    <TextBlock Text="接入模式" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <ComboBox FontFamily="SimSun" Width ="150"   Margin ="40,0" FontSize="24" VerticalAlignment="Center"  HorizontalAlignment="Center" Height="45"
                         SelectedIndex="{Binding AccessMode}" IsEnabled="{Binding IsSelected, ElementName=DynamicNode}">
                         <ComboBoxItem Content="0"/>
                         <ComboBoxItem Content="1"/>
@@ -80,8 +80,8 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="经度" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <TextBox Text="{Binding Long}" x:Name ="LangTextBox" FontFamily="Microsoft YaHei" FontSize="20" Margin="40,10" Width="200"
+                    <TextBlock Text="经度" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <TextBox Text="{Binding Long}" x:Name ="LangTextBox" FontFamily="SimSun" FontSize="20" Margin="40,10" Width="200"
                          touchKeyBoard:TabKeyBoard.HorizontalOffset="10"
 						    touchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									touchKeyBoard:TabKeyBoard.Width="480"
@@ -90,8 +90,8 @@
                                     touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=LangTextBox}" Height="45"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Text="纬度" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <TextBox Text="{Binding Lat}" x:Name ="LatTextBox" FontFamily="Microsoft YaHei" FontSize="20" Margin="40,10" Width="200"
+                    <TextBlock Text="纬度" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <TextBox Text="{Binding Lat}" x:Name ="LatTextBox" FontFamily="SimSun" FontSize="20" Margin="40,10" Width="200"
                          touchKeyBoard:TabKeyBoard.HorizontalOffset="-50"
 						    touchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									touchKeyBoard:TabKeyBoard.Width="480"
@@ -100,14 +100,14 @@
                                     touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=LatTextBox}" Height="45"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="串口2设备" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <ComboBox Width ="150"   Margin ="30,0" FontSize="24" ItemsSource="{Binding DeviceInfo}"
+                    <TextBlock Text="串口2设备" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <ComboBox FontFamily="SimSun" Width ="150"   Margin ="30,0" FontSize="24" ItemsSource="{Binding DeviceInfo}"
                               VerticalAlignment="Center"
                               SelectedIndex="{Binding Comm2Device}" HorizontalAlignment="Center" Height="45"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Text="串口3设备" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <ComboBox Width ="150"   Margin ="30,0" FontSize="24" ItemsSource="{Binding DeviceInfo, Mode=OneWay}"
+                    <TextBlock Text="串口3设备" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <ComboBox FontFamily="SimSun" Width ="150"   Margin ="30,0" FontSize="24" ItemsSource="{Binding DeviceInfo, Mode=OneWay}"
                               VerticalAlignment="Center"
                               SelectedIndex="{Binding Comm3Device}" HorizontalAlignment="Center" Height="45"/>
                 </StackPanel>
@@ -122,25 +122,25 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="发射机类型" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
+                    <TextBlock Text="发射机类型" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
                     <ComboBox VerticalAlignment="Center" FontSize="18" Width ="150"   Margin ="20,0" ItemsSource="{Binding EmitType, Mode=OneWay}"
-                              SelectedIndex="{Binding EmitIndex}" HorizontalAlignment="Center" Height="45"/>
+                              SelectedIndex="{Binding EmitIndex}" HorizontalAlignment="Center" Height="45" FontFamily="SimSun"/>
                 </StackPanel>
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
-                    <TextBlock Text="网络开关" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
-                    <ComboBox VerticalAlignment="Center" FontSize="24" Width ="150"   Margin ="45,0" SelectedIndex="{Binding NetSwitch}" Height="45">
+                    <TextBlock Text="网络开关" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <ComboBox FontFamily="SimSun" VerticalAlignment="Center" FontSize="24" Width ="150"   Margin ="45,0" SelectedIndex="{Binding NetSwitch}" Height="45">
                         <ComboBoxItem Content ="关"/>
                         <ComboBoxItem Content ="开"/>
                     </ComboBox>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="换能器个数" VerticalAlignment="Center" FontSize="24" Foreground="DarkBlue"/>
+                    <TextBlock Text="换能器个数" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
                     <metroControl:NumericUpDown x:Name="EmitNum"  FontSize="24" Value="{Binding Emit}" Maximum="4" Minimum="1" Foreground="{DynamicResource AccentColorBrush}" Width ="150"   Margin ="20,0" Height="45" />
                 </StackPanel>
             </Grid>
         </Grid>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom"/>
-        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="设置" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="设置" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="18"/>
     </Grid>
 </Page>

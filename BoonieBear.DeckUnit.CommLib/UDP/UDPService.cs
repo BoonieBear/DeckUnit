@@ -82,7 +82,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 {
                     var receiveBytes = _udpClient.Receive(ref remoteIpEndPoint);
 
-                    returnData = Encoding.ASCII.GetString(receiveBytes);
+                    returnData = Encoding.Default.GetString(receiveBytes);
                 }
                 catch (SocketException exception)
                 {

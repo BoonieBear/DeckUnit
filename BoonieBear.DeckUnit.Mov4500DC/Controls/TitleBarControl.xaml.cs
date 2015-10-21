@@ -13,6 +13,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Controls;
 using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
 namespace BoonieBear.DeckUnit.Mov4500UI.Controls
@@ -97,10 +98,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
         {
             VM.GoCommandWin();
         }
-        private void GoHome(object sender, RoutedEventArgs e)
-        {
-            VM.GoHome();
-        }
+       
         private void Minimize(object sender, RoutedEventArgs e)
         {
             if (MainWindow != null)
@@ -109,9 +107,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             }
         }
 
-        private void ExitProgram(object sender, RoutedEventArgs e)
+        private async void ExitProgram(object sender, RoutedEventArgs e)
         {
-            VM.ExitProgram();
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "退出";
+            md.NegativeButtonText = "取消";
+            md.ColorScheme = MetroDialogColorScheme.Accented;
+            var result = await VM.DialogCoordinator.ShowMessageAsync(VM, "退出程序",
+                "真的要退出潜器声学程序吗？", MessageDialogStyle.AffirmativeAndNegative, md);
+            if (result == MessageDialogResult.Affirmative)
+                VM.ExitProgram();
         }
 
         public Visibility BackButtonVisibility

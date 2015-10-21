@@ -30,6 +30,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             GoPingViewCMD = RegisterCommand(ExecuteGoPingViewCMD, CanExecuteGoPingViewCMD, true);
             GoDebugViewCMD = RegisterCommand(ExecuteGoDebugViewCMD, CanExecuteGoDebugViewCMD, true);
             GoGetInfoViewCMD = RegisterCommand(ExecuteGoGetInfoViewCMD, CanExecuteGoGetInfoViewCMD, true);
+            GoADViewCMD = RegisterCommand(ExecuteGoADViewCMD, CanExecuteGoADViewCMD, true);
             AddPropertyChangedNotification(() => NowTime);
             var t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
         }
@@ -305,6 +306,25 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
             EventAggregator.PublishMessage(new GoGetNodeStatusViewEvent());
+        }
+
+        public ICommand GoADViewCMD
+        {
+            get { return GetPropertyValue(() => GoADViewCMD); }
+            set { SetPropertyValue(() => GoADViewCMD, value); }
+        }
+
+
+        public void CanExecuteGoADViewCMD(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        public void ExecuteGoADViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            EventAggregator.PublishMessage(new GoADViewEvent());
         }
     }
 }

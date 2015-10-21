@@ -14,6 +14,9 @@ using BoonieBear.DeckUnit.Mov4500TraceService;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.BaseType;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
+using HelixToolkit.Wpf;
+using System.Windows.Media.Media3D;
+using System.Threading.Tasks;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     /// <summary>
@@ -28,13 +31,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         private IEventAggregator _eventAggregator;
         //网络服务接口
         private INetCore _iNetCore;
+        //串口服务接口，如果有
+        private ICommCore _iCommCore;
         //文件服务接口
         private IFileCore _iFileCore;
-        private MovTraceService _unitTraceService;
+        private MovTraceService _movTraceService;
         //基础配置信息
-        private MovConf _mov4500Conf;
-        private MovConfInfo _movConfInfo;
-        private CommConfInfo _commConf;
+        private MovConf _mov4500Conf;//系统设置类
+        private MovConfInfo _movConfInfo;//除通信以外其他设置类
+        private CommConfInfo _commConf;//通信设置
         private Observer<CustomEventArgs> _observer; 
         private bool _serviceStarted = false;
         public string Error { get; private set; }
@@ -42,9 +47,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public Mutex ACMMutex { get; set; }//全局解析锁
 
         
-        public MovTraceService UnitTraceService
+        public MovTraceService MovTraceService
         {
-            get { return _unitTraceService ?? (_unitTraceService = new MovTraceService(WorkMode)); }
+            get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }
         }
 
 
@@ -90,25 +95,32 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
 
         
 
-        public INetCore INetCore
+        public INetCore NetCore
         {
             get { return _iNetCore ?? (_iNetCore = NetLiveService_ACM.GetInstance(_commConf,_movConfInfo, _observer)); }
         }
-
+        public ICommCore CommCore
+        {
+            get { return _iCommCore ?? (_iCommCore = CommService.GetInstance(_commConf, Observer)); }
+        }
         public bool Start()
         {
             try
             {
                 if(!LoadConfiguration()) throw new Exception("无法读取基本配置");
-                INetCore.Initialize();
-                INetCore.Start();
-                _serviceStarted = INetCore.IsWorking;
-                Error = INetCore.Error;
+                NetCore.Initialize();
+                NetCore.Start();
+                CommCore.Initialize();
+                CommCore.Start();
+                if(!MovTraceService.CreateService()) throw new Exception("数据保存服务启动失败");
+                _serviceStarted = true;
+                Error = NetCore.Error;
                 return _serviceStarted;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Error = e.Message;
+                Error = ex.Message;
+                EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
                 return false;
             }
             
@@ -117,8 +129,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
 
         public void Stop()
         {
-            if(_serviceStarted)
-                INetCore.Stop();
+            if (NetCore.IsWorking)
+                NetCore.Stop();
+            if (CommCore.IsWorking)
+                CommCore.Stop();
+            MovTraceService.TearDownService();
             _serviceStarted = false;
         }
         public bool IsWorking
@@ -137,7 +152,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
 
         }
 
-        public IFileCore IFileCore
+        public IFileCore FileCore
         {
             get { return _iFileCore; }
             set { _iFileCore = value; }
@@ -146,6 +161,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public static UnitCore Instance
         {
             get { return GetInstance(); }
+        }
+        public Model3D ShipModel { get; set; }
+        public Model3D MovModel { get; set; }
+        private async Task<Model3DGroup> LoadAsync(string model3DPath, bool freeze)
+        {
+            return await Task.Factory.StartNew(() =>
+            {
+                var mi = new ModelImporter();
+
+                // Alt 1. - freeze the model 
+                return mi.Load(model3DPath, null, true);
+
+            });
         }
     }
 }

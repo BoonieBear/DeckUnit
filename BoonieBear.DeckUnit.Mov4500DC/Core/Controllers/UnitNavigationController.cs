@@ -10,17 +10,23 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
     /// BaseController已完成系统基础导航信息以及一些空间消息处理机制。
     /// </summary>
     internal class UnitNavigationController : BaseController,
-        IHandleMessage<GoSystemResourceNavigationRequest>,
-        IHandleMessage<GoLiveCaptureNavigationRequest>
+        IHandleMessage<GoHomePageNavigationRequest>,
+        IHandleMessage<GoLiveCaptureNavigationRequest>,
+        IHandleMessage<GoSettingNavigation>
     {
 
-        public void Handle(GoSystemResourceNavigationRequest message)
+        public void Handle(GoHomePageNavigationRequest message)
         {
-            NavigateToPage("Views/SystemResourceView.xaml");
+            NavigateToPage("Views/HomePageView.xaml");
         }
         public void Handle(GoLiveCaptureNavigationRequest message)
         {
             NavigateToPage("Views/LiveCaptureView.xaml");
+        }
+
+        public void Handle(GoSettingNavigation message)
+        {
+            NavigateToPage("Views/GlobalSettingView.xaml");
         }
     }
 }

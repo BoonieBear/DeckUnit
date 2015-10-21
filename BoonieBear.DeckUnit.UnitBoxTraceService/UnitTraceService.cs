@@ -102,7 +102,10 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
 
         public bool WriteTrace(string str)
         {
-            if (traceFile.Create())
+            bool bCreate = traceFile.WriteOpened;
+            if (!bCreate)
+                bCreate = traceFile.Create();
+            if (bCreate)
             {
                 if (traceFile.Write(str) > 0)
                 {

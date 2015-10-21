@@ -70,6 +70,24 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
+        ///   查找类似 串口打开失败 的本地化字符串。
+        /// </summary>
+        public static string Comm_Failed {
+            get {
+                return ResourceManager.GetString("Comm_Failed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 串口服务正常 的本地化字符串。
+        /// </summary>
+        public static string Comm_OK {
+            get {
+                return ResourceManager.GetString("Comm_OK", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 4500米载人潜器水声通信机-全局设置 的本地化字符串。
         /// </summary>
         public static string GLOBALSETTING_Title_Top {

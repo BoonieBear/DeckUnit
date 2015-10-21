@@ -241,14 +241,22 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="NodeInfoButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
-
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ADButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
+                <SplineDoubleKeyFrame KeyTime="00:00:00.7" Value="1"/>
+            </DoubleAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ADButton" Storyboard.TargetProperty ="IsEnabled">
+                <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
+            </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="DebugButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="NodeInfoButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
             </DoubleAnimationUsingKeyFrames>
-
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="ADButton">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
+            </DoubleAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisableTestButtonStoryboard">
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DebugButton" Storyboard.TargetProperty="(UIElement.Opacity)">
@@ -263,11 +271,20 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="NodeInfoButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ADButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+                <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+            <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="ADButton" Storyboard.TargetProperty ="IsEnabled">
+                <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
+            </BooleanAnimationUsingKeyFrames>
 
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="DebugButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="NodeInfoButton">
+                <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="ADButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
         </Storyboard>
@@ -395,28 +412,28 @@
                 <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="450,200"/>
             </ThicknessAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DeviceDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
+                <!--SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/-->
                 <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="DeviceDataButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="true"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="OptionButton" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
+                <!--SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/-->
                 <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="OptionButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="true"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="AcousticButton" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
+                <!--SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/-->
                 <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="AcousticButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="true"/>
             </BooleanAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TestButton" Storyboard.TargetProperty="(UIElement.Opacity)">
-                <SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/>
+                <!--SplineDoubleKeyFrame KeyTime="00:00:00.0000000" Value="0"/-->
                 <SplineDoubleKeyFrame KeyTime="00:00:00.5000000" Value="1"/>
             </DoubleAnimationUsingKeyFrames>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TestButton" Storyboard.TargetProperty ="IsEnabled">
@@ -1936,7 +1953,7 @@ Storyboard.TargetName="MyTextEffect"
                     </ModelVisual3D>
                 </Viewport3D>
                 <!--adcp button-->
-                <Button x:Name="NewTaskButton" Content ="新增任务" Command="{Binding GoNewTaskViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="Microsoft YaHei UI" FontSize="20">
+                <Button x:Name="NewTaskButton" Content ="新增任务" Command="{Binding GoNewTaskViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="SimSun" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1946,7 +1963,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="TaskListButton" Opacity="0" FontFamily="Microsoft YaHei UI" Content="任务表" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20" Command="{Binding GoTaskListViewCMD}">
+                <Button x:Name="TaskListButton" Opacity="0" FontFamily="SimSun" Content="任务表" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20" Command="{Binding GoTaskListViewCMD}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1956,7 +1973,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="HistoryDataButton"  Opacity="0" FontFamily="Microsoft YaHei UI" Content="数据" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20" Command="{Binding GoADCPDataViewCMD}">
+                <Button x:Name="HistoryDataButton"  Opacity="0" FontFamily="SimSun" Content="数据" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20" Command="{Binding GoADCPDataViewCMD}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1969,7 +1986,7 @@ Storyboard.TargetName="MyTextEffect"
                 </Button>
                 
                 <!--option button-->
-                <Button x:Name="BasicButton" Content ="基本设置" Command="{Binding GoBasicConfigViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="Microsoft YaHei UI" FontSize="20">
+                <Button x:Name="BasicButton" Content ="基本设置" Command="{Binding GoBasicConfigViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="SimSun" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1979,7 +1996,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="ConnectButton" Opacity="0" FontFamily="Microsoft YaHei UI" Content="端口设置" Command="{Binding GoConnectConfigViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="ConnectButton" Opacity="0" FontFamily="SimSun" Content="端口设置" Command="{Binding GoConnectConfigViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1989,7 +2006,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="EnergyButton"  Opacity="0" Command="{Binding GoSetEnergyViewCMD}" FontFamily="Microsoft YaHei UI" Content="能量设置" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="EnergyButton"  Opacity="0" Command="{Binding GoSetEnergyViewCMD}" FontFamily="SimSun" Content="能量设置" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2000,7 +2017,7 @@ Storyboard.TargetName="MyTextEffect"
                     </Button.RenderTransform>
 
                 </Button>
-                <Button x:Name="DetailButton" Opacity="0" Command="{Binding GoRefreshConfigViewCMD}" FontFamily="Microsoft YaHei UI" Content="详细设置" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="DetailButton" Opacity="0" Command="{Binding GoRefreshConfigViewCMD}" FontFamily="SimSun" Content="详细设置" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="488.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2011,7 +2028,7 @@ Storyboard.TargetName="MyTextEffect"
                     </Button.RenderTransform>
                 </Button>
                 <!--acoustic button-->
-                <Button x:Name="CommandButton" Content ="水声通信" Command="{Binding GoAcousticViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="Microsoft YaHei UI" FontSize="20">
+                <Button x:Name="CommandButton" Content ="水声通信" Command="{Binding GoAcousticViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="SimSun" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2021,7 +2038,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="HistoryCMDButton" Opacity="0" Command="{Binding GoHistoryCMDViewCMD}" FontFamily="Microsoft YaHei UI" Content="通信记录" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="HistoryCMDButton" Opacity="0" Command="{Binding GoHistoryCMDViewCMD}" FontFamily="SimSun" Content="通信记录" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2031,7 +2048,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="PingButton"  Opacity="0" Command ="{Binding GoPingViewCMD}" FontFamily="Microsoft YaHei UI" Content="回环测试" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="PingButton"  Opacity="0" Command ="{Binding GoPingViewCMD}" FontFamily="SimSun" Content="回环测试" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2044,7 +2061,7 @@ Storyboard.TargetName="MyTextEffect"
                 </Button>
                 
                 <!--test button-->
-                <Button x:Name="DebugButton" Content ="系统调试" Command="{Binding GoDebugViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="Microsoft YaHei UI" FontSize="20">
+                <Button x:Name="DebugButton" Content ="系统调试" Command="{Binding GoDebugViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="SimSun" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2054,7 +2071,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="NodeInfoButton" Opacity="0" Command="{Binding GoGetInfoViewCMD}" FontFamily="Microsoft YaHei UI" Content="系统信息" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="NodeInfoButton" Opacity="0" Command="{Binding GoGetInfoViewCMD}" FontFamily="SimSun" Content="系统信息" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="201.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2064,7 +2081,17 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                
+                <Button x:Name="ADButton"  Opacity="0" Command ="{Binding GoADViewCMD}" FontFamily="SimSun" Content="AD采集" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
+                    <Button.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform/>
+                            <SkewTransform/>
+                            <RotateTransform/>
+                            <TranslateTransform/>
+                        </TransformGroup>
+                    </Button.RenderTransform>
+
+                </Button>
             </Canvas>
         </Grid>
         

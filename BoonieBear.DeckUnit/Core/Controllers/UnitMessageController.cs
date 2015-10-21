@@ -58,7 +58,7 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         public void Alert(string message)
         {
             var md = new MetroDialogSettings();
-            md.AffirmativeButtonText = "好的";
+            md.AffirmativeButtonText = "确定";
             MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
                 message,MessageDialogStyle.Affirmative,md);
         }

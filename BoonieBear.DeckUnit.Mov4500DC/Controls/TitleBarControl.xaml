@@ -37,7 +37,7 @@
                 <Button  Click="ShowMore" VerticalAlignment="Center" Style="{StaticResource MoreAppBarButtonStyle}"/>
             </Grid>
 
-            <Button  Click="GoHome"  Margin="0,0,30,0" VerticalAlignment="Center" Style="{StaticResource HomeAppBarButtonStyle}" Grid.Column="3" HorizontalAlignment="Center"/>
+
             <Button  Click="Minimize"  Margin="0,0,30,0" VerticalAlignment="Center" Style="{StaticResource MinimizeAppBarButtonStyle}" Grid.Column="3" HorizontalAlignment="Center"/>
             <Button  Click="ExitProgram"  Margin="0,0,10,0" VerticalAlignment="Center" Style="{StaticResource CloseAppBarButtonStyle}" Grid.Column="4" HorizontalAlignment="Center"/>
         </StackPanel>

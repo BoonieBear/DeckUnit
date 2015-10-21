@@ -25,7 +25,7 @@
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+            <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -72,16 +72,16 @@
         <UniformGrid Grid.Row="2" Columns="2" Margin="5,0">
             <Button Style="{DynamicResource SquareButtonStyle}" 
                  Margin="2"
-				Content="开始" Visibility="{Binding TaskState, ConverterParameter=开始, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StartTaskCommand}"/>
+				Content="开始" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=开始, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StartTaskCommand}"/>
             <Button Style="{DynamicResource SquareButtonStyle}"
 				Margin="2"
-				Content="停止" Visibility="{Binding TaskState, ConverterParameter=停止, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StopTaskCommand}"/>
+				Content="停止" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=停止, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StopTaskCommand}"/>
             <Button Style="{DynamicResource SquareButtonStyle}" 
 				Margin="2"
-				Content="删除" Visibility="{Binding TaskState, ConverterParameter=删除, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding DeleteTaskCommand}"/>
+				Content="删除" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=删除, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding DeleteTaskCommand}"/>
             <Button Style="{DynamicResource SquareButtonStyle}" 
 				Margin="2"
-				Content="数据" Visibility="{Binding TaskState, ConverterParameter=数据, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding GoDataCommand}"/>
+				Content="数据" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=数据, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding GoDataCommand}"/>
         </UniformGrid>
         
     </Grid>

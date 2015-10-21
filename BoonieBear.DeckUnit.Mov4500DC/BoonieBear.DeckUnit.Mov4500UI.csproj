@@ -56,6 +56,12 @@
     <Reference Include="De.TorstenMandelkow.MetroChart">
       <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
+    <Reference Include="HelixToolkit.Wpf">
+      <HintPath>..\Tools\HelixToolkit.Wpf.dll</HintPath>
+    </Reference>
+    <Reference Include="HelixToolkit.Wpf.Input">
+      <HintPath>..\Tools\HelixToolkit.Wpf.Input.dll</HintPath>
+    </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\TinyMetro\TinyMetroWpfLibrary\ThirdParty\log4net\log4net.dll</HintPath>
     </Reference>
@@ -130,8 +136,9 @@
     <Compile Include="Converters\ZeroToVisibleConverter.cs" />
     <Compile Include="Events\GoHistoryDataPageBaseNavigationRequest.cs" />
     <Compile Include="Events\GoLiveCaptureNavigationRequest.cs" />
-    <Compile Include="Events\GoSystemResourceNavigationRequest.cs" />
+    <Compile Include="Events\GoHomePageNavigationRequest.cs" />
     <Compile Include="Events\GoDetailStatsNavigationRequest.cs" />
+    <Compile Include="Events\GoSettingNavigation.cs" />
     <Compile Include="Events\LogEvent.cs" />
     <Compile Include="Helpers\ResourcesHelper.cs" />
     <Compile Include="Models\Status.cs" />

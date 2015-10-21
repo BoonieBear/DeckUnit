@@ -1314,7 +1314,7 @@
     <Style x:Key="MetroStatusBar"
            TargetType="{x:Type StatusBar}">
         <Setter Property="FontFamily"
-                Value="Microsoft YaHei" />
+                Value="SimSun" />
         <Setter Property="FontSize"
                 Value="18" />
         <Setter Property="FontStyle"

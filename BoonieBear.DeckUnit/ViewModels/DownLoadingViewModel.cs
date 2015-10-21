@@ -16,6 +16,7 @@ using TinyMetroWpfLibrary.ViewModel;
 using BoonieBear.DeckUnit.Events;
 using TinyMetroWpfLibrary.Utility;
 using BoonieBear.DeckUnit.BaseType;
+using System.ComponentModel;
 namespace BoonieBear.DeckUnit.ViewModels
 {
     public class DownLoadingViewModel : ViewModelBase, BoonieBear.DeckUnit.UBP.BDObserver<EventArgs>
@@ -24,13 +25,14 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void Initialize()
         {
             CmdId = 1;
-            DeckDataProtocol.AddCallBack(this);
+            
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             GoDataCommand = RegisterCommand(ExecuteGoDataCommand, CanExecuteGoDataCommand, true);
             StartTaskCommand = RegisterCommand(ExecuteStartTaskCommand, CanExecuteStartTaskCommand, true);
             DeleteTaskCommand = RegisterCommand(ExecuteDeleteTaskCommand, CanExecuteDeleteTaskCommand, true);
             IsWorking = false;
             TaskState = "UNSTART";
+            
         }
 
 
@@ -43,6 +45,10 @@ namespace BoonieBear.DeckUnit.ViewModels
             DestID = _currentBdTask.DestID;
             CmdId = _currentBdTask.CommID;
             StarTime = _currentBdTask.StarTime;
+
+            DeckDataProtocol.AddCallBack(this);
+
+
         }
 
 
@@ -146,7 +152,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 if(TaskState=="WORKING") //正在工作
                 {
                     var md = new MetroDialogSettings();
-                    md.AffirmativeButtonText = "好的";
+                    md.AffirmativeButtonText = "确定";
                     await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
                     "请先停止任务再切换页面",MessageDialogStyle.Affirmative,md);
                     return;
@@ -201,7 +207,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 else
                 {
                     var md = new MetroDialogSettings();
-                    md.AffirmativeButtonText = "好的";
+                    md.AffirmativeButtonText = "确定";
                     await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "错误",
                     UnitCore.Instance.UnitTraceService.Error, MessageDialogStyle.Affirmative, md);
                 }
@@ -269,7 +275,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                     else
                     {
                         var md = new MetroDialogSettings();
-                        md.AffirmativeButtonText = "好的";
+                        md.AffirmativeButtonText = "确定";
                         await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "错误",
                         "任务开始失败", MessageDialogStyle.Affirmative, md);
                         TaskState = "UNSTART";
@@ -289,7 +295,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                     IsWorking = false;
                     TaskState = "STOP";
                     var md = new MetroDialogSettings();
-                    md.AffirmativeButtonText = "好的";
+                    md.AffirmativeButtonText = "确定";
                     await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
                     "任务失败", MessageDialogStyle.Affirmative, md);
                     break;

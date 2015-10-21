@@ -14,17 +14,25 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Models
         {
             get
             {
-                if (UnitCore.Instance.INetCore.IsWorking)
+                if (UnitCore.Instance.NetCore.IsWorking)
                     return Properties.Resources.NETWORK_OK;
                 return Properties.Resources.NETWORK_DOWN;
             }
         }
-
+        public static string CommStatus
+        {
+            get
+            {
+                if (UnitCore.Instance.CommCore.IsWorking)
+                    return Properties.Resources.Comm_OK;
+                return Properties.Resources.Comm_Failed;
+            }
+        }
  
 
         public static string LastUpdateTime { get; set; }
 
-        public static UInt16 ReceivebinaryDataCount{ get; set; }
+        public static UInt16 ReceiveMsgCount { get; set; }
 
     }
 }

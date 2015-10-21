@@ -24,7 +24,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+            <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -43,22 +43,22 @@
                             <ColumnDefinition Width="160"/>
                             <ColumnDefinition Width="160"/>
                         </Grid.ColumnDefinitions>
-                        <Button  FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetDateView}">
+                        <Button  FontFamily="SimSun" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetDateView}">
                             <TextBlock>
                                     设置系统时间
                             </TextBlock>
                         </Button>
-                        <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetSleepView}">
+                        <Button FontFamily="SimSun" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetSleepView}">
                             <TextBlock>
                                     设置休眠时间
                             </TextBlock>
                         </Button>
-                        <Button FontFamily="Microsoft YaHei" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowSetADView}">
+                        <Button FontFamily="SimSun" TextBlock.FontSize="20" Grid.Row="1" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowSetADView}">
                             <TextBlock>
                                     设置AD门限
                             </TextBlock>
                         </Button>
-                        <Button TextBlock.FontSize="20" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowWakeUpView}" FontFamily="Microsoft YaHei">
+                        <Button TextBlock.FontSize="20" Grid.Row="1" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowWakeUpView}" FontFamily="SimSun">
                             <TextBlock>
                                     设置唤醒时间
                             </TextBlock>

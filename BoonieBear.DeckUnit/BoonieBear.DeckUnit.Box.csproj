@@ -143,6 +143,7 @@
     <Compile Include="Converter\TaskStateToVisibilityConverter.cs" />
     <Compile Include="Converter\TraceMessageFilterConverter.cs" />
     <Compile Include="Events\GoADCPDataViewEvent.cs" />
+    <Compile Include="Events\GoADViewEvent.cs" />
     <Compile Include="Events\GoCofigViewPage.cs" />
     <Compile Include="Events\GoComSchemaEvent.cs" />
     <Compile Include="Events\GoConnectConfigViewEvent.cs" />

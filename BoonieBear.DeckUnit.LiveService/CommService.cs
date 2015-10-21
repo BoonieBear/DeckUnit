@@ -135,9 +135,6 @@ namespace BoonieBear.DeckUnit.LiveService
                 var cmd = commfactory.CreateSerialComm(str);
                 return Command.SendSerialAsync(cmd);
             }
-
-
-
         }
     }
 }

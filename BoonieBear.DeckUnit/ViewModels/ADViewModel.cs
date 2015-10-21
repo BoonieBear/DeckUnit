@@ -1,4 +1,8 @@
-﻿using System.Windows.Input;
+﻿using System.Collections.ObjectModel;
+using System.Windows.Input;
+using BoonieBear.DeckUnit.Models;
+using BoonieBear.DeckUnit.Resource;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 
@@ -12,19 +16,48 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void Initialize()
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
-
+            BeginAD = RegisterCommand(ExecuteBeginAD, CanExecuteBeginAD, true);
+            StopAD = RegisterCommand(ExecuteStopAD, CanExecuteStopAD, true);
         }
 
 
         public override void InitializePage(object extraData)
         {
+            IsWorking = false;
+            TotalADByte = 0;
+            RefreshInfos();
         }
+        private void RefreshInfos()
+        {
+            var ir = GetSystemInfo.CreateResourcesProbe();
+            if (MemInfos == null)
+                MemInfos = new ObservableCollection<SystemInfo>();
+            MemInfos.Clear();
 
+            MemInfos.Add(new SystemInfo() { Category = "内存使用", Number = ir.GetMemoryUsage() });
+
+            MemInfos.Add(new SystemInfo() { Category = "磁盘空间使用", Number = ir.GetDiskUsage() });
+        }
         #endregion
 
         #region 绑定属性
 
+        public bool IsWorking
+        {
+            get { return GetPropertyValue(() => IsWorking); }
+            set { SetPropertyValue(() => IsWorking, value); }
+        }
+        public int TotalADByte
+        {
+            get { return GetPropertyValue(() => TotalADByte); }
+            set { SetPropertyValue(() => TotalADByte, value); }
+        }
 
+        public ObservableCollection<SystemInfo> MemInfos
+        {
+            get { return GetPropertyValue(() => MemInfos); }
+            set { SetPropertyValue(() => MemInfos, value); }
+        }
         #endregion
 
         #region GoBack Command
@@ -43,11 +76,55 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
 
-        public void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        public async void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
+            if (IsWorking)
+            {
+                var md = new MetroDialogSettings();
+                md.AffirmativeButtonText = "确定";
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
+                "尚在接收AD数据中，请先停止AD采集再离开页面", MessageDialogStyle.Affirmative, md);
+                return;
+            }
             EventAggregator.PublishMessage(new GoBackNavigationRequest());
         }
 
+        public ICommand BeginAD
+        {
+            get { return GetPropertyValue(() => BeginAD); }
+            set { SetPropertyValue(() => BeginAD, value); }
+        }
+
+
+        public void CanExecuteBeginAD(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        public void ExecuteBeginAD(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            
+            EventAggregator.PublishMessage(new GoBackNavigationRequest());
+        }
+
+        public ICommand StopAD
+        {
+            get { return GetPropertyValue(() => StopAD); }
+            set { SetPropertyValue(() => StopAD, value); }
+        }
+
+
+        public void CanExecuteStopAD(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        public void ExecuteStopAD(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            EventAggregator.PublishMessage(new GoBackNavigationRequest());
+        }
         #endregion
     }
 }

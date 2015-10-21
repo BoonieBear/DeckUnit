@@ -29,7 +29,7 @@
             <RowDefinition Height="60"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
+            <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
@@ -74,22 +74,22 @@
 				touchKeyBoard:TabKeyBoard.HorizontalOffset="0"
 				touchKeyBoard:TabKeyBoard.Type="Char" 
 				touchKeyBoard:TabKeyBoard.Width="480" 
-				touchKeyBoard:TabKeyBoard.IsEnabled="{Binding index, Converter={StaticResource IndexToBooleanConverter}}" FontFamily="Microsoft YaHei UI" FontSize="18" VerticalScrollBarVisibility="Auto" TextAlignment="Justify" TextChanged="CMDTextBox_TextChanged" Margin="10,0"/>
+				touchKeyBoard:TabKeyBoard.IsEnabled="{Binding index, Converter={StaticResource IndexToBooleanConverter}}" FontFamily="SimSun" FontSize="18" VerticalScrollBarVisibility="Auto" TextAlignment="Justify" TextChanged="CMDTextBox_TextChanged" Margin="10,0"/>
             <TextBox x:Name="RecvTextBox" TextWrapping="Wrap" Grid.Row="1" Grid.Column="1"  IsReadOnly="True" 
-                     Text="{Binding PingDATA}" FontFamily="Microsoft YaHei UI" FontSize="18" VerticalScrollBarVisibility="Auto" 
+                     Text="{Binding PingDATA}" FontFamily="SimSun" FontSize="18" VerticalScrollBarVisibility="Auto" 
                      HorizontalAlignment="Right" Width="300" Margin="0,0,10,0" metroControl:TextBoxHelper.Watermark="接收数据" TextChanged="RecvTextBox_TextChanged"/>
         <StackPanel Grid.Row="2" Grid.Column="0" Orientation="Vertical">
-                <TextBlock x:Name ="sendlength" Text="" VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18"/>
-                <TextBlock x:Name ="sendltime"  VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18" Text="{Binding StartTime}"/>
+                <TextBlock x:Name ="sendlength" Text="" VerticalAlignment="Top" Margin="15" FontFamily="SimSun" FontSize="18"/>
+                <TextBlock x:Name ="sendltime"  VerticalAlignment="Top" Margin="15" FontFamily="SimSun" FontSize="18" Text="{Binding StartTime}"/>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Vertical">
-                <TextBlock x:Name ="recvlength" Text="" VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18"/>
-                <TextBlock x:Name ="recvltime"  VerticalAlignment="Top" Margin="15" FontFamily="Microsoft YaHei UI" FontSize="18" Text="{Binding RecvTime}"/>
+                <TextBlock x:Name ="recvlength" Text="" VerticalAlignment="Top" Margin="15" FontFamily="SimSun" FontSize="18"/>
+                <TextBlock x:Name ="recvltime"  VerticalAlignment="Top" Margin="15" FontFamily="SimSun" FontSize="18" Text="{Binding RecvTime}"/>
             </StackPanel>
             
         </Grid>
         <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
 			Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom"/>
-        <Button Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="测试" Command="{Binding SendCMD}" FontFamily="Microsoft YaHei UI" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="测试" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="18"/>
     </Grid>
 </Page>

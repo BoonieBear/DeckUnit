@@ -84,7 +84,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             await result;
             var ret = result.Result;
             var md = new MetroDialogSettings();
-            md.AffirmativeButtonText = "好的";
+            md.AffirmativeButtonText = "确定";
             if (ret == false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
                 UnitCore.Instance.CommEngine.Error,MessageDialogStyle.Affirmative,md);
