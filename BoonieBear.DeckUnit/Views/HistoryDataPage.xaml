@@ -35,9 +35,9 @@
             <metroControl:ProgressRing IsActive="{Binding IsFetching}" Margin="10,0"  IsLarge="False" Height="40"  Width="40"/>
         </StackPanel>
         <UniformGrid Grid.Row="1" Columns="3">
-            <DatePicker Margin ="4,0" SelectedDate="{Binding SelectedFromDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <DatePicker Margin ="4,0" SelectedDate="{Binding SelectedFromDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="SimSun"/>
             <TextBlock Text=">>" FontSize="34" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <DatePicker Margin="4,0" SelectedDate="{Binding SelectedToDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <DatePicker Margin="4,0" SelectedDate="{Binding SelectedToDate}" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center" FontFamily="SimSun"/>
         </UniformGrid>
         <TabControl Grid.Row="2" TabStripPlacement="Bottom" SelectedIndex="{Binding SelectIndex, Mode=OneWay}">
             <TabItem >

@@ -150,7 +150,6 @@
     <Compile Include="ViewModel\GlobalSettingViewModel.cs" />
     <Compile Include="ViewModel\HomePageViewModel.cs" />
     <Compile Include="ViewModel\LiveCaptureViewModel.cs" />
-    <Compile Include="ViewModel\SystemResourceViewModel.cs" />
     <Compile Include="Views\GlobalSettingView.xaml.cs">
       <DependentUpon>GlobalSettingView.xaml</DependentUpon>
     </Compile>
@@ -159,9 +158,6 @@
     </Compile>
     <Compile Include="Views\LiveCaptureView.xaml.cs">
       <DependentUpon>LiveCaptureView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SystemResourceView.xaml.cs">
-      <DependentUpon>SystemResourceView.xaml</DependentUpon>
     </Compile>
     <Page Include="Controls\MsgBox.xaml">
       <SubType>Designer</SubType>
@@ -222,10 +218,6 @@
       <DependentUpon>MainFrame.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\SystemResourceView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">

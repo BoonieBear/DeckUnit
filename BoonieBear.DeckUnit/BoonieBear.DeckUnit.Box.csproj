@@ -235,7 +235,6 @@
     <Compile Include="Core\Controllers\UnitNavigationController.cs" />
     <Compile Include="Core\UnitKernal.cs" />
     <Compile Include="Models\SystemInfo.cs" />
-    <Compile Include="ViewModels\SystemResourceViewModel.cs" />
     <Compile Include="ViewModels\AcousticViewModel.cs" />
     <Compile Include="Views\NewTaskPage.xaml.cs">
       <DependentUpon>NewTaskPage.xaml</DependentUpon>
@@ -277,9 +276,6 @@
     </Compile>
     <Compile Include="Views\SetView\SetEnergyInfoView.xaml.cs">
       <DependentUpon>SetEnergyInfoView.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\SystemResourceView.xaml.cs">
-      <DependentUpon>SystemResourceView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\AcousticView.xaml.cs">
       <DependentUpon>AcousticView.xaml</DependentUpon>
@@ -425,10 +421,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SetView\SetEnergyInfoView.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\SystemResourceView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

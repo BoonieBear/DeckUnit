@@ -25,16 +25,31 @@ namespace BoonieBear.DeckUnit.Resource
             return availableBytes*100/totalBytes;
         }
 
-        public  double GetDiskUsage()
+        public  double GetDiskUsage(string diskName)
         {
             var w = new WMIInfo(WMIPath.Win32_LogicalDisk);
             double availableBytes = 0;
             double totalBytes = 0;
-            for (var i = 0; i < w.Count; i++)
+            if (diskName.ToLower() == "all") //全部逻辑盘
             {
-                if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
-                totalBytes += Math.Round(Int64.Parse(w[i, "Size"].ToString()) / 1024.0, 1);
-                availableBytes += Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString()) / 1024.0, 1);
+                for (var i = 0; i < w.Count; i++)
+                {
+                    if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
+                    totalBytes += Math.Round(Int64.Parse(w[i, "Size"].ToString())/1024.0, 1);
+                    availableBytes += Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString())/1024.0, 1);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < w.Count; i++)
+                {
+                    if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
+                    if (w[i, "Name"].ToString() == diskName)
+                    {
+                        totalBytes = Math.Round(Int64.Parse(w[i, "Size"].ToString())/1024.0, 1);
+                        availableBytes = Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString())/1024.0, 1);
+                    }
+                }
             }
             return 100-availableBytes * 100 / totalBytes;
         }
@@ -241,7 +256,64 @@ namespace BoonieBear.DeckUnit.Resource
 
         #endregion
 
-        
+
+
+
+        public double GetDiskSize(string diskName)
+        {
+            var w = new WMIInfo(WMIPath.Win32_LogicalDisk);
+            double availableBytes = 0;
+            double totalBytes = 0;
+            if (diskName.ToLower() == "all") //全部逻辑盘
+            {
+                for (var i = 0; i < w.Count; i++)
+                {
+                    if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
+                    totalBytes += Math.Round(Int64.Parse(w[i, "Size"].ToString()) / 1024.0, 1);
+                    //availableBytes += Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString()) / 1024.0, 1);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < w.Count; i++)
+                {
+                    if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
+                    if (w[i, "Name"].ToString() == diskName)
+                        totalBytes = Math.Round(Int64.Parse(w[i, "Size"].ToString()) / 1024.0, 1);
+                    //availableBytes = Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString()) / 1024.0, 1);
+                }
+            }
+            return  totalBytes;
+        }
+
+        public double GetDiskFree(string diskName)
+        {
+            var w = new WMIInfo(WMIPath.Win32_LogicalDisk);
+            double availableBytes = 0;
+            double totalBytes = 0;
+            if (diskName.ToLower() == "all") //全部逻辑盘
+            {
+                for (var i = 0; i < w.Count; i++)
+                {
+                    if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
+                    //totalBytes += Math.Round(Int64.Parse(w[i, "Size"].ToString()) / 1024.0, 1);
+                    availableBytes += Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString()) / 1024.0, 1);
+                }
+            }
+            else
+            {
+                for (var i = 0; i < w.Count; i++)
+                {
+                    if (Convert.ToInt32(w[i, "DriveType"]) != Convert.ToInt32(DriveType.Fixed)) continue;
+                    if (w[i, "Name"].ToString() == diskName)
+                    {
+                        //totalBytes = Math.Round(Int64.Parse(w[i, "Size"].ToString())/1024.0, 1);
+                        availableBytes = Math.Round(Int64.Parse(w[i, "FreeSpace"].ToString())/1024.0, 1);
+                    }
+                }
+            }
+            return availableBytes;
+        }
     }
 
     /// <summary>

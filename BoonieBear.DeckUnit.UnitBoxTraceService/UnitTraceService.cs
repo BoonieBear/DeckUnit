@@ -9,7 +9,11 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
     public class UnitTraceService
     {
         private DALTrace _dalTrace;//dal
-        private ADFile _adFile;//trace file
+        private ADFile _adFile;//trace cmd file
+        private ADFile Ch1adFile;//ad file
+        private ADFile Ch2adFile;//ad file
+        private ADFile Ch3adFile;//ad file
+        private ADFile Ch4adFile;//ad file
         private LogFile traceFile;
         private LogFile shelLogFile;
         public string Error { get; set; }
@@ -33,15 +37,29 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             //create log directory
             string logPathDate = DateTime.Now.Date.ToString("yyyy-MM-dd");
             LogPath = Environment.CurrentDirectory + @"\Log\" + logPathDate;
-            string datapath = LogPath + @"\Data";
+
+            string datapath = LogPath + @"\CMDData";
             Directory.CreateDirectory(datapath);
-            var debugPath = new DirectoryInfo(datapath);
-            _adFile = new ADFile("Data", "dat");
-            _adFile.SetPath(debugPath);
+
+            var cmdPath = new DirectoryInfo(datapath);
+            _adFile = new ADFile("Cmd", "dat");
+            _adFile.SetPath(cmdPath);
+
             string logpath = LogPath + @"\Record";
             var recordPath = new DirectoryInfo(logpath);
             shelLogFile = new LogFile("Shell", "txt");
             shelLogFile.SetPath(recordPath);
+
+            string AdPath = LogPath + @"\AD";
+            var adInfo = new DirectoryInfo(AdPath);
+            Ch1adFile = new ADFile("AD1", "txt");
+            Ch1adFile.SetPath(adInfo);
+            Ch2adFile = new ADFile("AD2", "txt");
+            Ch2adFile.SetPath(adInfo);
+            Ch3adFile = new ADFile("AD3", "txt");
+            Ch3adFile.SetPath(adInfo);
+            Ch4adFile = new ADFile("AD4", "txt");
+            Ch4adFile.SetPath(adInfo);
 
             traceFile = new LogFile("Trace", "txt");
             traceFile.SetPath(recordPath);
@@ -67,6 +85,10 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                 _adFile.Close();
                 traceFile.Close();
                 shelLogFile.Close();
+                Ch1adFile.Close();
+                Ch2adFile.Close();
+                Ch3adFile.Close();
+                Ch4adFile.Close();
             }
             catch (Exception e)
             {
@@ -121,6 +143,57 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                 Error = "创建Trace文件失败！";
             }
             return false;
+        }
+
+        public void SaveAD(byte[] bytes) //
+        {
+            byte[] data = new byte[bytes.Length-4];
+            Buffer.BlockCopy(bytes, 4, data, 0, bytes.Length - 4);
+            switch (BitConverter.ToUInt16(bytes, 0))
+            {
+                case 0xAD01:
+                    bool bCreate = Ch1adFile.WriteOpened;
+                    if (!bCreate)
+                        bCreate = Ch1adFile.Create();
+                    if (bCreate)
+                    {
+                        Ch1adFile.BinaryWrite(data);
+                    }
+                    break;
+                case 0xAD02:
+                    bCreate = Ch2adFile.WriteOpened;
+                    if (!bCreate)
+                        bCreate = Ch2adFile.Create();
+                    if (bCreate)
+                    {
+                        Ch2adFile.BinaryWrite(data);
+                    }
+                    break;
+                case 0xAD03:
+                    bCreate = Ch3adFile.WriteOpened;
+                    if (!bCreate)
+                        bCreate = Ch3adFile.Create();
+                    if (bCreate)
+                    {
+                        Ch3adFile.BinaryWrite(data);
+                    }
+                    break;
+                case 0xAD04:
+                    bCreate = Ch4adFile.WriteOpened;
+                    if (!bCreate)
+                        bCreate = Ch4adFile.Create();
+                    if (bCreate)
+                    {
+                        Ch4adFile.BinaryWrite(data);
+                    }
+                    break;
+                case 0xEDED:
+                    Ch1adFile.Close();
+                    Ch2adFile.Close();
+                    Ch3adFile.Close();
+                    Ch4adFile.Close();
+                    break;
+            }
         }
 
         public bool Save(CommandLog log, byte[] bytes)

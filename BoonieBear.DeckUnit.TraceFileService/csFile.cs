@@ -273,7 +273,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         }
         public override bool Create()
         {
-            SetFileSizeLimit(5*1024*1024);
+            SetFileSizeLimit(100*1024*1024);
             return OpenBinaryFile();
         }
 

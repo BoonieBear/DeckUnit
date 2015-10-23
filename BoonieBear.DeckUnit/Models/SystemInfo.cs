@@ -3,59 +3,38 @@ using System.ComponentModel;
 
 namespace BoonieBear.DeckUnit.Models
 {
-    public class SeriesData
-    {
-        private string _seriesDisplayName;
-
-        public string SeriesDisplayName
-        {
-            get { return _seriesDisplayName; }
-            set
-            {
-                _seriesDisplayName = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("SeriesDisplayName"));
-                }
-            }
-            
-        }
-
-        public string SeriesDescription { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<SystemInfo> Items { get; set; }
-    }
+    
     public class SystemInfo:INotifyPropertyChanged
     {
-        private string _category;
+        private string _name;
 
-        private double _number = 0;
-        public double Number
+        private double _size = 0;
+        public double Size
         {
             get
             {
-                return _number;
+                return _size;
             }
             set
             {
-                _number = value;
+                _size = value;
                 if (PropertyChanged != null)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Number"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("Size"));
                 }
             }
 
         }
 
-        public string Category
+        public string Name
         {
-            get { return _category; }
+            get { return _name; }
             set
             {
-                _category = value;
+                _name = value;
                 if (PropertyChanged != null)
                 {
-                    PropertyChanged(this, new PropertyChangedEventArgs("Category"));
+                    PropertyChanged(this, new PropertyChangedEventArgs("Name"));
                 }
             }
         }

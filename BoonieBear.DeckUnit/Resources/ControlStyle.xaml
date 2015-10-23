@@ -1205,9 +1205,34 @@
             </LinearGradientBrush>
         </ResourceDictionary>
     </metroChart:ResourceDictionaryCollection>
-  
+    <metroChart:ResourceDictionaryCollection x:Key="CustomColors">
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush1" Color="#AA5B9BD5" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush2" Color="#AAED7D31" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush3" Color="#AAA5A5A5" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush4" Color="#AAFFC000" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush5" Color="#AAFF9BA5" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush6" Color="#AAFF7D31" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush7" Color="#AAFFA5A5" />
+        </ResourceDictionary>
+        <ResourceDictionary>
+            <SolidColorBrush x:Key="Brush8" Color="#9AFFC0FF" />
+        </ResourceDictionary>
+    </metroChart:ResourceDictionaryCollection>
 
-    <system:String x:Key="TooltipFormat">"{0}:{1}%"</system:String>
+    <system:String x:Key="TooltipFormat">"{0}:{1:F2}G"</system:String>
     
     <Style TargetType="ToggleButton" x:Key="SingleSelectInMultiButtonStyle2">
         <Setter Property="Template">

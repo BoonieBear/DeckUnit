@@ -4,7 +4,9 @@
    public interface IPcResources 
     {
         double GetMemoryUsage();
-        double GetDiskUsage();
+        double GetDiskUsage(string diskName);
+        double GetDiskSize(string diskName);
+        double GetDiskFree(string diskName); 
         string GetMacAddress();
         string GetIpAddress();
     }

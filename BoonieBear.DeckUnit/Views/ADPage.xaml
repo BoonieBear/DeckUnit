@@ -5,6 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:converter="clr-namespace:BoonieBear.DeckUnit.Converter"
       xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
+      xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" 
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=ADViewModel}"
       mc:Ignorable="d" 
       d:DesignHeight="480" d:DesignWidth="640"
@@ -18,6 +19,7 @@
             <RowDefinition/>
             <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
+
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
             <Button Style="{StaticResource ChromeButtonStyle}" Command="{Binding GoBackCommand}" Height="30"  Width="30" VerticalAlignment="Center" Margin="10">
                 <Button.Background>
@@ -26,29 +28,56 @@
             </Button>
             <TextBlock  Text="AD采集" VerticalAlignment="Center" FontFamily="SimSun"  FontSize="34px"/>
         </StackPanel>
-        <StackPanel  Grid.Row ="1" Orientation="Horizontal">
-            <metroChart:RadialGaugeChart  x:Name="SysChart"
-                Style="{StaticResource ChartStyleVariableSize}"
-                ChartTitle="系统资源"
-                ChartSubTitle="所在分区已使用空间"
-                Palette="{StaticResource Gradients}"
-                IsRowColumnSwitched= "False"
-                
-                ChartTitleVisibility="Visible"
-                ChartLegendVisibility="Visible"
-                ToolTipFormat="{StaticResource TooltipFormat}"
-                SelectedBrush="{StaticResource SelectedBackgroundBrush}" Width="639" FontFamily="SimSun">
-                <metroChart:RadialGaugeChart.Series>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <GroupBox Header="状态" Margin="4" Custom:ControlsHelper.HeaderFontSize="24">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition />
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Margin="5" Orientation="Vertical" VerticalAlignment="Bottom">
+                        <TextBlock Text="{Binding Status}" FontFamily="SimSun" FontSize="36"/>
+                        <Custom:MetroProgressBar IsIndeterminate="True"  EllipseDiameter="10" EllipseOffset="10" Foreground="{DynamicResource AccentSelectedColorBrush}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <TextBlock Text="数据上传速率：" FontFamily="SimSun" FontSize="24"/>
+                        <TextBlock Text="{Binding SpeedStr}" FontFamily="SimSun" FontSize="36"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="2" Orientation="Vertical" VerticalAlignment="Bottom">
+                        <StackPanel  Margin="5" Orientation="Horizontal" >
+                            <TextBlock Text="数据大小：" FontFamily="SimSun" FontSize="24"/>
+                            <TextBlock Text="{Binding TotalADByte}" FontFamily="SimSun" FontSize="24"/>
+                        </StackPanel>
+                        <TextBlock Margin="0,5" Text="打开文件所在位置" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                    </StackPanel>
+                </Grid>
+            </GroupBox>
+            <metroChart:PieChart  x:Name="SysChart"
+				Style="{StaticResource ChartStyleVariableSize}"
+				FontFamily="SimHei"
+				Grid.Column="1"
+				Margin="2"
+				ChartTitle="磁盘空间"
+				ChartSubTitle=""
+				ChartLegendVisibility="Visible"
+				Palette="{StaticResource CustomColors}"
+				ToolTipFormat="{StaticResource TooltipFormat}"
+				SelectedBrush="{StaticResource SelectedBackgroundBrush}" DockPanel.Dock="Right"  >
+                <metroChart:PieChart.Series>
                     <metroChart:ChartSeries
-			                SeriesTitle="内存"
-                            DisplayMember="Category"
-                            ValueMember="Number"
-                            ItemsSource="{Binding Path= MemInfos}"/>
-
-                </metroChart:RadialGaugeChart.Series>
-            </metroChart:RadialGaugeChart>
-        </StackPanel>
-        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="开始采集" Command="{Binding BeginAD}" FontFamily="SimSun" FontSize="18"/>
-        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Visibility="{Binding IsWorking, ConverterParameter=Collapsed,Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SquareButtonStyle}" Content="停止采集" Command="{Binding StopAD}" FontFamily="SimSun" FontSize="18"/>
+						SeriesTitle="磁盘使用"
+						DisplayMember="Name"
+						ValueMember="Size"
+						ItemsSource="{Binding MemInfos}"/>
+                </metroChart:PieChart.Series>
+            </metroChart:PieChart>
+        </Grid>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2"  Content="开始采集" Command="{Binding BeginAD}" FontFamily="SimSun" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Visibility="{Binding IsWorking, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}" Content="停止采集" Command="{Binding StopAD}" FontFamily="SimSun" FontSize="18"/>
     </Grid>
 </Page>

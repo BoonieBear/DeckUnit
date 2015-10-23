@@ -1,8 +1,9 @@
-﻿using System.Collections.ObjectModel;
-using System.Windows.Input;
-using BoonieBear.DeckUnit.Models;
+﻿using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.Resource;
 using MahApps.Metro.Controls.Dialogs;
+using System;
+using System.Collections.ObjectModel;
+using System.Windows.Input;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 
@@ -33,10 +34,17 @@ namespace BoonieBear.DeckUnit.ViewModels
             if (MemInfos == null)
                 MemInfos = new ObservableCollection<SystemInfo>();
             MemInfos.Clear();
-
-            MemInfos.Add(new SystemInfo() { Category = "内存使用", Number = ir.GetMemoryUsage() });
-
-            MemInfos.Add(new SystemInfo() { Category = "磁盘空间使用", Number = ir.GetDiskUsage() });
+            string MyExecPath = System.IO.Path.GetDirectoryName(
+                System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            string diskname = MyExecPath.Substring(0, 2);
+            double freesize = ir.GetDiskFree(diskname);//KB
+            freesize /= 1024;//MB
+            freesize /= 1024;//GB
+            double totalsize = ir.GetDiskSize(diskname);//KB
+            totalsize /= 1024;//MB
+            totalsize /= 1024;//GB
+            MemInfos.Add(new SystemInfo() { Name = "空闲", Size = Math.Round(freesize,2) });
+            MemInfos.Add(new SystemInfo() { Name = "已使用", Size = Math.Round(totalsize - freesize,2) });
         }
         #endregion
 

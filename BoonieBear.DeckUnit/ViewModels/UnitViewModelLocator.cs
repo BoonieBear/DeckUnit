@@ -10,7 +10,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         private MainPageViewModel _mainPageViewModel;
         private AcousticViewModel _acousticViewModel;
         private HistoryDataPageViewModel _historyDataPageViewModel;
-        private SystemResourceViewModel _systemResourceViewModel;
+        //private SystemResourceViewModel _systemResourceViewModel;
         private NewTaskPageViewModel _newTaskPageViewModel;
         private DownLoadingViewModel _downLoadingViewModel;
         private DownLoadedViewModel _downLoadedViewModel;
@@ -92,18 +92,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
         }
 
-        public SystemResourceViewModel SystemResourceViewModel
-        {
-            get
-            {
-                if (_systemResourceViewModel == null)
-                {
-                    _systemResourceViewModel = new SystemResourceViewModel();
-                    _systemResourceViewModel.Initialize();
-                }
-                return _systemResourceViewModel;
-            }
-        }
+        
         public NewTaskPageViewModel NewTaskPageViewModel
         {
             get

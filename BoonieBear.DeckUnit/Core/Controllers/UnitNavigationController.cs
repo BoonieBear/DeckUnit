@@ -11,7 +11,6 @@ namespace BoonieBear.DeckUnit.Core.Controllers
     /// </summary>
     internal class UnitNavigationController : BaseController,
         IHandleMessage<GoHistoryDataPageBaseNavigationRequest>,
-        IHandleMessage<GoSystemResourceNavigationRequest>,
         IHandleMessage<GoAcousticViewNavigationEvent>,
         IHandleMessage<GoHomePageNavigationEvent>,
         IHandleMessage<GoSimplePage>,
@@ -40,10 +39,7 @@ namespace BoonieBear.DeckUnit.Core.Controllers
 
         }
 
-        public void Handle(GoSystemResourceNavigationRequest message)
-        {
-            NavigateToPage("Views/SystemResourceView.xaml");
-        }
+        
         public void Handle(GoAcousticViewNavigationEvent message)
         {
             NavigateToPage("Views/AcousticView.xaml");

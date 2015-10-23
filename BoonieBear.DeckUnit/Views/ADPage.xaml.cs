@@ -23,5 +23,10 @@ namespace BoonieBear.DeckUnit.Views
         {
             InitializeComponent();
         }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }

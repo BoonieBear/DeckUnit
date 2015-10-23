@@ -21,7 +21,7 @@ namespace BoonieBear.DeckUnit.SysResourceLibTests
         public void GetDiskUsageTest()
         {
             var itest = GetSystemInfo.CreateResourcesProbe();
-            var usage = itest.GetDiskUsage();
+            var usage = itest.GetDiskUsage("all");
             Debug.WriteLine("diskusage = {0}%", usage);
             Assert.IsTrue(usage > 0 && usage < 100);
         }
