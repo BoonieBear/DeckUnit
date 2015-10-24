@@ -70,10 +70,10 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
         public int CmdId
         {
-            get { return CmdId; }
+            get { return GetPropertyValue(() => CmdId); }
             set
             {
-                CmdId = value;
+                SetPropertyValue(() => CmdId, value);
                 switch (CmdId)
                 {
                     case 1:
@@ -83,7 +83,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                         CmdIDDesc = "时间段索取-" + Encoding.Default.GetString(_currentBdTask.ParaBytes);
                         break;
                     case 3:
-                        CmdIDDesc = "抽取索取-"+ Encoding.Default.GetString(_currentBdTask.ParaBytes);
+                        CmdIDDesc = "抽取索取-" + Encoding.Default.GetString(_currentBdTask.ParaBytes);
                         break;
                     case 4:
                         CmdIDDesc = "ADCP继续工作";
