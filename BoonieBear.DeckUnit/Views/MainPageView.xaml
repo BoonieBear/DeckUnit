@@ -10,9 +10,9 @@
       Name="MainformPage"
       d:DesignHeight="480" d:DesignWidth="640" 
 	Title="甲板单元" Loaded="MainformPage_Loaded">
-    
-        
-    
+
+
+
     <Page.Resources>
         <!--adcp-->
         <Storyboard x:Key="EnableTaskButtonStoryboard">
@@ -30,22 +30,22 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TaskListButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <!--DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
                 <SplineDoubleKeyFrame KeyTime="00:00:00.7" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
+            </>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryDataButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
-            </BooleanAnimationUsingKeyFrames>
+            </BooleanAnimationUsingKeyFrames-->
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="NewTaskButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-276"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="TaskListButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="HistoryDataButton">
+            <!--DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="HistoryDataButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.4" Value="-300"/>
-            </DoubleAnimationUsingKeyFrames>
+            </-->
 
         </Storyboard>
         <Storyboard x:Key="DisableTaskButtonStoryboard">
@@ -61,22 +61,22 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TaskListButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <!--DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryDataButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.1" Value="0"/>
-            </DoubleAnimationUsingKeyFrames>
+            </>
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="HistoryDataButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.2" Value="False"/>
-            </BooleanAnimationUsingKeyFrames>
-  
+            </BooleanAnimationUsingKeyFrames-->
+
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="NewTaskButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
             <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="TaskListButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
             </DoubleAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="HistoryDataButton">
+            <!--DoubleAnimationUsingKeyFrames Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)" Storyboard.TargetName="HistoryDataButton">
                 <EasingDoubleKeyFrame KeyTime="0:0:0.3" Value="294"/>
-            </DoubleAnimationUsingKeyFrames>
+            </-->
 
 
         </Storyboard>
@@ -397,7 +397,7 @@
                 </EasingThicknessKeyFrame>
             </ThicknessAnimationUsingKeyFrames>
         </Storyboard>
-        
+
         <Storyboard x:Key="InitStoryboard">
             <ThicknessAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetProperty="(FrameworkElement.Margin)" Storyboard.TargetName="DeviceDataButton">
                 <LinearThicknessKeyFrame KeyTime="00:00:00.3" Value="10,200"/>
@@ -440,12 +440,12 @@
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.3" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(TileBrush.TileMode)" Storyboard.TargetName="DeviceDataButton">
-            	<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static TileMode.None}"/>
-            	<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static TileMode.None}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static TileMode.None}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static TileMode.None}"/>
             </ObjectAnimationUsingKeyFrames>
             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="(Panel.Background).(TileBrush.Stretch)" Storyboard.TargetName="DeviceDataButton">
-            	<DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Stretch.Uniform}"/>
-            	<DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Stretch.Uniform}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.3" Value="{x:Static Stretch.Uniform}"/>
+                <DiscreteObjectKeyFrame KeyTime="0:0:0.5" Value="{x:Static Stretch.Uniform}"/>
             </ObjectAnimationUsingKeyFrames>
         </Storyboard>
         <Storyboard x:Key="DisableModermStoryboard">
@@ -597,13 +597,13 @@ Storyboard.TargetName="MyTextEffect"
                         <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/MainPageButton/Signal.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
- 
+
                 <Button  x:Name="TestButton"  Style="{StaticResource TransparentButtonStyle}"  Content="系统维护" HorizontalAlignment="Left" VerticalAlignment="Bottom"  RenderTransformOrigin="0.5,0.5" Cursor="Hand" Opacity="1" Focusable="False" Height="150"  Width="150" Margin="350,180" FontSize="16" >
                     <Button.Background>
                         <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/MainPageButton/Test.png" Stretch="Uniform" />
                     </Button.Background>
                 </Button>
-                <TextBlock x:Name="TextBlock" Text="{Binding NowTime}" FontFamily="Segoe UI Semibold" Canvas.Left="470" Canvas.Top="0" FontSize="14"/>
+                <TextBlock x:Name="TextBlock" Text="{Binding NowTime}" FontFamily="Segoe UI Semibold" Canvas.Left="485" Canvas.Top="437" FontSize="14"/>
                 <Viewport3D x:Name="ModermViewport3DD" Height="202" Width="195" Canvas.Left="220" Canvas.Top="269.5" Panel.ZIndex="-1">
                     <Viewport3D.Camera>
                         <PerspectiveCamera FarPlaneDistance="1.138135" LookDirection="-0.591625438835131,-0.525542905388051,-0.611378765348801" NearPlaneDistance="0" Position="0.438092,0.438021,0.438092" UpDirection="-0.337609067793506,0.912865583975171,0.229557275940602" FieldOfView="48" />
@@ -623,13 +623,13 @@ Storyboard.TargetName="MyTextEffect"
                             <BeginStoryboard x:Name="RotationStoryboard_BeginStoryboard" Storyboard="{StaticResource RotationStoryboard}"/>
                         </EventTrigger>
                     </Viewport3D.Triggers>
-					<ModelVisual3D>
-                            <ModelVisual3D.Content>
-                                <Model3DGroup>
-                                    <DirectionalLight Color="#FFF5F1F1" Direction="0.266264055280985,-0.509085150331775,-0.818496036995293"/>
-                                </Model3DGroup>
-                            </ModelVisual3D.Content>
-                        </ModelVisual3D>
+                    <ModelVisual3D>
+                        <ModelVisual3D.Content>
+                            <Model3DGroup>
+                                <DirectionalLight Color="#FFF5F1F1" Direction="0.266264055280985,-0.509085150331775,-0.818496036995293"/>
+                            </Model3DGroup>
+                        </ModelVisual3D.Content>
+                    </ModelVisual3D>
                     <ModelVisual3D x:Name="modelVisual3D">
                         <ModelVisual3D.Transform>
                             <Transform3DGroup>
@@ -644,7 +644,7 @@ Storyboard.TargetName="MyTextEffect"
                                 <TranslateTransform3D/>
                             </Transform3DGroup>
                         </ModelVisual3D.Transform>
-                        
+
                         <ModelVisual3D>
                             <ModelVisual3D.Transform>
                                 <MatrixTransform3D Matrix="1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 0.000000 0.000000 0.000000 0.000000 1.000000 "/>
@@ -1973,7 +1973,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="HistoryDataButton"  Opacity="0" FontFamily="SimSun" Content="数据" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20" Command="{Binding GoADCPDataViewCMD}">
+                <!--Button x:Name="HistoryDataButton"  Opacity="0" FontFamily="SimSun" Content="数据" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20" Command="{Binding GoADCPDataViewCMD}">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -1983,8 +1983,8 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                     
-                </Button>
-                
+                </-->
+
                 <!--option button-->
                 <Button x:Name="BasicButton" Content ="基本设置" Command="{Binding GoBasicConfigViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="SimSun" FontSize="20">
                     <Button.RenderTransform>
@@ -2059,7 +2059,7 @@ Storyboard.TargetName="MyTextEffect"
                     </Button.RenderTransform>
 
                 </Button>
-                
+
                 <!--test button-->
                 <Button x:Name="DebugButton" Content ="系统调试" Command="{Binding GoDebugViewCMD}" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50"  Canvas.Top="490" Canvas.Left="60" IsEnabled="False" Opacity="0" FontFamily="SimSun" FontSize="20">
                     <Button.RenderTransform>
@@ -2081,7 +2081,7 @@ Storyboard.TargetName="MyTextEffect"
                         </TransformGroup>
                     </Button.RenderTransform>
                 </Button>
-                <Button x:Name="ADButton"  Opacity="0" Command ="{Binding GoADViewCMD}" FontFamily="SimSun" Content="AD采集" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
+                <Button x:Name="ADButton"  Opacity="0" Command ="{Binding GoADViewCMD}" FontFamily="SimSun" Content="数据采集" Style="{DynamicResource HighlightedSquareButtonStyle}" Width="120" Height="50" RenderTransformOrigin="0.575,4.05" Canvas.Top="490" Canvas.Left="344.364" IsEnabled="False" FontSize="20">
                     <Button.RenderTransform>
                         <TransformGroup>
                             <ScaleTransform/>
@@ -2094,6 +2094,6 @@ Storyboard.TargetName="MyTextEffect"
                 </Button>
             </Canvas>
         </Grid>
-        
+
     </Grid>
 </Page>

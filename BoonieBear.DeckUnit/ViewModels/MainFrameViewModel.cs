@@ -10,6 +10,7 @@ using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.JsonUtils;
+using BoonieBear.DeckUnit.Views;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.Frames;
 using TinyMetroWpfLibrary.ViewModel;
@@ -43,7 +44,6 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => StatusHeader);
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
-            IsStartPage= Visibility.Visible;
             StatusHeader = "甲板单元";
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
@@ -140,11 +140,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => LoaderMode); }
             set { SetPropertyValue(() => LoaderMode, value); }
         }
-        public Visibility IsStartPage
-        {
-            get { return GetPropertyValue(() => IsStartPage); }
-            set { SetPropertyValue(() => IsStartPage, value); }
-        }
+        
         #endregion
 
 
@@ -188,7 +184,35 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             if (ModeType)
             {
-                await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
+                if (NetInput.StartsWith("ad"))
+                {
+                    var md = new MetroDialogSettings();
+                    md.AffirmativeButtonText = "确定";
+                    md.NegativeButtonText = "取消";
+                    var ret = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
+                    "采集AD需通过数据采集页面，需要跳转页面去系统维护-数据采集吗？", MessageDialogStyle.AffirmativeAndNegative, md);
+                    if (ret == MessageDialogResult.Affirmative)
+                    {
+                        MainFrame mf = Application.Current.MainWindow as MainFrame;
+                        var flyouts = mf.flyoutsControl;
+                        if (flyouts != null)
+                        {
+                            Flyout f = flyouts.Items[0] as Flyout;
+                            if (f != null)
+                                f.IsOpen = false;
+                            f = flyouts.Items[1] as Flyout;
+                            if (f != null)
+                                f.IsOpen = false;
+                            f = flyouts.Items[2] as Flyout;
+                            if (f != null)
+                                f.IsOpen = false;
+                        }
+                        EventAggregator.PublishMessage(new GoADViewEvent());
+                    }
+                    return;
+                }
+                if(UnitCore.Instance.NetEngine.IsWorking)
+                    await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
             }
             else
             {

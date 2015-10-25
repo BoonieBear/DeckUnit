@@ -1,18 +1,26 @@
-﻿using BoonieBear.DeckUnit.Models;
+﻿using System.Windows.Threading;
+using BoonieBear.DeckUnit.Core;
+using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.Resource;
 using MahApps.Metro.Controls.Dialogs;
 using System;
 using System.Collections.ObjectModel;
 using System.Windows.Input;
+using TinyMetroWpfLibrary.EventAggregation;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 
 namespace BoonieBear.DeckUnit.ViewModels
 {
-    public class ADViewModel : ViewModelBase
+
+    public class ADViewModel : ViewModelBase, IHandleMessage<UpdateADByteCount>
     {
         #region Overrides of ViewModelBase
 
+        private int lastCount = 0;
+        private int currentCount = 0;
+        private DispatcherTimer t;
 
         public override void Initialize()
         {
@@ -25,7 +33,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void InitializePage(object extraData)
         {
             IsWorking = false;
-            TotalADByte = 0;
+            TotalADByte = "-";
             RefreshInfos();
         }
         private void RefreshInfos()
@@ -50,12 +58,22 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         #region 绑定属性
 
+        public string Status
+        {
+            get { return GetPropertyValue(() => Status); }
+            set { SetPropertyValue(() => Status, value); }
+        }
+        public string SpeedStr
+        {
+            get { return GetPropertyValue(() => SpeedStr); }
+            set { SetPropertyValue(() => SpeedStr, value); }
+        }
         public bool IsWorking
         {
             get { return GetPropertyValue(() => IsWorking); }
             set { SetPropertyValue(() => IsWorking, value); }
         }
-        public int TotalADByte
+        public string TotalADByte
         {
             get { return GetPropertyValue(() => TotalADByte); }
             set { SetPropertyValue(() => TotalADByte, value); }
@@ -106,16 +124,30 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void CanExecuteBeginAD(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
-            eventArgs.CanExecute = true;
+            eventArgs.CanExecute = !IsWorking;
         }
 
 
-        public void ExecuteBeginAD(object sender, ExecutedRoutedEventArgs eventArgs)
+        public async void ExecuteBeginAD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            
-            EventAggregator.PublishMessage(new GoBackNavigationRequest());
+            string NetInput = "ad";
+            await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
+            t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
+            IsWorking = true;
+            lastCount = 0;
+            currentCount = 0;
         }
-
+        void Tick(object sender, EventArgs e)
+        {
+            int speed = currentCount - lastCount;
+            lastCount = currentCount;
+            if (speed > 1024)
+                SpeedStr = ((float)speed/1024).ToString("F2") + " KB/s";
+            else
+            {
+                SpeedStr = speed.ToString() + " B/s";
+            }
+        }
         public ICommand StopAD
         {
             get { return GetPropertyValue(() => StopAD); }
@@ -129,10 +161,30 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
 
-        public void ExecuteStopAD(object sender, ExecutedRoutedEventArgs eventArgs)
+        public async void ExecuteStopAD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            EventAggregator.PublishMessage(new GoBackNavigationRequest());
+            char cesc = (char)27;
+            await UnitCore.Instance.NetEngine.SendConsoleCMD(cesc.ToString());
+            t.Stop();
+            t.IsEnabled = false;
+            Status = "";
+            IsWorking = false;
         }
         #endregion
+
+        public void Handle(UpdateADByteCount message)
+        {
+            Status = "接收AD数据中……";
+            IsWorking = true;
+            currentCount = message.AdCount;
+            if (currentCount > 1024*1024)
+                TotalADByte = ((float)currentCount/1024/1024).ToString("F2") + " MB";
+            else if (currentCount > 1024)
+                TotalADByte = ((float)currentCount/1024).ToString("F2") + " KB";
+            else //must be Byte, GB is too large to storage
+            {
+                TotalADByte = currentCount.ToString() + " Bytes";
+            }
+        }
     }
 }

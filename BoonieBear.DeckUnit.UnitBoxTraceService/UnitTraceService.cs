@@ -52,13 +52,13 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
 
             string AdPath = LogPath + @"\AD";
             var adInfo = new DirectoryInfo(AdPath);
-            Ch1adFile = new ADFile("AD1", "txt");
+            Ch1adFile = new ADFile("AD1_", "dat");
             Ch1adFile.SetPath(adInfo);
-            Ch2adFile = new ADFile("AD2", "txt");
+            Ch2adFile = new ADFile("AD2_", "dat");
             Ch2adFile.SetPath(adInfo);
-            Ch3adFile = new ADFile("AD3", "txt");
+            Ch3adFile = new ADFile("AD3_", "dat");
             Ch3adFile.SetPath(adInfo);
-            Ch4adFile = new ADFile("AD4", "txt");
+            Ch4adFile = new ADFile("AD4_", "dat");
             Ch4adFile.SetPath(adInfo);
 
             traceFile = new LogFile("Trace", "txt");
@@ -157,7 +157,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                         bCreate = Ch1adFile.Create();
                     if (bCreate)
                     {
-                        Ch1adFile.BinaryWrite(data);
+                        Ch1adFile.Write(data);
                     }
                     break;
                 case 0xAD02:
@@ -166,7 +166,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                         bCreate = Ch2adFile.Create();
                     if (bCreate)
                     {
-                        Ch2adFile.BinaryWrite(data);
+                        Ch2adFile.Write(data);
                     }
                     break;
                 case 0xAD03:
@@ -175,7 +175,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                         bCreate = Ch3adFile.Create();
                     if (bCreate)
                     {
-                        Ch3adFile.BinaryWrite(data);
+                        Ch3adFile.Write(data);
                     }
                     break;
                 case 0xAD04:
@@ -184,18 +184,25 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
                         bCreate = Ch4adFile.Create();
                     if (bCreate)
                     {
-                        Ch4adFile.BinaryWrite(data);
+                        Ch4adFile.Write(data);
                     }
                     break;
-                case 0xEDED:
-                    Ch1adFile.Close();
-                    Ch2adFile.Close();
-                    Ch3adFile.Close();
-                    Ch4adFile.Close();
-                    break;
+                
             }
         }
 
+        public void CloseAD()
+        {
+            Ch1adFile.Close();
+            Ch2adFile.Close();
+            Ch3adFile.Close();
+            Ch4adFile.Close();
+        }
+        public long GetADCount()
+        {
+            return Ch1adFile.FileLen + Ch2adFile.FileLen + Ch3adFile.FileLen + Ch4adFile.FileLen;
+            
+        }
         public bool Save(CommandLog log, byte[] bytes)
         {
             if (_adFile.Create())

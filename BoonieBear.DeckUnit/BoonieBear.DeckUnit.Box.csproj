@@ -161,6 +161,7 @@
     <Compile Include="Events\GoTaskListViewEvent.cs" />
     <Compile Include="Events\NodeStatusInfo.cs" />
     <Compile Include="Events\PingNotifyEvent.cs" />
+    <Compile Include="Events\UpdateADByteCount.cs" />
     <Compile Include="Events\UpdateCurrentTask.cs" />
     <Compile Include="Helps\PickerFilter.cs" />
     <Compile Include="Helps\TreeHelper.cs" />

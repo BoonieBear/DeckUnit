@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BoonieBear.DeckUnit.Core;
+using System.IO;
 
 namespace BoonieBear.DeckUnit.Views
 {
@@ -26,7 +28,9 @@ namespace BoonieBear.DeckUnit.Views
 
         private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-
+            string path = UnitCore.Instance.UnitTraceService.LogPath + @"\AD";
+            if (Directory.Exists(path))
+                System.Diagnostics.Process.Start("explorer.exe", path);
         }
     }
 }

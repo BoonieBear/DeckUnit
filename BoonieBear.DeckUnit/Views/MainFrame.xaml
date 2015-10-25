@@ -72,18 +72,14 @@
         <Binding Path="MainFrameViewModel" Source="{StaticResource ViewModelLocator}"/>
     </metroControl:MetroWindow.DataContext>
     <Grid x:Name="grid" Background="{StaticResource MainBackGround}">
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="40"/>
-        </Grid.RowDefinitions>
-        <frames:AnimationFrame x:Name="ContentFrame" Grid.Row="0"
+        <frames:AnimationFrame x:Name="ContentFrame"
 			Source="MainPageView.xaml" 
 			NavigationUIVisibility="Hidden"
 			AnimationMode="Fade"
 			SlideorGrowDuration ="0:0:0.30 "
 			FadeDuration="0:0:0.20"
 			FadeOffset="0:0:0.20" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
-        <metroControl:WindowCommands Grid.Row="1" VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="99" Height="40" Margin="0,0,5,0">
+        <metroControl:WindowCommands VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="99" Height="40" Margin="0,0,30,0">
             <Button Click="LaunchDebugView" Width="50"
 				ToolTip="调试信息">
                 <Button.Background>
@@ -259,11 +255,6 @@
             </metroControl:Flyout>
         </metroControl:FlyoutsControl>
 
-        <StatusBar Visibility="{Binding IsStartPage}" Grid.Row="2" Style="{StaticResource MetroStatusBar}" Foreground="Black" Background="{Binding Level, Converter={StaticResource NotifyLevelToBrushConverter}}">
-            <StatusBarItem FontSize ="18" Width="100" Content="{Binding StatusHeader, Mode=OneWay}"/>
-            <Separator Style="{StaticResource MetroStatusBarSeparator}" />
-            <StatusBarItem FontSize ="18" Content="{Binding StatusDescription, Mode=OneWay}"/>
-        </StatusBar>
     </Grid>
 
 </metroControl:MetroWindow>

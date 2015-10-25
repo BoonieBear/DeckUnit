@@ -43,7 +43,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public override void InitializePage(object extraData)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Collapsed;
+            
         }
 
         #endregion
@@ -122,7 +122,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoNewTaskViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoNewTaskViewEvent());
         }
         public ICommand GoTaskListViewCMD
@@ -140,7 +140,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoTaskListViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoTaskListViewEvent());
         }
         /*
@@ -177,7 +177,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoBasicConfigViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoCofigViewPage());
         }
         
@@ -196,7 +196,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoConnectConfigViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoConnectConfigViewEvent());
         }
         public ICommand GoSetEnergyViewCMD
@@ -214,7 +214,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoSetEnergyViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoSetEnergyViewEvent());
         }
         public ICommand GoRefreshConfigViewCMD
@@ -232,7 +232,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoRefreshConfigViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoRefreshNodeConfigViewEvent());
         }
         public ICommand GoHistoryCMDViewCMD
@@ -250,7 +250,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoHistoryCMDViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoHistoryDataPageBaseNavigationRequest());
         }
         public ICommand GoPingViewCMD
@@ -268,7 +268,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoPingViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoPingTestViewEvent());
         }
         public ICommand GoDebugViewCMD
@@ -286,7 +286,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoDebugViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoDebugViewPage());
         }
         public ICommand GoGetInfoViewCMD
@@ -304,7 +304,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoGetInfoViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoGetNodeStatusViewEvent());
         }
 
@@ -323,7 +323,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoADViewCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            MainFrameViewModel.pMainFrame.IsStartPage = Visibility.Visible;
+            
             EventAggregator.PublishMessage(new GoADViewEvent());
         }
     }

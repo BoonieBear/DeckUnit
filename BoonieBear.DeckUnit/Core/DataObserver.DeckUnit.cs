@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO.Ports;
 using System.Net.Sockets;
 using System.Windows;
+using System.Windows.Controls;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
@@ -72,6 +73,17 @@ namespace BoonieBear.DeckUnit.Core
                     {
                         case 0xEE01:
                             ParseData(bytes);
+                            break;
+                        case 0xEDED:
+                            UnitCore.Instance.UnitTraceService.CloseAD();
+                            break;
+                        case 0xAD01:
+                        case 0xAD02:
+                        case 0xAD03:
+                        case 0xAD04:
+                            UnitCore.Instance.UnitTraceService.SaveAD(e.DataBuffer);
+                            UnitCore.Instance.EventAggregator.PublishMessage(
+                                new UpdateADByteCount((int)UnitCore.Instance.UnitTraceService.GetADCount()));
                             break;
                         default:
                             break;

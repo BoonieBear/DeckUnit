@@ -41,12 +41,12 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <StackPanel Margin="5" Orientation="Vertical" VerticalAlignment="Bottom">
-                        <TextBlock Text="{Binding Status}" FontFamily="SimSun" FontSize="36"/>
-                        <Custom:MetroProgressBar IsIndeterminate="True"  EllipseDiameter="10" EllipseOffset="10" Foreground="{DynamicResource AccentSelectedColorBrush}"/>
+                        <TextBlock Text="{Binding Status}" FontFamily="SimSun" FontSize="32"/>
+                        <Custom:MetroProgressBar IsIndeterminate="True" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}}" EllipseDiameter="10" EllipseOffset="10" Foreground="{DynamicResource AccentSelectedColorBrush}"/>
                     </StackPanel>
                     <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom">
-                        <TextBlock Text="数据上传速率：" FontFamily="SimSun" FontSize="24"/>
-                        <TextBlock Text="{Binding SpeedStr}" FontFamily="SimSun" FontSize="36"/>
+                        <TextBlock Text="上传速率：" FontFamily="SimSun" FontSize="24"/>
+                        <TextBlock Text="{Binding SpeedStr}" FontFamily="SimSun" FontSize="24"/>
                     </StackPanel>
                     <StackPanel Grid.Row="2" Orientation="Vertical" VerticalAlignment="Bottom">
                         <StackPanel  Margin="5" Orientation="Horizontal" >

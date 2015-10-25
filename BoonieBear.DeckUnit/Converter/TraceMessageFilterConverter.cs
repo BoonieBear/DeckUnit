@@ -16,7 +16,7 @@ namespace BoonieBear.DeckUnit.Converter
             str = values[1] as string;
             var list = values[2] as List<string>;
             layer = values[0] as string;
-            if (layer != null && layer.TrimStart(' ') != "")
+            if (list !=null&& layer != null && layer.TrimStart(' ') != "")
                 list = list.FindAll(FindLayer);
 
             if (str != null && str.TrimStart(' ') != "")
