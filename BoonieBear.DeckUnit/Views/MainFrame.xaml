@@ -172,16 +172,16 @@
                                 <ComboBoxItem Content =" 网络监控"/>
                             </ComboBox>
                             <TextBlock Text="显示内容"/>
-                            <TextBox x:Name ="filterbox" Text="{Binding FilterString, Mode=TwoWay}" Width ="200" Margin="10,0,10,0" 
+                            <TextBox  Text="{Binding FilterString, Mode=TwoWay}" Width ="200" Margin="10,0,10,0" 
 								metroControl:TextBoxHelper.ClearTextButton="True"
                                      TouchKeyBoard:TabKeyBoard.Placement="Top" 
 									TouchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=filterbox}"
 									TouchKeyBoard:TabKeyBoard.HorizontalOffset="-240"
 									TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									TouchKeyBoard:TabKeyBoard.Type="Num" 
-									TouchKeyBoard:TabKeyBoard.Width="480" TextChanged="filterbox_TextChanged"/>
+									TouchKeyBoard:TabKeyBoard.Width="480" />
                         </StackPanel>
-                        <ListBox MinHeight="100">
+                        <ListBox MinHeight="100" Height="100" x:Name ="filterbox" >
                             <ListBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource TraceMessgaeFilterConverter}">
                                     <Binding Path="Filterlayer"/>

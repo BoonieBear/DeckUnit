@@ -113,7 +113,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
             {
                 try
                 {
-                    
+
                     Array.Clear(buffer, 0, 4096);
                     var receiveBytes = _udpClient.Receive(ref remoteIpEndPoint);
                     if (BitConverter.ToUInt16(receiveBytes, 0) != 0xEE01)
@@ -131,7 +131,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                         Array.Copy(receiveBytes, 0, buffer, numberOfBytesRead, receiveBytes.Length);
                         numberOfBytesRead += receiveBytes.Length;
                     }
-                    
+
                 }
                 catch (SocketException exception)
                 {
@@ -146,13 +146,17 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                         flag = false;
                         return;
                     }
-                
+
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(0, string.Empty, buffer, numberOfBytesRead, flag, error, mode, _udpClient);
-                    numberOfBytesRead = 0;
-                    OnParsed(e);
+                    if (numberOfBytesRead > 4)
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, buffer, numberOfBytesRead, flag, error, mode,
+                            _udpClient);
+                        numberOfBytesRead = 0;
+                        OnParsed(e);
+                    }
                 }
             }
         }

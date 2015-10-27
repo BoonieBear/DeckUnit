@@ -43,8 +43,8 @@ namespace BoonieBear.DeckUnit.Core
                     if (udpsrc != null) //trace
                     {
                         UnitCore.Instance.UnitTraceService.WriteTrace(str);
-                        MainFrameViewModel.pMainFrame.Dispatch(() => MainFrameViewModel.pMainFrame.TraceCollMt.Add(str));
-
+                        MainFrameViewModel.pMainFrame.TraceCollMt.Add(str);
+                        
                         if (MainFrameViewModel.pMainFrame.TraceCollMt.Count > 200)
                         {
                             //lock (MainFrameViewModel.pMainFrame.TraceCollMt.SyncRoot)

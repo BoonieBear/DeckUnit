@@ -116,16 +116,17 @@ namespace BoonieBear.DeckUnit.Core
                     return false;
                 ACNProtocol.Init(_modemConf.ID);
                 if (UnitTraceService.CreateService(DeckUnitConf.Connectstring) == false || DeckDataProtocol.Init(_modemConf.ID, "default.dudb") == false)
-                     throw new Exception("基础服务初始化失败");
+                     throw new Exception("数据库初始化失败");
                 
                 if (CommEngine != null)
                 {
-                    CommEngine.Initialize();
-                    CommEngine.Start();
-                    var cmd = MSPHexBuilder.Pack250(true);
-                    CommEngine.SendCMD(cmd);//进入调试模式，开启网络
-                    Thread.Sleep(500);
+                    //CommEngine.Initialize();
+                    //CommEngine.Start();
+                    //var cmd = MSPHexBuilder.Pack250(true);
+                    //CommEngine.SendCMD(cmd);//进入调试模式，开启网络
+                    //Thread.Sleep(500);
                     CheckAddrAvailable(500); //wait dsp start network
+
                 }
                 if (NetEngine != null)
                 {
@@ -145,7 +146,7 @@ namespace BoonieBear.DeckUnit.Core
 
         }
         /// <summary>
-        /// 测试通信机IP是否可以ping，测试三次，成功即返回true，不成功返回false
+        /// 测试通信机IP是否可以ping，测试N次，成功即返回true，不成功返回false
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>

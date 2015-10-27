@@ -44,12 +44,14 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => StatusHeader);
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
+            AddPropertyChangedNotification(() => TraceCollMt);
             StatusHeader = "甲板单元";
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
             ModeType = true;
             DataRecvTime = "数据接收时间：---";
-
+            FilterString = "";
+            Filterlayer = "";
         }
         #region 绑定属性
 
