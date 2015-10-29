@@ -86,8 +86,8 @@ namespace BoonieBear.DeckUnit.LiveService
         {
             IsWorking = false;
             if (_commConf == null || _DataObserver == null)
-                throw new Exception("无法设置串口");
-            if (!CreateSerialService(_commConf)) throw new Exception("串口服务无法初始化");
+                throw new Exception("无法设置串口，请检查硬件连接并重启程序");
+            if (!CreateSerialService(_commConf)) throw new Exception("串口服务无法初始化，请检查硬件连接并重启程序");
             IsWorking = true;
         }
 

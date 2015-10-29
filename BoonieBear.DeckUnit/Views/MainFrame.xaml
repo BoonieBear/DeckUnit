@@ -187,9 +187,36 @@
                                     <Binding Path="Filterlayer"/>
                                     <Binding Path="FilterString"/>
                                      <Binding Path="TraceCollMt"/>       
-                                </MultiBinding>
-                                              
+                                </MultiBinding>  
                             </ListBox.ItemsSource>
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <!-- 设置控件模板 -->
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <Border Background="{TemplateBinding Background}" Height="16">
+                                                    <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+
+                                    <!-- 设置触发器 -->
+                                    <Style.Triggers>
+                                        <Trigger Property="IsSelected" Value="true">
+                                            <Setter Property="Background" Value="#CC119EDA"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                        <Trigger Property="IsMouseOver" Value="true">
+                                            <Setter Property="Background" Value="LemonChiffon"/>
+                                            <Setter Property="Foreground" Value="Black"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
                         </ListBox>
                     </StackPanel>
                 </Grid>

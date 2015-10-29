@@ -32,6 +32,18 @@ namespace BoonieBear.DeckUnit.ViewModels
             SelectedFromDate = DateTime.Today;
             SelectedToDate = DateTime.Today;
             RefreshVisble = Visibility.Visible;
+            DataCollMt.CollectionChanged+=DataCollMt_CollectionChanged;
+            CMDCollMt.CollectionChanged+=CMDCollMt_CollectionChanged;
+        }
+
+        private void CMDCollMt_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            base.OnPropertyChanged(() => CMDCollMt);
+        }
+
+        private void DataCollMt_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            base.OnPropertyChanged(() => DataCollMt);
         }
 
 
@@ -180,10 +192,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                     }
                 }
             }
-            SelectIndex = 1;
-            SelectIndex = 0;//控件不能自己刷新，需要切换一下，下一步需改进
-            IsDataActive = true;
-            IsFetching = false;
+
             RefreshVisble = Visibility.Visible;
         }
         #endregion

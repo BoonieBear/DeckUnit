@@ -54,9 +54,8 @@ namespace BoonieBear.DeckUnit.LiveService
         /// </summary>
         /// <param name="configure"></param>
         /// <returns></returns>
-        private bool CreateTCPService(CommConfInfo configure)
+        private bool CreateTCPService()
         {
-            
             // 同步方法，会阻塞进程，调用init用task
             TCPShellService.ConnectSync();
             TCPDataService.ConnectSync();
@@ -139,7 +138,7 @@ namespace BoonieBear.DeckUnit.LiveService
             _datatcpClient = new TcpClient { SendTimeout = 1000 };
             if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort1) ||
                 (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
-                throw new Exception("通信网络初始化失败");
+                throw new Exception("通信网络初始化失败,请检查网络连接状态并重启程序");
             if (_udpTraceClient == null)
                 _udpTraceClient = new UdpClient(_commConf.TraceUDPPort);
             if (!UDPTraceService.Init(_udpTraceClient)) throw new Exception("调试广播网络初始化失败");
@@ -172,7 +171,7 @@ namespace BoonieBear.DeckUnit.LiveService
             IsWorking = false;
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("网络通信无法设置");
-            //if (!CreateTCPService(_commConf)) throw new Exception("网络服务无法启动");
+            if (!CreateTCPService()) throw new Exception("网络服务无法启动");
             if (!CreateUDPService()) throw new Exception("启动广播网络失败");
             IsWorking = true;
         }

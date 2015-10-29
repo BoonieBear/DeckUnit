@@ -30,7 +30,7 @@ namespace BoonieBear.DeckUnit.Views
             
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
             //this.DebugLog.Text = MainFrameViewModel.pMainFrame.Shellstring;
-            
+            filterbox.Items.CurrentChanged += (_1, _2) => filterbox.ScrollIntoView(filterbox.Items[filterbox.Items.Count-1]);
         }
 
         private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -40,39 +40,6 @@ namespace BoonieBear.DeckUnit.Views
             
             UnitCore.Instance.EventAggregator.PublishMessage(new GoHomePageNavigationEvent());
             UnitCore.Instance.Start();
-            /*
-            var remoteTask = this.ShowProgressAsync("请稍候...", "正在初始化系统");
-            Task.Factory.StartNew(() => Thread.Sleep(2000)).ContinueWith(x => Dispatcher.Invoke(new Action(() =>
-            {
-                remote = remoteTask.Result;
-                
-            }))).ContinueWith(obj =>
-            {
-                //UnitCore.Instance.Start();
-                remote.SetIndeterminate();
-                //remote.SetCancelable(true);
-                Dispatcher.Invoke(new Action(() =>
-                {
-                    if (UnitCore.Instance.ServiceOK)
-                    {
-                        remote.SetMessage("初始化成功!");
-                    }
-                    else
-                    {
-                        remote.SetMessage("初始化失败,详细错误信息请查看系统日志");
-                    }
-                }));
-                Thread.Sleep(3000);
-                Dispatcher.Invoke(new Action(() => remote.CloseAsync().ContinueWith(x =>
-                {
-                    if (!UnitCore.Instance.ServiceOK)
-                    {
-                        //导航到Home界面，下面的是示例
-                        UnitCore.Instance.EventAggregator.PublishMessage(new GoHomePageNavigationEvent());
-                        
-                    }
-                })));
-            });*/
 
         }
 

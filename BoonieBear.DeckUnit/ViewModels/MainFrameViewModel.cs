@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
-using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.JsonUtils;
 using BoonieBear.DeckUnit.Views;
 using TinyMetroWpfLibrary.Events;
@@ -19,6 +19,7 @@ using BoonieBear.DeckUnit.Models;
 using MahApps.Metro.Controls;
 using BoonieBear.DeckUnit.BaseType;
 using MahApps.Metro.Controls.Dialogs;
+using System.ComponentModel;
 namespace BoonieBear.DeckUnit.ViewModels
 {
     /// <summary>
@@ -44,7 +45,6 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => StatusHeader);
             AddPropertyChangedNotification(()=>StatusDescription);
             AddPropertyChangedNotification(() => ModeType);
-            AddPropertyChangedNotification(() => TraceCollMt);
             StatusHeader = "甲板单元";
             StatusDescription = "正在运行";
             Level = NotifyLevel.Info;
@@ -52,6 +52,20 @@ namespace BoonieBear.DeckUnit.ViewModels
             DataRecvTime = "数据接收时间：---";
             FilterString = "";
             Filterlayer = "";
+            TraceCollMt.CollectionChanged +=TraceCollMt_CollectionChanged;
+            DataCollMt.CollectionChanged +=DataCollMt_CollectionChanged;
+
+        }
+
+        private void DataCollMt_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            base.OnPropertyChanged(() => DataCollMt);
+        }
+
+        private void TraceCollMt_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            base.OnPropertyChanged(() => TraceCollMt);
+            
         }
         #region 绑定属性
 

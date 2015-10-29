@@ -565,6 +565,7 @@ Storyboard.TargetName="MyTextEffect"
                         </EventTrigger>
                             </TextBlock.Triggers-->
                         </TextBlock>
+                        <TextBlock  FontSize="18px" Margin="240,20,10,5" Foreground="#FFFFF0" Text="v2.0.1"/>
                     </Grid>
                 </Border>
                 <Rectangle Name="ReflectedText" Canvas.Top ="60" Height="{Binding ElementName=TextBorder,Path=ActualHeight}"

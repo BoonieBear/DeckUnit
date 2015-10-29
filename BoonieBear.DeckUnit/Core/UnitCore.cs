@@ -8,6 +8,8 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Windows.Baml2006;
+using System.Windows.Controls;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.CommLib.Serial;
@@ -15,14 +17,19 @@ using BoonieBear.DeckUnit.CommLib.TCP;
 using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.Models;
 using BoonieBear.DeckUnit.UBP;
+using BoonieBear.DeckUnit.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.UnitBoxTraceService;
 using BoonieBear.DeckUnit.DUConf;
 using BoonieBear.DeckUnit.BaseType;
 using BoonieBear.DeckUnit.LiveService;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
@@ -120,18 +127,14 @@ namespace BoonieBear.DeckUnit.Core
                 
                 if (CommEngine != null)
                 {
-                    //CommEngine.Initialize();
-                    //CommEngine.Start();
-                    //var cmd = MSPHexBuilder.Pack250(true);
-                    //CommEngine.SendCMD(cmd);//进入调试模式，开启网络
-                    //Thread.Sleep(500);
-                    CheckAddrAvailable(500); //wait dsp start network
-
+                    CommEngine.Initialize();
+                    CommEngine.Start();
+                    var cmd = MSPHexBuilder.Pack250(true);
+                    CommEngine.SendCMD(cmd);//进入调试模式，开启网络
                 }
                 if (NetEngine != null)
                 {
-                    NetEngine.Initialize();
-                    NetEngine.Start();
+                    StartSetupNetWork();
                 }
                 _serviceStarted = NetEngine.IsWorking && CommEngine.IsWorking;
                 Error = NetEngine.Error;
@@ -145,12 +148,78 @@ namespace BoonieBear.DeckUnit.Core
             return _serviceStarted;
 
         }
+
+        private async void StartSetupNetWork()
+        {
+
+            if (PingTest(500)) //wait dsp start network，先测试一次，失败进入重试节奏
+            {
+                NetEngine.Initialize();
+                NetEngine.Start();
+                return;
+            }
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            md.NegativeButtonText = "取消";
+            var controller =
+                await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowProgressAsync(MainFrameViewModel.pMainFrame,
+                        "网络无法连接", "准备重试，请确保甲板单元正常供电",true,md);
+            await TaskEx.Delay(2000);
+            controller.SetIndeterminate();
+            int i = 1;
+            while (true)
+            {
+                controller.SetMessage("重新连接第 " + i + "次");
+                
+                if (CommEngine.IsWorking)
+                {
+                    var cmd = MSPHexBuilder.Pack250(true);
+                    CommEngine.SendCMD(cmd);//进入调试模式，开启网络
+                }
+                bool ret = await Task.Factory.StartNew(()=>PingTest(500));
+                if (ret)
+                    break;
+                if (i == 30)
+                    break;
+                if (controller.IsCanceled)
+                    break; //canceled progressdialog auto closes.
+                i += 1;
+                await TaskEx.Delay(2000);
+            }
+            await controller.CloseAsync();
+
+            if (controller.IsCanceled||i==30)
+            {
+                await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "网络错误",
+                        "没有网络连接无法正常使用甲板单元", MessageDialogStyle.Affirmative, md);
+            }
+            else //ping通
+            {
+                var dialog = (BaseMetroDialog) App.Current.MainWindow.Resources["CustomInfoDialog"];
+                dialog.Title = "网络畅通";
+                await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(
+                        MainFrameViewModel.pMainFrame,
+                        dialog);
+                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                textBlock.Text = "开始启动网络通信服务";
+                await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(
+                        MainFrameViewModel.pMainFrame, dialog);
+                NetEngine.Initialize();
+                NetEngine.Start();
+            }
+
+        }
+
         /// <summary>
-        /// 测试通信机IP是否可以ping，测试N次，成功即返回true，不成功返回false
+        /// 测试通信机IP是否可以ping，测试3次，成功即返回true，失败返回false
         /// </summary>
         /// <param name="timeout"></param>
         /// <returns></returns>
-        private bool CheckAddrAvailable(int timeout)
+        private bool PingTest(int timeout)
         {
             var ipaddr = IPAddress.Parse(_commConf.LinkIP);
             Ping p = new Ping();
