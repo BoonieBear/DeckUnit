@@ -92,7 +92,7 @@
                 <StackPanel Grid.Row="0" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="纬度" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
                     <TextBox Text="{Binding Lat}" x:Name ="LatTextBox" FontFamily="SimSun" FontSize="20" Margin="40,10" Width="200"
-                         touchKeyBoard:TabKeyBoard.HorizontalOffset="-50"
+                         touchKeyBoard:TabKeyBoard.HorizontalOffset="-250"
 						    touchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									touchKeyBoard:TabKeyBoard.Width="480"
                                     touchKeyBoard:TabKeyBoard.Placement="Bottom" 
@@ -100,16 +100,33 @@
                                     touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=LatTextBox}" Height="45"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Horizontal">
-                    <TextBlock Text="串口2设备" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
-                    <ComboBox FontFamily="SimSun" Width ="150"   Margin ="30,0" FontSize="24" ItemsSource="{Binding DeviceInfo}"
-                              VerticalAlignment="Center"
-                              SelectedIndex="{Binding Comm2Device}" HorizontalAlignment="Center" Height="45"/>
+                    <TextBlock x:Name ="Comm2Box" Text="串口2设备" Margin ="5" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
+                    <ComboBox FontFamily="SimSun" Width ="175"   Margin ="5,0" FontSize="24" ItemsSource="{Binding DeviceInfo}"
+                            VerticalAlignment="Center"
+                            IsEditable="True"
+                            Text="{Binding Comm2DeviceName}"
+                            SelectedIndex="{Binding Comm2Device}" HorizontalAlignment="Center" Height="45" 
+                            touchKeyBoard:TabKeyBoard.Placement="Top" 
+							touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=Comm2Box}"
+							touchKeyBoard:TabKeyBoard.VerticalOffset="-10"
+							touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+							touchKeyBoard:TabKeyBoard.Type="Num" 
+							touchKeyBoard:TabKeyBoard.Width="480"/>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal">
                     <TextBlock Text="串口3设备" VerticalAlignment="Center" FontSize="24" Foreground="Black"/>
-                    <ComboBox FontFamily="SimSun" Width ="150"   Margin ="30,0" FontSize="24" ItemsSource="{Binding DeviceInfo, Mode=OneWay}"
+                    <ComboBox x:Name ="Comm3Box" FontFamily="SimSun" Width ="175"   Margin ="5,0" FontSize="24" ItemsSource="{Binding DeviceInfo, Mode=OneWay}"
                               VerticalAlignment="Center"
-                              SelectedIndex="{Binding Comm3Device}" HorizontalAlignment="Center" Height="45"/>
+                              IsEditable="True"
+                              Text="{Binding Comm3DeviceName}"
+                              SelectedIndex="{Binding Comm3Device}" HorizontalAlignment="Center" Height="45"
+                              touchKeyBoard:TabKeyBoard.Placement="Top" 
+							touchKeyBoard:TabKeyBoard.PlacementTarget="{Binding ElementName=Comm3Box}"
+							touchKeyBoard:TabKeyBoard.VerticalOffset="-10"
+                              touchKeyBoard:TabKeyBoard.HorizontalOffset="-290"
+							touchKeyBoard:TabKeyBoard.IsEnabled="True" 
+							touchKeyBoard:TabKeyBoard.Type="Num" 
+							touchKeyBoard:TabKeyBoard.Width="480"/>
                 </StackPanel>
             </Grid>
             <Grid Grid.Row="2">

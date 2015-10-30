@@ -110,7 +110,16 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             get { return GetPropertyValue(() => Comm3Device); }
             set { SetPropertyValue(() => Comm3Device, value); }
         }
-
+        public string Comm2DeviceName
+        {
+            get { return GetPropertyValue(() => Comm2DeviceName); }
+            set { SetPropertyValue(() => Comm2DeviceName, value); }
+        }
+        public string Comm3DeviceName
+        {
+            get { return GetPropertyValue(() => Comm3DeviceName); }
+            set { SetPropertyValue(() => Comm3DeviceName, value); }
+        }
         public int NetSwitch
         {
             get { return GetPropertyValue(() => NetSwitch); }
@@ -169,8 +178,8 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             Task<bool> result = null;
             var mc = new ModermConfig();
             mc.Buoyid = BuoyID;
-            mc.Com2Device = Convert.ToUInt32(Enum.Parse(typeof(DeviceAddr), DeviceInfo[Comm2Device]));
-            mc.Com3Device = Convert.ToUInt32(Enum.Parse(typeof(DeviceAddr), DeviceInfo[Comm3Device]));
+            mc.Com2Device = Convert.ToUInt32(Enum.Parse(typeof(DeviceAddr), Comm2DeviceName));
+            mc.Com3Device = Convert.ToUInt32(Enum.Parse(typeof(DeviceAddr), Comm3DeviceName));
             mc.Emitnum = (uint)Emit;
             mc.Emittype = Convert.ToUInt32(Enum.Parse(typeof(EmitType), EmitType[EmitIndex]));
             mc.Lang = double.Parse(Long);

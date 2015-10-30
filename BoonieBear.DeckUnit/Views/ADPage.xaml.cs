@@ -32,5 +32,10 @@ namespace BoonieBear.DeckUnit.Views
             if (Directory.Exists(path))
                 System.Diagnostics.Process.Start("explorer.exe", path);
         }
+
+        private void TextBlock_MouseLeftButtonDown_1(object sender, MouseButtonEventArgs e)
+        {
+            System.Diagnostics.Process.Start("explorer.exe", Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments));
+        }
     }
 }

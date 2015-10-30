@@ -53,7 +53,8 @@
                             <TextBlock Text="数据大小：" FontFamily="SimSun" FontSize="24"/>
                             <TextBlock Text="{Binding TotalADByte}" FontFamily="SimSun" FontSize="24"/>
                         </StackPanel>
-                        <TextBlock Margin="0,5" Text="打开文件所在位置" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                        <TextBlock Margin="0,5" Text="打开当前AD文件夹" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown"/>
+                        <TextBlock Margin="0,5" Text="打开系统文件夹" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown_1" />
                     </StackPanel>
                 </Grid>
             </GroupBox>
