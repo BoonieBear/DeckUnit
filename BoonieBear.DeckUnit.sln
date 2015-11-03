@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+VisualStudioVersion = 12.0.40629.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.DAL", "BoonieBear.DeckUnit.DAL\BoonieBear.DeckUnit.DAL.csproj", "{14AF1D53-3A3E-4740-A56B-C93555DD21A9}"
 EndProject
@@ -82,6 +82,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WpfReordingButtonTests", "WpfReordingButtonTests\WpfReordingButtonTests.csproj", "{090074B4-FAB8-4667-AAA9-13F4C611AB62}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BoonieBear.DeckUnit.BaseType", "BoonieBear.DeckUnit.BaseType\BoonieBear.DeckUnit.BaseType.csproj", "{2A7A853C-6554-446F-8536-4928DA33E666}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ImageConverter", "ImageConverter", "{02AB4787-8A9F-435D-B6F2-DB4E782D5420}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageProc", "ImageToJp2K\ImageProc.csproj", "{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImageProcTests", "ImageProcTests\ImageProcTests.csproj", "{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -409,6 +415,26 @@ Global
 		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{2A7A853C-6554-446F-8536-4928DA33E666}.Release|x86.ActiveCfg = Release|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2}.Release|x86.ActiveCfg = Release|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -448,5 +474,8 @@ Global
 		{108569AA-E2D3-4A39-92FA-1934AE120BE6} = {2775A811-EF20-4DC6-A306-ACB6C18D3579}
 		{090074B4-FAB8-4667-AAA9-13F4C611AB62} = {2775A811-EF20-4DC6-A306-ACB6C18D3579}
 		{2A7A853C-6554-446F-8536-4928DA33E666} = {DB38C11D-FC0C-4FDB-9AAE-775F2F268546}
+		{02AB4787-8A9F-435D-B6F2-DB4E782D5420} = {DB38C11D-FC0C-4FDB-9AAE-775F2F268546}
+		{DD8520EE-301B-4D85-AEB2-18B8156D0CC2} = {02AB4787-8A9F-435D-B6F2-DB4E782D5420}
+		{A4F7E63C-08A9-4550-8AF1-7AABAE8564DD} = {2775A811-EF20-4DC6-A306-ACB6C18D3579}
 	EndGlobalSection
 EndGlobal

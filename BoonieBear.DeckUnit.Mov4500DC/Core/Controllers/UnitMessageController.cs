@@ -1,9 +1,11 @@
 ﻿using System;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Controller;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
+using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
 {
     /// <summary>
@@ -54,7 +56,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
 
         public void Alert(string message)
         {
-            throw new System.NotImplementedException();
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
+                message, MessageDialogStyle.Affirmative, md);
         }
 
         public void BroadCast(string message)

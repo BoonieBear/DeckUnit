@@ -133,10 +133,16 @@ namespace BoonieBear.DeckUnit.ACMP
         private Int16 _relateX;//潜水器相对母船x轴位移
         private Int16 _relateY;//潜水器相对母船y轴位移
         private UInt16 _relateZ;//潜水器相对母船z轴位移	
-        public byte[] storebyte = new byte[40];
+        
 
+
+        /// <summary>
+        /// 按协议打包，无包头ID
+        /// </summary>
+        /// <returns></returns>
         public byte[] Pack()
         {
+            byte[] storebyte = new byte[40];
             int offset = 0;
             Buffer.BlockCopy(BitConverter.GetBytes(Ltime),0,storebyte,offset,sizeof(long));
             offset += sizeof (long);
@@ -233,9 +239,13 @@ namespace BoonieBear.DeckUnit.ACMP
             get { return _relateZ; }
             set { _relateZ = value; }
         }
+        internal void Parse(byte[] bytes)
+        {
+            throw new NotImplementedException();
+        }
     };
 
-    //避碰信息
+    //避碰信息2002,
     public class Bpdata {
         private long _ltime;
         private UInt16		_frontup;//前上避碰声呐距离
@@ -245,7 +255,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private UInt16		_behinddown;//后下
         private UInt16		_left;//左下
         private UInt16		_right;//右下	
-
+        private byte[] storebyte = new byte[22];
 
         public long Ltime
         {
@@ -294,10 +304,26 @@ namespace BoonieBear.DeckUnit.ACMP
             get { return _right; }
             set { _right = value; }
         }
+        /// <summary>
+        /// 用来打包数据给水声通信
+        /// </summary>
+        /// <returns></returns>
+        public byte[] Pack()
+        {
+            return storebyte;
+        }
 
         internal void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _frontup = BitConverter.ToUInt16(bytes, 10);
+            _front = BitConverter.ToUInt16(bytes, 12);
+            _frontdown = BitConverter.ToUInt16(bytes, 14);
+            _down = BitConverter.ToUInt16(bytes, 16);
+            _behinddown = BitConverter.ToUInt16(bytes, 18);
+            _left = BitConverter.ToUInt16(bytes, 20);
+            _right = BitConverter.ToUInt16(bytes, 22);
+            Buffer.BlockCopy(bytes, 2, storebyte,0,22);
         }
     };
 
@@ -305,7 +331,7 @@ namespace BoonieBear.DeckUnit.ACMP
     public class Bsssdata {
         private long _ltime;
         private Int16 _depth;//距离海底高度
-
+        byte[] storebyte = new byte[10];
         public long Ltime
         {
             get { return _ltime; }
@@ -318,21 +344,28 @@ namespace BoonieBear.DeckUnit.ACMP
             set { _depth = value; }
         }
 
+        public byte[] Pack()
+        {
+            return storebyte;
+        }
+
         internal void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _depth = BitConverter.ToInt16(bytes, 10);
+            Buffer.BlockCopy(bytes, 2, storebyte, 0,10);
         }
     };
 
 
-    //CTD信息
+    //CTD信息1002
     public class Ctddata {
         private long _ltime;
         private UInt16 _watertemp;//海水温度
         private UInt16 _vartlevel;//
         private UInt16 _watercond;//海水电导率
         private UInt16 _soundvec;//声速
-
+        byte[] storebyte = new byte[16];
         public long Ltime
         {
             get { return _ltime; }
@@ -365,7 +398,18 @@ namespace BoonieBear.DeckUnit.ACMP
 
         public void Parse(byte[] bytes)
         {
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _watertemp = BitConverter.ToUInt16(bytes, 10);
+            _vartlevel = BitConverter.ToUInt16(bytes, 12);
+            _watercond = BitConverter.ToUInt16(bytes, 14);
+            _soundvec = BitConverter.ToUInt16(bytes, 16);
             
+            Buffer.BlockCopy(bytes, 2, storebyte, 0, 16);
+        }
+
+        internal byte[] Pack()
+        {
+            return storebyte;
         }
     };
 
@@ -380,6 +424,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private Int16 _subroll;//潜水器横倾角
         private UInt16 _subdepth;//潜水器深度
         private UInt16 _subheight;//潜水器高度
+        private byte[] storebyte = new byte[26];
 
         //
         public Subposition(long time = 0, float Long = 0, float Lat = 0, UInt16 heading = 0, short pitch = 0, short roll = 0, UInt16 depth = 0, UInt16 height = 0)
@@ -441,16 +486,20 @@ namespace BoonieBear.DeckUnit.ACMP
         //前两个字节ID，parse完后数据存在成员里，属性表示真正的含义
         public void Parse(byte[] bytes)
         {
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _subLong = BitConverter.ToInt32(bytes, 10);
+            _subLat = BitConverter.ToInt32(bytes, 14);
+            _subheading = BitConverter.ToUInt16(bytes, 18);
+            _subpitch = BitConverter.ToInt16(bytes, 20);
+            _subroll = BitConverter.ToInt16(bytes, 22);
+            _subdepth = BitConverter.ToUInt16(bytes, 24);
+            _subheight = BitConverter.ToUInt16(bytes, 26);
+            Buffer.BlockCopy(bytes,0,storebyte,0,26);
+        }
 
-                _ltime = BitConverter.ToInt64(bytes, 2);
-                _subLong = BitConverter.ToInt32(bytes, 10);
-                _subLat = BitConverter.ToInt32(bytes, 14);
-                _subheading = BitConverter.ToUInt16(bytes, 18);
-                _subpitch = BitConverter.ToInt16(bytes, 20);
-                _subroll = BitConverter.ToInt16(bytes, 22);
-                _subdepth = BitConverter.ToUInt16(bytes, 24);
-                _subheight = BitConverter.ToUInt16(bytes, 26);
-
+        internal byte[] Pack()
+        {
+            return storebyte;
         }
     };
 
@@ -480,7 +529,7 @@ namespace BoonieBear.DeckUnit.ACMP
         }
     };
 
-    //生命支持系统
+    //生命支持系统0x1003
     public class Lifesupply {
         private long _ltime;
         private byte  _oxygen;//氧气浓度
@@ -488,7 +537,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private byte  _pressure;//舱内压力
         private byte  _temperature;//舱内温度
         private UInt16  _humidity; //舱内湿度		
-
+        byte[] storebyte = new byte[14];
         public long Ltime
         {
             get { return _ltime; }
@@ -527,115 +576,211 @@ namespace BoonieBear.DeckUnit.ACMP
 
         internal void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _oxygen = bytes[10];
+            _co2 = bytes[11];
+            _pressure = bytes[12];
+            _temperature = bytes[13];
+            _humidity = BitConverter.ToUInt16(bytes, 14);
+            Buffer.BlockCopy(bytes, 2, storebyte, 0, 14);
+        }
+
+        internal byte[] Pack()
+        {
+            return storebyte;
         }
     };
 
     //能源系统信息
     public class Energysys {
         private long _ltime;
-        private UInt16  _mainV;//主电池电压
-        private UInt16  _mainI;//主电池电流
-        private UInt16  _mainconsume;//主电池能源消耗
-        private UInt16  _subV;//副电池电压
-        private UInt16  _subI;//副电池电流
-        private UInt16  _subconsume;//副电池能源消耗	
-
+        private byte  _headmainV;//主电池电压
+        private UInt16  _headmainI;//主电池电流
+        private UInt16  _headmainconsume;//主电池能源消耗
+        private byte _headmainMaxTemp;
+        private byte _headmainMaxExpand;
+        private byte _tailmainV;//尾主电池电压
+        private UInt16 _tailmainI;//尾主电池电流
+        private UInt16 _tailmainconsume;//尾主电池能源消耗
+        private byte _tailmainMaxTemp;
+        private byte _tailmainMaxExpand;
+        private byte _leftsubV;//左副电池电压
+        private byte _leftsubI;//左副电池电流
+        private UInt16 _leftsubconsume;//左副电池能源消耗	
+        private byte _leftsubMaxTemp;
+        private byte _leftsubMaxExpand;
+        private byte _rightsubV;//右副电池电压
+        private byte _rightsubI;//右副电池电流
+        private UInt16 _rightsubconsume;//右副电池能源消耗	
+        private byte _rightsubMaxTemp;
+        private byte _rightsubMaxExpand;
+        byte[] storeBytes = new byte[34];
         public long Ltime
         {
             get { return _ltime; }
             set { _ltime = value; }
         }
 
-        public ushort MainV
+        public byte HeadmainV
         {
-            get { return _mainV; }
-            set { _mainV = value; }
+            get { return _headmainV; }
         }
 
-        public ushort MainI
+        public ushort HeadmainI
         {
-            get { return _mainI; }
-            set { _mainI = value; }
+            get { return _headmainI; }
         }
 
-        public ushort Mainconsume
+        public ushort Headmainconsume
         {
-            get { return _mainconsume; }
-            set { _mainconsume = value; }
+            get { return _headmainconsume; }
         }
 
-        public ushort SubV
+        public byte HeadmainMaxTemp
         {
-            get { return _subV; }
-            set { _subV = value; }
+            get { return _headmainMaxTemp; }
         }
 
-        public ushort SubI
+        public byte HeadmainMaxExpand
         {
-            get { return _subI; }
-            set { _subI = value; }
+            get { return _headmainMaxExpand; }
         }
 
-        public ushort Subconsume
+        public byte TailmainV
         {
-            get { return _subconsume; }
-            set { _subconsume = value; }
+            get { return _tailmainV; }
         }
+
+        public ushort TailmainI
+        {
+            get { return _tailmainI; }
+        }
+
+        public ushort Tailmainconsume
+        {
+            get { return _tailmainconsume; }
+        }
+
+        public byte TailmainMaxTemp
+        {
+            get { return _tailmainMaxTemp; }
+        }
+
+        public byte TailmainMaxExpand
+        {
+            get { return _tailmainMaxExpand; }
+        }
+
+        public byte LeftsubV
+        {
+            get { return _leftsubV; }
+        }
+
+        public byte LeftsubI
+        {
+            get { return _leftsubI; }
+        }
+
+        public ushort Leftsubconsume
+        {
+            get { return _leftsubconsume; }
+        }
+
+        public byte LeftsubMaxTemp
+        {
+            get { return _leftsubMaxTemp; }
+        }
+
+        public byte LeftsubMaxExpand
+        {
+            get { return _leftsubMaxExpand; }
+        }
+
+        public byte RightsubV
+        {
+            get { return _rightsubV; }
+        }
+
+        public byte RightsubI
+        {
+            get { return _rightsubI; }
+        }
+
+        public ushort Rightsubconsume
+        {
+            get { return _rightsubconsume; }
+        }
+
+        public byte RightsubMaxTemp
+        {
+            get { return _rightsubMaxTemp; }
+        }
+
+        public byte RightsubMaxExpand
+        {
+            get { return _rightsubMaxExpand; }
+        }
+
 
         internal void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _headmainV = bytes[10];
+            _headmainI = BitConverter.ToUInt16(bytes, 11);
+           _headmainconsume = BitConverter.ToUInt16(bytes, 13);
+            _headmainMaxTemp =bytes[15];
+            _headmainMaxExpand=bytes[16];
+            _tailmainV=bytes[17];
+            _tailmainI = BitConverter.ToUInt16(bytes, 18);
+            _tailmainconsume = BitConverter.ToUInt16(bytes, 20);
+            _tailmainMaxTemp = bytes[22];
+            _tailmainMaxExpand = bytes[23];
+            _leftsubV = bytes[24];
+            _leftsubI = bytes[25];
+            _leftsubconsume = BitConverter.ToUInt16(bytes, 26);
+            _leftsubMaxTemp = bytes[28];
+            _leftsubMaxExpand = bytes[29];
+            _rightsubV = bytes[30];
+            _rightsubI = bytes[31];
+            _rightsubconsume = BitConverter.ToUInt16(bytes, 32);	
+            _rightsubMaxTemp = bytes[34];
+            _rightsubMaxExpand = bytes[35];
+            Buffer.BlockCopy(bytes, 0, storeBytes, 0, 26);
+        }
+
+        internal byte[] Pack()
+        {
+            return storeBytes;
         }
     };
 
-    //报警信息
+    //报警信息1005
     public class Alertdata {
         private long _ltime;
-        private UInt32  _alert;//报警0-31bit
-        private byte	_aleak;//载人舱漏水
-        private UInt16	_pressure;//应急液压源压力
-        private UInt16	_head;//艏纵倾液位检测
-        private UInt16	_behind;//艉纵倾液位检测
+        private UInt64  _alert;//报警0-64bit
+        private byte	_leak;//载人舱漏水
         private UInt16	_cable;//压载水舱液位
         private byte    _temperature;//计算机罐温度
-
+        byte[] storeBytes = new byte[20];
         public long Ltime
         {
             get { return _ltime; }
             set { _ltime = value; }
         }
 
-        public uint Alert
+        public UInt64 Alert
         {
             get { return _alert; }
             set { _alert = value; }
         }
 
-        public byte Aleak
+        public byte Leak
         {
-            get { return _aleak; }
-            set { _aleak = value; }
+            get { return _leak; }
+            set { _leak = value; }
         }
 
-        public ushort Pressure
-        {
-            get { return _pressure; }
-            set { _pressure = value; }
-        }
-
-        public ushort Head
-        {
-            get { return _head; }
-            set { _head = value; }
-        }
-
-        public ushort Behind
-        {
-            get { return _behind; }
-            set { _behind = value; }
-        }
-
+     
         public ushort Cable
         {
             get { return _cable; }
@@ -650,7 +795,17 @@ namespace BoonieBear.DeckUnit.ACMP
 
         internal void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            _ltime = BitConverter.ToInt64(bytes, 2);
+            _alert = BitConverter.ToUInt64(bytes, 10);
+            _leak = bytes[18];
+            _cable = BitConverter.ToUInt16(bytes, 19);
+            _temperature = bytes[21];
+            Buffer.BlockCopy(bytes, 2, storeBytes,0,20);
+        }
+
+        internal byte[] Pack()
+        {
+            return storeBytes;
         }
     };
 
@@ -777,6 +932,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private sbyte[] _floorX;
         private sbyte[] _floorY;
         private sbyte[] _floorZ;
+        byte[] storebyte = new byte[30];
         public Adcpdata()
         {
             _floorX = new sbyte[10];
@@ -808,7 +964,15 @@ namespace BoonieBear.DeckUnit.ACMP
 
         internal void Parse(byte[] bytes)
         {
-            throw new NotImplementedException();
+            Buffer.BlockCopy(bytes, 2, _floorX, 0, 10);
+            Buffer.BlockCopy(bytes, 12, _floorY, 0, 10);
+            Buffer.BlockCopy(bytes, 22, _floorZ, 0, 10);
+            Buffer.BlockCopy(bytes,2,storebyte,0,30);
+        }
+
+        internal byte[] Pack()
+        {
+            return storebyte;
         }
     }
     #endregion

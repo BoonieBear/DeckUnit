@@ -90,15 +90,34 @@ namespace BoonieBear.DeckUnit.ACMP
             switch (mType)
             {
                 case ModuleType.MFSK:
+                    var bytes = _subposition.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,0,26);
+                    bytes = _bpdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,26,22);
+                    bytes = _bsssdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,48,10);
+                    bytes = _adcpdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,58,30);
+                    bytes = _ctddata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,88,16);
+                    bytes = _lifesupply.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,104,14);
+                    bytes = _energysys.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,128,26);
+                    bytes = _alertdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,154,20);
+                    if (_msg != null)
+                    {
+                        bytes = Encoding.Default.GetBytes(_msg);
+                    }
+                        Buffer.BlockCopy(bytes,0,_mfskBytes,174,40);
                     return _mfskBytes;
-                    break;
                 case ModuleType.MPSK:
                     return _mpskBytes;
-                    break;
                 default:
                     throw new Exception("未定义的调制类型！");
             }
-            return null;
+
         }
         public byte[] PackageMFSKBytes
         {
