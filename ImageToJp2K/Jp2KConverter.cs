@@ -155,7 +155,7 @@ namespace ImageProc
             FileInfo fi = new FileInfo(INPUT_FILENAME);
             float ratio = (float) MAX_SIZE/(float) fi.Length;
             string EncodeOpt = INPUT_FILENAME_FLAG + INPUT_FILENAME + ENCODD_CONVERT + OUTPUT_FILENAME_FLAG +
-                               OUTPUT_FILENAME + OPT + ratio.ToString("f3");
+                               OUTPUT_FILENAME + OPT + ratio.ToString("f4");
             try
             {
                 Process ps = new Process();

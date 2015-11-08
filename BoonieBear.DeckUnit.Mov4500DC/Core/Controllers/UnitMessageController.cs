@@ -13,7 +13,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
     /// 由于不像导航消息处理类那样已经由BaseController处理了一些基本消息
     /// 因此需要自己将消息处理函数完成并完成IMessageController接口
     /// </summary>
-    class UnitMessageController : IMessageController,IHandleMessage<LogEvent>
+    class UnitMessageController : IMessageController, IHandleMessage<LogEvent>, IHandleMessage<ErrorEvent>
     {
         #region 构造
         private IEventAggregator eventAggregator;
@@ -58,6 +58,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
         {
             var md = new MetroDialogSettings();
             md.AffirmativeButtonText = "确定";
+            
             MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
                 message, MessageDialogStyle.Affirmative, md);
         }
@@ -74,14 +75,33 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
         {
             switch (message.Type)
             {
-                case LogType.Error:
-                    ErrorLog(message.Message, message.Ex);
-                    break;
-                case LogType.Warning:
+                case LogType.Both:
                     WriteLog(message.Message);
+                    Alert(message.Message);
+                    break;
+                case LogType.OnlyInfo:
+                    //WriteLog(message.Message);
+                    Alert(message.Message);
                     break;
                 default:
                     WriteLog(message.Message);
+                    break;
+            }
+        }
+        public void Handle(ErrorEvent message)
+        {
+            switch (message.Type)
+            {
+                case LogType.OnlyLog:
+                    ErrorLog(message.Message, message.Ex);
+                    break;
+                case LogType.Both:
+                    ErrorLog(message.Message, message.Ex);
+                    Alert(message.Message);
+                    break;
+                default:
+                    //ErrorLog(message.Message, message.Ex);
+                    Alert(message.Message);
                     break;
             }
         }

@@ -6,6 +6,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Events;
 using TinyMetroWpfLibrary.Controller;
 using MahApps.Metro.Controls.Dialogs;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
+using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
 namespace BoonieBear.DeckUnit.Mov4500UI.Views
 {
     /// <summary>
@@ -16,6 +17,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         public MainFrame()
         {
             InitializeComponent();
+            MainFrameViewModel.pMainFrame.DialogCoordinator = DialogCoordinator.Instance;
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
         }
 

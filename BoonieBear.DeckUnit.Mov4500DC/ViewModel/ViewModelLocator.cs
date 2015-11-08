@@ -10,6 +10,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         public MainFrameViewModel _mainFrameViewModel;
         public HomePageViewModel _homwPageViewModel;
         public LiveCaptureViewModel _LiveCaptureViewModel;
+        public GlobalSettingViewModel _GlobalSettingViewModel;
         /// <summary>
         /// Gets the MainFrame ViewModel
         /// </summary>
@@ -50,6 +51,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     _LiveCaptureViewModel.Initialize();
                 }
                 return _LiveCaptureViewModel;
+            }
+        }
+        public GlobalSettingViewModel GlobalSettingViewModel
+        {
+            get
+            {
+                // Creates the MainFrame ViewModel
+                if (_GlobalSettingViewModel == null)
+                {
+                    _GlobalSettingViewModel = new GlobalSettingViewModel();
+                    _GlobalSettingViewModel.Initialize();
+                }
+                return _GlobalSettingViewModel;
             }
         }
     }

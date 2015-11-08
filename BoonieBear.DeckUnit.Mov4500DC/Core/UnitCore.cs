@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
@@ -7,6 +8,7 @@ using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.CommLib.Properties;
 using BoonieBear.DeckUnit.CommLib.UDP;
 using BoonieBear.DeckUnit.LiveService;
+using BoonieBear.DeckUnit.TraceFileService;
 using TinyMetroWpfLibrary.EventAggregation;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Mov4500Conf;
@@ -45,7 +47,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public string Error { get; private set; }
         public MonitorMode WorkMode{get; private set;}
         public Mutex ACMMutex { get; set; }//全局解析锁
-
+        public byte[] RecvOrOK = null;
+        public byte[] AskOrOK = null;
+        public byte[] AgreeOrReqRise = null;
+        public byte[] RiseOrUrgent = null;
+        public byte[] DisgOrRelBuoy = null;
         
         public MovTraceService MovTraceService
         {
@@ -82,7 +88,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             catch (Exception ex)
             {
                 ret = false;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
+                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
             }
             return ret;
         }
@@ -97,17 +103,41 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
 
         public INetCore NetCore
         {
-            get { return _iNetCore ?? (_iNetCore = NetLiveService_ACM.GetInstance(_commConf,_movConfInfo, _observer)); }
+            get { return _iNetCore ?? (_iNetCore = NetLiveService_ACM.GetInstance(_commConf, _movConfInfo, Observer)); }
         }
         public ICommCore CommCore
         {
             get { return _iCommCore ?? (_iCommCore = CommService.GetInstance(_commConf, Observer)); }
+        }
+
+        private bool LoadMorse()
+        {
+            string soundpath = MovConf.GetInstance().MyExecPath + "\\" + "morse";
+            if (Directory.Exists(soundpath))
+            {
+                try
+                {
+                    RecvOrOK = File.ReadAllBytes(soundpath + "\\" + "3.dat");
+                    AskOrOK = File.ReadAllBytes(soundpath + "\\" + "2.dat");
+                    AgreeOrReqRise = File.ReadAllBytes(soundpath + "\\" + "22.dat");
+                    RiseOrUrgent = File.ReadAllBytes(soundpath + "\\" + "5.dat");
+                    DisgOrRelBuoy = File.ReadAllBytes(soundpath + "\\" + "33.dat");
+                    return true;
+                }
+                catch (Exception)
+                {
+                    //do nothing
+                }
+                return false;
+            }
+            return false;
         }
         public bool Start()
         {
             try
             {
                 if(!LoadConfiguration()) throw new Exception("无法读取基本配置");
+                if (!LoadMorse()) throw new Exception("无法读取Morse数据");
                 NetCore.Initialize();
                 NetCore.Start();
                 CommCore.Initialize();
@@ -120,7 +150,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             catch (Exception ex)
             {
                 Error = ex.Message;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, ex, LogType.Error));
+                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.OnlyLog));
                 return false;
             }
             

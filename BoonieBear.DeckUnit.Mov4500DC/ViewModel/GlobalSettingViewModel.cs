@@ -6,7 +6,7 @@ using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
-    class GlobalSettingViewModel : ViewModelBase
+    public class GlobalSettingViewModel : ViewModelBase
     {
         public override void Initialize()
         {

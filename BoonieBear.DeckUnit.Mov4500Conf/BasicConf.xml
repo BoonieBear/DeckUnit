@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<Mov>
+<Mov4500>
   <Setup>
     <!--0:sub, 1:ship-->
     <Mode>1</Mode>
@@ -18,4 +18,4 @@
     <USBL>2000</USBL>
     <GPS>5000</GPS>
   </UDP>
-</Mov>
+</Mov4500>

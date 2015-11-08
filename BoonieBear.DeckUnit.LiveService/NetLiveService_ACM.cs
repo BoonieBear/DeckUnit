@@ -186,8 +186,8 @@ namespace BoonieBear.DeckUnit.LiveService
             IsWorking = false;
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
-            if (!CreateTCPService(_commConf)) throw new Exception("通信服务无法启动");
-            if (!CreateUDPService()) throw new Exception("启动广播网络失败");
+            if (!CreateTCPService(_commConf)) throw new Exception("通信机芯连接失败");
+            if (!CreateUDPService()) throw new Exception("广播网络启动失败");
             IsWorking = true;
         }
 

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using TinyMetroWpfLibrary.Utility;
@@ -22,9 +23,10 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
             }
         }
 
+        public string MyExecPath;
         protected MovConf()
         {
-            string MyExecPath = System.IO.Path.GetDirectoryName(
+            MyExecPath = System.IO.Path.GetDirectoryName(
                 System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
             xmldoc = MyExecPath + "\\" + xmldoc;
 
@@ -36,28 +38,28 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
 
         public MonitorMode GetMode()
         {
-            string[] str = { "Mov", "Setup", "Mode" };
+            string[] str = { "Setup", "Mode" };
             return (MonitorMode)Enum.Parse(typeof(MonitorMode), GetValue(str));
         }
 
         private string GetIP()
         {
-            string[] str = { "Mov", "Net", "IP" };
+            string[] str = { "Net", "IP" };
             return GetValue(str);
         }
         private string GetComPort()
         {
-            string[] str = { "Mov", "Net", "ComPort" };
+            string[] str = {"Net", "ComPort" };
             return GetValue(str);
         }
         private string GetDataPort()
         {
-            string[] str = { "Mov", "Net", "DataPort" };
+            string[] str = { "Net", "DataPort" };
             return GetValue(str);
         }
         private string GetBroadCastPort()
         {
-            string[] str = { "Mov", "Net", "Broadcast" };
+            string[] str = { "Net", "Broadcast" };
             return GetValue(str);
         }
         public ModemConfigure GetModemConfigure()
@@ -89,7 +91,7 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
         /// <returns></returns>
         public int GetSailPort()
         {
-            string[] str = { "Mov", "UDP", "Sail" };
+            string[] str = { "UDP", "Sail" };
             int port = 3000;
             int.TryParse(GetValue(str),out port);
             if (port == 0)
@@ -102,7 +104,7 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
         /// <returns></returns>
         public int GetGPSPort()
         {
-            string[] str = { "Mov", "UDP", "GPS" };
+            string[] str = { "UDP", "GPS" };
             int port = 5000;
             int.TryParse(GetValue(str),out port);
             if (port == 0)
@@ -115,7 +117,7 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
         /// <returns></returns>
         public int GetUSBLPort()
         {
-            string[] str = { "Mov", "UDP", "USBL" };
+            string[] str = { "UDP", "USBL" };
             int port = 2000;
             int.TryParse(GetValue(str),out port);
             if (port == 0)
@@ -128,7 +130,7 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
         /// <returns></returns>
         public int GetMovPort()
         {
-            string[] str = { "Mov", "UDP", "Mov" };
+            string[] str = { "UDP", "Mov" };
             int port = 4000;
             int.TryParse(GetValue(str),out port);
             if (port == 0)

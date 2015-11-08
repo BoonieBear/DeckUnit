@@ -153,6 +153,9 @@
     <Compile Include="Views\GlobalSettingView.xaml.cs">
       <DependentUpon>GlobalSettingView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\HistoryListPage.xaml.cs">
+      <DependentUpon>HistoryListPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\HomePageView.xaml.cs">
       <DependentUpon>HomePageView.xaml</DependentUpon>
     </Compile>
@@ -184,6 +187,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\GlobalSettingView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HistoryListPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -114,7 +114,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             md.NegativeButtonText = "取消";
             md.ColorScheme = MetroDialogColorScheme.Accented;
             var result = await VM.DialogCoordinator.ShowMessageAsync(VM, "退出程序",
-                "真的要退出潜器声学程序吗？", MessageDialogStyle.AffirmativeAndNegative, md);
+                "真的要退出声学主控程序吗？", MessageDialogStyle.AffirmativeAndNegative, md);
             if (result == MessageDialogResult.Affirmative)
                 VM.ExitProgram();
         }

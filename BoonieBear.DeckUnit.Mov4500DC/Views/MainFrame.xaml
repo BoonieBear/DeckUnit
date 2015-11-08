@@ -8,9 +8,11 @@
 		xmlns:frames="clr-namespace:TinyMetroWpfLibrary.Frames;assembly=TinyMetroWpfLibrary" 
         xmlns:Converters="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Converters"
         xmlns:ed="http://schemas.microsoft.com/expression/2010/drawing" 
-        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects" 
+        xmlns:ee="http://schemas.microsoft.com/expression/2010/effects"
+        xmlns:dialogs="clr-namespace:MahApps.Metro.Controls.Dialogs;assembly=MahApps.Metro"
         x:Class="BoonieBear.DeckUnit.Mov4500UI.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
+        dialogs:DialogParticipation.Register="{Binding}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
         ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized"  MouseDoubleClick="MetroWindow_MouseDoubleClick">
     <metroControl:MetroWindow.Resources>
@@ -28,7 +30,7 @@
     <Grid x:Name="FirstGrid">
         <Frame x:Name="ContentFrame"
 			NavigationUIVisibility="Hidden"
-            HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded">
+            HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded" FontSize="24">
         </Frame>
         <!--About the Software Panel-->
         <Controls:AnimationSlide  
@@ -36,7 +38,7 @@
                                      x:Name="AboutPanel"
                                      IsOpen="{Binding AboutVisibility, Mode=TwoWay}"
                                      IsAutoClose="True"   
-                                     Width="226" 
+                                     Width="300" 
                                      VerticalAlignment="Stretch"
                                      Visibility= "Visible"
                                      HorizontalAlignment="Right">

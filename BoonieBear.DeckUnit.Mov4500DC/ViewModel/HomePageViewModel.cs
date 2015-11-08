@@ -13,10 +13,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public override void Initialize()
         {
+            RecvMsgNumber = 0;
             StartLiveCapture = RegisterCommand(ExecuteStartLiveCapture, CanExecuteStartLiveCapture, true);
         }
         public override void InitializePage(object extraData)
         {
+        }
+        public int RecvMsgNumber
+        {
+            get { return GetPropertyValue(() => RecvMsgNumber); }
+            set { SetPropertyValue(() => RecvMsgNumber, value); }
         }
         public ICommand StartLiveCapture
         {

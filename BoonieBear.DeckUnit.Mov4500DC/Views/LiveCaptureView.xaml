@@ -13,7 +13,7 @@
       Background="{StaticResource DefaultBackgroundBrush}"
       mc:Ignorable="d" 
       d:DesignHeight="718" d:DesignWidth="1024"
-	Title="LiveCaptureView">
+	Title="LiveCaptureView" Loaded="Page_Loaded">
     <Page.Resources>
         <converters:HideZeroConverter x:Key="HideZeroConverter"/>
     </Page.Resources>

@@ -20,7 +20,6 @@ namespace BoonieBear.DeckUnit.ACMP
         private Lifesupply _lifesupply;
         private Energysys _energysys;
         private Alertdata _alertdata;
-        private Switchdata _switchdata;
         private Adcpdata _adcpdata;
         private string _msg;
         private byte[] img = new byte[MovGlobalVariables.ImgSize];
@@ -33,7 +32,6 @@ namespace BoonieBear.DeckUnit.ACMP
             _energysys = new Energysys();
             _alertdata = new Alertdata();
             _subposition = new Subposition();
-            _switchdata = new Switchdata();
             _adcpdata = new Adcpdata();
         }
         /// <summary>
@@ -93,26 +91,51 @@ namespace BoonieBear.DeckUnit.ACMP
                     var bytes = _subposition.Pack();
                     Buffer.BlockCopy(bytes,0,_mfskBytes,0,26);
                     bytes = _bpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,26,22);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,26,18);
                     bytes = _bsssdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,48,10);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,44,6);
                     bytes = _adcpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,58,30);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,50,34);
                     bytes = _ctddata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,88,16);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,84,16);
                     bytes = _lifesupply.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,104,14);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,100,14);
                     bytes = _energysys.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,128,26);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,114,34);
                     bytes = _alertdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,154,20);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,148,20);
                     if (_msg != null)
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
                     }
-                        Buffer.BlockCopy(bytes,0,_mfskBytes,174,40);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,168,40);
+                    _msg = null;
                     return _mfskBytes;
                 case ModuleType.MPSK:
+                    bytes = _subposition.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,0,26);
+                    bytes = _bpdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,26,18);
+                    bytes = _bsssdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,44,6);
+                    bytes = _adcpdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,50,34);
+                    bytes = _ctddata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,84,16);
+                    bytes = _lifesupply.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,100,14);
+                    bytes = _energysys.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,114,34);
+                    bytes = _alertdata.Pack();
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,148,20);
+                    if (_msg != null)
+                    {
+                        bytes = Encoding.Default.GetBytes(_msg);
+                    }
+                    _msg = null;
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,168,40);
+                    Buffer.BlockCopy(img, 0, _mpskBytes, MovGlobalVariables.MFSKSize, MovGlobalVariables.ImgSize);
+                    Array.Clear(img, 0, MovGlobalVariables.ImgSize);
                     return _mpskBytes;
                 default:
                     throw new Exception("未定义的调制类型！");
