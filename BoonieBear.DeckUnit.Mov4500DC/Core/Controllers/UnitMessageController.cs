@@ -47,6 +47,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
         public void WriteLog(string message)
         {
             LogHelper.WriteLog(message);
+            MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString()+":"+message);
         }
 
         public void ErrorLog(string message, Exception ex)

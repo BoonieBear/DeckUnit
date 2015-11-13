@@ -25,6 +25,11 @@ namespace BoonieBear.DeckUnit.ACMP
         private byte[] img = new byte[MovGlobalVariables.ImgSize];
         private UWVGatherData()
         {
+            Clean();
+        }
+        public void Clean()
+        {
+            _msg = string.Empty;
             _bpdata = new Bpdata();
             _bsssdata = new Bsssdata();
             _ctddata = new Ctddata();
@@ -33,55 +38,58 @@ namespace BoonieBear.DeckUnit.ACMP
             _alertdata = new Alertdata();
             _subposition = new Subposition();
             _adcpdata = new Adcpdata();
+            Array.Clear(_mfskBytes, 0, MovGlobalVariables.ShipMFSKSize);
+            Array.Clear(_mpskBytes, 0, MovGlobalVariables.MPSKSize);
+            Array.Clear(img, 0, MovGlobalVariables.ImgSize);
         }
         /// <summary>
         /// 将UDP接收到数据和文字，图像数据加入各个数据结构里
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="mDataType"></param>
-        public void Add(byte[] bytes, Mov4500DataType mDataType)
+        public void Add(byte[] bytes, MovDataType mDataType)
         {
             switch (mDataType)
             {
-                case Mov4500DataType.SUBPOST:
+                case MovDataType.SUBPOST:
                     _subposition.Parse(bytes);
                     break;
-                case Mov4500DataType.BP:
+                case MovDataType.BP:
                     _bpdata.Parse(bytes);
                     break;
-                case Mov4500DataType.BSSS:
+                case MovDataType.BSSS:
                     _bsssdata.Parse(bytes);
                     break;
-                case Mov4500DataType.ADCP:
+                case MovDataType.ADCP:
                     _adcpdata.Parse(bytes);
                     break;
-                case Mov4500DataType.CTD:
+                case MovDataType.CTD:
                     _ctddata.Parse(bytes);
                     break;
-                case Mov4500DataType.LIFESUPPLY:
+                case MovDataType.LIFESUPPLY:
                     _lifesupply.Parse(bytes);
                     break;
-                case Mov4500DataType.ENERGY:
+                case MovDataType.ENERGY:
                     _energysys.Parse(bytes);
                     break;
-                case Mov4500DataType.ALERT:
+                case MovDataType.ALERT:
                     _alertdata.Parse(bytes);
                     break;
-                case Mov4500DataType.WORD://发一次要清空一次
+                case MovDataType.WORD://发一次要清空一次
                     var msg = Encoding.Default.GetString(bytes);
                     if (msg != null)
                     {
                         Msg = msg;
                     }
                     break;
-                case Mov4500DataType.IMAGE://发一次要清空一次
+                case MovDataType.IMAGE://发一次要清空一次
                     Buffer.BlockCopy(bytes, 0, img, 0, bytes.Length);//bytes.Length要小于img尺寸
                     break;
                 default:
                     throw new Exception("undefined data type!");
             }
         }
-        internal byte[] Package(ModuleType mType)
+        private byte[] Package(ModuleType mType)
         {
             Array.Clear(_mfskBytes,0,_mfskBytes.Length);
             Array.Clear(_mpskBytes,0,_mpskBytes.Length);
@@ -150,7 +158,6 @@ namespace BoonieBear.DeckUnit.ACMP
         {
             get { return Package(ModuleType.MPSK); }
         }
-
         public string Msg
         {
             get { return _msg; }

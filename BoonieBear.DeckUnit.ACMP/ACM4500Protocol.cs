@@ -1,98 +1,112 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace BoonieBear.DeckUnit.ACMP
 {
     public class ACM4500Protocol
     {
-        private List<byte[]> mpskpkg; 
-        private static ShipGatherData _shipdataEngine;
-        private static UWVGatherData _uwvdataEngine;
+        private List<byte[]> mpskpkg; //mpsk包，3个凑齐一个完整的psk数据
+        //母船或是潜器数据池，每次启动只会用其中一个
+        private static ShipGatherData _shipdataPool;
+        private static UWVGatherData _uwvdataPool;
+        private static byte[] pkg;//指向需要解析的数据
         public static string Errormessage { get; private set; }
-
-        //some initial para
-        public class CommPara
-        {
-            public static ModuleType Type;
-            public static bool LinkOrient;//true:uplink,false:downlink
-
-        }
+        private static Hashtable ParsedInfoHT = new Hashtable();
+        private static MonitorMode Mode = MonitorMode.SUBMARINE;
 
         #region 成员函数
 
-        public static void Init()
+        public static void Init(MonitorMode mode = MonitorMode.SUBMARINE)
         {
-            CommPara.Type = ModuleType.MFSK;
-            CommPara.LinkOrient = true;
-            _shipdataEngine = ShipGatherData.GetInstance();
-            _uwvdataEngine = UWVGatherData.GetInstance();
+            Mode = mode;
+            _shipdataPool = ShipGatherData.GetInstance();
+            _uwvdataPool = UWVGatherData.GetInstance();
+            _shipdataPool.Clean();
+            _uwvdataPool.Clean();
+            ParsedInfoHT.Clear();
+            Errormessage = string.Empty;
         }
 
-        public static void PackMixData(byte[] bytes)
+        /// <summary>
+        /// 打包协议数据，如果是FH或是SSB的话，使用dataOfFhorSSB作为源数据
+        /// </summary>
+        /// <param name="type"></param>
+        /// <param name="dataOfFhorSSB"></param>
+        /// <returns></returns>
+        public static byte[] PackData(ModuleType type,byte[] dataOfFhorSSB = null)
         {
-            int byteslength = 0;
-            switch (CommPara.Type)
+            switch (type)
             {
                 case ModuleType.MFSK:
-                    if (CommPara.LinkOrient)
+                    if (Mode == MonitorMode.SUBMARINE)
                     {
-                        
+                        return _uwvdataPool.PackageMFSKBytes;
                     }
                     else
                     {
-                        
+                        return _shipdataPool.PackageMFSKBytes;
                     }
                     break;
                 case ModuleType.MPSK:
-                    if (CommPara.LinkOrient)
+                    if (Mode == MonitorMode.SUBMARINE)
                     {
-
+                        return _uwvdataPool.PackageMPSKBytes;
                     }
                     else
                     {
-
+                        Errormessage = "不支持的调制类型";
+                        return null;
                     }
                     break;
+                case ModuleType.FH://上下行无区别
+                    //暂无处理
+                    return dataOfFhorSSB;
+                case ModuleType.SSB:
+                    return dataOfFhorSSB;
+                case ModuleType.OFDM:
+                    return null;
                 default:
-                    break;
+                    return null;
             }
-
+            return null;
         }
          
         #endregion
 
-        #region 协议解析
-        public static int ParseBP(byte[] decodeBytes)
+
+        public static void GetBytes(byte[] pkgBytes)
         {
-            Errormessage = String.Empty;
-            var id = 0;
-            try
-            {
-                id = BitConverter.ToInt16(decodeBytes, 0);
-
-                return id;
-            }
-            catch (Exception e)
-            {
-                Errormessage = e.Message;
-                id = 0;
-                return id;
-            }
-            
-        }
-        #endregion
-
-
-        public static void GetBytes(byte[] p)
-        {
-            throw new NotImplementedException();
+            pkg = pkgBytes;
         }
 
-        public static object Parse()
+        public static bool Parse()
         {
-            throw new NotImplementedException();
+            if (pkg != null)
+            {
+                if (Mode == MonitorMode.SHIP)
+                {
+                    
+                }
+                else
+                {
+                    Sysposition postion = new Sysposition();
+                    postion.Parse(pkg);
+                    ParsedInfoHT.Add((int)MovDataType.ALLPOST, postion);
+                    string msg = Encoding.Default.GetString(pkg, 40, 40);
+                }
+                return true;
+            }
+            return false;
+        }
+        public static IEnumerator ReturnInfoPool()
+        {
+            if (ParsedInfoHT.Count > 0)
+                return ParsedInfoHT.GetEnumerator();
+            return null;
+
         }
     }
 }

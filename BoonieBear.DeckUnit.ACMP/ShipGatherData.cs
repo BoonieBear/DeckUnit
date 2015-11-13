@@ -16,9 +16,15 @@ namespace BoonieBear.DeckUnit.ACMP
 
         private ShipGatherData()
         {
-            _sysposition = new Sysposition();
+            Clean();
         }
 
+        public void Clean()
+        {
+            _msg = string.Empty;
+            _sysposition = new Sysposition();
+            Array.Clear(_packageBytes, 0, MovGlobalVariables.ShipMFSKSize);
+        }
         public string Msg
         {
             get { return _msg; }
@@ -39,14 +45,14 @@ namespace BoonieBear.DeckUnit.ACMP
             }
         }
 
-        public void Add(byte[] bytes, Mov4500DataType mDataType)
+        public void Add(byte[] bytes, MovDataType mDataType)
         {
             switch (mDataType)
             {
-                case Mov4500DataType.SHIPPOST:
+                case MovDataType.ALLPOST:
                     _sysposition.Parse(bytes);
                     break;
-                case Mov4500DataType.WORD:
+                case MovDataType.WORD:
                     var msg = Encoding.Default.GetString(bytes);
                     if (msg != null)
                     {
@@ -58,7 +64,7 @@ namespace BoonieBear.DeckUnit.ACMP
             }
         }
 
-        internal byte[] Package(ModuleType mType)
+        private byte[] Package(ModuleType mType)
         {
             Array.Clear(_packageBytes, 0, _packageBytes.Length);
             switch (mType)
@@ -77,5 +83,10 @@ namespace BoonieBear.DeckUnit.ACMP
                     return null;
             }
         }
+        public byte[] PackageMFSKBytes
+        {
+            get { return Package(ModuleType.MFSK); }
+        }
+        
     }
 }

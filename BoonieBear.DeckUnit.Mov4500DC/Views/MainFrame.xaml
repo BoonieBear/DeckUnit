@@ -1,6 +1,7 @@
 ﻿<metroControl:MetroWindow
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+        xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
         xmlns:Metro="clr-namespace:TinyMetroWpfLibrary.Metro;assembly=TinyMetroWpfLibrary" 
         xmlns:commands="clr-namespace:TinyMetroWpfLibrary.Commands;assembly=TinyMetroWpfLibrary" 
         xmlns:metroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -13,8 +14,9 @@
         x:Class="BoonieBear.DeckUnit.Mov4500UI.Views.MainFrame" 
         DataContext="{Binding MainFrameViewModel, Source={StaticResource ViewModelLocator}}"
         dialogs:DialogParticipation.Register="{Binding}"
+        dx:ThemeManager.ThemeName="MetropolisDark" IgnoreTaskbarOnMaximize="True"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized"  MouseDoubleClick="MetroWindow_MouseDoubleClick">
+        ShowInTaskbar ="True" ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized" EnableDWMDropShadow="True" IsWindowDraggable="False">
     <metroControl:MetroWindow.Resources>
         <Converters:WorkAreaWidthConverter x:Key="waw"/>
         <Converters:WorkAreaHeightConverter x:Key="wah"/>
@@ -96,7 +98,34 @@
                                   IsChecked ="False"
                                   Content="系统记录"/>
                     <ListView Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}">
-                        
+                        <ListBox.ItemContainerStyle>
+                            <Style TargetType="ListBoxItem">
+                                <!-- 设置控件模板 -->
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="ListBoxItem">
+                                            <Border Background="{TemplateBinding Background}" Height="16">
+                                                <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+
+                                <!-- 设置触发器 -->
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="true">
+                                        <Setter Property="Background" Value="#CC119EDA"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="true">
+                                        <Setter Property="Background" Value="LemonChiffon"/>
+                                        <Setter Property="Foreground" Value="Black"/>
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ListBox.ItemContainerStyle>
                     </ListView>
                 </StackPanel>
                 <StackPanel Margin ="4,0,0,0" Orientation="Vertical" Grid.Row="2">

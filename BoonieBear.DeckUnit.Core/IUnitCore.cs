@@ -37,6 +37,12 @@ namespace BoonieBear.DeckUnit.ICore
         Observer<CustomEventArgs> NetDataObserver { get; }
 
     }
+
+    //add a api to send specific id data:FH,FSK,PSK,OFDM,SSB
+    public interface IMovNetCore : INetCore
+    {
+        Task<bool> Send(int id, byte[] buf);
+    }
     public interface ICommCore:ICore
     {
         

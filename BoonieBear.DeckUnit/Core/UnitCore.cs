@@ -175,7 +175,7 @@ namespace BoonieBear.DeckUnit.Core
                 if (CommEngine.IsWorking)
                 {
                     var cmd = MSPHexBuilder.Pack250(true);
-                    CommEngine.SendCMD(cmd);//进入调试模式，开启网络
+                    await CommEngine.SendCMD(cmd);//进入调试模式，开启网络
                 }
                 bool ret = await Task.Factory.StartNew(()=>PingTest(500));
                 if (ret)

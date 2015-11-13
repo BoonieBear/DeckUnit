@@ -1764,7 +1764,7 @@
     <system:Double x:Key="Large">48</system:Double>
     <system:Double x:Key="Big">36</system:Double>
     <system:Double x:Key="Medium">22</system:Double>
-    <system:Double x:Key="Small">16</system:Double>
+    <system:Double x:Key="Small">18</system:Double>
     <system:Double x:Key="Tiny">11</system:Double>
 
 </ResourceDictionary>

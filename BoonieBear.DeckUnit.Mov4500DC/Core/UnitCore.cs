@@ -32,7 +32,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         //事件绑定接口，用于事件广播
         private IEventAggregator _eventAggregator;
         //网络服务接口
-        private INetCore _iNetCore;
+        private IMovNetCore _iNetCore;
         //串口服务接口，如果有
         private ICommCore _iCommCore;
         //文件服务接口
@@ -47,6 +47,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public string Error { get; private set; }
         public MonitorMode WorkMode{get; private set;}
         public Mutex ACMMutex { get; set; }//全局解析锁
+        public byte[] Single = null;
         public byte[] RecvOrOK = null;
         public byte[] AskOrOK = null;
         public byte[] AgreeOrReqRise = null;
@@ -99,9 +100,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             get { return _eventAggregator ?? (_eventAggregator = UnitKernal.Instance.EventAggregator); }
         }
 
-        
 
-        public INetCore NetCore
+
+        public IMovNetCore NetCore
         {
             get { return _iNetCore ?? (_iNetCore = NetLiveService_ACM.GetInstance(_commConf, _movConfInfo, Observer)); }
         }
@@ -117,6 +118,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             {
                 try
                 {
+                    Single = File.ReadAllBytes(soundpath + "\\" + "1.dat");
                     RecvOrOK = File.ReadAllBytes(soundpath + "\\" + "3.dat");
                     AskOrOK = File.ReadAllBytes(soundpath + "\\" + "2.dat");
                     AgreeOrReqRise = File.ReadAllBytes(soundpath + "\\" + "22.dat");

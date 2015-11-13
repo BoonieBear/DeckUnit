@@ -22,8 +22,8 @@ namespace BoonieBear.DeckUnit.ACMP
         SHIP = 0,
         SUBMARINE = 1,
     }
-    //数据类型，如果是潜器中交换数据，使用协议ID，其他的自定义
-    public enum Mov4500DataType
+    //如果是潜器中交换数据
+    public enum ExchageType
     {
         ALLPOST = 0x2001,
         BP = 0x2002,
@@ -32,16 +32,25 @@ namespace BoonieBear.DeckUnit.ACMP
         LIFESUPPLY = 0x1003,
         ENERGY = 0x1004,
         ALERT = 0x1005,
-        ACUSTICALARM = 6,
-        BSSS = 3,
-        SUBALERT = 9,
-        ADCP= 10,
-        SWITCH = 11,
-        SHIPPOST=12,
-        SUBLASTEST5POST = 13,
-        WORD = 14,
-        IMAGE = 15,
-        
+    }
+    //数据类型，程序中用到的所有数据类型定义
+    public enum MovDataType
+    {
+
+        ALLPOST = 1,//母船下发的定位数据
+        BP=2,//避碰声纳数据
+        SUBPOST = 3,//潜器上传的定位数据
+        CTD = 4,
+        LIFESUPPLY = 5,
+        ENERGY = 6,
+        ALERT = 7,
+        BSSS = 9,//fsk
+        ADCP= 10,//fsk
+        USBLSUBPOST = 11,//usbl
+        USBLSHIPPOST=12,//usbl
+        WORD = 13,//ui
+        IMAGE = 14,//ui
+        SOUND = 15,//ui
     }
     #endregion
 
