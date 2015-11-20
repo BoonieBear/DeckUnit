@@ -56,6 +56,75 @@
     <Reference Include="De.TorstenMandelkow.MetroChart">
       <HintPath>..\Tools\De.TorstenMandelkow.MetroChart.dll</HintPath>
     </Reference>
+    <Reference Include="DevExpress.Charts.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.Charts.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Data.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Data.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Office.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.Office.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.PivotGrid.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.PivotGrid.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Printing.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.Printing.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.RichEdit.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.RichEdit.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Sparkline.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.Sparkline.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Charts.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Charts.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Core.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Core.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Docking.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Docking.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Gauges.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Gauges.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Grid.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Grid.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Grid.v13.1.Extensions">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Grid.v13.1.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Layout.v13.1.Core">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Layout.v13.1.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.LayoutControl.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.LayoutControl.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Mvvm.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Mvvm.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Printing.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Printing.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Ribbon.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Ribbon.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Xpf.Themes.MetropolisDark.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.Xpf.Themes.MetropolisDark.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraCharts.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.XtraCharts.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraPrinting.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.XtraPrinting.v13.1.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.XtraReports.v13.1">
+      <HintPath>..\Tools\DevExpress\DevExpress.XtraReports.v13.1.dll</HintPath>
+    </Reference>
     <Reference Include="HelixToolkit.Wpf">
       <HintPath>..\Tools\HelixToolkit.Wpf.dll</HintPath>
     </Reference>
@@ -79,6 +148,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO">
       <HintPath>..\packages\Microsoft.Bcl.1.1.8\lib\net40\System.IO.dll</HintPath>
     </Reference>
@@ -329,7 +399,9 @@
       <Name>BoonieBear.DeckUnit.WaveBox</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Assets\UWA.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\IACAS.bmp" />
   </ItemGroup>

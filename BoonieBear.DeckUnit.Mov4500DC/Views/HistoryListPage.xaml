@@ -124,7 +124,7 @@ Padding="5,0,0,0">
             <RowDefinition Height="24"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <RichTextBox Height="270" HorizontalAlignment="Left" x:Name="richTextBox1" VerticalAlignment="Top" Style="{DynamicResource RichTextBoxStyle1}" VerticalScrollBarVisibility="Auto">
+        <RichTextBox Height="270" x:Name="richTextBox1" VerticalAlignment="Top" Style="{DynamicResource RichTextBoxStyle1}" VerticalScrollBarVisibility="Auto">
             <RichTextBox.Resources>
                 <Style TargetType="{x:Type Paragraph}">
                     <Setter Property="Margin" Value="0"/>

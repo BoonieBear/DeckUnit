@@ -3,6 +3,7 @@
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
       xmlns:k="clr-namespace:TinyMetroWpfLibrary.Controls.TouchKeyBoard;assembly=TinyMetroWpfLibrary.Controls"
       xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
       xmlns:MetroControl="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
@@ -13,26 +14,30 @@
       Background="{StaticResource DefaultBackgroundBrush}"
       mc:Ignorable="d" 
       d:DesignHeight="718" d:DesignWidth="1024"
-	Title="LiveCaptureView" Loaded="Page_Loaded">
+	Title="LiveCaptureView" Loaded="Page_Loaded" PreviewMouseDown="Page_PreviewMouseDown">
     <Page.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+        <converters:BoolReverseConverter x:Key="BoolReverseConverter"/>
+        <converters:VisibilityBoolToggleConverter x:Key="VisibilityBoolToggleConverter"/>
         <converters:HideZeroConverter x:Key="HideZeroConverter"/>
+        <converters:DoubleMultiConverter x:Key="DoubleMultiConverter"/>
     </Page.Resources>
-    <Controls:MetroContentControl >
-        <Grid>
+    <Controls:MetroContentControl>
+        <Grid Name="RootGrid">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="90"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="10"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="10"/>
             </Grid.ColumnDefinitions>
             <!--Logo and title-->
             <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <ViewControls:TitleBarControl 
                     Title="{Binding Live_Title_Top, Mode=OneWay, Source={StaticResource Resources}}"
@@ -40,6 +45,78 @@
                     Grid.Column ="0"
                     Grid.ColumnSpan ="2"
                     HorizontalAlignment ="Stretch"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ActualWidth, ConverterParameter=0.9, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid  Grid.Row="0" Name="PosGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="400"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="540"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Margin="0,0,2,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="120"/>
+                            <RowDefinition Height="80"/>
+                        </Grid.RowDefinitions>
+                        <RichTextBox Grid.Row="0"  VerticalScrollBarVisibility="Auto" IsReadOnly="True" Name="MessageRichTextBox"  IsDocumentEnabled="True" Margin="0" Background="{DynamicResource GrayBrush}" BorderThickness="1,0" >
+                            <RichTextBox.Resources>
+                                <Style TargetType="{x:Type Paragraph}">
+                                    <Setter Property="Margin" Value="0"/>
+                                </Style>
+                            </RichTextBox.Resources>
+                            <FlowDocument Name="MessageDocument" LineHeight="24">
+                            </FlowDocument>
+                        </RichTextBox>
+                        <UniformGrid Grid.Row="1" Columns="5" Background="{DynamicResource GrayBrush}">
+                            <Button Content="收到" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
+                            <Button Content="询问情况" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
+                            <Button Content="同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
+                            <Button Content="立即上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
+                            <Button Content="不同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
+                            <TextBlock Text="●●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●● ●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●●●●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●●● ●●●" TextAlignment="Center" FontSize="20"  />
+                            <Button Content="一切正常" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
+                            <Button Content="完成阶段工作" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
+                            <Button Content="请求上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
+                            <Button Content="进入应急程序" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
+                            <Button Content="释放应急浮标" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>             
+                            <TextBlock Text="●●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●● ●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●●●●●" TextAlignment="Center" FontSize="20" />
+                            <TextBlock Text="●● ●● ●●" TextAlignment="Center" FontSize="20"  />
+                        </UniformGrid>
+                        <TextBox  Grid.Row="2" VerticalScrollBarVisibility="Auto" 
+                                      Name="SendMessageBox" 
+                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0,3,0,0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" />
+                        <Grid  Margin="5" Grid.Row="2" HorizontalAlignment="Right">
+                            <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="80" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                <Button Name="AddImageBtn" Content="语音" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-45" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
+                                <Button Name="StartSSBBtn"  Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="0" VerticalAlignment="Center"   Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" HorizontalAlignment="Center"/>
+                                <Button Name="AddFHBtn"  Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="45" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" HorizontalAlignment="Center"/>
+                            </Controls:FanPanel>
+                            <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{StaticResource DefaultBackgroundBrush}"/>
+                            <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
+                        </Grid>
+                        <Button Background ="{DynamicResource DefaultBackgroundBrush}" Name ="SendBtn" Style="{StaticResource SquareButtonStyle}" Content="发送" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="55" Height="45" Click="SendBtn_Click" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" />
+                        <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入20个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                    </Grid>
+                </Grid>                
             </Grid>
         </Grid>
     </Controls:MetroContentControl>

@@ -283,12 +283,24 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                                                             int.Parse(hexStr.Substring(36, 4)));
                                         else
                                             info.AppendLine("纬度位置无可用数据");
-                                        info.AppendLine("串口2设备:" +
-                                                        Enum.GetName(typeof (DeviceAddr),
-                                                            int.Parse(hexStr.Substring(40, 4))));
-                                        info.AppendLine("串口3设备:" +
-                                                        Enum.GetName(typeof (DeviceAddr),
-                                                            int.Parse(hexStr.Substring(44, 4))));
+                                        var devicestring = Enum.GetName(typeof (DeviceAddr),int.Parse(hexStr.Substring(40, 4)));
+                                        if (devicestring == null)
+                                        {
+                                            info.AppendLine("串口2设备:(自定义设备)" + int.Parse(hexStr.Substring(40, 4)).ToString());
+                                        }
+                                        else
+                                        {
+                                            info.AppendLine("串口2设备:" + devicestring);
+                                        }
+                                        devicestring = Enum.GetName(typeof (DeviceAddr),int.Parse(hexStr.Substring(44, 4)));
+                                        if (devicestring == null)
+                                        {
+                                            info.AppendLine("串口3设备:(自定义设备)" + int.Parse(hexStr.Substring(44, 4)).ToString());
+                                        }
+                                        else
+                                        {
+                                            info.AppendLine("串口3设备:" + devicestring);
+                                        }
 
                                         int emittype = int.Parse(hexStr.Substring(48, 2));
                                         if (emittype == 0)
