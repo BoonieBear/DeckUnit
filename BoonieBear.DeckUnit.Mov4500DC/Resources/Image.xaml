@@ -4,6 +4,10 @@
     <BitmapImage x:Key="ico_about_n" UriSource="/Assets/ico_about_n.png"/>
     <BitmapImage x:Key="ico_about_o" UriSource="/Assets/ico_about_o.png"/>
     <BitmapImage x:Key="ico_about_p" UriSource="/Assets/ico_about_p.png"/>
+    <BitmapImage x:Key="ico_audio_80" UriSource="/Assets/ico_audio_80.png"/>
+    <BitmapImage x:Key="ico_edit_n" UriSource="/Assets/ico_edit_n.png"/>
+    <BitmapImage x:Key="ico_edit_o" UriSource="/Assets/ico_edit_o.png"/>
+    <BitmapImage x:Key="ico_edit_p" UriSource="/Assets/ico_edit_p.png"/>
     <BitmapImage x:Key="ico_moreoption_n" UriSource="/Assets/ico_moreoption_n.png"/>
     <BitmapImage x:Key="ico_moreoption_o" UriSource="/Assets/ico_moreoption_o.png"/>
     <BitmapImage x:Key="ico_moreoption_p" UriSource="/Assets/ico_moreoption_p.png"/>

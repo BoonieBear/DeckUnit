@@ -6,6 +6,7 @@ using System.Text;
 using System.Windows;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.Mov4500UI.Models;
+using DevExpress.Data.Async.Helpers;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.Frames;
 using TinyMetroWpfLibrary.ViewModel;
@@ -49,6 +50,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         internal void ExitProgram()
         {
+            EventAggregator.PublishMessage(new GoDetailStatsNavigationRequest(""));
+            EventAggregator.PublishMessage(new CloseWaveControl());
             Application.Current.Shutdown();
         }
 

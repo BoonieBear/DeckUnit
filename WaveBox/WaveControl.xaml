@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="800">
     <Grid Name="MainGrid" MouseDown="MouseButtonDownHandler">
-        <Canvas  Name="PlotCanvas" Background="Black" Cursor="Hand">
+        <Canvas  Name="PlotCanvas" Background="#FF0F3A6E" Cursor="Hand">
             <Image Name="ImageBox" Stretch="Fill" Width ="{Binding ActualWidth, ElementName=MainGrid, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=MainGrid, Mode=OneWay}" SizeChanged="ImageBox_SizeChanged" Loaded="ImageBox_Loaded"/>
         </Canvas>
     </Grid>

@@ -1,29 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
-using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
-using DevExpress.Utils;
-using DevExpress.Xpf.Core;
+using System.Windows.Controls;
+using TinyMetroWpfLibrary.EventAggregation;
+using Button = System.Windows.Controls.Button;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using BoonieBear.DeckUnit.WaveBox;
+using BoonieBear.DeckUnit.Mov4500UI.Events;
 using MahApps.Metro.Controls.Dialogs;
 using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
-using System.Windows.Forms;
-using System.Windows.Controls;
-using Button = System.Windows.Controls.Button;
-using Cursors = System.Windows.Input.Cursors;
-using MouseEventArgs = System.Windows.Input.MouseEventArgs;
-
 namespace BoonieBear.DeckUnit.Mov4500UI.Views
 {
     /// <summary>
@@ -39,77 +32,80 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         Dictionary<int, Span> spans = new Dictionary<int, Span>(0);
         List<Paragraph> parasList = new List<Paragraph>(0);
         private int index = 0;
+        private bool StartRecode = false;
         #endregion
         public LiveCaptureView()
         {
             InitializeComponent();
+            if (!WaveControl.IsInit)
+                WaveControl.Initailize();
+            WaveControl.PlayMode = WaveControl.Mode.Both;
+            WaveControl.AddRecDoneHandle(RecHandle);
+            UnitCore.Instance.liveBox = WaveControl;
+        }
+
+        private void RecHandle(byte[] bufBytes)
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                //WaveControl.Display(bufBytes);
+                if (StartRecode)
+                    VoiceBar.Value = bufBytes.Sum((s)=>(int)s)*100/(2048*255);
+            }) );
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            /*
+            await TryConnnect();
+            if (UnitCore.Instance.IsWorking)
+            {
+                
+            }
+        }
+
+        private static async Task TryConnnect()
+        {
             if (!UnitCore.Instance.IsWorking)
             {
-            ServiceInitial:
-                bool ret = UnitCore.Instance.Start();
-                if (ret == false)
+                while (UnitCore.Instance.Start()== false)
                 {
                     var md = new MetroDialogSettings();
-                    md.AffirmativeButtonText = "重新连接";
-                    md.NegativeButtonText = "修改系统设置";
-                    MessageDialogResult answer = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "启动通信机失败！",
-                        UnitCore.Instance.Error, MessageDialogStyle.AffirmativeAndNegativeAndDoubleAuxiliary, md);
-                    if (answer == MessageDialogResult.Affirmative)
+                    md.AffirmativeButtonText = "重试连接";
+                    md.NegativeButtonText = "修改设置";
+                    md.FirstAuxiliaryButtonText = "取消";
+                    md.ColorScheme = MetroDialogColorScheme.Accented;
+                    MessageDialogResult answer =
+                        await
+                            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,
+                                "启动通信机失败！",
+                                UnitCore.Instance.Error, MessageDialogStyle.AffirmativeAndNegativeAndSingleAuxiliary, md);
+                    if (answer == MessageDialogResult.Negative)
                     {
                         UnitCore.Instance.EventAggregator.PublishMessage(new GoSettingNavigation());
                     }
+                    else if (answer == MessageDialogResult.FirstAuxiliary)
+                    {
+                        break;
+                    }
                     else
                     {
-                        if (!UnitCore.Instance.Start())
-                            goto ServiceInitial;
+                        if (UnitCore.Instance.Start())
+                            break;
                     }
                 }
-                
-            }*/
+            }
         }
+
         public void UpdateRecvStatus()
         {
 
         }
 
-        //将所有要发送的信息填入chartbox中，靠左对齐
+        //将要发送的文字信息填入chartbox中，靠左对齐
         private void AddSendMsgToChart()
         {
-            var title = new Span();
-            Image img;
-            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
-            {
-                img = new Image//母船的图片
-                {
-                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
-                    Width = 40,
-                    Height = 40,
-                };
-            }
-            else
-            {
-                img = new Image//潜器的图片
-                {
-                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
-                    Width = 40,
-                    Height = 40,
-                };
-            }
-            title.Inlines.Add(img);
-            var run = new Run("  ("+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")+")")
-            {
-                FontSize = 24,
-                Foreground = Brushes.Green
-            };
-            title.Inlines.Add(run);
-            var titlep = new Paragraph(title);
-            titlep.TextAlignment = TextAlignment.Left;
-            MessageDocument.Blocks.Add(titlep);
+            Run run;
+            SetTiltle(true);
             run = new Run(SendMessageBox.Text);
             p = new Paragraph(run);
             p.TextAlignment = TextAlignment.Left;
@@ -117,42 +113,73 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             MessageRichTextBox.ScrollToEnd();
             SendMessageBox.Text = "";
         }
-        //将收到的信息填入chartbox中，靠右对齐
-        private void AppendRecvInfo(ModuleType type, string msg, Image img)
-        {
 
+        //向chartbox中加入信息标题， 发送信息靠左，接收信息靠右
+        private void SetTiltle(bool sender)
+        {
             var title = new Span();
-            Image titleimg;
+            Image img;
             if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
             {
-                titleimg = new Image//潜器的图片
+                img = new Image //母船的图片
                 {
                     Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
                     Width = 40,
                     Height = 40,
                 };
-
             }
             else
             {
-                titleimg = new Image//潜器的图片
+                img = new Image //潜器的图片
                 {
                     Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
                     Width = 40,
                     Height = 40,
                 };
             }
-
-            title.Inlines.Add(titleimg);
-            var run = new Run("  ("+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss")+")")
+            title.Inlines.Add(img);
+            var run = new Run("  (" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ")")
             {
                 FontSize = 24,
                 Foreground = Brushes.Green
             };
             title.Inlines.Add(run);
             var titlep = new Paragraph(title);
-            titlep.TextAlignment = TextAlignment.Right;
+            if (sender)
+                titlep.TextAlignment = TextAlignment.Left;
+            else
+            {
+                titlep.TextAlignment = TextAlignment.Right;
+            }
             MessageDocument.Blocks.Add(titlep);
+        }
+
+        private void AddSendFHToChart(string msg)
+        {
+            SetTiltle(true);
+            if (msg == null)
+                return;
+            var run = new Run("(" + "跳频" + ")" + msg);
+            run.FontSize = 22;
+            var chartmsg = new Paragraph(run);
+            chartmsg.TextAlignment = TextAlignment.Left;
+            chartmsg.LineHeight = 24;
+            MessageDocument.Blocks.Add(chartmsg);
+        }
+
+        private void AddSendImgToChart(Image img)
+        {
+            SetTiltle(true);
+            var p = new Paragraph();
+            p.Inlines.Add(img);
+            p.TextAlignment = TextAlignment.Left;
+            MessageDocument.Blocks.Add(p);
+        }
+        //将收到的信息填入chartbox中，靠右对齐
+        private void AppendRecvInfo(ModuleType type, string msg, Image img)
+        {
+            SetTiltle(false);
+            Run run;
             if (type == ModuleType.MFSK)
             {
                 if(msg==null)
@@ -268,9 +295,39 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             fanpanel.IsOpen = false;
         }
 
+        private void SendSSBBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SendSSBBtn.Visibility = Visibility.Hidden;
+            BackToEditBtn.Visibility = Visibility.Visible;
+            SSBToolTip.Visibility = Visibility.Visible;
+            VoiceBar.Visibility = Visibility.Visible;
+            LeftSize.Visibility = Visibility.Hidden;
+        }
 
-        
+        private void VoiceBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            SSBToolTip.Content = "释放后发送语音";
+            StartRecode = true;
+        }
 
-
+        private void VoiceBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            SSBToolTip.Content = "按住说话";
+            StartRecode = false;
+        }
+        //和释放动作效果一样
+        private void VoiceBar_MouseLeave(object sender, MouseEventArgs e)
+        {
+            SSBToolTip.Content = "按住说话";
+            StartRecode = false;
+        }
+        private void BackToEditBtn_Click(object sender, RoutedEventArgs e)
+        {
+            SendSSBBtn.Visibility = Visibility.Visible;
+            BackToEditBtn.Visibility = Visibility.Hidden;
+            SSBToolTip.Visibility = Visibility.Hidden;
+            VoiceBar.Visibility = Visibility.Hidden;
+            LeftSize.Visibility = Visibility.Visible;
+        }
     }
 }

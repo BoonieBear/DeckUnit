@@ -31,6 +31,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         private int _audioChannels = 1;
         private BinaryReader br;
         private Mode playMode;
+        private bool bInit = false;
         private DispatcherTimer timer;
 
         public delegate void Recordbufferdonehanlder(byte[] bufBytes);
@@ -55,7 +56,8 @@ namespace BoonieBear.DeckUnit.WaveBox
         {
             None,
             Voiceplayer,
-            Voicerecorder
+            Voicerecorder,
+            Both//both player and recoder ,just display the waveout data
         }
         public WaveControl()
         {
@@ -171,10 +173,30 @@ namespace BoonieBear.DeckUnit.WaveBox
         {
             set
             {
+                if(playMode==value)
+                    return;
                 playMode = value;
                 try
                 {
-                    if (playMode==Mode.Voiceplayer)
+                    if (playMode == Mode.Both)
+                    {
+                        _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);
+
+                        if (WaveOutPlayer.DeviceCount == 0)
+                        {
+
+                            playMode = Mode.None;
+                            throw new Exception("没有可用的音频设备");
+                        }
+                        else
+                        {
+                            _player = new WaveOutPlayer(-1, _waveFormat, _audioFrameSize * 2, 3,
+                                     new BufferFillEventHandler(Filler));
+                            _recorder = new WaveInRecorder(-1, _waveFormat, _audioFrameSize * 2, 3,
+                                     new BufferDoneEventHandler(DataArrived));
+                        }
+                    }
+                    else if (playMode==Mode.Voiceplayer)
                     {
                         _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);
 
@@ -189,14 +211,10 @@ namespace BoonieBear.DeckUnit.WaveBox
                            _player = new WaveOutPlayer(-1, _waveFormat, _audioFrameSize*2, 3,
                                     new BufferFillEventHandler(Filler));
                         }
+                        if (_recorder != null)
+                            _recorder.Dispose();
                     }
-                    else
-                    {
-                        if(_player!=null)
-                            _player.Dispose();
-                    }
-
-                    if (playMode == Mode.Voicerecorder)
+                    else if (playMode == Mode.Voicerecorder)
                     {
                         _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);
 
@@ -211,13 +229,10 @@ namespace BoonieBear.DeckUnit.WaveBox
                             _recorder = new WaveInRecorder(-1, _waveFormat, _audioFrameSize * 2, 3,
                                      new BufferDoneEventHandler(DataArrived));
                         }
+                        if (_player != null)
+                            _player.Dispose();
                     }
-                    else
-                    {
-                        if (_recorder != null)
-                            _recorder.Dispose();
-                    }
-
+                    
                 }
                 catch (Exception ex)
                 {
@@ -239,8 +254,13 @@ namespace BoonieBear.DeckUnit.WaveBox
                     _audioFrame.ShowFFT = false;
             }
         }
-        
- 
+
+        public bool IsInit
+        {
+            get { return bInit; }
+        }
+
+
         public void Initailize()
         {
             Stop();
@@ -254,16 +274,11 @@ namespace BoonieBear.DeckUnit.WaveBox
             try
             {
                 _waveFormat = new WaveFormat(_audioSamplesPerSecond, _audioBitsPerSample, _audioChannels);  
-                if (playMode == Mode.Voiceplayer&&WaveOutPlayer.DeviceCount == 0)
+                if (WaveOutPlayer.DeviceCount == 0)
                 {
 
                     playMode = Mode.None;
                     throw new Exception("没有可用的音频设备");
-                }
-                else if (playMode == Mode.Voicerecorder && WaveInRecorder.DeviceCount == 0)
-                {
-                    playMode = Mode.None;
-                    throw new Exception("没有可用的录音设备");
                 }
                 else
                 {
@@ -272,11 +287,18 @@ namespace BoonieBear.DeckUnit.WaveBox
                     if (playMode==Mode.Voicerecorder)
                         _recorder = new WaveInRecorder(-1, _waveFormat, _audioFrameSize * 2, 3,
                                     new BufferDoneEventHandler(DataArrived));
+                    if (playMode == Mode.Both)
+                    {
+                        _player = new WaveOutPlayer(-1, _waveFormat, _audioFrameSize * _audioChannels, 3, new BufferFillEventHandler(Filler));
+                        _recorder = new WaveInRecorder(-1, _waveFormat, _audioFrameSize * 2, 3,
+                                   new BufferDoneEventHandler(DataArrived));
+                    }
                 }
-
+                bInit = true;
             }
             catch (Exception ex)
             {
+                bInit = false;
                 throw ex;
             }
         }
@@ -287,7 +309,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         }
         private void Stop()
         {
-           
+            bInit = false;
             if (_recorder != null)
             {
                 try
@@ -296,6 +318,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                 }
                 finally
                 {
+                    _recProc = null;
                     _recorder = null;
                 }
             }
@@ -351,7 +374,8 @@ namespace BoonieBear.DeckUnit.WaveBox
                 Marshal.Copy(data,b,0, size);
                 try
                 {
-                    Display(_recorderBuffer);
+                    if (playMode == Mode.Voicerecorder)//just diaplay wave under recoder scenario
+                        Display(_recorderBuffer);
                     if (_recProc != null)
                         _recProc(b);
                 }
@@ -363,7 +387,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         }
         public void Display(byte[] buf)
         {
-            if (playMode==Mode.Voiceplayer)
+            if (playMode != Mode.Voicerecorder)
                 _stream.Write(buf, 0, buf.Length);
             if (buf.Length <= _audioFrameSize)
             {

@@ -120,7 +120,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                 return;
             // Set up for drawing
             Graphics offScreenDC = Graphics.FromImage(canvas);
-            offScreenDC.Clear(Color.Black);
+            offScreenDC.Clear(ColorTranslator.FromHtml("#FF0F3A6E"));
             Pen pen = new System.Drawing.Pen(Color.WhiteSmoke);
             p = new System.Drawing.Point[canvas.Width];
             // Determine channnel boundries
@@ -156,7 +156,7 @@ namespace BoonieBear.DeckUnit.WaveBox
             if (ImageBox.Source == null)
             {
                 Graphics g = Graphics.FromImage(canvas);
-                g.Clear(Color.Black);
+                g.Clear(ColorTranslator.FromHtml("#FF0F3A6E"));
                 ImageBox.Source = BitmapToImageSource(canvas);
                 g.Dispose();
                 return;

@@ -1496,7 +1496,24 @@
         <Setter Property="adp:AppBarButtonPropertys.OverBackground" Value="{StaticResource Over}"/>
         <Setter Property="adp:AppBarButtonPropertys.PressedBackground" Value="{StaticResource Pressed}"/>
     </Style>
-
+    <Style x:Key="VoiceAppBarButtonStyle" BasedOn="{StaticResource AppBarButtonImageStyle}" TargetType="Button">
+        <Style.Resources>
+            <ImageBrush x:Key="Normal" ImageSource="{DynamicResource ico_audio_80}"/>
+        </Style.Resources>
+        <Setter Property="adp:AppBarButtonPropertys.NormalBackground" Value="{StaticResource Normal}"/>
+        <Setter Property="adp:AppBarButtonPropertys.OverBackground" Value="{StaticResource Normal}"/>
+        <Setter Property="adp:AppBarButtonPropertys.PressedBackground" Value="{StaticResource Normal}"/>
+    </Style>
+    <Style x:Key="EditTextAppBarButtonStyle" BasedOn="{StaticResource AppBarButtonImageStyle}" TargetType="Button">
+        <Style.Resources>
+            <ImageBrush x:Key="Normal" ImageSource="{DynamicResource ico_edit_n}"/>
+            <ImageBrush x:Key="Over" ImageSource="{DynamicResource ico_edit_o}"/>
+            <ImageBrush x:Key="Pressed" ImageSource="{DynamicResource ico_edit_p}"/>
+        </Style.Resources>
+        <Setter Property="adp:AppBarButtonPropertys.NormalBackground" Value="{StaticResource Normal}"/>
+        <Setter Property="adp:AppBarButtonPropertys.OverBackground" Value="{StaticResource Over}"/>
+        <Setter Property="adp:AppBarButtonPropertys.PressedBackground" Value="{StaticResource Pressed}"/>
+    </Style>
     <Style x:Key="QuitAppBarButtonStyle" BasedOn="{StaticResource AppBarButtonImageStyle}" TargetType="Button">
         <Style.Resources>
             <ImageBrush x:Key="Normal" ImageSource="{DynamicResource QuitNormal}"/>

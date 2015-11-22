@@ -217,6 +217,7 @@
     <Compile Include="SplashWindow.xaml.cs">
       <DependentUpon>SplashWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\CloseWaveControl.cs" />
     <Compile Include="ViewModel\GlobalSettingViewModel.cs" />
     <Compile Include="ViewModel\HomePageViewModel.cs" />
     <Compile Include="ViewModel\LiveCaptureViewModel.cs" />

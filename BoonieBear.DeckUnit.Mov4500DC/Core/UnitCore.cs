@@ -19,6 +19,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Events;
 using HelixToolkit.Wpf;
 using System.Windows.Media.Media3D;
 using System.Threading.Tasks;
+using BoonieBear.DeckUnit.WaveBox;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     /// <summary>
@@ -53,7 +54,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public byte[] AgreeOrReqRise = null;
         public byte[] RiseOrUrgent = null;
         public byte[] DisgOrRelBuoy = null;
-        
+        public WaveControl liveBox = null;
         public MovTraceService MovTraceService
         {
             get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }
@@ -140,8 +141,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             {
                 if(!LoadConfiguration()) throw new Exception("无法读取基本配置");
                 if (!LoadMorse()) throw new Exception("无法读取Morse数据");
+                if(NetCore.IsInitialize)
+                    NetCore.Stop();
                 NetCore.Initialize();
                 NetCore.Start();
+                if(CommCore.IsInitialize)
+                    CommCore.Stop();
                 CommCore.Initialize();
                 CommCore.Start();
                 if(!MovTraceService.CreateService()) throw new Exception("数据保存服务启动失败");
@@ -167,6 +172,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 CommCore.Stop();
             MovTraceService.TearDownService();
             _serviceStarted = false;
+            
         }
         public bool IsWorking
         {

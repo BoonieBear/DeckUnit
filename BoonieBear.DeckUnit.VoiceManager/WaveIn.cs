@@ -230,7 +230,7 @@ namespace BoonieBear.DeckUnit.VoiceManager
 		private void WaitForAllBuffers()
 		{
 			WaveInBuffer Buf = m_Buffers;
-			while (Buf.NextBuffer != m_Buffers)
+			while (m_Buffers!=null&&Buf.NextBuffer != m_Buffers)
 			{
 				Buf.WaitFor();
 				Buf = Buf.NextBuffer;
