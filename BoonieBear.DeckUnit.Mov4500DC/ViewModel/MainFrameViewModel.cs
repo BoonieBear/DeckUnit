@@ -50,8 +50,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         internal void ExitProgram()
         {
-            EventAggregator.PublishMessage(new GoDetailStatsNavigationRequest(""));
-            EventAggregator.PublishMessage(new CloseWaveControl());
             Application.Current.Shutdown();
         }
 

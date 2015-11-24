@@ -138,7 +138,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                 p[x] = new System.Drawing.Point(x, y);
                 
             }
-            offScreenDC.DrawCurve(pen, p,0.5f);
+            offScreenDC.DrawCurve(pen, p);
             // Clean up
             ImageBox.Source = BitmapToImageSource(canvas);
             offScreenDC.Dispose();

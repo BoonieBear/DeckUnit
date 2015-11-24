@@ -1,240 +1,517 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using BoonieBear.DeckUnit.VoiceManager.WinNative;
 
 namespace BoonieBear.DeckUnit.VoiceManager
 {
-	internal class WaveInHelper
-	{
-		public static void Try(int err)
-		{
-			if (err != WaveNative.MMSYSERR_NOERROR)
-				throw new Exception(err.ToString());
-		}
-	}
+    #region Delegates Implementation
 
-	public delegate void BufferDoneEventHandler(IntPtr data, int size);
+    /// <summary>
+    /// Represents the method that will handle the <b>WavRecorder.BufferFull</b> event.
+    /// </summary>
+    /// <param name="buffer">Recorded data.</param>
+    public delegate void BufferFullHandler(byte[] buffer);
 
-	internal class WaveInBuffer : IDisposable
-	{
-		public WaveInBuffer NextBuffer;
+    #endregion
 
-		private AutoResetEvent m_RecordEvent = new AutoResetEvent(false);
-		private IntPtr m_WaveIn;
+    /// <summary>
+    /// This class implements streaming microphone wav data receiver.
+    /// </summary>
+    public class WaveIn
+    {
+        #region class BufferItem
 
-		private WaveNative.WaveHdr m_Header;
-		private byte[] m_HeaderData;
-		private GCHandle m_HeaderHandle;
-		private GCHandle m_HeaderDataHandle;
+        /// <summary>
+        /// This class holds queued recording buffer.
+        /// </summary>
+        private class BufferItem
+        {
+            private GCHandle m_HeaderHandle;
+            private GCHandle m_DataHandle;
+            private int      m_DataSize = 0;
 
-		private bool m_Recording;
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
+            /// <param name="headerHandle">Header handle.</param>
+            /// <param name="header">Wav header.</param>
+            /// <param name="dataHandle">Wav header data handle.</param>
+            /// <param name="dataSize">Data size in bytes.</param>
+            public BufferItem(ref GCHandle headerHandle,ref GCHandle dataHandle,int dataSize)
+            {
+                m_HeaderHandle = headerHandle;
+                m_DataHandle   = dataHandle;
+                m_DataSize     = dataSize;
+            }
 
-		internal static void WaveInProc(IntPtr hdrvr, int uMsg, int dwUser, ref WaveNative.WaveHdr wavhdr, int dwParam2)
-		{
-			if (uMsg == WaveNative.MM_WIM_DATA)
-			{
-				try
-				{
-					GCHandle h = (GCHandle)wavhdr.dwUser;
-					WaveInBuffer buf = (WaveInBuffer)h.Target;
-					buf.OnCompleted();
-				}
-				catch
-				{
-				}
-			}
-		}
+            #region method Dispose
 
-		public WaveInBuffer(IntPtr waveInHandle, int size)
-		{
-			m_WaveIn = waveInHandle;
+            /// <summary>
+            /// Cleans up any resources being used.
+            /// </summary>
+            public void Dispose()
+            {
+                m_HeaderHandle.Free();
+                m_DataHandle.Free();
+            }
 
-			m_HeaderHandle = GCHandle.Alloc(m_Header, GCHandleType.Pinned);
-			m_Header.dwUser = (IntPtr)GCHandle.Alloc(this);
-			m_HeaderData = new byte[size];
-			m_HeaderDataHandle = GCHandle.Alloc(m_HeaderData, GCHandleType.Pinned);
-			m_Header.lpData = m_HeaderDataHandle.AddrOfPinnedObject();
-			m_Header.dwBufferLength = size;
-			WaveInHelper.Try(WaveNative.waveInPrepareHeader(m_WaveIn, ref m_Header, Marshal.SizeOf(m_Header)));
-		}
-		~WaveInBuffer()
-		{
-			Dispose();
-		}
+            #endregion
 
-		public void Dispose()
-		{
-			if (m_Header.lpData != IntPtr.Zero)
-			{
-				WaveNative.waveInUnprepareHeader(m_WaveIn, ref m_Header, Marshal.SizeOf(m_Header));
-				m_HeaderHandle.Free();
-				m_Header.lpData = IntPtr.Zero;
-			}
-			m_RecordEvent.Close();
-			if (m_HeaderDataHandle.IsAllocated)
-				m_HeaderDataHandle.Free();
-			GC.SuppressFinalize(this);
-		}
 
-		public int Size
-		{
-			get { return m_Header.dwBufferLength; }
-		}
+            #region Properties Implementation
 
-		public IntPtr Data
-		{
-			get { return m_Header.lpData; }
-		}
+            /// <summary>
+            /// Gets header handle.
+            /// </summary>
+            public GCHandle HeaderHandle
+            {
+                get{ return m_HeaderHandle; }
+            }
 
-		public bool Record()
-		{
-			lock(this)
-			{
-				m_RecordEvent.Reset();
-				m_Recording = WaveNative.waveInAddBuffer(m_WaveIn, ref m_Header, Marshal.SizeOf(m_Header)) == WaveNative.MMSYSERR_NOERROR;
-				return m_Recording;
-			}
-		}
+            /// <summary>
+            /// Gets header.
+            /// </summary>
+            public WAVEHDR Header
+            {
+                get{ return (WAVEHDR)m_HeaderHandle.Target; }
+            }
 
-		public void WaitFor()
-		{
-			if (m_Recording)
-				m_Recording = m_RecordEvent.WaitOne();
-			else
-				Thread.Sleep(0);
-		}
+            /// <summary>
+            /// Gets wav header data pointer handle.
+            /// </summary>
+            public GCHandle DataHandle
+            {
+                get{ return m_DataHandle; }
+            }
 
-		private void OnCompleted()
-		{
-			m_RecordEvent.Set();
-			m_Recording = false;
-		}
-	}
+            /// <summary>
+            /// Gets wav header data.
+            /// </summary>
+            public byte[] Data
+            {
+                get
+                {
+                    try
+                    {
+                        var buf = (byte[]) m_DataHandle.Target;
+                    }
+                    catch (InvalidOperationException)
+                    {
+                        return null;
+                    }
+                    return (byte[])m_DataHandle.Target;
+                    
+                }
+            }
 
-	public class WaveInRecorder : IDisposable
-	{
-		private IntPtr m_WaveIn;
-		private WaveInBuffer m_Buffers; // linked list
-		private WaveInBuffer m_CurrentBuffer;
-		private Thread m_Thread;
-		private BufferDoneEventHandler m_DoneProc;
-		private bool m_Finished;
+            /// <summary>
+            /// Gets wav header data size in bytes.
+            /// </summary>
+            public int DataSize
+            {
+                get{ return m_DataSize; }
+            }
 
-		private WaveNative.WaveDelegate m_BufferProc = new WaveNative.WaveDelegate(WaveInBuffer.WaveInProc);
+            #endregion
 
-		public static int DeviceCount
-		{
-			get { return WaveNative.waveInGetNumDevs(); }
-		}
+        }
 
-		public WaveInRecorder(int device, WaveFormat format, int bufferSize, int bufferCount, BufferDoneEventHandler doneProc)
-		{
-			m_DoneProc = doneProc;
-            WaveInHelper.Try(WaveNative.waveInOpen(out m_WaveIn, device, format, m_BufferProc, IntPtr.Zero, WaveNative.CALLBACK_FUNCTION));
-			AllocateBuffers(bufferSize, bufferCount);
-			for (int i = 0; i < bufferCount; i++)
-			{
-				SelectNextBuffer();
-				m_CurrentBuffer.Record();
-			}
-			WaveInHelper.Try(WaveNative.waveInStart(m_WaveIn));
-			m_Thread = new Thread(new ThreadStart(ThreadProc));
-			m_Thread.Start();
-		}
-		~WaveInRecorder()
-		{
-			Dispose();
-		}
-		public void Dispose()
-		{
-			if (m_Thread != null)
-				try
-				{
-					m_Finished = true;
-					if (m_WaveIn != IntPtr.Zero)
-						WaveNative.waveInReset(m_WaveIn);
-                    FreeBuffers();
-					WaitForAllBuffers();
-					m_Thread.Join();
-					m_DoneProc = null;
-					
-					if (m_WaveIn != IntPtr.Zero)
-						WaveNative.waveInClose(m_WaveIn);
-				}
-				finally
-				{
-					m_Thread = null;
-					m_WaveIn = IntPtr.Zero;
-				}
-			GC.SuppressFinalize(this);
-		}
-		private void ThreadProc()
-		{
-			while (!m_Finished)
-			{
-				Advance();
-				if (m_DoneProc != null && !m_Finished)
-					m_DoneProc(m_CurrentBuffer.Data, m_CurrentBuffer.Size);
-                if (m_CurrentBuffer != null)
-                    m_CurrentBuffer.Record();
-			}
-		}
-		private void AllocateBuffers(int bufferSize, int bufferCount)
-		{
-			FreeBuffers();
-			if (bufferCount > 0)
-			{
-				m_Buffers = new WaveInBuffer(m_WaveIn, bufferSize);
-				WaveInBuffer Prev = m_Buffers;
-				try
-				{
-					for (int i = 1; i < bufferCount; i++)
-					{
-						WaveInBuffer Buf = new WaveInBuffer(m_WaveIn, bufferSize);
-						Prev.NextBuffer = Buf;
-						Prev = Buf;
-					}
-				}
-				finally
-				{
-					Prev.NextBuffer = m_Buffers;
-				}
-			}
-		}
-		private void FreeBuffers()
-		{
-			m_CurrentBuffer = null;
-			if (m_Buffers != null)
-			{
-				WaveInBuffer First = m_Buffers;
-				m_Buffers = null;
+        #endregion
 
-				WaveInBuffer Current = First;
-				do
-				{
-					WaveInBuffer Next = Current.NextBuffer;
-					Current.Dispose();
-					Current = Next;
-				} while(Current != First);
-			}
-		}
-		private void Advance()
-		{
-			SelectNextBuffer();
-			m_CurrentBuffer.WaitFor();
-		}
-		private void SelectNextBuffer()
-		{
-			m_CurrentBuffer = m_CurrentBuffer == null ? m_Buffers : m_CurrentBuffer.NextBuffer;
-		}
-		private void WaitForAllBuffers()
-		{
-			WaveInBuffer Buf = m_Buffers;
-			while (m_Buffers!=null&&Buf.NextBuffer != m_Buffers)
-			{
-				Buf.WaitFor();
-				Buf = Buf.NextBuffer;
-			}
-		}
-	}
+        private WavInDevice      m_pInDevice     = null;
+        private int              m_SamplesPerSec = 8000;
+        private int              m_BitsPerSample = 8;
+        private int              m_Channels      = 1;
+        private int              m_BufferSize    = 400;
+        private IntPtr           m_pWavDevHandle = IntPtr.Zero;
+        private int              m_BlockSize     = 0;
+        private List<BufferItem> m_pBuffers      = null;
+        private waveInProc       m_pWaveInProc   = null;
+        private bool             m_IsRecording   = false;
+        private bool             m_IsDisposed    = false;
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="outputDevice">Input device.</param>
+        /// <param name="samplesPerSec">Sample rate, in samples per second (hertz). For PCM common values are 
+        /// 8.0 kHz, 11.025 kHz, 22.05 kHz, and 44.1 kHz.</param>
+        /// <param name="bitsPerSample">Bits per sample. For PCM 8 or 16 are the only valid values.</param>
+        /// <param name="channels">Number of channels.</param>
+        /// <param name="bufferSize">Specifies recording buffer size.</param>
+        /// <exception cref="ArgumentNullException">Is raised when <b>outputDevice</b> is null.</exception>
+        /// <exception cref="ArgumentException">Is raised when any of the aruments has invalid value.</exception>
+        public WaveIn(WavInDevice device,int samplesPerSec,int bitsPerSample,int channels,int bufferSize)
+        {
+            if(device == null){
+                throw new ArgumentNullException("device");
+            }
+            if(samplesPerSec < 8000){
+                throw new ArgumentException("Argument 'samplesPerSec' value must be >= 8000.");
+            }
+            if(bitsPerSample < 8){
+                throw new ArgumentException("Argument 'bitsPerSample' value must be >= 8.");
+            }
+            if(channels < 1){
+                throw new ArgumentException("Argument 'channels' value must be >= 1.");
+            }
+
+            m_pInDevice     = device;
+            m_SamplesPerSec = samplesPerSec;
+            m_BitsPerSample = bitsPerSample;
+            m_Channels      = channels;
+            m_BufferSize    = bufferSize;
+            m_BlockSize     = m_Channels * (m_BitsPerSample / 8);
+            m_pBuffers      = new List<BufferItem>();
+
+            // Try to open wav device.            
+            WAVEFORMATEX format = new WAVEFORMATEX();
+            format.wFormatTag      = WavFormat.PCM;
+            format.nChannels       = (ushort)m_Channels;
+            format.nSamplesPerSec  = (uint)samplesPerSec;                        
+            format.nAvgBytesPerSec = (uint)(m_SamplesPerSec * m_Channels * (m_BitsPerSample / 8));
+            format.nBlockAlign     = (ushort)m_BlockSize;
+            format.wBitsPerSample  = (ushort)m_BitsPerSample;
+            format.cbSize          = 0; 
+            // We must delegate reference, otherwise GC will collect it.
+            m_pWaveInProc = new waveInProc(this.OnWaveInProc);
+            int result = WavMethods.waveInOpen(out m_pWavDevHandle,m_pInDevice.Index,format,m_pWaveInProc,0,WavConstants.CALLBACK_FUNCTION);
+            if(result != MMSYSERR.NOERROR){
+                throw new Exception("Failed to open wav device, error: " + result.ToString() + ".");
+            }
+
+            EnsureBuffers();
+        }
+        
+        /// <summary>
+        /// Default destructor.
+        /// </summary>
+        ~WaveIn()
+        {
+            Dispose();
+        }
+
+        #region method Dispose
+
+        /// <summary>
+        /// Cleans up any resources being used.
+        /// </summary>
+        public void Dispose()
+        {
+            if(m_IsDisposed){
+                return;
+            }
+            m_IsDisposed = true;
+
+            // Release events.
+            this.BufferFull = null;
+
+            try{
+                // If recording, we need to reset wav device first.
+                WavMethods.waveInReset(m_pWavDevHandle);
+                
+                // If there are unprepared wav headers, we need to unprepare these.
+                foreach(BufferItem item in m_pBuffers){
+                    WavMethods.waveInUnprepareHeader(m_pWavDevHandle,item.HeaderHandle.AddrOfPinnedObject(),Marshal.SizeOf(item.Header));
+                    item.Dispose();
+                }
+                
+                // Close input device.
+                WavMethods.waveInClose(m_pWavDevHandle);
+
+                m_pInDevice     = null;
+                m_pWavDevHandle = IntPtr.Zero;
+            }
+            catch(InvalidOperationException){                
+            }
+            catch{                
+            }
+        }
+
+        #endregion
+
+
+        #region method Start
+
+        /// <summary>
+        /// Starts recording.
+        /// </summary>
+        public void Start()
+        {
+            if(m_IsRecording){
+                return;
+            }
+            m_IsRecording = true;
+
+            int result = WavMethods.waveInStart(m_pWavDevHandle);
+            if(result != MMSYSERR.NOERROR){
+                throw new Exception("Failed to start wav device, error: " + result + ".");
+            }
+        }
+
+        #endregion
+
+        #region method Stop
+
+        /// <summary>
+        /// Stops recording.
+        /// </summary>
+        public void Stop()
+        {
+            if(!m_IsRecording){
+                return;
+            }
+            m_IsRecording = false;
+            
+            int result = WavMethods.waveInStop(m_pWavDevHandle);
+            if(result != MMSYSERR.NOERROR){
+                throw new Exception("Failed to stop wav device, error: " + result + ".");
+            }
+        }
+
+        #endregion
+
+
+        #region method OnWaveInProc
+
+        /// <summary>
+        /// This method is called when wav device generates some event.
+        /// </summary>
+        /// <param name="hdrvr">Handle to the waveform-audio device associated with the callback.</param>
+        /// <param name="uMsg">Waveform-audio input message.</param>
+        /// <param name="dwUser">User-instance data specified with waveOutOpen.</param>
+        /// <param name="dwParam1">Message parameter.</param>
+        /// <param name="dwParam2">Message parameter.</param>
+        private void OnWaveInProc(IntPtr hdrvr,int uMsg,int dwUser,int dwParam1,int dwParam2)
+        {   
+            // NOTE: MSDN warns, we may not call any wav related methods here.
+
+            try{
+                if(uMsg == WavConstants.MM_WIM_DATA){ 
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(this.ProcessFirstBuffer));
+                }
+            }
+            catch{
+            }
+        }
+
+        #endregion
+
+        #region method ProcessFirstBuffer
+
+        /// <summary>
+        /// Processes first first filled buffer in queue and disposes it if done.
+        /// </summary>
+        /// <param name="state">User data.</param>
+        private void ProcessFirstBuffer(object state)
+        {
+            try{            
+                lock(m_pBuffers){
+                    BufferItem item = m_pBuffers[0];
+
+                    // Raise BufferFull event.
+                    OnBufferFull(item.Data);
+
+                    // Clean up.
+                    WavMethods.waveInUnprepareHeader(m_pWavDevHandle,item.HeaderHandle.AddrOfPinnedObject(),Marshal.SizeOf(item.Header));                    
+                    m_pBuffers.Remove(item);
+                    item.Dispose();
+                }
+
+                EnsureBuffers();
+            }
+            catch(InvalidOperationException)
+            { }
+            catch{
+            }
+        }
+
+        #endregion
+
+        #region method EnsureBuffers
+
+        /// <summary>
+        /// Fills recording buffers.
+        /// </summary>
+        private void EnsureBuffers()
+        {
+            // We keep 3 x buffer.
+            lock(m_pBuffers){
+                while(m_pBuffers.Count < 3){
+                    byte[]   data       = new byte[m_BufferSize];
+                    GCHandle dataHandle = GCHandle.Alloc(data,GCHandleType.Pinned);
+
+                    WAVEHDR wavHeader = new WAVEHDR();
+                    wavHeader.lpData          = dataHandle.AddrOfPinnedObject();
+                    wavHeader.dwBufferLength  = (uint)data.Length;
+                    wavHeader.dwBytesRecorded = 0;
+                    wavHeader.dwUser          = IntPtr.Zero;
+                    wavHeader.dwFlags         = 0;
+                    wavHeader.dwLoops         = 0;
+                    wavHeader.lpNext          = IntPtr.Zero;
+                    wavHeader.reserved        = 0;
+                    GCHandle headerHandle = GCHandle.Alloc(wavHeader,GCHandleType.Pinned);
+                    int result = 0;        
+                    result = WavMethods.waveInPrepareHeader(m_pWavDevHandle,headerHandle.AddrOfPinnedObject(),Marshal.SizeOf(wavHeader));
+                    if(result == MMSYSERR.NOERROR){
+                        m_pBuffers.Add(new BufferItem(ref headerHandle,ref dataHandle,m_BufferSize));
+
+                        result = WavMethods.waveInAddBuffer(m_pWavDevHandle,headerHandle.AddrOfPinnedObject(),Marshal.SizeOf(wavHeader));
+                        if(result != MMSYSERR.NOERROR){
+                            throw new Exception("Error adding wave in buffer, error: " + result + ".");
+                        }
+                    }
+                }
+            }
+        }
+
+        #endregion
+
+
+        #region Properties Implementation
+
+        /// <summary>
+        /// Gets all available input audio devices.
+        /// </summary>
+        public static WavInDevice[] Devices
+        {
+            get{
+                List<WavInDevice> retVal = new List<WavInDevice>();
+                // Get all available output devices and their info.                
+                int devicesCount = WavMethods.waveInGetNumDevs();
+                for(int i=0;i<devicesCount;i++){
+                    WAVEOUTCAPS pwoc = new WAVEOUTCAPS();
+                    if(WavMethods.waveInGetDevCaps((uint)i,ref pwoc,Marshal.SizeOf(pwoc)) == MMSYSERR.NOERROR){
+                        retVal.Add(new WavInDevice(i,pwoc.szPname,pwoc.wChannels));
+                    }
+                }
+
+                return retVal.ToArray();
+            }
+        }
+
+
+        /// <summary>
+        /// Gets if this object is disposed.
+        /// </summary>
+        public bool IsDisposed
+        {
+            get{ return m_IsDisposed; }
+        }
+
+        /// <summary>
+        /// Gets current input device.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public WavInDevice InputDevice
+        {
+            get{
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WavRecorder");
+                }
+
+                return m_pInDevice; 
+            }
+        }
+
+        /// <summary>
+        /// Gets number of samples per second.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int SamplesPerSec
+        {
+            get{                 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WavRecorder");
+                }
+
+                return m_SamplesPerSec; 
+            }
+        }
+
+        /// <summary>
+        /// Gets number of buts per sample.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int BitsPerSample
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WavRecorder");
+                }
+                
+                return m_BitsPerSample; 
+            }
+        }
+
+        /// <summary>
+        /// Gets number of channels.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int Channels
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WavRecorder");
+                }
+                
+                return m_Channels; 
+            }
+        }
+
+        /// <summary>
+        /// Gets recording buffer size.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int BufferSize
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WavRecorder");
+                }
+                
+                return m_BufferSize; 
+            }
+        }
+
+        // <summary>
+        /// Gets one smaple block size in bytes.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int BlockSize
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WavRecorder");
+                }
+
+                return m_BlockSize; 
+            }
+        }
+
+        #endregion
+        
+        #region Events Implementation
+
+        /// <summary>
+        /// This event is raised when record buffer is full and application should process it.
+        /// </summary>
+        public event BufferFullHandler BufferFull = null;
+
+        /// <summary>
+        /// This method raises event <b>BufferFull</b> event.
+        /// </summary>
+        /// <param name="buffer">Receive buffer.</param>
+        private void OnBufferFull(byte[] buffer)
+        {
+            if(this.BufferFull != null){
+                this.BufferFull(buffer);
+            }
+        }
+
+        #endregion
+
+    }
 }

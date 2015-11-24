@@ -54,7 +54,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public byte[] AgreeOrReqRise = null;
         public byte[] RiseOrUrgent = null;
         public byte[] DisgOrRelBuoy = null;
-        public WaveControl liveBox = null;
         public MovTraceService MovTraceService
         {
             get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }

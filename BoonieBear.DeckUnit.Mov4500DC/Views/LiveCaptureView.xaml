@@ -111,20 +111,20 @@
                                     <Button Name="AddImageBtn" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-30" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
                                     <Button Name="AddFHBtn"  Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="30" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" HorizontalAlignment="Center"/>
                                 </Controls:FanPanel>
-                                <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Background.Color, ElementName=SendMessageBox}"/>
+                                <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Background, ElementName=SendMessageBox}"/>
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
                             </Grid>
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="SendBtn" Style="{StaticResource SquareButtonStyle}" Content="发送" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="55" Height="45" Click="SendBtn_Click" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" />
                             <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入20个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                             <Label Name="SSBToolTip" Foreground="Black" Content="按住说话" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                            <Controls:MetroProgressBar Name="VoiceBar" Visibility="Hidden" EllipseDiameter="80" EllipseOffset="40" Value="55" Margin="55,0" MouseLeftButtonDown="VoiceBar_MouseLeftButtonDown" MouseLeftButtonUp="VoiceBar_MouseLeftButtonUp" MouseLeave="VoiceBar_MouseLeave" Opacity="0.4">
-                                <Controls:MetroProgressBar.Foreground>
+                            <MetroControl:MetroProgressBar Name="VoiceBar"  Visibility="Hidden" EllipseDiameter="80" EllipseOffset="40" Value="0" Margin="55,0" MouseLeftButtonDown="VoiceBar_MouseLeftButtonDown" MouseLeftButtonUp="VoiceBar_MouseLeftButtonUp" MouseLeave="VoiceBar_MouseLeave" Opacity="0.4">
+                                <MetroControl:MetroProgressBar.Foreground>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#FF4B3333" Offset="0.386"/>
                                         <GradientStop Color="Red" Offset="1"/>
                                     </LinearGradientBrush>
-                                </Controls:MetroProgressBar.Foreground>
-                            </Controls:MetroProgressBar>
+                                </MetroControl:MetroProgressBar.Foreground>
+                            </MetroControl:MetroProgressBar>
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="SendSSBBtn" Style="{StaticResource VoiceAppBarButtonStyle}" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Height="45" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Visible" Click="SendSSBBtn_Click" />
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="BackToEditBtn" Style="{StaticResource EditTextAppBarButtonStyle}" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Height="45" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" Click="BackToEditBtn_Click" />
                         </Grid>

@@ -32,26 +32,63 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         Dictionary<int, Span> spans = new Dictionary<int, Span>(0);
         List<Paragraph> parasList = new List<Paragraph>(0);
         private int index = 0;
-        private bool StartRecode = false;
+        private bool isRecording = false;
+        private short[] volumnbuffer = new short[400];//half of wavecontrol recording buffer
         #endregion
         public LiveCaptureView()
         {
             InitializeComponent();
-            if (!WaveControl.IsInit)
-                WaveControl.Initailize();
-            WaveControl.PlayMode = WaveControl.Mode.Both;
+            WaveControl.Initailize();
             WaveControl.AddRecDoneHandle(RecHandle);
-            UnitCore.Instance.liveBox = WaveControl;
+            WaveControl.StartPlaying();
         }
 
         private void RecHandle(byte[] bufBytes)
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
-                //WaveControl.Display(bufBytes);
-                if (StartRecode)
-                    VoiceBar.Value = bufBytes.Sum((s)=>(int)s)*100/(2048*255);
+                WaveControl.Display(bufBytes);
+                VoiceBar.Value = UpdateVolumn(bufBytes);
             }) );
+        }
+        /// <summary>
+        /// 计算音量，输出离散化为10，20，30，………………
+        /// </summary>
+        /// <param name="bufBytes"></param>
+        private int UpdateVolumn(byte[] bufBytes)
+        {
+            Buffer.BlockCopy(bufBytes, 0, volumnbuffer, 0, bufBytes.Length);
+            // 将 buffer 内容取出，进行平方和运算
+            double v = 0;
+            for (int i = 0; i < volumnbuffer.Length; i++)
+            {
+                v += volumnbuffer[i] * volumnbuffer[i];
+            }
+            // 平方和除以数据总长度，得到音量大小。
+            double mean = v / (double)volumnbuffer.Length;
+            var volume = 10 * Math.Log10(mean);
+            if (volume < 10)
+                volume = 5;
+            else if (volume > 10 && volume < 20)
+                volume = 15;
+            else if (volume > 20 && volume < 30)
+                volume = 25;
+            else if (volume > 30 && volume < 40)
+                volume = 35;
+            else if (volume > 40 && volume < 50)
+                volume = 45;
+            else if (volume > 50 && volume < 60)
+                volume = 55;
+            else if (volume > 60 && volume < 70)
+                volume = 65;
+            else if (volume > 70 && volume < 80)
+                volume = 75;
+            else if (volume > 80 && volume < 90)
+                volume = 85;
+            else
+                volume = 100;
+
+            return (int) volume;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -306,20 +343,37 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private void VoiceBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            SSBToolTip.Content = "释放后发送语音";
-            StartRecode = true;
+            Recording(true);
+        }
+        
+        private void Recording(bool start = true)
+        {
+            if (start)
+            {
+                WaveControl.StartRecording();
+                SSBToolTip.Content = "释放后发送语音";
+                isRecording = true;
+            }
+            else
+            {
+                WaveControl.StopRecoding();
+                SSBToolTip.Content = "按住说话";
+                isRecording = false;
+            }
+            VoiceBar.Value = 0;
+            
         }
 
         private void VoiceBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            SSBToolTip.Content = "按住说话";
-            StartRecode = false;
+
+            Recording(false);
+            
         }
         //和释放动作效果一样
         private void VoiceBar_MouseLeave(object sender, MouseEventArgs e)
         {
-            SSBToolTip.Content = "按住说话";
-            StartRecode = false;
+            Recording(false);
         }
         private void BackToEditBtn_Click(object sender, RoutedEventArgs e)
         {

@@ -1,249 +1,505 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Threading;
+using BoonieBear.DeckUnit.VoiceManager.WinNative;
 
 namespace BoonieBear.DeckUnit.VoiceManager
 {
-    internal class WaveOutHelper
+    /// <summary>
+    /// This class implements streaming wav data player.
+    /// </summary>
+    public class WaveOut : IDisposable
     {
-        public static void Try(int err)
+        #region class PlayItem
+
+        /// <summary>
+        /// This class holds queued wav play item.
+        /// </summary>
+        internal class PlayItem
         {
-            if (err != WaveNative.MMSYSERR_NOERROR)
-                throw new Exception(err.ToString());
-        }
-    }
+            private GCHandle m_HeaderHandle;
+            private GCHandle m_DataHandle;
+            private int      m_DataSize = 0;
 
-    public delegate void BufferFillEventHandler(IntPtr data, int size);
-
-	internal class WaveOutBuffer : IDisposable
-	{
-        public WaveOutBuffer NextBuffer;
-
-        private AutoResetEvent m_PlayEvent = new AutoResetEvent(false);
-        private IntPtr m_WaveOut;
-
-        private WaveNative.WaveHdr m_Header;
-        private byte[] m_HeaderData;
-        private GCHandle m_HeaderHandle;
-        private GCHandle m_HeaderDataHandle;
-
-        private bool m_Playing;
-
-        internal static void WaveOutProc(IntPtr hdrvr, int uMsg, int dwUser, ref WaveNative.WaveHdr wavhdr, int dwParam2)
-        {
-            if (uMsg == WaveNative.MM_WOM_DONE)
+            /// <summary>
+            /// Default constructor.
+            /// </summary>
+            /// <param name="headerHandle">Header handle.</param>
+            /// <param name="header">Wav header.</param>
+            /// <param name="dataHandle">Wav header data handle.</param>
+            /// <param name="dataSize">Data size in bytes.</param>
+            public PlayItem(ref GCHandle headerHandle,ref GCHandle dataHandle,int dataSize)
             {
-                try
-                {
-                    GCHandle h = (GCHandle)wavhdr.dwUser;
-                    WaveOutBuffer buf = (WaveOutBuffer)h.Target;
-                    buf.OnCompleted();
-                }
-                catch
-                {
-                }
+                m_HeaderHandle = headerHandle;
+                m_DataHandle   = dataHandle;
+                m_DataSize     = dataSize;
             }
-        }
 
-        public WaveOutBuffer(IntPtr waveOutHandle, int size)
-		{
-            m_WaveOut = waveOutHandle;
+            #region method Dispose
 
-            m_HeaderHandle = GCHandle.Alloc(m_Header, GCHandleType.Pinned);
-            m_Header.dwUser = (IntPtr)GCHandle.Alloc(this);
-            m_HeaderData = new byte[size];
-            m_HeaderDataHandle = GCHandle.Alloc(m_HeaderData, GCHandleType.Pinned);
-            m_Header.lpData = m_HeaderDataHandle.AddrOfPinnedObject();
-            m_Header.dwBufferLength = size;
-            WaveOutHelper.Try(WaveNative.waveOutPrepareHeader(m_WaveOut, ref m_Header, Marshal.SizeOf(m_Header)));
-		}
-        ~WaveOutBuffer()
-        {
-            Dispose();
-        }
-        public void Dispose()
-        {
-            if (m_Header.lpData != IntPtr.Zero)
+            /// <summary>
+            /// Cleans up any resources being used.
+            /// </summary>
+            public void Dispose()
             {
-                WaveNative.waveOutUnprepareHeader(m_WaveOut, ref m_Header, Marshal.SizeOf(m_Header));
                 m_HeaderHandle.Free();
-                m_Header.lpData = IntPtr.Zero;
+                m_DataHandle.Free();
             }
-            m_PlayEvent.Close();
-            if (m_HeaderDataHandle.IsAllocated)
-                m_HeaderDataHandle.Free();
-            GC.SuppressFinalize(this);
-        }
 
-        public int Size
-        {
-            get { return m_Header.dwBufferLength; }
-        }
+            #endregion
 
-        public IntPtr Data
-        {
-            get { return m_Header.lpData; }
-        }
 
-        public bool Play()
-        {
-            lock(this)
+            #region Properties Implementation
+
+            /// <summary>
+            /// Gets header handle.
+            /// </summary>
+            public GCHandle HeaderHandle
             {
-                m_PlayEvent.Reset();
-                m_Playing = WaveNative.waveOutWrite(m_WaveOut, ref m_Header, Marshal.SizeOf(m_Header)) == WaveNative.MMSYSERR_NOERROR;
-                return m_Playing;
+                get{ return m_HeaderHandle; }
             }
-        }
-        public void WaitFor()
-        {
-            if (m_Playing)
+
+            /// <summary>
+            /// Gets header.
+            /// </summary>
+            public WAVEHDR Header
             {
-                m_Playing = m_PlayEvent.WaitOne();
+                get{ return (WAVEHDR)m_HeaderHandle.Target; }
             }
-            else
+
+            /// <summary>
+            /// Gets wav header data pointer handle.
+            /// </summary>
+            public GCHandle DataHandle
             {
-                Thread.Sleep(0);
+                get{ return m_DataHandle; }
+            }
+
+            /// <summary>
+            /// Gets wav header data size in bytes.
+            /// </summary>
+            public int DataSize
+            {
+                get{ return m_DataSize; }
+            }
+
+            #endregion
+
+        }
+
+        #endregion
+
+        private WavOutDevice    m_pOutDevice    = null;
+        private int             m_SamplesPerSec = 8000;
+        private int             m_BitsPerSample = 16;
+        private int             m_Channels      = 1;
+        private int             m_MinBuffer     = 1200;
+        private IntPtr          m_pWavDevHandle = IntPtr.Zero;
+        private int             m_BlockSize     = 0;
+        private int             m_BytesBuffered = 0;
+        private bool            m_IsPaused      = false;
+        private List<PlayItem>  m_pPlayItems    = null;
+        private waveOutProc     m_pWaveOutProc  = null;
+        private bool            m_IsDisposed    = false;
+        
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
+        /// <param name="outputDevice">Output device.</param>
+        /// <param name="samplesPerSec">Sample rate, in samples per second (hertz). For PCM common values are 
+        /// 8.0 kHz, 11.025 kHz, 22.05 kHz, and 44.1 kHz.</param>
+        /// <param name="bitsPerSample">Bits per sample. For PCM 8 or 16 are the only valid values.</param>
+        /// <param name="channels">Number of channels.</param>
+        /// <exception cref="ArgumentNullException">Is raised when <b>outputDevice</b> is null.</exception>
+        /// <exception cref="ArgumentException">Is raised when any of the aruments has invalid value.</exception>
+        public WaveOut(WavOutDevice outputDevice,int samplesPerSec,int bitsPerSample,int channels)
+        {
+            if(outputDevice == null){
+                throw new ArgumentNullException("outputDevice");
+            }
+            if(samplesPerSec < 8000){
+                throw new ArgumentException("Argument 'samplesPerSec' value must be >= 8000.");
+            }
+            if(bitsPerSample < 8){
+                throw new ArgumentException("Argument 'bitsPerSample' value must be >= 8.");
+            }
+            if(channels < 1){
+                throw new ArgumentException("Argument 'channels' value must be >= 1.");
+            }
+
+            m_pOutDevice    = outputDevice;
+            m_SamplesPerSec = samplesPerSec;
+            m_BitsPerSample = bitsPerSample;
+            m_Channels      = channels;
+            m_BlockSize     = m_Channels * (m_BitsPerSample / 8);
+            m_pPlayItems    = new List<PlayItem>();
+            
+            // Try to open wav device.            
+            WAVEFORMATEX format = new WAVEFORMATEX();
+            format.wFormatTag      = WavFormat.PCM;
+            format.nChannels       = (ushort)m_Channels;
+            format.nSamplesPerSec  = (uint)samplesPerSec;                        
+            format.nAvgBytesPerSec = (uint)(m_SamplesPerSec * m_Channels * (m_BitsPerSample / 8));
+            format.nBlockAlign     = (ushort)m_BlockSize;
+            format.wBitsPerSample  = (ushort)m_BitsPerSample;
+            format.cbSize          = 0; 
+            // We must delegate reference, otherwise GC will collect it.
+            m_pWaveOutProc = new waveOutProc(this.OnWaveOutProc);
+            int result = WavMethods.waveOutOpen(out m_pWavDevHandle,m_pOutDevice.Index,format,m_pWaveOutProc,0,WavConstants.CALLBACK_FUNCTION);
+            if(result != MMSYSERR.NOERROR){
+                throw new Exception("Failed to open wav device, error: " + result.ToString() + ".");
             }
         }
-        public void OnCompleted()
-        {
-            m_PlayEvent.Set();
-            m_Playing = false;
-        }
-    }
 
-    public class WaveOutPlayer : IDisposable
-    {
-        private IntPtr m_WaveOut;
-        private WaveOutBuffer m_Buffers; // linked list
-        private WaveOutBuffer m_CurrentBuffer;
-        private Thread m_Thread;
-        private BufferFillEventHandler m_FillProc;
-		private bool m_Finished;
-		private byte m_zero;
-
-        private WaveNative.WaveDelegate m_BufferProc = new WaveNative.WaveDelegate(WaveOutBuffer.WaveOutProc);
-
-        public static int DeviceCount
-        {
-            get { return WaveNative.waveOutGetNumDevs(); }
-        }
-
-        public WaveOutPlayer(int device, WaveFormat format, int bufferSize, int bufferCount, BufferFillEventHandler fillProc)
-        {
-			m_zero = format.wBitsPerSample == 8 ? (byte)128 : (byte)0;
-            m_FillProc = fillProc;
-            WaveOutHelper.Try(WaveNative.waveOutOpen(out m_WaveOut, device, format, m_BufferProc, IntPtr.Zero, WaveNative.CALLBACK_FUNCTION));
-            AllocateBuffers(bufferSize, bufferCount);
-            m_Thread = new Thread(new ThreadStart(ThreadProc));
-            m_Thread.Start();
-        }
-        ~WaveOutPlayer()
+        /// <summary>
+        /// Default destructor.
+        /// </summary>
+        ~WaveOut()
         {
             Dispose();
         }
+
+        #region method Dispose
+
+        /// <summary>
+        /// Cleans up any resources being used.
+        /// </summary>
         public void Dispose()
         {
-            if (m_Thread != null)
-				try
-				{
-					m_Finished = true;
-					if (m_WaveOut != IntPtr.Zero)
-						WaveNative.waveOutReset(m_WaveOut);
-                    m_FillProc = null;
-                    FreeBuffers();
-					m_Thread.Abort();
-					if (m_WaveOut != IntPtr.Zero)
-						WaveNative.waveOutClose(m_WaveOut);
-				}
-				finally
-				{
-					m_Thread = null;
-					m_WaveOut = IntPtr.Zero;
-				}
-            GC.SuppressFinalize(this);
-        }
-        private void ThreadProc()
-        {
-            while (!m_Finished)
-            {
-                Advance();
-                if (m_Finished)
-                    return;
-				if (m_FillProc != null && !m_Finished)
-					m_FillProc(m_CurrentBuffer.Data, m_CurrentBuffer.Size);
-                else if (m_CurrentBuffer!=null)
-				{
-					// zero out buffer
-					byte v = m_zero;
-					byte[] b = new byte[m_CurrentBuffer.Size];
-					for (int i = 0; i < b.Length; i++)
-						b[i] = v;
-					Marshal.Copy(b, 0, m_CurrentBuffer.Data, b.Length);
-
-				}
-                else
-                    continue;
-                if (m_CurrentBuffer != null)
-                    m_CurrentBuffer.Play();
+            if(m_IsDisposed){
+                return;
             }
-            if (m_Buffers!=null)
-			    WaitForAllBuffers();
-		}
-        private void AllocateBuffers(int bufferSize, int bufferCount)
+            m_IsDisposed = true;
+
+            try{
+                // If playing, we need to reset wav device first.
+                WavMethods.waveOutReset(m_pWavDevHandle);
+
+                // If there are unprepared wav headers, we need to unprepare these.
+                foreach(PlayItem item in m_pPlayItems){
+                    WavMethods.waveOutUnprepareHeader(m_pWavDevHandle,item.HeaderHandle.AddrOfPinnedObject(),Marshal.SizeOf(item.Header));
+                    item.Dispose();
+                }
+                
+                // Close output device.
+                WavMethods.waveOutClose(m_pWavDevHandle);
+
+                m_pOutDevice    = null;
+                m_pWavDevHandle = IntPtr.Zero;
+                m_pPlayItems    = null;
+                m_pWaveOutProc  = null;
+            }
+            catch{                
+            }
+        }
+
+        #endregion
+
+
+        #region method OnWaveOutProc
+
+        /// <summary>
+        /// This method is called when wav device generates some event.
+        /// </summary>
+        /// <param name="hdrvr">Handle to the waveform-audio device associated with the callback.</param>
+        /// <param name="uMsg">Waveform-audio output message.</param>
+        /// <param name="dwUser">User-instance data specified with waveOutOpen.</param>
+        /// <param name="dwParam1">Message parameter.</param>
+        /// <param name="dwParam2">Message parameter.</param>
+        private void OnWaveOutProc(IntPtr hdrvr,int uMsg,int dwUser,int dwParam1,int dwParam2)
+        {   
+            // NOTE: MSDN warns, we may not call any wav related methods here.
+
+            try{
+                if(uMsg == WavConstants.MM_WOM_DONE){ 
+                    ThreadPool.QueueUserWorkItem(new WaitCallback(this.OnCleanUpFirstBlock));
+                }
+            }
+            catch{
+            }
+        }
+
+        #endregion
+
+        #region method OnCleanUpFirstBlock
+
+        /// <summary>
+        /// Cleans up the first data block in play queue.
+        /// </summary>
+        /// <param name="state">User data.</param>
+        private void OnCleanUpFirstBlock(object state)
         {
-            FreeBuffers();
-            if (bufferCount > 0)
-            {
-                m_Buffers = new WaveOutBuffer(m_WaveOut, bufferSize);
-                WaveOutBuffer Prev = m_Buffers;
-                try
-                {
-                    for (int i = 1; i < bufferCount; i++)
-                    {
-                        WaveOutBuffer Buf = new WaveOutBuffer(m_WaveOut, bufferSize);
-                        Prev.NextBuffer = Buf;
-                        Prev = Buf;
+            try{            
+                lock(m_pPlayItems){
+                    PlayItem item = m_pPlayItems[0];
+                    WavMethods.waveOutUnprepareHeader(m_pWavDevHandle,item.HeaderHandle.AddrOfPinnedObject(),Marshal.SizeOf(item.Header));                    
+                    m_pPlayItems.Remove(item);
+                    m_BytesBuffered -= item.DataSize;
+                    item.Dispose();
+                }
+            }
+            catch{
+            }
+        }
+
+        #endregion
+
+
+        #region method Play
+
+        /// <summary>
+        /// Plays specified audio data bytes. If player is currently playing, data will be queued for playing.
+        /// </summary>
+        /// <param name="audioData">Audio data. Data boundary must n * BlockSize.</param>
+        /// <param name="offset">Offset in the buffer.</param>
+        /// <param name="count">Number of bytes to play form the specified offset.</param>
+        /// <exception cref="ObjectDisposedException">Is raised when this object is disposed and this method is accessed.</exception>
+        /// <exception cref="ArgumentNullException">Is raised when <b>audioData</b> is null.</exception>
+        /// <exception cref="ArgumentException">Is raised when <b>audioData</b> is with invalid length.</exception>
+        public void Play(byte[] audioData,int offset,int count)
+        {
+            if(m_IsDisposed){
+                throw new ObjectDisposedException("WaveOut");
+            }
+            if(audioData == null){
+                throw new ArgumentNullException("audioData");
+            }
+            if((count % m_BlockSize) != 0){
+                throw new ArgumentException("Audio data is not n * BlockSize.");
+            }
+
+            //--- Queue specified audio block for play. --------------------------------------------------------
+            byte[]   data       = new byte[count];
+            Array.Copy(audioData,offset,data,0,count);
+            GCHandle dataHandle = GCHandle.Alloc(data,GCHandleType.Pinned);
+//            m_BytesBuffered += data.Length;
+
+            WAVEHDR wavHeader = new WAVEHDR();
+            wavHeader.lpData          = dataHandle.AddrOfPinnedObject();
+            wavHeader.dwBufferLength  = (uint)data.Length;
+            wavHeader.dwBytesRecorded = 0;
+            wavHeader.dwUser          = IntPtr.Zero;
+            wavHeader.dwFlags         = 0;
+            wavHeader.dwLoops         = 0;
+            wavHeader.lpNext          = IntPtr.Zero;
+            wavHeader.reserved        = 0;
+            GCHandle headerHandle = GCHandle.Alloc(wavHeader,GCHandleType.Pinned);
+            int result = 0;        
+            result = WavMethods.waveOutPrepareHeader(m_pWavDevHandle,headerHandle.AddrOfPinnedObject(),Marshal.SizeOf(wavHeader));
+            if(result == MMSYSERR.NOERROR){
+                PlayItem item = new PlayItem(ref headerHandle,ref dataHandle,data.Length);
+                m_pPlayItems.Add(item);
+
+                // We ran out of minimum buffer, we must pause playing while min buffer filled.
+                if(m_BytesBuffered < 1000){
+                    if(!m_IsPaused){
+                        WavMethods.waveOutPause(m_pWavDevHandle);
+                        m_IsPaused = true;
+                    }
+                    //File.AppendAllText("aaaa.txt","Begin buffer\r\n");
+                }
+                // Buffering completed,we may resume playing.
+                else if(m_IsPaused && m_BytesBuffered > m_MinBuffer){
+                    WavMethods.waveOutRestart(m_pWavDevHandle);
+                    m_IsPaused = false;
+                    //File.AppendAllText("aaaa.txt","end buffer: " + m_BytesBuffered + "\r\n");
+                }
+                /*
+                // TODO: If we ran out of minimum buffer, we must pause playing while min buffer filled.
+                if(m_BytesBuffered < m_MinBuffer){
+                    if(!m_IsPaused){
+                        WavMethods.waveOutPause(m_pWavDevHandle);
+                        m_IsPaused = true;
                     }
                 }
-                finally
-                {
-                    Prev.NextBuffer = m_Buffers;
+                else if(m_IsPaused){
+                    WavMethods.waveOutRestart(m_pWavDevHandle);
+                }*/
+
+                m_BytesBuffered += data.Length;
+
+                result = WavMethods.waveOutWrite(m_pWavDevHandle,headerHandle.AddrOfPinnedObject(),Marshal.SizeOf(wavHeader));
+            }
+            else{
+                dataHandle.Free();
+                headerHandle.Free();
+            }
+            //--------------------------------------------------------------------------------------------------
+        }
+
+        #endregion
+
+        #region method GetVolume
+
+        /// <summary>
+        /// Gets audio output volume.
+        /// </summary>
+        /// <param name="left">Left channel volume level.</param>
+        /// <param name="right">Right channel volume level.</param>
+        /// <exception cref="ObjectDisposedException">Is raised when this object is disposed and this method is accessed.</exception>
+        public void GetVolume(ref ushort left,ref ushort right)
+        {
+            if(m_IsDisposed){
+                throw new ObjectDisposedException("WaveOut");
+            }
+
+            int volume = 0;
+            WavMethods.waveOutGetVolume(m_pWavDevHandle,out volume);
+
+            left  = (ushort)(volume & 0x0000ffff);
+            right = (ushort)(volume >> 16);
+        }
+
+        #endregion
+
+        #region method SetVolume
+
+        /// <summary>
+        /// Sets audio output volume.
+        /// </summary>
+        /// <param name="left">Left channel volume level.</param>
+        /// <param name="right">Right channel volume level.</param>
+        /// <exception cref="ObjectDisposedException">Is raised when this object is disposed and this method is accessed.</exception>
+        public void SetVolume(ushort left,ushort right)
+        {
+            if(m_IsDisposed){
+                throw new ObjectDisposedException("WaveOut");
+            }
+
+            WavMethods.waveOutSetVolume(m_pWavDevHandle,(right << 16 | left & 0xFFFF));
+        }
+
+        #endregion
+
+
+        #region Properties Implementation
+
+        /// <summary>
+        /// Gets all available output audio devices.
+        /// </summary>
+        public static WavOutDevice[] Devices
+        {
+            get{
+                List<WavOutDevice> retVal = new List<WavOutDevice>();
+                // Get all available output devices and their info.
+                int devicesCount = WavMethods.waveOutGetNumDevs();
+                for(int i=0;i<devicesCount;i++){
+                    WAVEOUTCAPS pwoc = new WAVEOUTCAPS();
+                    if(WavMethods.waveOutGetDevCaps((uint)i,ref pwoc,Marshal.SizeOf(pwoc)) == MMSYSERR.NOERROR){
+                        retVal.Add(new WavOutDevice(i,pwoc.szPname,pwoc.wChannels));
+                    }
+                }
+
+                return retVal.ToArray(); 
+            }
+        }
+
+
+        /// <summary>
+        /// Gets if this object is disposed.
+        /// </summary>
+        public bool IsDisposed
+        {
+            get{ return m_IsDisposed; }
+        }
+
+        /// <summary>
+        /// Gets current output device.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public WavOutDevice OutputDevice
+        {
+            get{
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WaveOut");
+                }
+
+                return m_pOutDevice; 
+            }
+        }
+
+        /// <summary>
+        /// Gets number of samples per second.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int SamplesPerSec
+        {
+            get{                 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WaveOut");
+                }
+
+                return m_SamplesPerSec; 
+            }
+        }
+
+        /// <summary>
+        /// Gets number of buts per sample.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int BitsPerSample
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WaveOut");
+                }
+                
+                return m_BitsPerSample; 
+            }
+        }
+
+        /// <summary>
+        /// Gets number of channels.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int Channels
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WaveOut");
+                }
+                
+                return m_Channels; 
+            }
+        }
+
+        /// <summary>
+        /// Gets one smaple block size in bytes.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public int BlockSize
+        {
+            get{ 
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WaveOut");
+                }
+
+                return m_BlockSize; 
+            }
+        }
+
+        /// <summary>
+        /// Gets if wav player is currently playing something.
+        /// </summary>
+        /// <exception cref="">Is raised when this object is disposed and this property is accessed.</exception>
+        public bool IsPlaying
+        {
+            get{
+                if(m_IsDisposed){
+                    throw new ObjectDisposedException("WaveOut");
+                }
+                
+                if(m_pPlayItems.Count > 0){
+                    return true;
+                }
+                else{
+                    return false;
                 }
             }
         }
-        private void FreeBuffers()
-        {
-            if(m_CurrentBuffer!=null)
-                m_CurrentBuffer.Dispose();
-            m_CurrentBuffer = null;
-            if (m_Buffers != null)
-            {
-                WaveOutBuffer First = m_Buffers;
-                m_Buffers = null;
 
-                WaveOutBuffer Current = First;
-                do
-                {
-                    WaveOutBuffer Next = Current.NextBuffer;
-                    Current.Dispose();
-                    Current = Next;
-                } while(Current != First);
-            }
-        }
-        private void Advance()
-        {
-            m_CurrentBuffer = m_CurrentBuffer == null ? m_Buffers : m_CurrentBuffer.NextBuffer;
-            m_CurrentBuffer.WaitFor();
-        }
-        private void WaitForAllBuffers()
-        {
-            WaveOutBuffer Buf = m_Buffers;
-            while (Buf.NextBuffer != m_Buffers)
-            {
-                Buf.WaitFor();
-                Buf = Buf.NextBuffer;
-            }
-        }
+        #endregion
+
     }
 }

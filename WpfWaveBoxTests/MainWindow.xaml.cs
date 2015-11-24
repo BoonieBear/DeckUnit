@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Forms;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.WaveBox;
@@ -25,17 +26,22 @@ namespace WpfWaveBoxTests
         private DispatcherTimer timer;
         private BinaryReader br;
         private byte[] _playerBuffer;
+
         public MainWindow()
         {
             InitializeComponent();
+            WaveControl.Initailize();
             FileStream fs = new FileStream("XMTvoice20120622095015.wav", FileMode.Open);
             br = new BinaryReader(fs);
             timer = new DispatcherTimer();
+
+ 
             timer.Interval = new TimeSpan(0, 0, 0, 0, 125);
             timer.Tick += timer_Tick;
             timer.Start();
-            WaveControl.PlayMode = WaveControl.Mode.Voiceplayer;
-            //WaveControl.AddRecDoneHandle(saverecvoice);
+            
+            WaveControl.AddRecDoneHandle(saverecvoice);
+            WaveControl.StartPlaying();
         }
         private void timer_Tick(object sender, EventArgs e)
         {
@@ -45,6 +51,7 @@ namespace WpfWaveBoxTests
             if (_wave.Length != 0)
             {
                 WaveControl.Display(_wave);
+
             }
 
             
@@ -56,7 +63,7 @@ namespace WpfWaveBoxTests
         }
         private void Window_Closed(object sender, EventArgs e)
         {
-            WaveControl.Dispose();
+            //WaveControl.Dispose();
         }
     }
 }
