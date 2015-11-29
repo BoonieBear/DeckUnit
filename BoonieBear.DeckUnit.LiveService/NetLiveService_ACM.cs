@@ -178,6 +178,8 @@ namespace BoonieBear.DeckUnit.LiveService
                 TCPDataService.UnRegister(NetDataObserver);
                 TCPDataService.Stop();
 
+                StopUDPService();
+
             }
             IsWorking = false;
             IsInitialize = false;
@@ -185,6 +187,8 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public void Start()
         {
+            if(!IsInitialize)
+                Initialize();
             IsWorking = false;
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
@@ -229,9 +233,27 @@ namespace BoonieBear.DeckUnit.LiveService
 
         }
 
-        public Task<bool> SendFile(Stream file)
+        public async Task<bool> SendFile(Stream file)
         {
-            throw new NotImplementedException();
+            SendBytes = 0;
+            var shellcmd = new ACNTCPShellCommand(_shelltcpClient, "gd");
+            var ret = Command.SendTCPAsync(shellcmd);
+            if (await ret)
+            {
+                var datacmd = new ACNTCPStreamCommand(_datatcpClient, file, reportprogress);
+                TCPDataService.Register(datacmd);
+                return await Command.SendTCPAsync(datacmd).ContinueWith(x =>
+                {
+                    TCPDataService.UnRegister(datacmd);
+                    return x.Result;
+                });
+            }
+            return false;
+        }
+
+        private void reportprogress(int i)
+        {
+            SendBytes = i;
         }
 
         //下发调制数据，水声需要手动添加最后0xeded

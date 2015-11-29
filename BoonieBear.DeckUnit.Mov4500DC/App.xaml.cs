@@ -16,6 +16,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI
     {
         private Mutex gMu;
         public static bool IsExit = false;
+        public App()
+        {
+            DispatcherUnhandledException += Application_DispatcherUnhandledException;
+            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
+        }
         protected override void OnStartup(StartupEventArgs e)
         {
             //检查实例是否重复
@@ -29,8 +34,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI
                 return;
             }
              
-            this.DispatcherUnhandledException += Application_DispatcherUnhandledException;
-            AppDomain.CurrentDomain.UnhandledException += UnhandledExceptionHandler;
             Splasher.Splash = new SplashWindow();
 
             Splasher.ShowSplash();
@@ -56,7 +59,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             if (App.IsExit)
                 return;
             e.Handled = true;
-            if (App.Current.MainWindow.IsActive)
+            if (Application.Current.MainWindow.IsActive)
                 UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(e.Exception.Message, LogType.Both));
             else
             {
@@ -86,6 +89,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             LogHelper.WriteLog("程序关闭");
             if (UnitCore.GetInstance().IsWorking)
                 UnitCore.GetInstance().Stop();
+            if(UnitCore.Instance.Wave!=null)
+                UnitCore.Instance.Wave.Dispose();
         }
     }
 }

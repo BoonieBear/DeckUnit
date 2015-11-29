@@ -54,6 +54,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public byte[] AgreeOrReqRise = null;
         public byte[] RiseOrUrgent = null;
         public byte[] DisgOrRelBuoy = null;
+        public WaveControl Wave = null;
         public MovTraceService MovTraceService
         {
             get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }
@@ -144,10 +145,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     NetCore.Stop();
                 NetCore.Initialize();
                 NetCore.Start();
-                if(CommCore.IsInitialize)
+                /*没有串口连接
+                 * if(CommCore.IsInitialize)
                     CommCore.Stop();
                 CommCore.Initialize();
                 CommCore.Start();
+                 * */
                 if(!MovTraceService.CreateService()) throw new Exception("数据保存服务启动失败");
                 _serviceStarted = true;
                 Error = NetCore.Error;
@@ -167,8 +170,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         {
             if (NetCore.IsWorking)
                 NetCore.Stop();
-            if (CommCore.IsWorking)
-                CommCore.Stop();
+            /*if (CommCore.IsWorking)
+                CommCore.Stop();*/
             MovTraceService.TearDownService();
             _serviceStarted = false;
             

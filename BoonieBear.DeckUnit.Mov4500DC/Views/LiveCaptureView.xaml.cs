@@ -52,7 +52,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             }) );
         }
         /// <summary>
-        /// 计算音量，输出离散化为10，20，30，………………
+        /// 计算音量，输出离散化
         /// </summary>
         /// <param name="bufBytes"></param>
         private int UpdateVolumn(byte[] bufBytes)
@@ -60,6 +60,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             Buffer.BlockCopy(bufBytes, 0, volumnbuffer, 0, bufBytes.Length);
             // 将 buffer 内容取出，进行平方和运算
             double v = 0;
+            int newvolumn = 0;
             for (int i = 0; i < volumnbuffer.Length; i++)
             {
                 v += volumnbuffer[i] * volumnbuffer[i];
@@ -69,26 +70,22 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             var volume = 10 * Math.Log10(mean);
             if (volume < 10)
                 volume = 5;
-            else if (volume > 10 && volume < 20)
-                volume = 15;
-            else if (volume > 20 && volume < 30)
-                volume = 25;
+            else if ( volume < 30)
+                newvolumn = 0;
             else if (volume > 30 && volume < 40)
-                volume = 35;
+                newvolumn = 15;
             else if (volume > 40 && volume < 50)
-                volume = 45;
+                newvolumn = 35;
             else if (volume > 50 && volume < 60)
-                volume = 55;
+                newvolumn = 55;
             else if (volume > 60 && volume < 70)
-                volume = 65;
+                newvolumn = 70;
             else if (volume > 70 && volume < 80)
-                volume = 75;
-            else if (volume > 80 && volume < 90)
-                volume = 85;
-            else
-                volume = 100;
+                newvolumn = 85;
+            else if (volume > 80)
+                newvolumn = 100;
 
-            return (int) volume;
+            return newvolumn;
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
@@ -96,8 +93,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             await TryConnnect();
             if (UnitCore.Instance.IsWorking)
             {
-                
+                NolinkBlock.Visibility = Visibility.Hidden;
             }
+            UnitCore.Instance.Wave = WaveControl;
         }
 
         private static async Task TryConnnect()
@@ -119,6 +117,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     if (answer == MessageDialogResult.Negative)
                     {
                         UnitCore.Instance.EventAggregator.PublishMessage(new GoSettingNavigation());
+                        break;
                     }
                     else if (answer == MessageDialogResult.FirstAuxiliary)
                     {

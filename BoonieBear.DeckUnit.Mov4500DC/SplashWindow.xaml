@@ -9,7 +9,7 @@
     <Window.Resources>
         <VisualBrush x:Key="StartCharMapBrush">
             <VisualBrush.Visual>
-                <TextBlock  FontFamily="{DynamicResource SegoeUISymbol}" Foreground="#133456" Text="&#xE102;"/>
+                <TextBlock  FontFamily="{StaticResource SegoeUISymbol}" Foreground="#133456" Text="&#xE102;"/>
             </VisualBrush.Visual>
         </VisualBrush>
     </Window.Resources>

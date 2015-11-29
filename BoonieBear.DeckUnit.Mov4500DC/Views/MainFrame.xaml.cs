@@ -24,6 +24,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             Splasher.CloseSplash();
+            Application.Current.MainWindow = this;
             Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
 
         }

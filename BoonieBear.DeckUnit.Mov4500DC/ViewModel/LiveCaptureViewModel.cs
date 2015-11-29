@@ -26,5 +26,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             get { return GetPropertyValue(() => BtnShow); }
             set { SetPropertyValue(() => BtnShow, value); }
         }
+
     }
 }

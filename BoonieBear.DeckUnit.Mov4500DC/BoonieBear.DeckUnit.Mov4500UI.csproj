@@ -177,6 +177,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\TinyMetroWpfLibrary.Controls.dll</HintPath>
     </Reference>
+    <Reference Include="TinyMetroWpfLibrary.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Tools\TinyMetroWpfLibrary.Utility.dll</HintPath>
+    </Reference>
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -211,6 +215,7 @@
     <Compile Include="Events\GoSettingNavigation.cs" />
     <Compile Include="Events\LogEvent.cs" />
     <Compile Include="Helpers\ResourcesHelper.cs" />
+    <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Models\Status.cs" />
     <Compile Include="Models\SystemInfo.cs" />
     <Compile Include="Splasher.cs" />
@@ -492,6 +497,12 @@
     <Resource Include="Assets\ico_zoomout_o.png" />
     <Resource Include="Assets\ico_zoomout_p.png" />
     <Resource Include="Assets\Logo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.refresh.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\appbar.download.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

@@ -12,6 +12,7 @@ namespace BoonieBear.DeckUnit.WaveBox
     {
         private double[] _waveLeft;
         private double[] wave;
+        private int[] pointlist;//store point`s y data
         System.Drawing.Point[] p;
         private int SamplesPerSecond;
         //private FifoStream _streamMemory;
@@ -40,6 +41,8 @@ namespace BoonieBear.DeckUnit.WaveBox
             _SampleByte = _bitsPerSample / 8;
             ShowFFT = EnableFFT;
             canvas = new Bitmap(2048,300);
+            p = new System.Drawing.Point[canvas.Width];
+            pointlist = new int[canvas.Width];
         }
 
         
@@ -77,10 +80,20 @@ namespace BoonieBear.DeckUnit.WaveBox
                     _fftLeftSpect.Add(_fftLeft);
                 Monitor.Exit(_fftLeftSpect);
             }
-               
-            Array.Copy(wave, _waveLeft.Length, wave, 0, wave.Length - _waveLeft.Length);
-            Array.Copy(_waveLeft, 0, wave, wave.Length - _waveLeft.Length, _waveLeft.Length);
-            
+            // move point array
+            int width = canvas.Width;
+            int height = canvas.Height;
+            double center = height / 2;
+            double scale = 0.5 * height / _ymax;  // a 16 bit sample has values from -32768 to 32767
+            double distance = (double)wave.Length / (double)width;//sampling,int better 8192/1024
+            int movecount =(int)(_waveLeft.Length/distance);
+            Array.Copy(pointlist, movecount, pointlist, 0, pointlist.Length - movecount);
+            //sampling the input data to point array
+            for (int x = 0; x < movecount; x++)
+            {
+                pointlist[pointlist.Length - movecount+x] = (int)(center - (_waveLeft[(int)(distance * x)] * scale));
+                
+            }
         }
         //给功率谱加窗，以免下采样显示时丢失谱线，但会造成谱分辨率下降
          private void AddWindows(double[] b)
@@ -122,21 +135,9 @@ namespace BoonieBear.DeckUnit.WaveBox
             Graphics offScreenDC = Graphics.FromImage(canvas);
             offScreenDC.Clear(ColorTranslator.FromHtml("#FF0F3A6E"));
             Pen pen = new System.Drawing.Pen(Color.WhiteSmoke);
-            p = new System.Drawing.Point[canvas.Width];
-            // Determine channnel boundries
-            int width = canvas.Width;
-            int height = canvas.Height;
-            double center = height / 2;
-
-            // Draw left channel
-            double scale = 0.5 * height / _ymax;  // a 16 bit sample has values from -32768 to 32767
-            //int xPrev = 0, yPrev = 0;
-            double distance = (double)wave.Length / (double)width;
-            for (int x = 0; x < width; x++)
+            for (int i = 0; i < canvas.Width; i++)
             {
-                int y = (int)(center - (wave[(int)(distance * x)] * scale));
-                p[x] = new System.Drawing.Point(x, y);
-                
+                p[i] = new System.Drawing.Point(i, pointlist[i]);
             }
             offScreenDC.DrawCurve(pen, p);
             // Clean up

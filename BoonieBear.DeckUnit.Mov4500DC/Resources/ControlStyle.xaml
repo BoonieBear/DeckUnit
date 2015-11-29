@@ -7,7 +7,7 @@
                     xmlns:system="clr-namespace:System;assembly=mscorlib"
                     xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
                     mc:Ignorable="d">
-
+    <FontFamily x:Key="SegoeUISymbol">../Font/seguisym.ttf#Segoe UI Symbol</FontFamily>
     <!--ButtonStyle-->
 	<Style x:Key="GlassButtonStyle" BasedOn="{x:Null}" TargetType="{x:Type Button}">
 		<Setter Property="Template">

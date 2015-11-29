@@ -15,8 +15,9 @@
       DataContext="{Binding GlobalSettingViewModel, Source={StaticResource ViewModelLocator}}" 
       mc:Ignorable="d" 
       d:DesignHeight="718" d:DesignWidth="1024"
-	Title="GlobalSettingView">
+	Title="GlobalSettingView" >
     <Page.Resources>
+        <Converters:VisibilityBoolToggleConverter x:Key="VisibilityBoolToggleConverter"/>
         <Converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converters:DoubleMultiConverter x:Key="DoubleMultiConverter"/>
     </Page.Resources>
@@ -45,149 +46,91 @@
                     Grid.ColumnSpan ="2"
                     HorizontalAlignment ="Stretch"/>
             </Grid>
+            <Controls:PercentageProgressRing Grid.Row ="1" Grid.Column="1" Name="PercentageRing" Visibility="Collapsed"/>
             <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="18"
 				VerticalScrollBarVisibility="Auto"
 				PanningMode="VerticalOnly">
+                
                 <StackPanel Width="{Binding ActualWidth, ConverterParameter=0.8, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
                     <!--端口-->
-                    <ToggleButton x:Name="Connection" Background="#600F3A6E"
+                    <ToggleButton x:Name="Connection" Background="{StaticResource AccentColorBrush2}"
                                   IsChecked ="False"
-                                  Content="网络连接"/>
-                    <UniformGrid Columns="2" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=Connection}">
-                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                            <TextBlock FontSize="16" VerticalAlignment="Center" Text=" 声纳主控网络地址："/>
-                            <TextBox  Margin="15,4,4,4" Width="200" Text="{Binding IpAddr}" Background="{x:Null}" Foreground="White"/>
+                                  Content="网络连接" FontFamily="Microsoft YaHei"/>
+                    <StackPanel Orientation ="Vertical" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=Connection}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Text=" 运行模式："/>
+                            <Controls:MetroComboBox Name="ModeBox" Background="{x:Null}" Foreground="Black" Margin="25,4,4,4" Width="100" SelectedIndex="{Binding SelectMode}" FontSize="18">
+                                <ComboBoxItem x:Name="comboBoxItem" Cursor="Hand" Content="母船模式" Background="{x:Null}" />
+                                <ComboBoxItem x:Name="comboBoxItem1" Cursor="Hand" Content="潜器模式" Background="{x:Null}" />
+                            </Controls:MetroComboBox>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                            <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 声纳主控网络端口："/>
-                            <TextBox  Margin="15,4,4,4" Width="100" Text="{Binding IpPort}" Background="{x:Null}" Foreground="White"/>
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Text="母船通信机网络地址："/>
+                            <TextBox Name="ShipIpBox" Margin="15,4,4,4" Width="200" Text="{Binding ShipIpAddr}" Background="{x:Null}" Foreground="White"/>
+                            <MetroControl:ToggleSwitch Name="ShipConnect" IsChecked="{Binding ShipConnected}" ThumbIndicatorWidth="30"  OffLabel="断开" OnLabel="已连接" CheckedCommand="{Binding LinkCheckCommand}" UnCheckedCommand="{Binding LinkUnCheckCommand}" IsEnabled="{Binding IsSelected, ElementName=comboBoxItem}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Text="潜器通信机网络地址："/>
+                            <TextBox Name="UWVIpBox" Margin="15,4,4,4" Width="200" Text="{Binding UWVIpAddr}" Background="{x:Null}" Foreground="White"/>
+                            <MetroControl:ToggleSwitch Name="UWVConnect" IsChecked="{Binding UWVConnected}" ThumbIndicatorWidth="30" OffLabel="断开" OnLabel="已连接" CheckedCommand="{Binding LinkCheckCommand}" UnCheckedCommand="{Binding LinkUnCheckCommand}" IsEnabled="{Binding IsSelected, ElementName=comboBoxItem1}"/>
                         </StackPanel>
 
-                    </UniformGrid>
+                    </StackPanel>
 
-                    <UniformGrid Columns="2" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=Connection}">
-                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                            <TextBlock FontSize="16" VerticalAlignment="Center" Text=" 姿态传感器地址："/>
-                            <TextBox Margin="31,4,4,4" Width="200" Text="{Binding IpPoseAddr}" Background="{x:Null}" Foreground="White"/>
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                            <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 姿态传感器端口："/>
-                            <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding IpPosePort}" Background="{x:Null}" Foreground="White"/>
-                        </StackPanel>
-                    </UniformGrid>
-                    <UniformGrid Columns="2" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=Connection}">
-                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                            <TextBlock FontSize="16" VerticalAlignment="Center" Text=" GPS串行端口："/>
-                            <Controls:MetroComboBox  Margin="50,4,4,4" Width="120" ItemsSource="{Binding CommInfo, Mode=OneWay}"
-                             VerticalAlignment="Center" SelectedIndex="{Binding SelectComm}" HorizontalAlignment="Center" />
-                        </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                            <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" GPS串行口速率："/>
-                            <Controls:MetroComboBox  Margin="34,4,4,4" Width="120" ItemsSource="{Binding RateInfo, Mode=OneWay}"
-                             VerticalAlignment="Center" SelectedIndex="{Binding SelectRate}" HorizontalAlignment="Center" />
-                        </StackPanel>
-                    </UniformGrid>
                     <!--sonar-->
-                    <ToggleButton x:Name="SonarConfigButton" Background="#600F3A6E"
+                    <ToggleButton x:Name="SonarConfigButton" Background="#99119EDA"
                                   IsChecked ="False"
-                                  Content="详细参数设置"/>
-                    <StackPanel Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=SonarConfigButton}">
-                        <UniformGrid Columns="2">
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 表面声速来源："/>
-                                <Controls:MetroComboBox  Margin="34,4,4,4" Width="120" HorizontalAlignment="Center" SelectedIndex="{Binding SurVelSrcIndex}" >
-                                    <ComboBoxItem Content="声速剖面" />
-                                    <ComboBoxItem x:Name="comboBoxItem" Content="用户定义"/>
-                                    <ComboBoxItem Content="表面声速计"/>
-                                </Controls:MetroComboBox>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" Visibility="{Binding IsSelected, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=comboBoxItem}">
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 表面声速："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding SurVel}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 平均声速来源："/>
-                                <Controls:MetroComboBox  Margin="34,4,4,4" Width="120" HorizontalAlignment="Center" SelectedIndex="{Binding AvgVelIndex}" >
-                                    <ComboBoxItem Content="用户定义" x:Name="comboBoxItem1"/>
-                                    <ComboBoxItem Content="声速剖面"/>
-                                </Controls:MetroComboBox>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" Visibility="{Binding IsSelected, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=comboBoxItem1}">
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 平均声速："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding AvgVel}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 固定增益（-100～100dB）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding FixedGain}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="TVG模式控制字："/>
-                                <Controls:MetroComboBox  Margin="34,4,4,4" Width="120" HorizontalAlignment="Center" SelectedIndex="{Binding TVGCmd}" >
-                                    <ComboBoxItem Content="不进行TVG补偿" />
-                                    <ComboBoxItem x:Name="comboBoxItem2" Content="固定TVG补偿"/>
-                                    <ComboBoxItem Content="计算TVG补偿"/>
-                                </Controls:MetroComboBox>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" Visibility="{Binding IsSelected, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=comboBoxItem2}" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 固定TVG（-100～100dB）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding FixedTVG}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="TVG采样率："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding TVGSampling}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="TVG点数："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding TVGSamples}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 固定增益(A1)："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding TVGA1}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 声吸收衰减系数："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding TVGA2}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" 球扩散衰减系数："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding TVGA3}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text=" Ping周期（s）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding PingPeriod}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="声纳入水深度（m）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding SonarDepth}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="声纳距离GPS的距离x（m）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding SonarGPSx}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="声纳距离GPS的距离y（m）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding SonarGPSy}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="声纳距离GPS的距离z（m）："/>
-                                <TextBox  Margin="31,4,4,4" Width="100" Text="{Binding SonarGPSz}" Background="{x:Null}" Foreground="White"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="原始AD数据："/>
-                                <MetroControl:ToggleSwitch Margin="31,4,4,4" IsChecked="{Binding ADSaved}" OffLabel="不保存" OnLabel="保存" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="姿态传感器数据："/>
-                                <MetroControl:ToggleSwitch Margin="31,4,4,4" IsChecked="{Binding PoseSaved}" OffLabel="不保存" OnLabel="保存" />
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Margin="4,4,0,4" >
-                                <TextBlock Margin="15,0,0,0" FontSize="16" VerticalAlignment="Center" Text="定位数据："/>
-                                <MetroControl:ToggleSwitch Margin="31,4,4,4" IsChecked="{Binding PosSaved}" OffLabel="不保存" OnLabel="保存" />
-                            </StackPanel>
-                        </UniformGrid>
+                                  Content="运行参数" FontFamily="Microsoft YaHei"/>
+                    <StackPanel Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=SonarConfigButton}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Text="默认通道："/>
+                            <Controls:MetroComboBox FontSize="16" FontFamily="Microsoft YaHei" SelectedIndex="{Binding XmtIndex}">
+                                <ComboBoxItem Content="1" Background="{x:Null}"/>
+                                <ComboBoxItem Content="2" Background="{x:Null}"/>
+                                <ComboBoxItem Content="3" Background="{x:Null}"/>
+                                <ComboBoxItem Content="4" Background="{x:Null}"/>
+                            </Controls:MetroComboBox>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Text="默认幅度："/>
+                            <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" Width="200" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" />
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Margin="15,4,4,4" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            <TextBlock FontSize="18" VerticalAlignment="Center" Text="默认增益："/>
+                            <MetroControl:NumericUpDown Value="{Binding Gain}" Margin="15,4,4,4" Minimum="0" Maximum="74"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <ToggleButton x:Name="OtherOption" Background="{StaticResource AccentColorBrush2}"
+                                  IsChecked ="False"
+                                  Content="其他设置" FontFamily="Microsoft YaHei"/>
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=OtherOption}">
+                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            <TextBlock  FontSize="18" VerticalAlignment="Center" Text="当前通信机软件版本:"/>
+                            <TextBlock Margin="15,0,0,0" FontSize="18" VerticalAlignment="Center" Text="{Binding Version}"/>
+                            <Button  Style="{StaticResource ChromeButtonStyle}"  Command="{Binding FetchingVersion }" Visibility="{Binding RefreshVisble}" Height="40"  Width="40" VerticalAlignment="Center" Margin="15" RenderTransformOrigin="0.5,0.5">
+                                <Button.Background>
+                                    <ImageBrush ImageSource="/Assets/appbar.refresh.png" Stretch="Uniform" />
+                                </Button.Background>
+                            </Button>
+                            <MetroControl:ProgressRing IsActive="{Binding IsFetching}" Visibility="{Binding IsFetching, ConverterParameter=IsReversed\=false;IsCollapsed\=True, Converter={StaticResource VisibilityBoolToggleConverter}}" Margin="10,0"  IsLarge="False" Height="40"  Width="40"/>
+                            <Button Style="{StaticResource ChromeButtonStyle}" HorizontalAlignment="Center" VerticalAlignment="Center" Click="Button_Click">
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="/Assets/appbar.download.png" Height="30" Width="30" />
+                                            <TextBlock FontSize="18" Text="更新程序" FontFamily="Microsoft YaHei" />
+                                        </StackPanel>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
+            <Controls:PercentageProgressRing  IsOpen="{Binding IsUpdating}" IsSupportPercentage="True" Percentange="{Binding UpdatePercentange}"/>
+            <Button Grid.Row="2" Grid.Column ="1" Style="{StaticResource SaveResultAppBarButtonStyle}" Command="{Binding SaveConfig}"/>
         </Grid>
     </Controls:MetroContentControl>
 </Page>

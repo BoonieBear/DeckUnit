@@ -35,29 +35,84 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
         {
             return XmlHelper.GetConfigValue(xmldoc, str);
         }
-
+        protected bool SetValue(string[] str,string value)
+        {
+            return XmlHelper.SetConfigValue(xmldoc, str, value);
+        }
         public MonitorMode GetMode()
         {
             string[] str = { "Setup", "Mode" };
             return (MonitorMode)Enum.Parse(typeof(MonitorMode), GetValue(str));
         }
-
-        private string GetIP()
+        public bool SetMode(MonitorMode mode)
         {
-            string[] str = { "Net", "IP" };
+            string value = ((int)mode).ToString();
+            string[] str = { "Setup", "Mode" };
+            return SetValue(str,value);
+        }
+        public string GetShipIP()
+        {
+            string[] str = { "Net", "ShipIP" };
             return GetValue(str);
         }
-        private string GetComPort()
+        public bool SetShipIP(string ip)
+        {
+            string[] str = { "Net", "ShipIP" };
+            return SetValue(str,ip);
+        }
+        
+        public string GetUWVIP()
+        {
+            string[] str = { "Net", "UWVIP" };
+
+            return GetValue(str);
+        }
+        public bool SetUWVIP(string ip)
+        {
+            string[] str = { "Net", "UWVIP" };
+            return SetValue(str,ip);
+        }
+        public string GetXmtChannel()
+        {
+            string[] str = { "Setup", "XMTChannel" };
+            return GetValue(str);
+        }
+        public string GetXmtAmp()
+        {
+            string[] str = { "Setup", "XMTAMP" };
+            return GetValue(str);
+        }
+        public string GetGain()
+        {
+            string[] str = { "Setup", "Gain" };
+            return GetValue(str);
+        }
+        public bool SetXmtChannel(int i)
+        {
+            string[] str = { "Setup", "XMTChannel" };
+            return SetValue(str,i.ToString());
+        }
+        public bool SetXmtAmp(float amp)
+        {
+            string[] str = { "Setup", "XMTAMP" };
+            return SetValue(str,amp.ToString("F3"));
+        }
+        public bool SetGain(int gain)
+        {
+            string[] str = { "Setup", "Gain" };
+            return SetValue(str,gain.ToString());
+        }
+        public string GetComPort()
         {
             string[] str = {"Net", "ComPort" };
             return GetValue(str);
         }
-        private string GetDataPort()
+        public string GetDataPort()
         {
             string[] str = { "Net", "DataPort" };
             return GetValue(str);
         }
-        private string GetBroadCastPort()
+        public string GetBroadCastPort()
         {
             string[] str = { "Net", "Broadcast" };
             return GetValue(str);
@@ -72,7 +127,12 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
             var cominfo = new CommConfInfo();
             try
             {
-                cominfo.LinkIP = GetIP();
+                if (GetMode()==MonitorMode.SHIP)
+                    cominfo.LinkIP = GetShipIP();
+                else
+                {
+                    cominfo.LinkIP = GetUWVIP();
+                }
                 cominfo.NetPort1 = int.Parse(GetComPort());
                 cominfo.NetPort2 = int.Parse(GetDataPort());
                 cominfo.TraceUDPPort = int.Parse(GetBroadCastPort());

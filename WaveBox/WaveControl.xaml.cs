@@ -25,7 +25,7 @@ namespace BoonieBear.DeckUnit.WaveBox
         private int _audioSamplesPerSecond = 8000;
         private int _displayFrequecyMax = 4000;
         private int _displayAmpMax = 32767;
-        private int _TimeDomainLen = 16000;
+        private int _TimeDomainLen = 8192;
         private int _audioFrameSize = 1024;
         private int _audioBitsPerSample = 16;
         private int _audioChannels = 1;
@@ -227,7 +227,7 @@ namespace BoonieBear.DeckUnit.WaveBox
             IsPlaying = true;
  	        try
             {
-                while (true)
+                while (IsPlaying)
                 {
                     if (_stream != null)
                     {
@@ -236,7 +236,7 @@ namespace BoonieBear.DeckUnit.WaveBox
                             _player.Play(_playerBuffer, 0, ret);
                         else
                         {
-                            Thread.Sleep(400);
+                            Thread.Sleep(100);
                         }
                     }
                     
@@ -303,8 +303,9 @@ namespace BoonieBear.DeckUnit.WaveBox
             {
                 try
                 {
-                    _playSound.Abort();
                     IsPlaying = false;
+                    _playSound.Abort();
+                    
                     _stream.Flush();
                 }
                 catch (ThreadAbortException)

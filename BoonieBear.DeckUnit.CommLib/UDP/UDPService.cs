@@ -10,7 +10,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
     public abstract class  UDPBaseService:IUDPService
     {
         protected UdpClient _udpClient;
-
+        private Thread UdpReceiver;
         public static event EventHandler<CustomEventArgs> DoParse;
         private List<byte> _recvQueue = new List<byte>();
         public bool Init(UdpClient udpClient)
@@ -33,14 +33,16 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
         public bool Start()
         {
             //打开udp监听端口
-            var UdpReceiver = new Thread(ListensenUDP);
+            UdpReceiver  = new Thread(ListensenUDP);
             UdpReceiver.Start();
             return UdpReceiver.IsAlive;
         }
 
         public void Stop()
         {
-            if(_udpClient!=null)
+            if(UdpReceiver!=null)
+                UdpReceiver.Abort();
+            if (_udpClient != null)
                 _udpClient.Close();
         }
 

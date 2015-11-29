@@ -27,6 +27,12 @@
             <Setter Property="Padding" Value="8,10"/>
             <Setter Property="Margin" Value="0,0,0,4"/>
         </Style>
+        <dialogs:CustomDialog x:Key="CustomInfoDialog"
+                                 Title=""
+                                 x:Name="CustomInfoDialog">
+            <TextBlock Height="30" Text=".。。。" x:Name="MessageTextBlock"
+                               Foreground="{DynamicResource AccentColorBrush}" />
+        </dialogs:CustomDialog>
     </metroControl:MetroWindow.Resources>
 
     <Grid x:Name="FirstGrid">

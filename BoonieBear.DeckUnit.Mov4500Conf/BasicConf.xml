@@ -1,15 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Mov4500>
   <Setup>
-    <!--0:sub, 1:ship-->
+    <!--0:ship, 1:uwv-->
     <Mode>1</Mode>
     <XMTChannel>2</XMTChannel>
     <XMTAMP>0.1</XMTAMP>
+    <Gain>35</Gain>
   </Setup>
   <Net>
-    <IP>192.168.2.100</IP>
-    <ComPort>10010</ComPort>
-    <DataPort>10011</DataPort>
+    <ShipIP>192.168.2.100</ShipIP>
+    <UWVIP>192.168.2.111</UWVIP>
+    <ComPort>8080</ComPort>
+    <DataPort>8081</DataPort>
     <Broadcast>10040</Broadcast>
   </Net>
   <UDP>
