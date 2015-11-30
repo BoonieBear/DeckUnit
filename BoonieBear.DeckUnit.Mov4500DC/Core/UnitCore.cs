@@ -144,7 +144,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 if(NetCore.IsInitialize)
                     NetCore.Stop();
                 NetCore.Initialize();
-                NetCore.Start();
+                NetCore.Start();//只启动udp服务，tcp服务单独启动
                 /*没有串口连接
                  * if(CommCore.IsInitialize)
                     CommCore.Stop();
@@ -159,7 +159,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             catch (Exception ex)
             {
                 Error = ex.Message;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.OnlyLog));
+                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
                 return false;
             }
             
@@ -168,11 +168,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
 
         public void Stop()
         {
-            if (NetCore.IsWorking)
-                NetCore.Stop();
+            if (NetCore.IsTCPWorking)
+                NetCore.StopTCpService();
+            if (NetCore.IsUDPWorking)
+                NetCore.StopUDPService();
             /*if (CommCore.IsWorking)
                 CommCore.Stop();*/
-            MovTraceService.TearDownService();
+            if (MovTraceService!=null)
+                MovTraceService.TearDownService();
             _serviceStarted = false;
             
         }

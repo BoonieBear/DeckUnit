@@ -91,7 +91,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             await TryConnnect();
-            if (UnitCore.Instance.IsWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 NolinkBlock.Visibility = Visibility.Hidden;
             }
@@ -100,9 +100,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private static async Task TryConnnect()
         {
-            if (!UnitCore.Instance.IsWorking)
+            if (!UnitCore.Instance.NetCore.IsTCPWorking)
             {
-                while (UnitCore.Instance.Start()== false)
+                while (UnitCore.Instance.NetCore.StartTCPService() == false)
                 {
                     var md = new MetroDialogSettings();
                     md.AffirmativeButtonText = "重试连接";
@@ -125,7 +125,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     }
                     else
                     {
-                        if (UnitCore.Instance.Start())
+                        if (UnitCore.Instance.NetCore.StartTCPService())
                             break;
                     }
                 }

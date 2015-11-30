@@ -75,8 +75,6 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(numberOfBytesRead), 0, mySendBuffer, 2, 2);
                     base.LoadData(mySendBuffer);
-                    if(ReportSendBytes!=null)
-                        ReportSendBytes(sendBytes);
                     if (SendData(out error))
                     {
                         if (EAutoResetEvent.WaitOne(TimeOut))
@@ -90,6 +88,8 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
                                 break;
                             }
                             sendBytes += numberOfBytesRead;
+                            if (ReportSendBytes != null)
+                                ReportSendBytes(sendBytes);
                         }
                         else
                         {

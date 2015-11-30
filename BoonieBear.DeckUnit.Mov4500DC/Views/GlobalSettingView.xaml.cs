@@ -43,12 +43,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
                 try
                 {
-                    if (UnitCore.Instance.NetCore.IsWorking)
+                    if (UnitCore.Instance.NetCore.IsTCPWorking)
                     {
                         t = new DispatcherTimer(TimeSpan.FromMilliseconds(100),DispatcherPriority.Background,RefreshPercentage,Dispatcher.CurrentDispatcher);
                         t.Start();
                         Updatefile = OpenMspFile.OpenFile();
-                        PercentageRing.Visibility = Visibility.Visible;
+                        ConfigViewer.Opacity = 0.2;
+                        PercentageRing.IsOpen = true;
                         var ret = await UnitCore.Instance.NetCore.SendFile(Updatefile);
                         if (ret)
                         {
@@ -69,7 +70,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     }
                     if (Updatefile!=null)
                         Updatefile.Close();
-                    PercentageRing.Visibility = Visibility.Collapsed;
+                    PercentageRing.IsOpen = false;
+                    ConfigViewer.Opacity = 1;
                     if(t!=null)
                         t.Stop();
 
@@ -78,7 +80,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 {
                     if (Updatefile != null)
                         Updatefile.Close();
-                    PercentageRing.Visibility = Visibility.Collapsed;
+                    PercentageRing.IsOpen = false;
+                    ConfigViewer.Opacity = 1;
                     if (t != null)
                         t.Stop();
                     UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(MyEx.Message, LogType.Both));

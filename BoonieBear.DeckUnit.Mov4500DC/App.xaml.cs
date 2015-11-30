@@ -87,8 +87,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
         {
             IsExit = true;
             LogHelper.WriteLog("程序关闭");
-            if (UnitCore.GetInstance().IsWorking)
-                UnitCore.GetInstance().Stop();
+            UnitCore.GetInstance().Stop();
             if(UnitCore.Instance.Wave!=null)
                 UnitCore.Instance.Wave.Dispose();
         }

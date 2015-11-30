@@ -40,8 +40,6 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
 
         public void Stop()
         {
-            if(UdpReceiver!=null)
-                UdpReceiver.Abort();
             if (_udpClient != null)
                 _udpClient.Close();
         }
@@ -199,8 +197,18 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode, _udpClient);
-                    OnParsed(e);
+                    if (buffer == null)
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, null, 0, flag, error, mode,
+                            _udpClient);
+                        OnParsed(e);
+                    }
+                    else
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode,
+                            _udpClient);
+                        OnParsed(e);
+                    }
                 }
             }
         }
@@ -240,14 +248,24 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode, _udpClient);
-                    OnParsed(e);
+                    if (buffer == null)
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, null, 0, flag, error, mode,
+                            _udpClient);
+                        OnParsed(e);
+                    }
+                    else
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode,
+                            _udpClient);
+                        OnParsed(e);
+                    }
                 }
             }
         }
     }
     /// <summary>
-    /// 4500接收外部广播数据服务2：GPS
+    /// 4500接收外部广播数据服务3：GPS
     /// </summary>
     public class ACMGPSService : UDPBaseService
     {
@@ -281,8 +299,18 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 }
                 finally
                 {
-                    var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode, _udpClient);
-                    OnParsed(e);
+                    if (buffer == null)
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, null, 0, flag, error, mode,
+                            _udpClient);
+                        OnParsed(e);
+                    }
+                    else
+                    {
+                        var e = new CustomEventArgs(0, string.Empty, buffer, buffer.Length, flag, error, mode,
+                            _udpClient);
+                        OnParsed(e);
+                    }
                 }
             }
         }

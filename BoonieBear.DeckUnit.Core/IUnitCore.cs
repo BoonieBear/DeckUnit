@@ -38,10 +38,16 @@ namespace BoonieBear.DeckUnit.ICore
 
     }
 
-    //add a api to send specific id data:FH,FSK,PSK,OFDM,SSB
+    //add some apis to send specific id data:FH,FSK,PSK,OFDM,SSB and start special service
     public interface IMovNetCore : INetCore
     {
+        bool StartUDPService();
+        bool StartTCPService();
+        void StopUDPService();
+        void StopTCpService();
         Task<bool> Send(int id, byte[] buf);
+        bool IsUDPWorking { get; set; }//
+        bool IsTCPWorking { get; set; }
     }
     public interface ICommCore:ICore
     {

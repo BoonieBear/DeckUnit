@@ -46,8 +46,8 @@
                     Grid.ColumnSpan ="2"
                     HorizontalAlignment ="Stretch"/>
             </Grid>
-            <Controls:PercentageProgressRing Grid.Row ="1" Grid.Column="1" Name="PercentageRing" Visibility="Collapsed"/>
-            <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="18"
+            <Controls:PercentageProgressRing Grid.Row ="1" Grid.Column="1" Name="PercentageRing" Foreground="{DynamicResource {x:Static SystemColors.ScrollBarBrushKey}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            <ScrollViewer Name="ConfigViewer" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" FontSize="18"
 				VerticalScrollBarVisibility="Auto"
 				PanningMode="VerticalOnly">
                 

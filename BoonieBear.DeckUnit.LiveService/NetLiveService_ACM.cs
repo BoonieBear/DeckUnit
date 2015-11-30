@@ -42,7 +42,8 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public string Error { get; set; }
         public bool IsInitialize { get; set; }
-        public bool IsWorking { get; set; }
+        public bool IsUDPWorking { get; set; }//
+        public bool IsTCPWorking { get; set; }
         public int SendBytes { get; set; }
 
         public static IMovNetCore GetInstance(CommConfInfo conf, MovConfInfo movconf, Observer<CustomEventArgs> observer)
@@ -56,49 +57,6 @@ namespace BoonieBear.DeckUnit.LiveService
                     return null;
                 }
             }
-        }
-
-        /// <summary>
-        /// tcp数据交换初始化
-        /// </summary>
-        /// <param name="configure"></param>
-        /// <returns></returns>
-        private bool CreateTCPService(CommConfInfo configure)
-        {
-            // 同步方法，会阻塞进程，调用init用task
-            TCPShellService.ConnectSync();
-            TCPDataService.ConnectSync();
-            TCPShellService.Register(NetDataObserver);
-            TCPDataService.Register(NetDataObserver);
-            if (TCPShellService.Connected && TCPShellService.Start() && TCPDataService.Connected &&
-                TCPDataService.Start())
-                return true;
-            return false;
-        }
-
-        /// <summary>
-        /// UDP数据交换初始化
-        /// </summary>
-        /// <returns></returns>
-        protected bool CreateUDPService()
-        {
-            if (!GpsService.Start()) return false;
-            GpsService.Register(NetDataObserver);
-            if (!USBLService.Start()) return false;
-            USBLService.Register(NetDataObserver);
-            if (!UwaService.Start()) return false;
-            UwaService.Register(NetDataObserver);
-            return true;
-        }
-
-        protected void StopUDPService()
-        {
-            GpsService.Stop();
-            GpsService.UnRegister(NetDataObserver);
-            USBLService.Stop();
-            USBLService.UnRegister(NetDataObserver);
-            UwaService.Stop();
-            UwaService.UnRegister(NetDataObserver);
         }
 
         protected NetLiveService_ACM(CommConfInfo conf, MovConfInfo movconf, Observer<CustomEventArgs> observer)
@@ -149,8 +107,10 @@ namespace BoonieBear.DeckUnit.LiveService
             {
                 throw new Exception("服务已初始化");
             }
-            _shelltcpClient = new TcpClient {SendTimeout = 1000};
-            _datatcpClient = new TcpClient {SendTimeout = 1000};
+            if (_shelltcpClient==null)
+                _shelltcpClient = new TcpClient {SendTimeout = 1000};
+            if (_datatcpClient==null)
+                _datatcpClient = new TcpClient {SendTimeout = 1000};
             _movClient = new UdpClient();
             if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort1) ||
                 (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
@@ -171,30 +131,25 @@ namespace BoonieBear.DeckUnit.LiveService
         {
             if (IsInitialize)
             {
-
-                TCPShellService.UnRegister(NetDataObserver);
-                TCPShellService.Stop();
-
-                TCPDataService.UnRegister(NetDataObserver);
-                TCPDataService.Stop();
-
+                StopTCpService();//关闭网络时必然全部关闭
                 StopUDPService();
 
             }
-            IsWorking = false;
             IsInitialize = false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void Start()
         {
             if(!IsInitialize)
                 Initialize();
-            IsWorking = false;
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
-            if (!CreateTCPService(_commConf)) throw new Exception("通信机芯连接失败");
-            if (!CreateUDPService()) throw new Exception("广播网络启动失败");
-            IsWorking = true;
+            //if (!StartTCPService()) throw new Exception("通信机芯连接失败");//按需要单独起tcp服务
+            if (!StartUDPService()) throw new Exception("广播网络启动失败");
+
         }
 
 
@@ -202,10 +157,6 @@ namespace BoonieBear.DeckUnit.LiveService
         {
             throw new NotImplementedException();
         }
-
-
-
-
 
         public Task<bool> SendConsoleCMD(string cmd)
         {
@@ -300,6 +251,81 @@ namespace BoonieBear.DeckUnit.LiveService
                 return Command.SendTCPAsync(lastcmd);
             }
             else
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        public bool StartUDPService()
+        {
+            if (!IsInitialize)
+                Initialize();
+            if (!GpsService.Start()) return false;
+            GpsService.Register(NetDataObserver);
+            if (!USBLService.Start()) return false;
+            USBLService.Register(NetDataObserver);
+            if (!UwaService.Start()) return false;
+            UwaService.Register(NetDataObserver);
+            IsUDPWorking = true;
+            return true;
+        }
+
+        public bool StartTCPService()
+        {
+            if (!IsInitialize)
+                Initialize();
+            // 同步方法，会阻塞进程，调用init用task
+            TCPShellService.ConnectSync();
+            TCPDataService.ConnectSync();
+            TCPShellService.Register(NetDataObserver);
+            TCPDataService.Register(NetDataObserver);
+            if (TCPShellService.Connected && TCPShellService.Start() && TCPDataService.Connected &&
+                TCPDataService.Start())
+            {
+                IsTCPWorking = true;
+                return true;
+            }
+            IsTCPWorking = false;
+            return false;
+        }
+
+        public void StopUDPService()
+        {
+            GpsService.Stop();
+            GpsService.UnRegister(NetDataObserver);
+            USBLService.Stop();
+            USBLService.UnRegister(NetDataObserver);
+            UwaService.Stop();
+            UwaService.UnRegister(NetDataObserver);
+            _gpsClient = null;
+            _movClient = null;
+            _usblClient = null;
+            _uwaClient = null;
+            IsUDPWorking = false;
+            IsInitialize = false;
+        }
+
+        public void StopTCpService()
+        {
+            TCPShellService.UnRegister(NetDataObserver);
+            TCPShellService.Stop();
+
+            TCPDataService.UnRegister(NetDataObserver);
+            TCPDataService.Stop();
+            _shelltcpClient = null;
+            _datatcpClient = null;
+            IsTCPWorking = false;
+            IsInitialize = false;
+        }
+
+
+        public bool IsWorking
+        {
+            get
+            {
+                return IsUDPWorking && IsTCPWorking;
+            }
+            set
             {
                 throw new NotImplementedException();
             }

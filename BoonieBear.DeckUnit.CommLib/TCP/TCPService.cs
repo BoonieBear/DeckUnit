@@ -78,13 +78,15 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         {
             if (_tcpClient != null)
                 _tcpClient.Close();
+            _tcpClient = null;
             if (TdThread != null)
             {
                 if (TdThread.IsAlive)
                 {
                     TdThread.Abort();
 
-                }               
+                }
+                TdThread = null;
             }
 
         }

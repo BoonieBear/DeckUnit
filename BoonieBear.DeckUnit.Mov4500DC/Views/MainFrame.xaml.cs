@@ -25,6 +25,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         {
             Splasher.CloseSplash();
             Application.Current.MainWindow = this;
+            UnitCore.Instance.Start();
             Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
 
         }

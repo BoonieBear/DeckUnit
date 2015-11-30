@@ -47,7 +47,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 XMTValue = float.Parse(UnitCore.Instance.MovConfigueService.GetXmtAmp());
                 Gain = int.Parse(UnitCore.Instance.MovConfigueService.GetGain());
             }
-            if (UnitCore.Instance.IsWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 
                 
@@ -152,21 +152,21 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public void ExecuteLinkCheckCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            if (UnitCore.Instance.NetCore.IsWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
                 return;
             else
             {
                 try
                 {
                     Save();
-                    UnitCore.Instance.Start();
+                    UnitCore.Instance.NetCore.StartTCPService();
                 }
                 catch (Exception e)
                 {
                     EventAggregator.PublishMessage(new LogEvent(e.Message, LogType.OnlyInfo));
                 }
-                
-                if (UnitCore.Instance.NetCore.IsWorking)
+
+                if (UnitCore.Instance.NetCore.IsTCPWorking)
                 {
                     if (SelectMode == 0)
                     {
@@ -202,8 +202,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public void ExecuteLinkUnCheckCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            if(UnitCore.Instance.NetCore.IsWorking)
-                UnitCore.Instance.NetCore.Stop();
+            if(UnitCore.Instance.NetCore.IsTCPWorking)
+                UnitCore.Instance.NetCore.StopTCpService();
             UWVConnected = false;
             ShipConnected = false;
         }
@@ -225,18 +225,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             IsFetching = true;
             RefreshVisble = Visibility.Collapsed;
             //fetch data...
-            if (!UnitCore.Instance.IsWorking)
+            if (!UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 await TaskEx.Delay(500);
-                IsFetching = false;
-                RefreshVisble = Visibility.Visible;
                 Version = "0.0.0";
-                return;
+
             }
             else
             {
                 
             }
+            IsFetching = false;
+            RefreshVisble = Visibility.Visible;
         }
 
         public ICommand SaveConfig
@@ -267,7 +267,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void Save()
         {
-            if (UnitCore.Instance.IsWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 if (UnitCore.Instance.LoadConfiguration() == false)
                 {
@@ -327,15 +327,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void ReConnectToDSP()
         {
-            if (UnitCore.Instance.IsWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 if(UnitCore.Instance.NetCore.IsInitialize)
-                    UnitCore.Instance.NetCore.Stop();
+                    UnitCore.Instance.NetCore.StopTCpService();
             }
             try
             {
                 if (!UnitCore.Instance.LoadConfiguration()) throw new Exception("无法读取网络配置");
-                UnitCore.Instance.NetCore.Start();
+                UnitCore.Instance.NetCore.StartTCPService();
             }
             catch (Exception e)
             {
