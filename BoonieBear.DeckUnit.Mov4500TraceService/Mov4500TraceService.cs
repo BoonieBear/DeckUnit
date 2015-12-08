@@ -1,4 +1,5 @@
-﻿using BoonieBear.DeckUnit.TraceFileService;
+﻿using System;
+using BoonieBear.DeckUnit.TraceFileService;
 using BoonieBear.DeckUnit.ACMP;
 namespace BoonieBear.DeckUnit.Mov4500TraceService
 {
@@ -15,9 +16,14 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
             get { return _traceFile.Errormsg; }
         }
 
-        public void SetMode(MonitorMode mode )
+        public bool SetMode(MonitorMode mode )
         {
+            if (_mode != mode)
+                TearDownService();
             _mode = mode;
+
+            return CreateService();
+
         }
         public MovTraceService(MonitorMode mode)
         {
@@ -33,7 +39,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
         {
             if (_mode==MonitorMode.SHIP)
             {
-                if (_traceFile.CreateFile("DEBUG", TraceType.String, "Debug", "dbg", @"\Debug") == false)
+                if (_traceFile.CreateFile("WORD", TraceType.String, "Chart", "txt", @"\WORD") == false)
                 {
                     return false;
                 }
@@ -45,31 +51,60 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
                 {
                     return false;
                 }
+                if (_traceFile.CreateFile("FH", TraceType.String, "FH", "fh", @"\FH") == false)
+                {
+                    return false;
+                }
                 //通信数据
-                if (_traceFile.CreateFile("XMTDATA", TraceType.Binary, "XmtData", "xdat", @"\XmtData") == false)
+                if (_traceFile.CreateFile("XMTFSK", TraceType.Binary, "Fsk", "xfd", @"\XmtFSK") == false)
                 {
                     return false;
                 }
 
-                if (_traceFile.CreateFile("RECVDATA", TraceType.Binary, "RecvData", "rdat", @"\RecvData") == false)
+                if (_traceFile.CreateFile("RECVFSK", TraceType.Binary, "Fsk", "rfd", @"\RECVFSK") == false)
                 {
                  
                     return false;
                 }
+                if (_traceFile.CreateFile("FSKSRC", TraceType.Binary, "Fsk", "src", @"\RECVFSK") == false)
+                {
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("RECVPSK", TraceType.Binary, "Psk", "rpd", @"\RECVPSK") == false)
+                {
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("PSKSRC", TraceType.Binary, "Psk", "src", @"\RECVPSK") == false)
+                {
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("PSKJPC", TraceType.Binary, "Psk", "jpc", @"\RECVPSK") == false)//压缩Jpeg2000
+                {
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("IMG", TraceType.Binary, "Img", "pkg", @"\RECVPSK") == false)//图像
+                {
+
+                    return false;
+                }
                 //水声数据
-                if (_traceFile.CreateFile("RECVVOICE", TraceType.Binary, "RecvVoice", "rwav", @"\RecvVoice") == false)
+                if (_traceFile.CreateFile("RECVVOICE", TraceType.SingleBinary, "RecvVoice", "rwav", @"\RecvVoice") == false)
                 {
                  
                     return false;
                 }
                 //录音数据
-                if (_traceFile.CreateFile("XMTVOICE", TraceType.Binary, "XmtVoice", "xwav", @"\XmtVoice") == false)
+                if (_traceFile.CreateFile("XMTVOICE", TraceType.SingleBinary, "XmtVoice", "xwav", @"\XmtVoice") == false)
                 {
                  
                     return false;
                 }
                 //航控数据
-                if (_traceFile.CreateFile("ACOUSTICTOSAIL", TraceType.Binary, "AcousticData", "ats", @"\AtsData") == false)
+                if (_traceFile.CreateFile("ACOUSTICTOSAIL", TraceType.SingleBinary, "AcousticData", "ats", @"\AtsData") == false)
                 {
                  
                     return false;
@@ -77,56 +112,72 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
             }
             else if (_mode == MonitorMode.SUBMARINE)
             {
-                if (_traceFile.CreateFile("DEBUG", TraceType.String, "Debug", "dbg", @"\Debug") == false)
-                {
-                 
-                    return false;
-                }
-
-                if (_traceFile.CreateFile("BP", TraceType.String, "Bp", "bp", @"\BP") == false)
+                if (_traceFile.CreateFile("WORD", TraceType.String, "Chart", "txt", @"\WORD") == false)
                 {
                     return false;
                 }
 
+                if (_traceFile.CreateFile("BP", TraceType.SingleBinary, "Bp", "bp", @"\BP") == false)
+                {
+                    return false;
+                }
+                if (_traceFile.CreateFile("FH", TraceType.String, "FH", "fh", @"\FH") == false)
+                {
+                    return false;
+                }
                 //通信数据
-                if (_traceFile.CreateFile("XMTDATA", TraceType.Binary, "XmtData", "xdat", @"\XmtData") == false)
+                if (_traceFile.CreateFile("XMTFSK", TraceType.Binary, "Fsk", "xfd", @"\XmtFSK") == false)
                 {
-                    
                     return false;
                 }
 
-                if (_traceFile.CreateFile("RECVDATA", TraceType.Binary, "RecvData", "rdat", @"\RecvData") == false)
+                if (_traceFile.CreateFile("RECVFSK", TraceType.Binary, "Fsk", "rfd", @"\RECVFSK") == false)
                 {
-                    
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("FSKSRC", TraceType.Binary, "Fsk", "src", @"\RECVFSK") == false)
+                {
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("XMTPSK", TraceType.Binary, "Psk", "xpd", @"\XmtPSK") == false)
+                {
+
                     return false;
                 }
                 //水声数据
-                if (_traceFile.CreateFile("RECVVOICE", TraceType.Binary, "RecvVoice", "rwav", @"\RecvVoice") == false)
+                if (_traceFile.CreateFile("RECVVOICE", TraceType.SingleBinary, "RecvVoice", "rwav", @"\RecvVoice") == false)
                 {
                     
                     return false;
                 }
                 //录音数据
-                if (_traceFile.CreateFile("XMTVOICE", TraceType.Binary, "XmtVoice", "xwav", @"\XmtVoice") == false)
+                if (_traceFile.CreateFile("XMTVOICE", TraceType.SingleBinary, "XmtVoice", "xwav", @"\XmtVoice") == false)
                 {
                     
                     return false;
                 }
                 //航控数据
-                if (_traceFile.CreateFile("SAILTOACOUSTIC", TraceType.Binary, "SailData", "sta", @"\StaData") == false)
+                if (_traceFile.CreateFile("SAILTOACOUSTIC", TraceType.SingleBinary, "SailData", "sta", @"\StaData") == false)
                 {
                     
                     return false;
                 }
-                if (_traceFile.CreateFile("ACOUSTICTOSAIL", TraceType.Binary, "AcousticData", "ats", @"\AtsData") == false)
+                if (_traceFile.CreateFile("ACOUSTICTOSAIL", TraceType.SingleBinary, "AcousticData", "ats", @"\AtsData") == false)
                 {
                     
                     return false;
                 }
                 //ADCP
-                if (_traceFile.CreateFile("ADCP", TraceType.Binary, "Adcp", "vlt", @"\ADCP") == false)
+                if (_traceFile.CreateFile("ADCP", TraceType.SingleBinary, "Adcp", "vlt", @"\ADCP") == false)
                 {
                     
+                    return false;
+                }
+                if (_traceFile.CreateFile("BSSS", TraceType.SingleBinary, "Bsss", "bsss", @"\BSSS") == false)
+                {
+
                     return false;
                 }
             }
@@ -146,25 +197,58 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
         public long Save(string sType, object bTraceBytes)
         {
             long ret = 0;
-            switch (_traceFile.GeTraceType(sType))
+            try
             {
-                case TraceType.Binary:
-                    ret = _traceFile.WriteData(sType, (byte[])bTraceBytes);
-                    break;
-                case TraceType.SingleBinary:
-                    ret = _traceFile.WriteSingleData(sType, (byte[])bTraceBytes);
-                    break;
-                case TraceType.String:
-                    ret = _traceFile.WriteString(sType, (string)bTraceBytes);
-                    break;
-                default://none
-                    ret = 0;
-                    break;
- 
+                switch (_traceFile.GeTraceType(sType))
+                {
+                    case TraceType.Binary:
+                        ret = _traceFile.WriteData(sType, (byte[])bTraceBytes);
+                        break;
+                    case TraceType.SingleBinary:
+                        ret = _traceFile.WriteSingleData(sType, (byte[])bTraceBytes);
+                        break;
+                    case TraceType.String:
+                        ret = _traceFile.WriteString(sType, (string)bTraceBytes);
+                        break;
+                    default://none
+                        ret = 0;
+                        break;
+                }
             }
+            catch (Exception ex)
+            {
+                ret = 0;
+            }
+            
             return ret;
            
         }
+        /// <summary>
+        /// 关闭一个已经多次写入的single文件
+        /// </summary>
+        /// <param name="sType"></param>
+        /// <returns></returns>
+        public bool EndSave(string sType)
+        {
+            bool ret = false;
+            try
+            {
+                if (_traceFile.CloseFile(sType))
+                {
+                    //录音数据
+                    if (_traceFile.CreateFile("XMTVOICE", TraceType.Binary, "XmtVoice", "xwav", @"\XmtVoice"))
+                    {
+                        ret = true;
+                    }
+                }
 
+            }
+            catch (Exception ex)
+            {
+                ret = false;
+            }
+
+            return ret;
+        }
     }
 }

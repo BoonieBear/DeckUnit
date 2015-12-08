@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <BitmapImage x:Key="LiveImageBackground" UriSource="/Assets/Work.png"/>
+    <BitmapImage x:Key="AnalyseBackground" UriSource="/Assets/ico_task.png"/>
     <BitmapImage x:Key="ico_about_n" UriSource="/Assets/ico_about_n.png"/>
     <BitmapImage x:Key="ico_about_o" UriSource="/Assets/ico_about_o.png"/>
     <BitmapImage x:Key="ico_about_p" UriSource="/Assets/ico_about_p.png"/>

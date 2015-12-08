@@ -14,12 +14,12 @@
       Background="{StaticResource DefaultBackgroundBrush}"
       DataContext="{Binding HomePageViewModel, Source={StaticResource ViewModelLocator}}" 
       mc:Ignorable="d" 
-      d:DesignHeight="718" d:DesignWidth="1024"
+      d:DesignHeight="1024" d:DesignWidth="1280"
 	Title="MainPage">
     <Page.Resources>
         <Converters:HideZeroConverter x:Key="HideZeroConverter"/>
         <ImageBrush x:Key="LiveImageBrush" ImageSource="{StaticResource LiveImageBackground}"/>
-        
+        <ImageBrush x:Key="AnalyseBrush" ImageSource="{StaticResource AnalyseBackground}"/>
     </Page.Resources>
     <Controls:MetroContentControl >
         <Grid>
@@ -41,11 +41,11 @@
                 <ViewControls:TitleBarControl 
                     Title="{Binding Home_Title_ApplicationName, Mode=OneWay, Source={StaticResource Resources}}"
                     Grid.Row ="0"
-                    TitleImageSource="/Assets/IACAS.bmp"
+                    TitleImageSource="/Assets/UWA.png"
                     BackButtonVisibility="Collapsed"
                     Grid.Column ="1"
                     Grid.ColumnSpan ="2"
-                    HorizontalAlignment ="Stretch"/>
+                    HorizontalAlignment ="Stretch" OpacityMask="Black" Margin="10,0,0,0"/>
             </Grid>
                 <!--Main area-->
                 <StackPanel Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -109,40 +109,10 @@
                             <Controls:TileContentControl Background="{StaticResource Home_DataBackground}"
                                          Content="{Binding Home_Tile_Data, Mode=OneWay, Source={StaticResource Resources}}"
                                          TextHorizontalAlignment="Center"
-                                         IconBackground="{StaticResource LiveImageBrush}"
+                                         IconBackground="{StaticResource AnalyseBrush}"
                                          />
                         </Border>
-
-                        <Border Width="{StaticResource TileItemWidth}" 
-                            Height="{StaticResource TileItemHeight}"
-                            Margin="0,0,10,10"
-                            Grid.Row="1"
-                            Grid.Column="0">
-
-                            <Controls:TileContentControl Background="{StaticResource Home_SetupBackground}"
-                                         Content="{Binding Home_Tile_Setup, Mode=OneWay, Source={StaticResource Resources}}"
-                                         TextHorizontalAlignment="Center"
-                                         IconBackground="{StaticResource LiveImageBrush}"
-                                         />
-                        </Border>
-
-
-
-                        <Border Width="{StaticResource TileItemWidth}" 
-                            Height="{StaticResource TileItemHeight}"
-                            Grid.Row="1"
-                            Grid.Column="1">
-                            <Border.Style>
-                            <Style TargetType="Border">
-                                <Setter Property="Margin" Value="0,0,50,10"/>
-                            </Style>
-                            </Border.Style>
-                            <Controls:TileContentControl Background="{StaticResource Home_ConsoleBackground}"
-                                         Content="{Binding Home_Tile_Console, Mode=OneWay, Source={StaticResource Resources}}"
-                                         TextHorizontalAlignment="Center"
-                                         IconBackground="{StaticResource LiveImageBrush}"
-                                         />
-                        </Border>
+ 
                     </Grid>
                 </StackPanel>
                 <!--Brand info at bottom right corner-->

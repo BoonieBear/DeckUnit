@@ -103,18 +103,9 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public void Initialize()
         {
-            if (IsInitialize)
-            {
-                throw new Exception("服务已初始化");
-            }
-            if (_shelltcpClient==null)
-                _shelltcpClient = new TcpClient {SendTimeout = 1000};
-            if (_datatcpClient==null)
-                _datatcpClient = new TcpClient {SendTimeout = 1000};
+            
             _movClient = new UdpClient();
-            if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort1) ||
-                (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
-                throw new Exception("通信网络初始化失败");
+            
             if (_gpsClient == null)
                 _gpsClient = new UdpClient(_mocConf.GPSPort);
             if (!GpsService.Init(_gpsClient)) throw new Exception("GPS端口打开失败");
@@ -143,8 +134,7 @@ namespace BoonieBear.DeckUnit.LiveService
         /// </summary>
         public void Start()
         {
-            if(!IsInitialize)
-                Initialize();
+            Initialize();
             if (_commConf == null || _DataObserver == null)
                 throw new Exception("无法设置网络通信");
             //if (!StartTCPService()) throw new Exception("通信机芯连接失败");//按需要单独起tcp服务
@@ -235,8 +225,8 @@ namespace BoonieBear.DeckUnit.LiveService
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
                     Buffer.BlockCopy(BitConverter.GetBytes(PkgLimit), 0, newBytes, 2, 2);
-                    Buffer.BlockCopy(buf, i*PkgLimit, newBytes, 4, i*PkgLimit);
-                    var cmd = new ACNTCPDataCommand(_datatcpClient, buf);
+                    Buffer.BlockCopy(buf, i*PkgLimit, newBytes, 4, PkgLimit);
+                    var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
                     Command.SendTCPAsync(cmd);
                 }
                 //last pkg
@@ -247,7 +237,7 @@ namespace BoonieBear.DeckUnit.LiveService
                     Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
                 Buffer.BlockCopy(BitConverter.GetBytes(lastpkglenth), 0, newBytes, 2, 2);
                 Buffer.BlockCopy(buf, pkgnum*PkgLimit, newBytes, 4, lastpkglenth);
-                var lastcmd = new ACNTCPDataCommand(_datatcpClient, buf);
+                var lastcmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
                 return Command.SendTCPAsync(lastcmd);
             }
             else
@@ -272,9 +262,13 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public bool StartTCPService()
         {
-            if (!IsInitialize)
-                Initialize();
-            // 同步方法，会阻塞进程，调用init用task
+            if (_shelltcpClient == null)
+                _shelltcpClient = new TcpClient { SendTimeout = 1000 };
+            if (_datatcpClient == null)
+                _datatcpClient = new TcpClient { SendTimeout = 1000 };
+            if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort1) ||
+                (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
+                throw new Exception("通信网络初始化失败");
             TCPShellService.ConnectSync();
             TCPDataService.ConnectSync();
             TCPShellService.Register(NetDataObserver);
@@ -285,6 +279,10 @@ namespace BoonieBear.DeckUnit.LiveService
                 IsTCPWorking = true;
                 return true;
             }
+            _shelltcpClient.Close();
+            _datatcpClient.Close();
+            _shelltcpClient = null;
+            _datatcpClient = null;
             IsTCPWorking = false;
             return false;
         }
@@ -329,6 +327,16 @@ namespace BoonieBear.DeckUnit.LiveService
             {
                 throw new NotImplementedException();
             }
+        }
+
+        //水声结束包
+        public Task<bool> SendSSBEND()
+        {
+            byte[] newBytes = new byte[4];
+            Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.END), 0, newBytes, 0, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(2), 0, newBytes, 2, 2);
+            var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
+            return Command.SendTCPAsync(cmd);
         }
     }
 }

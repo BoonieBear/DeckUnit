@@ -137,7 +137,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
             {
                 if (_StringTable.ContainsKey(keyName) || _BinaryTable.ContainsKey(keyName) || _SingleBinaryTable.ContainsKey(keyName))
                 {
-                    Errormsg = @"replicate trace file name";
+                    Errormsg = @"重复的记录文件名";
                     isOk = false;
                 }
                 //create log directory
@@ -165,7 +165,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
                         break;
                     default:
                         isOk = false;
-                        Errormsg = "undefine trace type!";
+                        Errormsg = "未定义的文件类型";
                         break;
                 }
             }
@@ -177,6 +177,36 @@ namespace BoonieBear.DeckUnit.TraceFileService
             return isOk;
         }
 
+        /// <summary>
+        /// 关闭单一的adfile,用于需要多次写硬盘然后再关闭的文件
+        /// </summary>
+        /// <param name="keyName"></param>
+        /// <returns></returns>
+        public bool CloseFile(string keyName)
+        {
+            bool isOk = true;
+            try
+            {
+                if (!_StringTable.ContainsKey(keyName) &&! _BinaryTable.ContainsKey(keyName) &&
+                    !_SingleBinaryTable.ContainsKey(keyName))
+                {
+                    Errormsg = @"不存在要求的记录文件";
+                    isOk = false;
+                }
+                var adfile = GetSingleADFile(keyName);
+                if (adfile != null)
+                {
+                    adfile.Close();
+                    isOk = true;
+                }
+            }
+            catch (Exception e)
+            {
+                Errormsg = e.Message;
+                isOk = false;
+            }
+            return isOk;
+        }
         private LogFile GetStringTrace(string keyName)
         {
             if (_StringTable.ContainsKey(keyName))

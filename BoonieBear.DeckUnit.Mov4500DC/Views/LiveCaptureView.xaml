@@ -10,6 +10,7 @@
       xmlns:wavebox="clr-namespace:BoonieBear.DeckUnit.WaveBox;assembly=LOAT.DeckUnit.WaveBox"
       xmlns:ViewControls="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Controls"
       xmlns:converters="clr-namespace:BoonieBear.DeckUnit.Mov4500UI.Converters"
+      xmlns:h="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
       xmlns:system="clr-namespace:System;assembly=mscorlib"
       DataContext="{Binding LiveCaptureViewModel, Source={StaticResource ViewModelLocator}}"
       Background="{StaticResource DefaultBackgroundBrush}"
@@ -29,7 +30,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="30"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="10"/>
@@ -48,18 +49,41 @@
                     Grid.ColumnSpan ="2"
                     HorizontalAlignment ="Stretch"/>
             </Grid>
-            <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ActualWidth, ConverterParameter=0.9, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
+            <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ActualWidth, ConverterParameter=0.95, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="120"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid  Grid.Row="0" Name="PosWaveGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="{Binding ActualWidth, ElementName=MessageRichTextBox, Mode=OneWay}"/>
-                        <ColumnDefinition Width="400"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <wavebox:WaveControl Grid.Column="0" Name="WaveControl" HorizontalAlignment="Left" Height="100" Margin="-1,0,0,0" VerticalAlignment="Top" Width="539"/>
+                    <wavebox:WaveControl Grid.Column="0" Name="WaveControl"/>
+                    <Controls:MetroComboBox VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsDropDownOpen="True" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="16" BorderThickness="0" Margin="5,0,0,5" Width="35" AllowDrop="True">
+                        <ComboBoxItem Content="1"  Background="{DynamicResource DefaultBackgroundBrush}"/>
+                        <ComboBoxItem Content="2" Background="{DynamicResource DefaultBackgroundBrush}"/>
+                        <ComboBoxItem Content="3"  Background="{DynamicResource DefaultBackgroundBrush}"/>
+                        <ComboBoxItem Content="4" Background="{DynamicResource DefaultBackgroundBrush}"/>
+                    </Controls:MetroComboBox>
+                    <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="60,0,0,0" Height="30" />
+                    <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="240,0,0,5" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="100"/>
+                    <MetroControl:FlipView Grid.Column="1" MouseOverGlowEnabled ="True" SelectionChanged="FlipView_SelectionChanged" MouseEnter="FlipView_MouseEnter" MouseLeave="FlipView_MouseLeave" Margin="5,0">
+                        <MetroControl:FlipView.Items>
+                            <Grid Background="#2E8DEF" Margin="0">
+
+                            </Grid>
+                            <Grid Background="#00A600">
+
+                            </Grid>
+                            <Grid Background="#BF1E4B">
+
+                            </Grid>
+                            <Grid Background="#2E8DEF">
+
+                            </Grid>
+                        </MetroControl:FlipView.Items>
+                    </MetroControl:FlipView>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -69,7 +93,7 @@
                     <Grid Margin="0,0,2,0">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
-                            <RowDefinition Height="120"/>
+                            <RowDefinition  Name="MorseRow" Height="0"/>
                             <RowDefinition Height="80"/>
                         </Grid.RowDefinitions>
 
@@ -82,23 +106,23 @@
                             <FlowDocument Name="MessageDocument" LineHeight="24">
                             </FlowDocument>
                         </RichTextBox>
-                        <TextBlock Grid.Row="0"  Name="NolinkBlock" Grid.Column="0" Background="DarkOrange" Text="没有可用的连接" Visibility="Visible" FontSize="24" TextAlignment="Center" VerticalAlignment="Bottom" Margin="2" Opacity="0.6"/>
-                        <UniformGrid Grid.Row="1" Columns="5" Background="{DynamicResource GrayBrush}">
-                            <Button Content="收到" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
-                            <Button Content="询问情况" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
-                            <Button Content="同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
-                            <Button Content="立即上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
-                            <Button Content="不同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}"/>
+                        <TextBlock Grid.Row="0"  Name="NolinkBlock" Grid.Column="0" Background="DarkOrange" Text="没有可用的连接" Visibility="Visible" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Margin="2" Opacity="0.4"/>
+                        <UniformGrid  Name="MorseGrid"  Grid.Row="1" Columns="5" Background="{DynamicResource GrayBrush}">
+                            <Button Content="收到" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
+                            <Button Content="询问情况" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
+                            <Button Content="同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
+                            <Button Content="立即上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
+                            <Button Content="不同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
                             <TextBlock Text="●●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●● ●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●●●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●● ●●●" TextAlignment="Center" FontSize="20"  />
-                            <Button Content="一切正常" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
-                            <Button Content="完成阶段工作" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
-                            <Button Content="请求上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
-                            <Button Content="进入应急程序" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
-                            <Button Content="释放应急浮标" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}"/>
+                            <Button Content="一切正常" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="完成阶段工作" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="请求上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="进入应急程序" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="释放应急浮标" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
                             <TextBlock Text="●●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●● ●●" TextAlignment="Center" FontSize="20" />
@@ -108,11 +132,12 @@
                         <Grid Grid.Row="2" Background="{Binding Background, ElementName=SendMessageBox}">
                             <TextBox  Grid.Row="2" VerticalScrollBarVisibility="Auto" 
                                       Name="SendMessageBox" 
-                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="50,0,55,0" />
+                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" />
                             <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right">
                                 <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="80" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Button Name="AddImageBtn" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-30" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
-                                    <Button Name="AddFHBtn"  Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="30" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" HorizontalAlignment="Center"/>
+                                    <Button Name="AddMorseBtn"  Content="摩斯码" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-135" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
+                                    <Button Name="AddImageBtn" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="180" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
+                                    <Button Name="AddFHBtn"  Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="135" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
                                 </Controls:FanPanel>
                                 <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Background, ElementName=SendMessageBox}"/>
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
@@ -132,8 +157,194 @@
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="BackToEditBtn" Style="{StaticResource EditTextAppBarButtonStyle}" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Height="45" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" Click="BackToEditBtn_Click" />
                         </Grid>
                     </Grid>
+                    <Grid Grid.Row="1" Column="1" Margin="20,0,0,0">
+                        <MetroControl:MetroAnimatedTabControl TabStripPlacement="Bottom" Cursor="Hand" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+                            <TabItem Header="位姿">
+                                <Grid>
+                                    <h:HelixViewport3D x:Name="PosViewport3D" Background="{StaticResource DefaultBackgroundBrush}" 
+                                               ShowViewCube="False" 
+                                               ShowCameraTarget="False" 
+                                               ShowCoordinateSystem="False" 
+                                               Margin="4" MouseEnter="PosViewport3D_MouseEnter" MouseLeave="PosViewport3D_MouseLeave" IsManipulationEnabled="True">
+                                        <h:HelixViewport3D.DefaultCamera>
+                                            <PerspectiveCamera x:Name ="PosCamera" Position="0,0,6000" LookDirection="0,0,-6000" UpDirection="-1,0,0" NearPlaneDistance="3000" FarPlaneDistance="60000"/>
+                                        </h:HelixViewport3D.DefaultCamera>
+                                        
+                                        <h:SunLight/>
+                                        <h:GridLinesVisual3D  Fill="Cornsilk" Length ="10000" Width="10000" MinorDistance="500" MajorDistance="20000" Thickness="3">
+                                            <h:GridLinesVisual3D.Transform>
+                                                <Transform3DGroup>
+                                                    <TranslateTransform3D OffsetZ="-100"/>
+                                                </Transform3DGroup>
+                                            </h:GridLinesVisual3D.Transform>
+                                        </h:GridLinesVisual3D>
+                                        <ModelVisual3D x:Name="ShipD">
+                                            <ModelVisual3D.Transform>
+                                                <Transform3DGroup>
+                                                    <TranslateTransform3D OffsetZ="100"/>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding ShipHeading}"/>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                </Transform3DGroup>
+                                            </ModelVisual3D.Transform>
+                                        </ModelVisual3D>
+                                        <ModelVisual3D x:Name="MovD">
+                                            <ModelVisual3D.Transform>
+                                                <Transform3DGroup>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="1,0,0" Angle="-90"/>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="0,1,0" Angle="180"/>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding MovHeading}"/>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                    <TranslateTransform3D OffsetZ="{Binding Z}"/>
+                                                    <TranslateTransform3D OffsetX="{Binding X}"/>
+                                                    <TranslateTransform3D OffsetY="{Binding Y}"/>
+                                                </Transform3DGroup>
+                                            </ModelVisual3D.Transform>
+                                        </ModelVisual3D>
+                                        <h:ArrowVisual3D Point1="6000 0 -100" Point2="-6000 0 -100" Diameter="20" Fill="Red"  HeadLength="30" ThetaDiv="36"  />
+                                        <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Green" HeadLength="30" ThetaDiv="36"  />
+                                    </h:HelixViewport3D>
+                                    <Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/>
+                                    <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Height="195">
+                                        <TextBlock FontSize="14">
+                                            <Run Text="USBL:   "/>
+                                            <Run Text="{Binding PosFromUSBLTime}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="母船经度:"/>
+                                            <Run Text="{Binding ShipLongUsbl}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="母船纬度:"/>
+                                            <Run Text="{Binding ShipLatUsbl}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="母船速度:"/>
+                                            <Run Text="{Binding ShipSpeed}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="艏向角:"/>
+                                            <Run Text="{Binding ShipHeading}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="纵倾:"/>
+                                            <Run Text="{Binding ShipPitch}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="横倾:"/>
+                                            <Run Text="{Binding ShipRoll}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器经度:"/>
+                                            <Run Text="{Binding MovLongUsbl}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器纬度:"/>
+                                            <Run Text="{Binding MovLatUsbl}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器深度:"/>
+                                            <Run Text="{Binding MovDepthUsbl}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="相对距离"/>
+                                            <Run Text=" X:"/>
+                                            <Run Text="{Binding XDistance}"/>
+                                            <Run Text=" | Y:"/>
+                                            <Run Text="{Binding YDistance}"/>
+                                            <Run Text=" | Z:"/>
+                                            <Run Text="{Binding ZDistance}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Name="MovPos" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,40,0">
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器:   "/>
+                                            <Run Text="{Binding PosFromUwvTime}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器经度:"/>
+                                            <Run Text="{Binding MovLong}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器纬度:"/>
+                                            <Run Text="{Binding MovLat}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="艏向角:"/>
+                                            <Run Text="{Binding MovHeading}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="纵倾:"/>
+                                            <Run Text="{Binding MovPitch}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="横倾:"/>
+                                            <Run Text="{Binding MovRoll}"/>
+                                        </TextBlock>
+                          
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器深度:"/>
+                                            <Run Text="{Binding MovDepth}"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="14">
+                                            <Run Text="潜器高度:"/>
+                                            <Run Text="{Binding MovHeight}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="生命支持">
+                            </TabItem>
+                            <TabItem Header="能源">
+                            </TabItem>
+                            <TabItem Header="避碰">
+                            </TabItem>
+                            <TabItem Header="CTD">
+                            </TabItem>
+                            <TabItem Header="ADCP">
+                            </TabItem>
+                            <TabItem Header="报警" >
+                                <StackPanel>
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="14" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding AlarmTime}"/>
+                                     </TextBlock>
+                                    <UniformGrid Columns="2">
+                                        
+                                    </UniformGrid>
+                                    <ListView ItemsSource="{Binding AlarmList}"/>
+                                </StackPanel>
+                            </TabItem>
+                        </MetroControl:MetroAnimatedTabControl>
+                    </Grid>
                 </Grid>
             </Grid>
+            <TextBlock Grid.Row ="2" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Foreground="{Binding LinkBoxColor}" Margin="25,0,0,0" FontFamily="Microsoft YaHei">
+                <Run Text="网络状态："/>
+                <Run Text="{Binding LinkStatus}" />
+            </TextBlock>
+            <TextBlock Grid.Row ="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,25,0">
+                <Run Text="网速："/>
+                <Run Text="Rx-"/>
+                 <Run Text="{Binding LinkRxSpeed}" />
+                <Run Text="| Tx-"/>
+                 <Run Text="{Binding LinkTxSpeed}" />
+            </TextBlock>
         </Grid>
+
     </Controls:MetroContentControl>
 </Page>

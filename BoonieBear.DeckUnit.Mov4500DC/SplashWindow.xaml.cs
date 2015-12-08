@@ -1,4 +1,6 @@
-﻿using BoonieBear.DeckUnit.Mov4500UI.Helpers;
+﻿using System.Threading;
+using BoonieBear.DeckUnit.Mov4500UI.Core;
+using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 
 namespace BoonieBear.DeckUnit.Mov4500UI
 {
@@ -11,6 +13,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
         {
             InitializeComponent();
             this.DataContext = this;
+            UnitCore.Instance.Start();
         }
 
         public string ProductName

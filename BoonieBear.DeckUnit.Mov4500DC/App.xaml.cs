@@ -31,15 +31,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI
                 String strTitle = ResourcesHelper.TryFindResourceString("Mov4500_ApplicationName");
                 String strErrMsg = ResourcesHelper.TryFindResourceString("Mov4500_RUNNING");
                 MessageBox.Show(strErrMsg, strTitle);
+                App.Current.Shutdown();
                 return;
             }
              
             Splasher.Splash = new SplashWindow();
 
             Splasher.ShowSplash();
-            /////
-            ///加入比较耗费时间的载入操作
-            /// 
             //  初始化框架
             //派生接口单实例
             UnitKernal.Instance = new UnitKernal();
@@ -50,7 +48,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
             LogHelper.WriteLog("程序启动");
-
+            Thread.Sleep(4000);//等待网络连接完成
+  
             base.OnStartup(e);
         }
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)

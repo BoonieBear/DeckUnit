@@ -53,8 +53,10 @@ namespace BoonieBear.DeckUnit.VoiceManager
             /// </summary>
             public void Dispose()
             {
-                m_HeaderHandle.Free();
-                m_DataHandle.Free();
+                if (m_HeaderHandle.IsAllocated)
+                    m_HeaderHandle.Free();
+                if (m_DataHandle.IsAllocated)
+                    m_DataHandle.Free();
             }
 
             #endregion
@@ -95,14 +97,18 @@ namespace BoonieBear.DeckUnit.VoiceManager
                 {
                     try
                     {
+                        if(!m_DataHandle.IsAllocated)
+                            return null;
                         var buf = (byte[]) m_DataHandle.Target;
                     }
                     catch (InvalidOperationException)
                     {
                         return null;
                     }
-                    return (byte[])m_DataHandle.Target;
-                    
+                    if (m_DataHandle.IsAllocated)
+                        return (byte[])m_DataHandle.Target;
+                    return null;
+
                 }
             }
 
@@ -310,17 +316,18 @@ namespace BoonieBear.DeckUnit.VoiceManager
             try{            
                 lock(m_pBuffers){
                     BufferItem item = m_pBuffers[0];
-
-                    // Raise BufferFull event.
                     OnBufferFull(item.Data);
 
-                    // Clean up.
-                    WavMethods.waveInUnprepareHeader(m_pWavDevHandle,item.HeaderHandle.AddrOfPinnedObject(),Marshal.SizeOf(item.Header));                    
-                    m_pBuffers.Remove(item);
-                    item.Dispose();
-                }
+                        // Clean up.
+                    if (item.DataHandle.IsAllocated)
+                        WavMethods.waveInUnprepareHeader(m_pWavDevHandle, item.HeaderHandle.AddrOfPinnedObject(),
+                            Marshal.SizeOf(item.Header));
+                        m_pBuffers.Remove(item);
+                        item.Dispose();
 
-                EnsureBuffers();
+                }
+                if (m_IsRecording)
+                    EnsureBuffers();
             }
             catch(InvalidOperationException)
             { }

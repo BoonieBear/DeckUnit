@@ -11,8 +11,7 @@ namespace Test4500netDemo
         {
             if (e.ParseOK && (e.Mode ==CallMode.DataMode))
             {
-                ACM4500Protocol.GetBytes(e.DataBuffer);
-                var ret = ACM4500Protocol.Parse();
+
                 
             }
         }

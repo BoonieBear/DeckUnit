@@ -20,6 +20,7 @@ using HelixToolkit.Wpf;
 using System.Windows.Media.Media3D;
 using System.Threading.Tasks;
 using BoonieBear.DeckUnit.WaveBox;
+using System.Net.NetworkInformation;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     /// <summary>
@@ -53,7 +54,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public byte[] AskOrOK = null;
         public byte[] AgreeOrReqRise = null;
         public byte[] RiseOrUrgent = null;
-        public byte[] DisgOrRelBuoy = null;
+        public byte[] Disg = null;
+        public byte[] RelBuoy = null;
         public WaveControl Wave = null;
         public MovTraceService MovTraceService
         {
@@ -124,7 +126,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     AskOrOK = File.ReadAllBytes(soundpath + "\\" + "2.dat");
                     AgreeOrReqRise = File.ReadAllBytes(soundpath + "\\" + "22.dat");
                     RiseOrUrgent = File.ReadAllBytes(soundpath + "\\" + "5.dat");
-                    DisgOrRelBuoy = File.ReadAllBytes(soundpath + "\\" + "33.dat");
+                    Disg = File.ReadAllBytes(soundpath + "\\" + "33.dat");
+                    RelBuoy = File.ReadAllBytes(soundpath + "\\" + "222.dat");
                     return true;
                 }
                 catch (Exception)
@@ -139,7 +142,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         {
             try
             {
+                NetworkChange.NetworkAvailabilityChanged += new
+            NetworkAvailabilityChangedEventHandler(AvailabilityChangedCallback);
                 if(!LoadConfiguration()) throw new Exception("无法读取基本配置");
+                ACM4500Protocol.Init(WorkMode);
                 if (!LoadMorse()) throw new Exception("无法读取Morse数据");
                 if(NetCore.IsInitialize)
                     NetCore.Stop();
@@ -166,8 +172,25 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             
         }
 
+        private void AvailabilityChangedCallback(object sender, NetworkAvailabilityEventArgs e)
+        {
+            NetworkAvailabilityEventArgs myEg = (NetworkAvailabilityEventArgs)e;
+            if (!myEg.IsAvailable)
+            {
+                if (NetCore.IsTCPWorking)
+                {
+                    NetCore.StopTCpService();
+                }
+                 
+                EventAggregator.PublishMessage(new LogEvent("网络出错，请检查网络！",LogType.Both));
+
+            }
+        }
+
         public void Stop()
         {
+            if(!NetCore.IsInitialize)
+                return;
             if (NetCore.IsTCPWorking)
                 NetCore.StopTCpService();
             if (NetCore.IsUDPWorking)
@@ -205,18 +228,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         {
             get { return GetInstance(); }
         }
-        public Model3D ShipModel { get; set; }
-        public Model3D MovModel { get; set; }
-        private async Task<Model3DGroup> LoadAsync(string model3DPath, bool freeze)
-        {
-            return await Task.Factory.StartNew(() =>
-            {
-                var mi = new ModelImporter();
-
-                // Alt 1. - freeze the model 
-                return mi.Load(model3DPath, null, true);
-
-            });
-        }
+        
+        
     }
 }

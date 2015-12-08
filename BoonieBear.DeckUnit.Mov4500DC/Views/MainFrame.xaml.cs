@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
+using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using TinyMetroWpfLibrary.Controller;
 using MahApps.Metro.Controls.Dialogs;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
@@ -19,15 +20,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             InitializeComponent();
             MainFrameViewModel.pMainFrame.DialogCoordinator = DialogCoordinator.Instance;
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
+
         }
 
-        private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
+        private  void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            Splasher.CloseSplash();
+            
             Application.Current.MainWindow = this;
-            UnitCore.Instance.Start();
             Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
-
+            Splasher.CloseSplash();
         }
 
         private void MetroWindow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

@@ -52,8 +52,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Net" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GetSysInfo.cs" />

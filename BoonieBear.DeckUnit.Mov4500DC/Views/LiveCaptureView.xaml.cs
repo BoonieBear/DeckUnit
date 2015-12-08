@@ -1,15 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using BoonieBear.DeckUnit.ACMP;
+using BoonieBear.DeckUnit.Mov4500Conf;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using System.Windows.Controls;
+using HelixToolkit.Wpf;
 using TinyMetroWpfLibrary.EventAggregation;
 using Button = System.Windows.Controls.Button;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -17,6 +20,10 @@ using BoonieBear.DeckUnit.WaveBox;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using MahApps.Metro.Controls.Dialogs;
 using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
+using System.Windows.Media.Media3D;
+using System.Windows.Threading;
+using System.Runtime.InteropServices;
+using MahApps.Metro.Controls;
 namespace BoonieBear.DeckUnit.Mov4500UI.Views
 {
     /// <summary>
@@ -24,6 +31,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
     /// </summary>
     public partial class LiveCaptureView : Page
     {
+        [DllImport("user32.dll")]
+        private extern static bool SwapMouseButton(bool fSwap);
         #region 变量区域
         //选择图片的文件名
         private string _fileName = string.Empty;
@@ -34,6 +43,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private int index = 0;
         private bool isRecording = false;
         private short[] volumnbuffer = new short[400];//half of wavecontrol recording buffer
+        private readonly Dispatcher dispatcher;
         #endregion
         public LiveCaptureView()
         {
@@ -41,6 +51,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             WaveControl.Initailize();
             WaveControl.AddRecDoneHandle(RecHandle);
             WaveControl.StartPlaying();
+            this.dispatcher = Dispatcher.CurrentDispatcher;
         }
 
         private void RecHandle(byte[] bufBytes)
@@ -90,17 +101,60 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                if (ShipD.Content == null)
+                {
+                    string modelpath = MovConf.GetInstance().MyExecPath + "\\" + "Assets\\Ship.3DS";
+                    ShipD.Content = await LoadAsync(modelpath, false);
+                    if (ShipD.Content == null)
+                        throw new Exception("加载母船组件失败！");
+                }
+                if (MovD.Content == null)
+                {
+                    string modelpath = MovConf.GetInstance().MyExecPath + "\\" + "Assets\\jl.obj";
+                    MovD.Content = await LoadAsync(modelpath, false);
+                    if (MovD.Content == null)
+                        throw new Exception("加载潜器组件失败！");
+                }
+            }
+            catch (Exception ex)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                
+            }
+            SwapMouseButton(false);
             await TryConnnect();
             if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 NolinkBlock.Visibility = Visibility.Hidden;
             }
             UnitCore.Instance.Wave = WaveControl;
-        }
 
+        }
+        private async Task<Model3DGroup> LoadAsync(string model3DPath, bool freeze)
+        {
+            return await Task.Factory.StartNew(() =>
+            {
+                var mi = new ModelImporter();
+                if (freeze)
+                {
+                    // Alt 1. - freeze the model 
+                    return mi.Load(model3DPath, null, true);
+                }
+
+                // Alt. 2 - create the model on the UI dispatcher
+                return mi.Load(model3DPath, this.dispatcher);
+
+            });
+        }
         private static async Task TryConnnect()
         {
-            if (!UnitCore.Instance.NetCore.IsTCPWorking)
+            while (UnitCore.Instance.NetCore==null)
+            {
+                Thread.Sleep(200);
+            }
+            if (UnitCore.Instance.NetCore!=null&&!UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 while (UnitCore.Instance.NetCore.StartTCPService() == false)
                 {
@@ -160,8 +214,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 img = new Image //母船的图片
                 {
                     Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
-                    Width = 40,
-                    Height = 40,
+                    Width = 30,
+                    Height = 30,
                 };
             }
             else
@@ -169,8 +223,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 img = new Image //潜器的图片
                 {
                     Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
-                    Width = 40,
-                    Height = 40,
+                    Width = 30,
+                    Height = 30,
                 };
             }
             title.Inlines.Add(img);
@@ -202,7 +256,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             chartmsg.LineHeight = 24;
             MessageDocument.Blocks.Add(chartmsg);
         }
-
+        private void AddSendSSBToChart(string msg)
+        {
+            SetTiltle(true);
+            if (msg == null)
+                return;
+            var run = new Run("(" + "水声摩斯码" + ")" + msg);
+            run.FontSize = 22;
+            var chartmsg = new Paragraph(run);
+            chartmsg.TextAlignment = TextAlignment.Left;
+            chartmsg.LineHeight = 24;
+            MessageDocument.Blocks.Add(chartmsg);
+        }
         private void AddSendImgToChart(Image img)
         {
             SetTiltle(true);
@@ -329,6 +394,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 }
             }
             fanpanel.IsOpen = false;
+            foreach (var item in MorseGrid.Children)
+            {
+                Button btn = item as Button;
+                if (btn != null && btn.IsMouseOver)
+                {
+                    return;
+                }
+            }
+            MorseRow.Height = new GridLength(0);
         }
 
         private void SendSSBBtn_Click(object sender, RoutedEventArgs e)
@@ -381,6 +455,118 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             SSBToolTip.Visibility = Visibility.Hidden;
             VoiceBar.Visibility = Visibility.Hidden;
             LeftSize.Visibility = Visibility.Visible;
+        }
+
+        private void NorthButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (PosViewport3D == null || PosViewport3D.CameraController == null)
+                return;
+            PosViewport3D.CameraController.ChangeDirection(new Vector3D(0, 0, -6000), new Vector3D(-1, 0, 0), 1000);
+            
+        }
+
+        private void AddMorseBtn_Click(object sender, RoutedEventArgs e)
+        {
+            MorseRow.Height =new GridLength(120);
+        }
+
+        private async void SendMorse(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            if (btn != null&&UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                try
+                {
+                    switch (btn.Content.ToString())
+                    {
+                    case "收到":
+                    case "一切正常":
+                        await UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.RecvOrOK);
+                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        break;
+                    case "询问情况":
+                    case "完成阶段工作":
+                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AskOrOK);
+                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        break;
+                    case "同意":
+                    case "请求上浮":
+                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AgreeOrReqRise);
+                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        break;
+                    case "立即上浮":
+                    case "进入应急程序":
+                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RiseOrUrgent);
+                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        break;
+                    case "不同意":
+                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Disg);
+                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        break;
+                    case "释放应急浮标":
+                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RelBuoy);
+                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        break;
+                    default:
+                        break;
+                    }
+                    AddSendSSBToChart(btn.Content.ToString());
+                }
+                catch (Exception ex)
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                }
+
+            }
+        }
+
+        private void PosViewport3D_MouseEnter(object sender, MouseEventArgs e)
+        {
+            SwapMouseButton(true);//switch to right button mode to manipulate pos view,For the device which don` t have multi-touch
+        }
+
+        private void PosViewport3D_MouseLeave(object sender, MouseEventArgs e)
+        {
+            SwapMouseButton(false);//switch back
+        }
+
+        private void FlipView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var flipview = ((FlipView)sender);
+            switch (flipview.SelectedIndex)
+            {
+                case 0:
+                    flipview.BannerText = "潜器深度/曲线";
+                    break;
+                case 1:
+                     flipview.BannerText = "能源数据";
+                    break;
+                case 2:
+                    flipview.BannerText = "生命支持数据";
+                    break;
+                case 3:
+                    if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)
+                    {
+                        flipview.SelectedIndex = 0;
+                        break;
+                    }
+                    flipview.BannerText = "潜器采集图像!";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void FlipView_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var flipview = ((FlipView)sender);
+            flipview.IsBannerEnabled = true;
+        }
+
+        private void FlipView_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var flipview = ((FlipView)sender);
+            flipview.IsBannerEnabled = false;
         }
     }
 }

@@ -197,6 +197,9 @@
     <Compile Include="Controls\TitleBarControl.xaml.cs">
       <DependentUpon>TitleBarControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TreadTile.xaml.cs">
+      <DependentUpon>TreadTile.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\BoolReverseConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DoubleMultiConverter.cs" />
@@ -245,6 +248,10 @@
     <Page Include="Controls\TitleBarControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\TreadTile.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Resources\ControlStyle.xaml">
       <Generator>MSBuild:Compile</Generator>

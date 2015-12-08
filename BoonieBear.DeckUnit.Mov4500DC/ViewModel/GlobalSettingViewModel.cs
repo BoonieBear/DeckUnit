@@ -290,12 +290,25 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     return;
                 }
             }
-
-            var ret = UnitCore.Instance.MovConfigueService.SetMode((MonitorMode)Enum.Parse(typeof(MonitorMode), SelectMode.ToString()));
-            if (ret == false)
+            if(SelectMode != (int)UnitCore.Instance.MovConfigueService.GetMode())//不同的模式才要重新保存
             {
-                EventAggregator.PublishMessage(new LogEvent("保存运行模式出错！", LogType.Both));
-                return;
+                var ret =
+                    UnitCore.Instance.MovConfigueService.SetMode(
+                        (MonitorMode) Enum.Parse(typeof (MonitorMode), SelectMode.ToString()));
+                if (ret == false)
+                {
+                    EventAggregator.PublishMessage(new LogEvent("保存运行模式出错！", LogType.Both));
+                    return;
+                }
+                ret =
+                    UnitCore.Instance.MovTraceService.SetMode(
+                        (MonitorMode) Enum.Parse(typeof (MonitorMode), SelectMode.ToString()));
+                if (ret == false)
+                {
+                    EventAggregator.PublishMessage(new LogEvent("数据保存服务设置出错！", LogType.Both));
+                    return;
+                }
+                ACM4500Protocol.Init((MonitorMode) Enum.Parse(typeof (MonitorMode), SelectMode.ToString()));
             }
             IPAddress ip;
             if (IPAddress.TryParse(ShipIpAddr, out ip) == false)
@@ -308,17 +321,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 EventAggregator.PublishMessage(new LogEvent("潜器通信机网络地址非法！", LogType.OnlyInfo));
                 return;
             }
-            ret = (UnitCore.Instance.MovConfigueService.SetShipIP(ShipIpAddr) &&
+            bool result = (UnitCore.Instance.MovConfigueService.SetShipIP(ShipIpAddr) &&
                    UnitCore.Instance.MovConfigueService.SetUWVIP(UWVIpAddr));
-            if (ret == false)
+            if (result == false)
             {
                 EventAggregator.PublishMessage(new LogEvent("保存网络地址出错", LogType.Both));
                 return;
             }
-            ret = UnitCore.Instance.MovConfigueService.SetXmtChannel(XmtIndex + 1) &&
+            var ans = UnitCore.Instance.MovConfigueService.SetXmtChannel(XmtIndex + 1) &&
                   UnitCore.Instance.MovConfigueService.SetXmtAmp(XMTValue) &&
                   UnitCore.Instance.MovConfigueService.SetGain(Gain);
-            if (ret == false)
+            if (ans == false)
             {
                 EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
                 return;

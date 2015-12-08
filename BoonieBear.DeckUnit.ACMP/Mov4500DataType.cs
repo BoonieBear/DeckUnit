@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.ACMP
             OFDM = 0xda03,
             SSB= 0xda04,
             FH=0xda05,
-            END = 0xeded,
+            END = 0xeded,//不会接收到
         }
 
     public enum MonitorMode
@@ -22,11 +22,13 @@ namespace BoonieBear.DeckUnit.ACMP
         SHIP = 0,
         SUBMARINE = 1,
     }
-    //如果是潜器中交换数据
+    //潜器中交换数据，只用于udp
     public enum ExchageType
     {
         ALLPOST = 0x2001,
         BP = 0x2002,
+        BSSS = 0x2005,//2003,2004预留
+        ADCP = 0x2006,
         SUBPOST = 0x1001,
         CTD = 0x1002,
         LIFESUPPLY = 0x1003,
@@ -37,15 +39,15 @@ namespace BoonieBear.DeckUnit.ACMP
     public enum MovDataType
     {
 
-        ALLPOST = 1,//母船下发的定位数据
-        BP=2,//避碰声纳数据
-        SUBPOST = 3,//潜器上传的定位数据
-        CTD = 4,
-        LIFESUPPLY = 5,
-        ENERGY = 6,
-        ALERT = 7,
-        BSSS = 9,//fsk
-        ADCP= 10,//fsk
+        ALLPOST = 0x2001,//母船下发的定位数据
+        BP=0x2002,//避碰声纳数据
+        SUBPOST = 0x1001,//潜器上传的定位数据
+        CTD = 0x1002,
+        LIFESUPPLY = 0x1003,
+        ENERGY = 0x1004,
+        ALERT = 0x1005,
+        BSSS = 0x2005,//fsk
+        ADCP = 0x2006,//fsk
         USBLSUBPOST = 11,//usbl
         USBLSHIPPOST=12,//usbl
         WORD = 13,//ui
@@ -199,9 +201,20 @@ namespace BoonieBear.DeckUnit.ACMP
 
     #endregion 
  
+
+
     #region Mov4500设备数据
+
+    /// <summary>
+    /// 接口
+    /// </summary>
+    public interface IProtocol
+    {
+         byte[] Pack();
+        void Parse(byte[] bytes);
+    }
     //定位信息0x2001
-    public class Sysposition 
+    public class Sysposition : IProtocol
     {
         private long _ltime;
         private float _shipLong;//母船经度
@@ -217,7 +230,6 @@ namespace BoonieBear.DeckUnit.ACMP
         private Int16 _relateY;//潜水器相对母船y轴位移
         private UInt16 _relateZ;//潜水器相对母船z轴位移	
         private byte[] storebyte = new byte[40];
-
 
         /// <summary>
         /// 按协议打包，无包头ID
@@ -255,22 +267,22 @@ namespace BoonieBear.DeckUnit.ACMP
             return storebyte;
 
         }
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
-            _ltime = BitConverter.ToInt64(bytes, 2);
-            _shipLong = BitConverter.ToSingle(bytes, 10);
-            _shipLat = BitConverter.ToSingle(bytes, 14);
-            _shipvel = BitConverter.ToInt16(bytes, 18);
-            _shipheading = BitConverter.ToUInt16(bytes, 20);
-            _shippitch = BitConverter.ToInt16(bytes, 22);
-            _shiproll = BitConverter.ToInt16(bytes, 24);
-            _subLong = BitConverter.ToSingle(bytes, 26);
-            _subLat = BitConverter.ToSingle(bytes, 30);
-            _subdepth = BitConverter.ToUInt16(bytes, 34);
-            _relateX = BitConverter.ToInt16(bytes, 36);
-            _relateY = BitConverter.ToInt16(bytes, 38);
-            _relateZ = BitConverter.ToUInt16(bytes, 40);
-            Buffer.BlockCopy(bytes, 2, storebyte,0,40);
+            _ltime = BitConverter.ToInt64(bytes, 0);
+            _shipLong = BitConverter.ToSingle(bytes, 8);
+            _shipLat = BitConverter.ToSingle(bytes, 12);
+            _shipvel = BitConverter.ToInt16(bytes, 16);
+            _shipheading = BitConverter.ToUInt16(bytes, 18);
+            _shippitch = BitConverter.ToInt16(bytes, 20);
+            _shiproll = BitConverter.ToInt16(bytes, 22);
+            _subLong = BitConverter.ToSingle(bytes, 24);
+            _subLat = BitConverter.ToSingle(bytes, 28);
+            _subdepth = BitConverter.ToUInt16(bytes, 32);
+            _relateX = BitConverter.ToInt16(bytes, 34);
+            _relateY = BitConverter.ToInt16(bytes, 36);
+            _relateZ = BitConverter.ToUInt16(bytes, 38);
+            Buffer.BlockCopy(bytes, 0, storebyte,0,40);
         }
 
         public long Ltime
@@ -365,7 +377,8 @@ namespace BoonieBear.DeckUnit.ACMP
     };
 
     //避碰信息2002,
-    public class Bpdata {
+    public class Bpdata:IProtocol
+    {
         private UInt32      _itime;//从2015年1/1/0:0:0开始的秒数
         private UInt16		_frontup;//前上避碰声呐距离
         private UInt16		_front;//正前
@@ -430,24 +443,25 @@ namespace BoonieBear.DeckUnit.ACMP
             return storebyte;
         }
 
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
             _itime = BitConverter.ToUInt32(bytes, 2);
-            _frontup = BitConverter.ToUInt16(bytes, 6);
-            _front = BitConverter.ToUInt16(bytes, 8);
-            _frontdown = BitConverter.ToUInt16(bytes, 10);
-            _down = BitConverter.ToUInt16(bytes, 12);
-            _behinddown = BitConverter.ToUInt16(bytes, 14);
-            _left = BitConverter.ToUInt16(bytes, 16);
-            _right = BitConverter.ToUInt16(bytes, 18);
-            Buffer.BlockCopy(bytes, 2, storebyte,0,18);
+            _frontup = BitConverter.ToUInt16(bytes, 4);
+            _front = BitConverter.ToUInt16(bytes, 6);
+            _frontdown = BitConverter.ToUInt16(bytes, 8);
+            _down = BitConverter.ToUInt16(bytes, 10);
+            _behinddown = BitConverter.ToUInt16(bytes, 12);
+            _left = BitConverter.ToUInt16(bytes, 14);
+            _right = BitConverter.ToUInt16(bytes, 16);
+            Buffer.BlockCopy(bytes, 0, storebyte,0,18);
         }
     };
 
     //侧深侧扫信息和ADCP的时间取定位数据的时间
-    public class Bsssdata {
+    public class Bsssdata :IProtocol
+    {
         private UInt32 _itime;//从2015年1/1/0:0:0开始的秒数
-        private UInt16 _depth;//距离海底高度
+        private UInt16 _height;//距离海底高度
         byte[] storebyte = new byte[6];
         public long Itime
         {
@@ -458,10 +472,10 @@ namespace BoonieBear.DeckUnit.ACMP
                 return newtTime.ToFileTime();
             }
         }
-        public ushort Depth
+        public ushort Height
         {
-            get { return _depth; }
-            set { _depth = value; }
+            get { return _height; }
+            set { _height = value; }
         }
 
         public byte[] Pack()
@@ -469,17 +483,18 @@ namespace BoonieBear.DeckUnit.ACMP
             return storebyte;
         }
 
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
-            _itime = BitConverter.ToUInt32(bytes, 2);
-            _depth = BitConverter.ToUInt16(bytes, 6);
-            Buffer.BlockCopy(bytes, 2, storebyte, 0,6);
+            _itime = BitConverter.ToUInt32(bytes, 0);
+            _height = BitConverter.ToUInt16(bytes, 4);
+            Buffer.BlockCopy(bytes, 0, storebyte, 0,6);
         }
     };
 
 
     //CTD信息1002
-    public class Ctddata {
+    public class Ctddata :IProtocol
+    {
         private long _ltime;
         private UInt16 _watertemp;//海水温度
         private UInt16 _vartlevel;//
@@ -517,23 +532,23 @@ namespace BoonieBear.DeckUnit.ACMP
 
         public void Parse(byte[] bytes)
         {
-            _ltime = BitConverter.ToInt64(bytes, 2);
-            _watertemp = BitConverter.ToUInt16(bytes, 10);
-            _vartlevel = BitConverter.ToUInt16(bytes, 12);
-            _watercond = BitConverter.ToUInt16(bytes, 14);
-            _soundvec = BitConverter.ToUInt16(bytes, 16);
+            _ltime = BitConverter.ToInt64(bytes, 0);
+            _watertemp = BitConverter.ToUInt16(bytes, 8);
+            _vartlevel = BitConverter.ToUInt16(bytes, 10);
+            _watercond = BitConverter.ToUInt16(bytes, 12);
+            _soundvec = BitConverter.ToUInt16(bytes, 14);
             
-            Buffer.BlockCopy(bytes, 2, storebyte, 0, 16);
+            Buffer.BlockCopy(bytes, 0, storebyte, 0, 16);
         }
 
-        internal byte[] Pack()
+        public byte[] Pack()
         {
             return storebyte;
         }
     };
 
     //潜水器位姿信息0x1001
-    public class Subposition 
+    public class Subposition :IProtocol
     {
         private long _ltime;
         private float   _subLong; //潜水器经度
@@ -622,25 +637,25 @@ namespace BoonieBear.DeckUnit.ACMP
         //前两个字节ID，parse完后数据存在成员里，属性表示真正的含义
         public void Parse(byte[] bytes)
         {
-            _ltime = BitConverter.ToInt64(bytes, 2);
-            _subLong = BitConverter.ToInt32(bytes, 10);
-            _subLat = BitConverter.ToInt32(bytes, 14);
-            _subheading = BitConverter.ToUInt16(bytes, 18);
-            _subpitch = BitConverter.ToInt16(bytes, 20);
-            _subroll = BitConverter.ToInt16(bytes, 22);
-            _subdepth = BitConverter.ToUInt16(bytes, 24);
-            _subheight = BitConverter.ToUInt16(bytes, 26);
+            _ltime = BitConverter.ToInt64(bytes, 0);
+            _subLong = BitConverter.ToInt32(bytes, 8);
+            _subLat = BitConverter.ToInt32(bytes, 12);
+            _subheading = BitConverter.ToUInt16(bytes, 16);
+            _subpitch = BitConverter.ToInt16(bytes, 18);
+            _subroll = BitConverter.ToInt16(bytes, 20);
+            _subdepth = BitConverter.ToUInt16(bytes, 22);
+            _subheight = BitConverter.ToUInt16(bytes, 24);
             Buffer.BlockCopy(bytes,0,storebyte,0,26);
         }
 
-        internal byte[] Pack()
+        public byte[] Pack()
         {
             return storebyte;
         }
     };
 
 
-    //声学设备异常信息
+    //声学设备异常信息， 现在不用
     public class Abnormity{
         private long _ltime;
         private byte _equipNo;//设备号
@@ -666,7 +681,8 @@ namespace BoonieBear.DeckUnit.ACMP
     };
 
     //生命支持系统0x1003
-    public class Lifesupply {
+    public class Lifesupply:IProtocol
+    {
         private long _ltime;
         private byte  _oxygen;//氧气浓度
         private byte  _co2;//二氧化碳浓度
@@ -707,25 +723,26 @@ namespace BoonieBear.DeckUnit.ACMP
             get { return (float)_humidity*100/65536; }
         }
 
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
-            _ltime = BitConverter.ToInt64(bytes, 2);
-            _oxygen = bytes[10];
-            _co2 = bytes[11];
-            _pressure = bytes[12];
-            _temperature = bytes[13];
-            _humidity = BitConverter.ToUInt16(bytes, 14);
-            Buffer.BlockCopy(bytes, 2, storebyte, 0, 14);
+            _ltime = BitConverter.ToInt64(bytes, 0);
+            _oxygen = bytes[8];
+            _co2 = bytes[9];
+            _pressure = bytes[10];
+            _temperature = bytes[11];
+            _humidity = BitConverter.ToUInt16(bytes, 12);
+            Buffer.BlockCopy(bytes, 0, storebyte, 0, 14);
         }
 
-        internal byte[] Pack()
+        public byte[] Pack()
         {
             return storebyte;
         }
     };
 
     //能源系统信息
-    public class Energysys {
+    public class Energysys:IProtocol
+    {
         private long _ltime;
         private byte  _headmainV;//主电池电压
         private UInt16  _headmainI;//主电池电流
@@ -855,40 +872,41 @@ namespace BoonieBear.DeckUnit.ACMP
         }
 
 
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
-            _ltime = BitConverter.ToInt64(bytes, 2);
-            _headmainV = bytes[10];
-            _headmainI = BitConverter.ToUInt16(bytes, 11);
-           _headmainconsume = BitConverter.ToUInt16(bytes, 13);
-            _headmainMaxTemp =bytes[15];
-            _headmainMaxExpand=bytes[16];
-            _tailmainV=bytes[17];
-            _tailmainI = BitConverter.ToUInt16(bytes, 18);
-            _tailmainconsume = BitConverter.ToUInt16(bytes, 20);
-            _tailmainMaxTemp = bytes[22];
-            _tailmainMaxExpand = bytes[23];
-            _leftsubV = bytes[24];
-            _leftsubI = bytes[25];
-            _leftsubconsume = BitConverter.ToUInt16(bytes, 26);
-            _leftsubMaxTemp = bytes[28];
-            _leftsubMaxExpand = bytes[29];
-            _rightsubV = bytes[30];
-            _rightsubI = bytes[31];
-            _rightsubconsume = BitConverter.ToUInt16(bytes, 32);	
-            _rightsubMaxTemp = bytes[34];
-            _rightsubMaxExpand = bytes[35];
-            Buffer.BlockCopy(bytes, 0, storeBytes, 0, 26);
+            _ltime = BitConverter.ToInt64(bytes, 0);
+            _headmainV = bytes[8];
+            _headmainI = BitConverter.ToUInt16(bytes, 9);
+           _headmainconsume = BitConverter.ToUInt16(bytes, 11);
+            _headmainMaxTemp =bytes[13];
+            _headmainMaxExpand=bytes[14];
+            _tailmainV=bytes[15];
+            _tailmainI = BitConverter.ToUInt16(bytes, 16);
+            _tailmainconsume = BitConverter.ToUInt16(bytes, 18);
+            _tailmainMaxTemp = bytes[20];
+            _tailmainMaxExpand = bytes[21];
+            _leftsubV = bytes[22];
+            _leftsubI = bytes[23];
+            _leftsubconsume = BitConverter.ToUInt16(bytes, 24);
+            _leftsubMaxTemp = bytes[26];
+            _leftsubMaxExpand = bytes[27];
+            _rightsubV = bytes[28];
+            _rightsubI = bytes[29];
+            _rightsubconsume = BitConverter.ToUInt16(bytes, 30);	
+            _rightsubMaxTemp = bytes[32];
+            _rightsubMaxExpand = bytes[33];
+            Buffer.BlockCopy(bytes, 0, storeBytes, 0, 34);
         }
 
-        internal byte[] Pack()
+        public byte[] Pack()
         {
             return storeBytes;
         }
     };
 
     //报警信息1005
-    public class Alertdata {
+    public class Alertdata:IProtocol
+    {
         private long _ltime;
         private UInt64  _alert;//报警0-63bit
         private byte	_leak;//载人舱漏水
@@ -926,17 +944,17 @@ namespace BoonieBear.DeckUnit.ACMP
             
         }
 
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
-            _ltime = BitConverter.ToInt64(bytes, 2);
-            _alert = BitConverter.ToUInt64(bytes, 10);
-            _leak = bytes[18];
-            _cable = BitConverter.ToUInt16(bytes, 19);
-            _temperature = bytes[21];
-            Buffer.BlockCopy(bytes, 2, storeBytes,0,20);
+            _ltime = BitConverter.ToInt64(bytes, 0);
+            _alert = BitConverter.ToUInt64(bytes, 8);
+            _leak = bytes[16];
+            _cable = BitConverter.ToUInt16(bytes, 17);
+            _temperature = bytes[19];
+            Buffer.BlockCopy(bytes, 0, storeBytes,0,20);
         }
 
-        internal byte[] Pack()
+        public byte[] Pack()
         {
             return storeBytes;
         }
@@ -1000,7 +1018,7 @@ namespace BoonieBear.DeckUnit.ACMP
         }
     };
 
-    public class Adcpdata
+    public class Adcpdata:IProtocol
     {
         private UInt32 _itime;//从2015年1/1/0:0:0开始的秒数
         private sbyte[] _floorX;
@@ -1047,19 +1065,20 @@ namespace BoonieBear.DeckUnit.ACMP
             }
         }
 
-        internal void Parse(byte[] bytes)
+        public void Parse(byte[] bytes)
         {
-            _itime = BitConverter.ToUInt32(bytes, 2);
-            Buffer.BlockCopy(bytes, 6, _floorX, 0, 10);
-            Buffer.BlockCopy(bytes, 16, _floorY, 0, 10);
-            Buffer.BlockCopy(bytes, 26, _floorZ, 0, 10);
-            Buffer.BlockCopy(bytes,2,storebyte,0,34);
+            _itime = BitConverter.ToUInt32(bytes, 0);
+            Buffer.BlockCopy(bytes, 4, _floorX, 0, 10);
+            Buffer.BlockCopy(bytes, 14, _floorY, 0, 10);
+            Buffer.BlockCopy(bytes, 24, _floorZ, 0, 10);
+            Buffer.BlockCopy(bytes,0,storebyte,0,34);
         }
 
-        internal byte[] Pack()
+        public byte[] Pack()
         {
             return storebyte;
         }
+
     }
     #endregion
 
