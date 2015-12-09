@@ -217,6 +217,8 @@
     <Compile Include="Events\GoDetailStatsNavigationRequest.cs" />
     <Compile Include="Events\GoSettingNavigation.cs" />
     <Compile Include="Events\LogEvent.cs" />
+    <Compile Include="Events\MovDataEvent.cs" />
+    <Compile Include="Events\USBLEvent.cs" />
     <Compile Include="Helpers\ResourcesHelper.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
     <Compile Include="Models\Status.cs" />
@@ -406,6 +408,10 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.VoiceManager\BoonieBear.DeckUnit.VoiceManager.csproj">
       <Project>{515e0e25-de62-4c8b-890f-9eacff65b79f}</Project>
       <Name>BoonieBear.DeckUnit.VoiceManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ImageToJp2K\ImageProc.csproj">
+      <Project>{dd8520ee-301b-4d85-aeb2-18b8156d0cc2}</Project>
+      <Name>ImageProc</Name>
     </ProjectReference>
     <ProjectReference Include="..\WaveBox\BoonieBear.DeckUnit.WaveBox.csproj">
       <Project>{7fd46512-42b0-4ad2-89df-6f44a650018e}</Project>

@@ -47,8 +47,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             // 初始化消息处理函数
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
+            UnitCore.Instance.Start();
             LogHelper.WriteLog("程序启动");
-            Thread.Sleep(4000);//等待网络连接完成
+            Thread.Sleep(3000);//等待网络连接完成
   
             base.OnStartup(e);
         }

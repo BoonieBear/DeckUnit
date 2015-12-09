@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections;
 using System.IO;
 using System.IO.Ports;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows.Controls;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.CommLib.Properties;
 using BoonieBear.DeckUnit.CommLib.UDP;
@@ -57,6 +59,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public byte[] Disg = null;
         public byte[] RelBuoy = null;
         public WaveControl Wave = null;
+        public delegate void UpdateLiveViewHandle(ModuleType type, string msg, Image img);
+
+        public UpdateLiveViewHandle LiveHandle;
         public MovTraceService MovTraceService
         {
             get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }

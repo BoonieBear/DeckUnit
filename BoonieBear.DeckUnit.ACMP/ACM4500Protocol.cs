@@ -346,8 +346,11 @@ namespace BoonieBear.DeckUnit.ACMP
             return null;
         }
 
-        public static bool ParseFH(byte[] pkg)//now do nothing
+        public static bool ParseFH(byte[] pkg)
         {
+            string msg = Encoding.Default.GetString(pkg, 0, 8);
+            Results.Clear();
+            Results.Add(MovDataType.WORD, msg);
             return true;
         }
 

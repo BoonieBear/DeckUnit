@@ -52,12 +52,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             WaveControl.AddRecDoneHandle(RecHandle);
             WaveControl.StartPlaying();
             this.dispatcher = Dispatcher.CurrentDispatcher;
+            UnitCore.Instance.LiveHandle = AppendRecvInfo;
         }
 
         private void RecHandle(byte[] bufBytes)
         {
+            
             Dispatcher.BeginInvoke(new Action(() =>
             {
+                UnitCore.Instance.MovTraceService.Save("XMTVOICE", bufBytes);
                 WaveControl.Display(bufBytes);
                 VoiceBar.Value = UpdateVolumn(bufBytes);
             }) );
@@ -184,11 +187,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     }
                 }
             }
-        }
-
-        public void UpdateRecvStatus()
-        {
-
         }
 
         //将要发送的文字信息填入chartbox中，靠左对齐
@@ -426,11 +424,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 WaveControl.StartRecording();
                 SSBToolTip.Content = "释放后发送语音";
                 isRecording = true;
+                
             }
             else
             {
-                WaveControl.StopRecoding();
-                SSBToolTip.Content = "按住说话";
+                if (isRecording)
+                {
+                    WaveControl.StopRecoding();
+                    SSBToolTip.Content = "按住说话";
+                    UnitCore.Instance.MovTraceService.EndSave("XMTVOICE");
+                }
                 isRecording = false;
             }
             VoiceBar.Value = 0;

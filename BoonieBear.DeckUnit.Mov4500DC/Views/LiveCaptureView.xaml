@@ -269,7 +269,7 @@
                                             <Run Text="{Binding ZDistance}"/>
                                         </TextBlock>
                                     </StackPanel>
-                                    <StackPanel Name="MovPos" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,40,0">
+                                    <StackPanel Name="MovPos" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,80,0">
                                         <TextBlock FontSize="14">
                                             <Run Text="潜器:   "/>
                                             <Run Text="{Binding PosFromUwvTime}"/>
@@ -308,26 +308,97 @@
                                 </Grid>
                             </TabItem>
                             <TabItem Header="生命支持">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding LifeTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                    <UniformGrid Grid.Row="1" Columns="2" Rows="5">
+                                    <ViewControls:TreadTile Title="氧气含量" Unit="%" Value="{Binding Oxygen}"/>
+                                </UniformGrid>
+                                </Grid>
+                                
+                                
                             </TabItem>
                             <TabItem Header="能源">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding EnergyTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                    </Grid>
                             </TabItem>
                             <TabItem Header="避碰">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding BpTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                    </Grid>
                             </TabItem>
                             <TabItem Header="CTD">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding CTDTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                    </Grid>
                             </TabItem>
                             <TabItem Header="ADCP">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding ADCPTime}"/>
+                                    </TextBlock>
+                                </StackPanel>
+                                    </Grid>
                             </TabItem>
                             <TabItem Header="报警" >
-                                <StackPanel>
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="14" Height="30">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
                                         <Run Text="更新时间:"/>
                                         <Run Text="{Binding AlarmTime}"/>
-                                     </TextBlock>
-                                    <UniformGrid Columns="2">
-                                        
-                                    </UniformGrid>
-                                    <ListView ItemsSource="{Binding AlarmList}"/>
-                                </StackPanel>
+                                        </TextBlock>
+                                        <UniformGrid Columns="2">
+
+                                        </UniformGrid>
+                                        <ListView ItemsSource="{Binding AlarmList}"/>
+                                    </StackPanel>
+                                </Grid>
                             </TabItem>
                         </MetroControl:MetroAnimatedTabControl>
                     </Grid>

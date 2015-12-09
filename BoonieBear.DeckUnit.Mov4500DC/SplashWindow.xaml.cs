@@ -13,7 +13,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI
         {
             InitializeComponent();
             this.DataContext = this;
-            UnitCore.Instance.Start();
         }
 
         public string ProductName

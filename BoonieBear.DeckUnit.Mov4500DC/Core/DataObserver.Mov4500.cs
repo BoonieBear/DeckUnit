@@ -3,8 +3,10 @@ using System.Net.Sockets;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
+using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using DevExpress.Xpf.Core;
 using Microsoft.Win32;
+using ImageProc;
 
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
@@ -78,6 +80,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         //tbd
                         datatype = "USBL";
                         ACM4500Protocol.ShipdataPool.Add(pos.Pack(), MovDataType.ALLPOST);
+                        UnitCore.Instance.EventAggregator.PublishMessage(new USBLEvent(pos));
 
                     }
                     else if (e.Mode == CallMode.GPS)
@@ -87,7 +90,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     }
                     else if (e.Mode == CallMode.DataMode) //payload or ssb
                     {
-
+                        LogHelper.WriteLog("收到");
                         switch (id)
                         {
                             case (int) ModuleType.SSB:
@@ -110,25 +113,32 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     UnitCore.Instance.MovTraceService.Save(datatype, buffer);//保存上面全部数据类型
                     if (e.Mode == CallMode.DataMode)
                     {
+                        if (id == (int) ModuleType.SSB)
+                        {
+                            UnitCore.Instance.Wave.Display(buffer);
+                            return;
+                        }
+                        if (id == (int) ModuleType.FH)
+                        {
+                            if (ACM4500Protocol.ParseFH(buffer))
+                            {
+                                UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
+                                    ModuleType.FH, ACM4500Protocol.Results));
+                            }
+                            return;
+                        }
                         UnitCore.Instance.ACMMutex.WaitOne();
                         var ret = ACM4500Protocol.DecodeACNData(buffer);
                         if (ret != null)
                         {
-                            switch ((int) BitConverter.ToInt16(buffer, 0))
+                            switch (id)
                             {
-                                case (int)ModuleType.FH:
-                                    
-                                    //tbd
-                                    break;
-                                case (int)ModuleType.SSB:
-
-                                    //tbd
-                                    break;
                                 case (int)ModuleType.MFSK:
                                     UnitCore.Instance.MovTraceService.Save("FSKSRC", ret);
                                     if (ACM4500Protocol.ParseFSK(ret))
                                     {
-                                        //tbd
+                                        UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
+                                    ModuleType.MFSK, ACM4500Protocol.Results));
                                     }
                                     break;
                                 case (int)ModuleType.MPSK:
@@ -137,7 +147,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                     if (jpcdata!=null)//全部接收
                                     {
                                         UnitCore.Instance.MovTraceService.Save("PSKJPC", jpcdata);
-                                        //tbd
+                                        if (Jp2KConverter.LoadJp2k(jpcdata))
+                                        {
+                                            var imgbuf = Jp2KConverter.SaveImg(UnitCore.Instance.MovConfigueService.MyExecPath+"\\"+"decode.jpg");
+                                            if (imgbuf != null)
+                                            {
+                                                UnitCore.Instance.MovTraceService.Save("IMG", imgbuf);
+                                                ACM4500Protocol.Results.Add(MovDataType.IMAGE,imgbuf);
+                                            }
+                                            UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
+                                    ModuleType.MPSK, ACM4500Protocol.Results));
+                                        }
                                     }
                                     break;
                             }

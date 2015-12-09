@@ -11,6 +11,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
     {
         private TraceFile _traceFile = TraceFile.GetInstance();
         private MonitorMode _mode = MonitorMode.SHIP;
+        private bool IsCreate = false;
         public string Error
         {
             get { return _traceFile.Errormsg; }
@@ -37,6 +38,8 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
         /// <returns>生成结果</returns>
         public bool CreateService()
         {
+            if (IsCreate)
+                return true;
             if (_mode==MonitorMode.SHIP)
             {
                 if (_traceFile.CreateFile("WORD", TraceType.String, "Chart", "txt", @"\WORD") == false)
@@ -86,7 +89,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
 
                     return false;
                 }
-                if (_traceFile.CreateFile("IMG", TraceType.Binary, "Img", "pkg", @"\RECVPSK") == false)//图像
+                if (_traceFile.CreateFile("IMG", TraceType.Binary, "Img", "jpg", @"\RECVPSK") == false)//图像
                 {
 
                     return false;
@@ -185,12 +188,13 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
             {
                 return false;
             }
-
+            IsCreate = true;
             return true;
         }
 
         public bool TearDownService()
         {
+            IsCreate = false;
             return _traceFile.Close();
         }
 

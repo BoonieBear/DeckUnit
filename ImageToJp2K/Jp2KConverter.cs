@@ -181,7 +181,7 @@ namespace ImageProc
         /// </summary>
         /// <param name="filename"></param>
         /// <returns>图像object</returns>
-        public static object SaveImg(string filename)
+        public static byte[] SaveImg(string filename)
         {
             if (!bJp2kLoad)
                 return null;
@@ -193,8 +193,7 @@ namespace ImageProc
                     try
                     {
                         img.Save(filename, ImageFormat.Jpeg);
-                        img = new Bitmap(filename);
-                        return img;
+                        return File.ReadAllBytes(filename);
                     }
                     catch (Exception)
                     {

@@ -48,8 +48,7 @@ namespace BoonieBear.DeckUnit.ACMP
         ALERT = 0x1005,
         BSSS = 0x2005,//fsk
         ADCP = 0x2006,//fsk
-        USBLSUBPOST = 11,//usbl
-        USBLSHIPPOST=12,//usbl
+
         WORD = 13,//ui
         IMAGE = 14,//ui
         SOUND = 15,//ui
