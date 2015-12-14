@@ -6,6 +6,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
+using System.Windows.Threading;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
 {
     /// <summary>

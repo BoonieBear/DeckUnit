@@ -32,6 +32,11 @@ namespace BoonieBear.DeckUnit.CommLib
             return Task.Factory.StartNew(() => command.Send(out Error));
 
         }
+        public static bool SendTCPSync(TCPBaseComm command)
+        {
+            return command.Send(out Error);
+
+        }
         public static Task<CustomEventArgs> RecvTCPAsync(TCPBaseComm command)
         {
             return Task.Factory.StartNew(() => command.RecvData());

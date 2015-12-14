@@ -10,6 +10,7 @@ using System.Windows.Threading;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
+using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using DevExpress.Xpf.Ribbon.Customization;
 using DevExpress.XtraCharts.Native;
 using DevExpress.XtraRichEdit.Utils.NumberConverters;
@@ -23,6 +24,7 @@ using TinyMetroWpfLibrary.EventAggregation;
 using System.Collections;
 using System.IO;
 using System.Windows.Media.Imaging;
+using BoonieBear.DeckUnit.Mov4500UI.Models;
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
     public class LiveCaptureViewModel : ViewModelBase, IHandleMessage<MovDataEvent>, IHandleMessage<USBLEvent>
@@ -32,23 +34,105 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         private NetworkInterface[] networkInterfaces = null;
         double bytesFormerReceived;
         double bytesFormerSent;
+        private bool InInitial = false;
 
         public override void Initialize()
         {
+            
             MovHeading = 45;
             ShipHeading = 135;
-            XMTValue = 0.001F;
-            XMTIndex = 0;
+
             LinkStatus = "未连接通信机";
             LinkBoxColor = new SolidColorBrush(Colors.Crimson);
             xVel = new ObservableCollection<sbyte>();
             yVel = new ObservableCollection<sbyte>();
             zVel = new ObservableCollection<sbyte>();
             AlarmList = new ObservableCollection<string>();
+            UsblPositionCollection = new ObservableCollection<Sysposition>();
+            SubPositionCollection = new ObservableCollection<Subposition>();
+            BpCollection = new ObservableCollection<Bpdata>();
+            CTDCollection = new ObservableCollection<Ctddata>();
+            LifesupplyCollection = new ObservableCollection<Lifesupply>();
+            EnergysysCollection = new ObservableCollection<Energysys>();
+            AlertdataCollection = new ObservableCollection<Alertdata>();
+            AdcpdataCollection = new ObservableCollection<Adcpdata>();
+            ImgCollection =new ObservableCollection<BitmapImage>();
+        
+        
             xVel.CollectionChanged+=xVel_CollectionChanged;
             yVel.CollectionChanged +=yVel_CollectionChanged;
             zVel.CollectionChanged+=zVel_CollectionChanged;
             AlarmList.CollectionChanged +=AlarmList_CollectionChanged;
+            UsblPositionCollection.CollectionChanged +=UsblPositionCollection_CollectionChanged;
+            SubPositionCollection.CollectionChanged += SubPositionCollection_CollectionChanged;
+            BpCollection.CollectionChanged += BpCollection_CollectionChanged;
+            CTDCollection.CollectionChanged += CTDCollection_CollectionChanged;
+            LifesupplyCollection.CollectionChanged += LifesupplyCollection_CollectionChanged;
+            EnergysysCollection.CollectionChanged += EnergysysCollection_CollectionChanged;
+            AlertdataCollection.CollectionChanged += AlertdataCollection_CollectionChanged;
+            AdcpdataCollection.CollectionChanged += AdcpdataCollection_CollectionChanged;
+            ImgCollection.CollectionChanged += ImgCollection_CollectionChanged;
+        }
+
+        private void AlertdataCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (AlertdataCollection.Count > 600)
+                AlertdataCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => AlertdataCollection);
+        }
+
+        private void ImgCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            base.OnPropertyChanged(() => ImgCollection);
+        }
+
+        private void AdcpdataCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (AdcpdataCollection.Count>600)
+                AdcpdataCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => AdcpdataCollection);
+        }
+
+        private void EnergysysCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (EnergysysCollection.Count > 600)
+                EnergysysCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => EnergysysCollection);
+        }
+
+        private void LifesupplyCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (LifesupplyCollection.Count > 600)
+                LifesupplyCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => LifesupplyCollection);
+        }
+
+        private void CTDCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (CTDCollection.Count > 600)
+                CTDCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => CTDCollection);
+        }
+
+        private void BpCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (BpCollection.Count > 600)
+                BpCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => BpCollection);
+        }
+
+        private void SubPositionCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (SubPositionCollection.Count > 600)
+                SubPositionCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => SubPositionCollection);
+        }
+
+        private void UsblPositionCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            if (UsblPositionCollection.Count > 600)
+                UsblPositionCollection.RemoveAt(0);
+            base.OnPropertyChanged(() => UsblPositionCollection);
         }
 
         private void AlarmList_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -80,6 +164,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         public override void InitializePage(object extraData)
         {
+            InInitial = true;
             BtnShow = (UnitCore.Instance.WorkMode == MonitorMode.SHIP) ? true : false;
             XDistance = 300;
             YDistance = 600;
@@ -97,6 +182,29 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             {
                 t.IsEnabled = true;
             }
+            XMTValue = float.Parse(UnitCore.Instance.MovConfigueService.GetXmtAmp());
+            XMTIndex = int.Parse(UnitCore.Instance.MovConfigueService.GetXmtChannel()) - 1;
+            InInitial = false;
+            RefreshLifeInfos();
+        }
+
+        private void RefreshLifeInfos()
+        {
+            if(LiveInfos==null)
+                LiveInfos = new ObservableCollection<PieInfo>();
+            LiveInfos.Clear();
+            var o2info = new PieInfo();
+            var co2info = new PieInfo();
+            var other = new PieInfo();
+            o2info.Category = "氧气";
+            o2info.Number = 16.2f;
+            co2info.Category = "二氧化碳";
+            co2info.Number = 2.1f;
+            other.Category = "其他";
+            other.Number = 100 - o2info.Number - co2info.Number;
+            LiveInfos.Add(o2info);
+            LiveInfos.Add(co2info);
+            LiveInfos.Add(other);
         }
 
         private void Tick(object sender, EventArgs e)
@@ -142,6 +250,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             bytesFormerReceived = receiveByte;
             bytesFormerSent = SentBype;
+            RefreshLifeInfos();
         }
 
         //show btn or control based on the workmode 
@@ -156,7 +265,50 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         public int XMTIndex
         {
             get { return GetPropertyValue(() => XMTIndex); }
-            set { SetPropertyValue(() => XMTIndex, value); }
+            set
+            {
+                if (value == XMTIndex)
+                {
+                    return;
+                }
+                SetPropertyValue(() => XMTIndex, value);
+                if (!InInitial)
+                    ChangeXMTIndex(XMTIndex);
+            }
+        }
+        public float XMTValue
+        {
+            get { return GetPropertyValue(() => XMTValue); }
+            set
+            {
+                if (value == XMTValue)
+                {
+                    return;
+                }
+                SetPropertyValue(() => XMTValue, value);
+                if (!InInitial)
+                    ChangeXMTValue(XMTValue);
+            }
+        }
+
+        private void ChangeXMTValue(float XMTValue)
+        {
+            var cmd = "a " + XMTValue.ToString("F03");
+            UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+            LogHelper.WriteLog("发射幅度设置为" + XMTValue.ToString("F03"));
+        }
+
+        private async void ChangeXMTIndex(int index)
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                var cmd = "channel " + (index + 1).ToString() + " -w";
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("发射换能器设置为" + (index + 1).ToString());
+                cmd = "opent " + (index + 1).ToString() + " -w";
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("接收换能器设置为" + (index + 1).ToString());
+            }
         }
         
         #region status
@@ -491,6 +643,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             get { return GetPropertyValue(() => Co2); }
             set { SetPropertyValue(() => Co2, value); }
         }
+
+        public ObservableCollection<PieInfo> LiveInfos
+        {
+            get { return GetPropertyValue(() => LiveInfos); }
+            set { SetPropertyValue(() => LiveInfos, value); }
+        }
         public float Pressure
         {
             get { return GetPropertyValue(() => Pressure); }
@@ -591,12 +749,58 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         #endregion
         
-        public float XMTValue
+
+        #endregion
+        //所有历史数据集合，可以从里面找出有意义的数据进行显示 假设1分钟一个数据 10小时数据大小~=2K*60*10 = 1.2M字节 
+        //UDP数据包太多，所以集合只存储最近的600个数据包
+        #region all stats collections
+        public ObservableCollection<Sysposition> UsblPositionCollection
         {
-            get { return GetPropertyValue(() => XMTValue); }
-            set { SetPropertyValue(() => XMTValue, value); }
+            get { return GetPropertyValue(() => UsblPositionCollection); }
+            set { SetPropertyValue(() => UsblPositionCollection, value); }
+        }
+        public ObservableCollection<Subposition> SubPositionCollection
+        {
+            get { return GetPropertyValue(() => SubPositionCollection); }
+            set { SetPropertyValue(() => SubPositionCollection, value); }
+        }
+        public ObservableCollection<Bpdata> BpCollection
+        {
+            get { return GetPropertyValue(() => BpCollection); }
+            set { SetPropertyValue(() => BpCollection, value); }
+        }
+        public ObservableCollection<Ctddata> CTDCollection
+        {
+            get { return GetPropertyValue(() => CTDCollection); }
+            set { SetPropertyValue(() => CTDCollection, value); }
+        }
+        public ObservableCollection<Lifesupply> LifesupplyCollection
+        {
+            get { return GetPropertyValue(() => LifesupplyCollection); }
+            set { SetPropertyValue(() => LifesupplyCollection, value); }
+        }
+        public ObservableCollection<Energysys> EnergysysCollection
+        {
+            get { return GetPropertyValue(() => EnergysysCollection); }
+            set { SetPropertyValue(() => EnergysysCollection, value); }
+        }
+        public ObservableCollection<Alertdata> AlertdataCollection
+        {
+            get { return GetPropertyValue(() => AlertdataCollection); }
+            set { SetPropertyValue(() => AlertdataCollection, value); }
+        }
+        public ObservableCollection<Adcpdata> AdcpdataCollection
+        {
+            get { return GetPropertyValue(() => AdcpdataCollection); }
+            set { SetPropertyValue(() => AdcpdataCollection, value); }
+        }
+        public ObservableCollection<BitmapImage> ImgCollection
+        {
+            get { return GetPropertyValue(() => ImgCollection); }
+            set { SetPropertyValue(() => ImgCollection, value); }
         }
         #endregion
+
         #region Command
 
         public ICommand AddFHCMD
@@ -647,6 +851,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     yVel.AddRange(adcp.FloorY);
                     zVel.Clear();
                     zVel.AddRange(adcp.FloorZ);
+                    AdcpdataCollection.Add(adcp);
                 }
             }
             if (message.Data.ContainsKey(MovDataType.ALERT))
@@ -669,6 +874,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         }
                         i++;
                     }
+                    AlertdataCollection.Add(alt);
                     //广播
                     UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
                     byte[] posBytes = new byte[22];
@@ -698,6 +904,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     YDistance = allpos.RelateY;
                     ZDistance = allpos.RelateZ;
                     Transfromxyz(XDistance, YDistance, ZDistance);
+                    UsblPositionCollection.Add(allpos);
                     //广播
                     UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
                     byte[] posBytes = new byte[42];
@@ -720,6 +927,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     BpFrontUp = bp.Frontup;
                     BpLeft = bp.Left;
                     BpRight = bp.Right;
+                    BpCollection.Add(bp);
                 }
             }
             if (message.Data.ContainsKey(MovDataType.BSSS))
@@ -729,6 +937,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 {
                     BsssTime = DateTime.FromFileTime(bsss.Itime).ToShortTimeString();
                     BsssHeight = bsss.Height;
+
                 }
             }
             if (message.Data.ContainsKey(MovDataType.CTD))
@@ -741,6 +950,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     CTDVartlevel = ctd.Vartlevel;
                     CTDWaterTemp = ctd.Watertemp;
                     CTDWatercond = ctd.Watercond;
+                    CTDCollection.Add(ctd);
                     //广播
                     UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
                     byte[] posBytes = new byte[18];
@@ -776,6 +986,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     Rightsubconsume = eng.Rightsubconsume;
                     RightsubMaxTemp = eng.RightsubMaxTemp;
                     RightsubMaxExpand = eng.RightsubMaxExpand;
+                    EnergysysCollection.Add(eng);
                     //广播
                     UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
                     byte[] posBytes = new byte[36];
@@ -798,6 +1009,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         image.EndInit();
                         ImgContainer = new System.Windows.Controls.Image();
                         ImgContainer.Source = image;
+                        ImgCollection.Add(image);
                     }
                 }
 
@@ -813,6 +1025,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     Pressure = life.Pressure;
                     Temperature = life.Temperature;
                     Humidity = life.Humidity;
+                    LifesupplyCollection.Add(life);
                     //广播
                     UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
                     byte[] posBytes = new byte[16];
@@ -820,6 +1033,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     posBytes[1] = 0x10;
                     Buffer.BlockCopy(life.Pack(), 0, posBytes, 2, 14);
                     UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    RefreshLifeInfos();
                 }
             }
             if (message.Data.ContainsKey(MovDataType.SUBPOST))
@@ -836,6 +1050,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     MovHeight = subpos.Subheight;
                     MovPitch = subpos.Subpitch;
                     MovRoll = subpos.Subroll;
+                    SubPositionCollection.Add(subpos);
                     //广播
                     UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
                     byte[] posBytes = new byte[28];
@@ -884,5 +1099,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 Transfromxyz(XDistance, YDistance, ZDistance);
             }
         }
+
+        
     }
 }

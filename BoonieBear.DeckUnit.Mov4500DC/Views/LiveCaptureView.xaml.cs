@@ -24,6 +24,7 @@ using System.Windows.Media.Media3D;
 using System.Windows.Threading;
 using System.Runtime.InteropServices;
 using MahApps.Metro.Controls;
+using DevExpress.XtraCharts;
 namespace BoonieBear.DeckUnit.Mov4500UI.Views
 {
     /// <summary>
@@ -61,7 +62,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 UnitCore.Instance.MovTraceService.Save("XMTVOICE", bufBytes);
-                WaveControl.Display(bufBytes);
+                UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);
+                //WaveControl.Display(bufBytes);
                 VoiceBar.Value = UpdateVolumn(bufBytes);
             }) );
         }
@@ -120,6 +122,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     if (MovD.Content == null)
                         throw new Exception("加载潜器组件失败！");
                 }
+                PosViewport3D.CameraController.ChangeDirection(new Vector3D(-12000, 0, -6000), 1000);
             }
             catch (Exception ex)
             {
@@ -130,6 +133,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             await TryConnnect();
             if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
+                SetupDSP();
                 NolinkBlock.Visibility = Visibility.Hidden;
             }
             UnitCore.Instance.Wave = WaveControl;
@@ -183,9 +187,42 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     else
                     {
                         if (UnitCore.Instance.NetCore.StartTCPService())
+                        {
+                            
                             break;
+                        }
+                            
                     }
                 }
+            }
+        }
+
+        private static async void SetupDSP()
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                string gain = UnitCore.Instance.MovConfigueService.GetGain();
+                string amp = UnitCore.Instance.MovConfigueService.GetXmtAmp();
+                string channel = UnitCore.Instance.MovConfigueService.GetXmtChannel();
+                MonitorMode mode = UnitCore.Instance.MovConfigueService.GetMode();
+                string dspmode = (mode == MonitorMode.SHIP) ? "2" : "1";
+                var cmd = "synseq " + dspmode;
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                cmd = "channel " + channel + " -w";
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("发射换能器设置为"+channel);
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                cmd = "opent " + channel + " -w";
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("接收换能器设置为" + channel);
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                cmd = "a " + amp;
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("发射幅度设置为" + amp);
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                cmd = "g " + gain;
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("接收增益设置为" + gain);
             }
         }
 
@@ -392,14 +429,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 }
             }
             fanpanel.IsOpen = false;
-            foreach (var item in MorseGrid.Children)
-            {
-                Button btn = item as Button;
-                if (btn != null && btn.IsMouseOver)
-                {
-                    return;
-                }
-            }
+            if (MorseGrid.IsMouseOver)
+                return;
+           
             MorseRow.Height = new GridLength(0);
         }
 
@@ -421,8 +453,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         {
             if (start)
             {
+                LogHelper.WriteLog("开始录音");
+                if (UnitCore.Instance.NetCore.IsTCPWorking)
+                {
+                    UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.Single);
+                    LogHelper.WriteLog("开始发送语音");
+                }
                 WaveControl.StartRecording();
                 SSBToolTip.Content = "释放后发送语音";
+                
                 isRecording = true;
                 
             }
@@ -431,8 +470,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 if (isRecording)
                 {
                     WaveControl.StopRecoding();
+                    UnitCore.Instance.NetCore.SendSSBEND();
+                    LogHelper.WriteLog("结束录音");
                     SSBToolTip.Content = "按住说话";
                     UnitCore.Instance.MovTraceService.EndSave("XMTVOICE");
+                    LogHelper.WriteLog("结束语音发送");
                 }
                 isRecording = false;
             }
@@ -484,40 +526,42 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     {
                     case "收到":
                     case "一切正常":
-                        await UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.RecvOrOK);
+                        UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.RecvOrOK);
                         await UnitCore.Instance.NetCore.SendSSBEND();
+                        
                         break;
                     case "询问情况":
                     case "完成阶段工作":
-                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AskOrOK);
+                        UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AskOrOK);
                         await UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "同意":
                     case "请求上浮":
-                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AgreeOrReqRise);
+                        UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AgreeOrReqRise);
                         await UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "立即上浮":
                     case "进入应急程序":
-                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RiseOrUrgent);
+                        UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RiseOrUrgent);
                         await UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "不同意":
-                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Disg);
+                        UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Disg);
                         await UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "释放应急浮标":
-                        await UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RelBuoy);
+                        UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RelBuoy);
                         await UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     default:
                         break;
                     }
                     AddSendSSBToChart(btn.Content.ToString());
+                    LogHelper.WriteLog("发送摩斯码" + btn.Content.ToString());
                 }
                 catch (Exception ex)
                 {
-                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
                 }
 
             }

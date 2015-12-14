@@ -204,6 +204,7 @@
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
     <Compile Include="Converters\DoubleMultiConverter.cs" />
     <Compile Include="Converters\DoubleSumConverter.cs" />
+    <Compile Include="Converters\FtimeToShortTimeConverter.cs" />
     <Compile Include="Converters\HideZeroConverter.cs" />
     <Compile Include="Converters\HomePageMarginLeftConverter.cs" />
     <Compile Include="Converters\VisibilityBoolConverter.cs" />

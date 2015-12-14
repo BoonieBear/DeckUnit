@@ -97,7 +97,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             catch (Exception ex)
             {
                 ret = false;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
             }
             return ret;
         }
@@ -170,7 +170,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             catch (Exception ex)
             {
                 Error = ex.Message;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
                 return false;
             }
             
@@ -186,15 +186,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 {
                     NetCore.StopTCpService();
                 }
-                 
-                EventAggregator.PublishMessage(new LogEvent("网络出错，请检查网络！",LogType.Both));
+
+                App.Current.Dispatcher.Invoke(new Action(()=>
+                {
+                    EventAggregator.PublishMessage(new LogEvent("网络出错，请检查网络！", LogType.Both));
+                }));
 
             }
         }
 
         public void Stop()
         {
-            if(!NetCore.IsInitialize)
+            if(NetCore==null)
                 return;
             if (NetCore.IsTCPWorking)
                 NetCore.StopTCpService();

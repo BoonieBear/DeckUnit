@@ -15,6 +15,7 @@ namespace BoonieBear.DeckUnit.ACMP
             SSB= 0xda04,
             FH=0xda05,
             END = 0xeded,//不会接收到
+            Req = 0xdada,
         }
 
     public enum MonitorMode
@@ -57,11 +58,11 @@ namespace BoonieBear.DeckUnit.ACMP
 
     public class MovGlobalVariables
     {
-        public static int MFSKSize = 211;
+        public static int MFSKSize = 228;
         public static int ShipMFSKSize = 80;
         public static int MovMFSKSize = 208;
         public static int WordSize = 40;
-        public static int ImgSize = 16340;
+        public static int ImgSize = 16330;
         public static int MPSKSize = 16560;
     }
 

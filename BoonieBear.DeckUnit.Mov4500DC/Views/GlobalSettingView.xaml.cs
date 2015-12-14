@@ -84,7 +84,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     ConfigViewer.Opacity = 1;
                     if (t != null)
                         t.Stop();
-                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(MyEx.Message, LogType.Both));
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(MyEx, LogType.Both));
                 }
             }
         }

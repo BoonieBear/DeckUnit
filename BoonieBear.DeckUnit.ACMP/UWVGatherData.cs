@@ -11,7 +11,7 @@ namespace BoonieBear.DeckUnit.ACMP
     {
         private readonly static object SyncObject = new object();
         private static UWVGatherData _uwvGatherData;
-        private byte[] _mfskBytes = new byte[MovGlobalVariables.ShipMFSKSize];
+        private byte[] _mfskBytes = new byte[MovGlobalVariables.MovMFSKSize];
         private byte[] _mpskBytes = new byte[MovGlobalVariables.MPSKSize];
         private Bpdata _bpdata;
         private Bsssdata _bsssdata;
@@ -23,6 +23,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private Adcpdata _adcpdata;
         private string _msg;
         private byte[] img = new byte[MovGlobalVariables.ImgSize];
+        public bool HasImg = false;
         private UWVGatherData()
         {
             Clean();
@@ -41,6 +42,7 @@ namespace BoonieBear.DeckUnit.ACMP
             Array.Clear(_mfskBytes, 0, MovGlobalVariables.ShipMFSKSize);
             Array.Clear(_mpskBytes, 0, MovGlobalVariables.MPSKSize);
             Array.Clear(img, 0, MovGlobalVariables.ImgSize);
+            HasImg = false;
         }
         /// <summary>
         /// 将UDP接收到数据和文字，图像数据加入各个数据结构里
@@ -83,6 +85,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     }
                     break;
                 case MovDataType.IMAGE://发一次要清空一次
+                    HasImg = true;
                     Buffer.BlockCopy(bytes, 0, img, 0, bytes.Length);//bytes.Length要小于img尺寸
                     break;
                 default:
@@ -144,6 +147,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(bytes,0,_mpskBytes,168,40);
                     Buffer.BlockCopy(img, 0, _mpskBytes, MovGlobalVariables.MFSKSize, MovGlobalVariables.ImgSize);
                     Array.Clear(img, 0, MovGlobalVariables.ImgSize);
+                    HasImg = false;
                     return _mpskBytes;
                 default:
                     throw new Exception("未定义的调制类型！");

@@ -38,7 +38,7 @@ namespace BoonieBear.DeckUnit.LiveService
         private CommConfInfo _commConf;
         private MovConfInfo _mocConf;
         private Observer<CustomEventArgs> _DataObserver;
-        private int PkgLimit = 1460;
+        private int PkgLimit = 1456;
 
         public string Error { get; set; }
         public bool IsInitialize { get; set; }
@@ -198,7 +198,7 @@ namespace BoonieBear.DeckUnit.LiveService
         }
 
         //下发调制数据，水声需要手动添加最后0xeded
-        public Task<bool> Send(int id, byte[] buf)
+        public bool Send(int id, byte[] buf)
         {
             if (id == (int) ModuleType.MFSK || id == (int) ModuleType.FH)
             {
@@ -206,31 +206,35 @@ namespace BoonieBear.DeckUnit.LiveService
                 Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
                 Buffer.BlockCopy(BitConverter.GetBytes(buf.Length), 0, newBytes, 2, 2);
                 Buffer.BlockCopy(buf, 0, newBytes, 4, buf.Length);
-                return SendCMD(newBytes);
+                SendCMD(newBytes);
+                return true;
             }
             else if (id == (int) ModuleType.MPSK || id == (int) ModuleType.SSB)
             {
+                
 
                 byte[] newBytes = new byte[PkgLimit + 4];
+                if (id == (int) ModuleType.SSB)
+                {
+                    Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
+                    Buffer.BlockCopy(BitConverter.GetBytes(PkgLimit), 0, newBytes, 2, 2);
+                    var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
+                    Command.SendTCPSync(cmd);
+                }
                 int pkgnum = 0;
-                if (buf.Length%PkgLimit == 0) //整除
-                {
-                    pkgnum = buf.Length/PkgLimit - 1; //最后一包单独打包
-                }
-                else
-                {
-                    pkgnum = buf.Length/PkgLimit;
-                }
+                pkgnum = buf.Length/PkgLimit;
                 for (int i = 0; i < pkgnum - 1; i++)
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
                     Buffer.BlockCopy(BitConverter.GetBytes(PkgLimit), 0, newBytes, 2, 2);
                     Buffer.BlockCopy(buf, i*PkgLimit, newBytes, 4, PkgLimit);
                     var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
-                    Command.SendTCPAsync(cmd);
+                    Command.SendTCPSync(cmd);
                 }
                 //last pkg
                 int lastpkglenth = buf.Length - pkgnum*PkgLimit;
+                if (lastpkglenth == 0)
+                    return true;
                 if (id == (int) ModuleType.MPSK)
                     Buffer.BlockCopy(BitConverter.GetBytes((int) ModuleType.END), 0, newBytes, 0, 2);
                 if (id == (int) ModuleType.SSB)
@@ -238,7 +242,7 @@ namespace BoonieBear.DeckUnit.LiveService
                 Buffer.BlockCopy(BitConverter.GetBytes(lastpkglenth), 0, newBytes, 2, 2);
                 Buffer.BlockCopy(buf, pkgnum*PkgLimit, newBytes, 4, lastpkglenth);
                 var lastcmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
-                return Command.SendTCPAsync(lastcmd);
+                return Command.SendTCPSync(lastcmd);
             }
             else
             {

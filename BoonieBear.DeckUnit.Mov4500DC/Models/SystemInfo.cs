@@ -3,34 +3,13 @@ using System.ComponentModel;
 
 namespace BoonieBear.DeckUnit.Mov4500UI.Models
 {
-    public class SeriesData
-    {
-        private string _seriesDisplayName;
-
-        public string SeriesDisplayName
-        {
-            get { return _seriesDisplayName; }
-            set
-            {
-                _seriesDisplayName = value;
-                if (PropertyChanged != null)
-                {
-                    PropertyChanged(this, new PropertyChangedEventArgs("SeriesDisplayName"));
-                }
-            }
-            
-        }
-
-        public string SeriesDescription { get; set; }
-        public event PropertyChangedEventHandler PropertyChanged;
-        public ObservableCollection<SystemInfo> Items { get; set; }
-    }
-    public class SystemInfo:INotifyPropertyChanged
+    
+    public class PieInfo:INotifyPropertyChanged
     {
         private string _category;
 
-        private double _number = 0;
-        public double Number
+        private float _number = 0;
+        public float Number
         {
             get
             {

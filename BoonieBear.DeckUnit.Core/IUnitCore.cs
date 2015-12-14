@@ -45,7 +45,7 @@ namespace BoonieBear.DeckUnit.ICore
         bool StartTCPService();
         void StopUDPService();
         void StopTCpService();
-        Task<bool> Send(int id, byte[] buf);
+        bool Send(int id, byte[] buf);
         Task<bool> SendSSBEND(); 
         bool IsUDPWorking { get; set; }//
         bool IsTCPWorking { get; set; }

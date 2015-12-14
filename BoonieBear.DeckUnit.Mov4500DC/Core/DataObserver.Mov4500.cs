@@ -12,7 +12,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     public class Mov4500DataObserver:Observer<CustomEventArgs>
     {
-        public void Handle(object sender, CustomEventArgs e)
+        public async void Handle(object sender, CustomEventArgs e)
         {
             string datatype = "";
             if (e.ParseOK)
@@ -20,9 +20,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 IProtocol pro =null;
                 try
                 {
-
-                    int id = BitConverter.ToInt16(e.DataBuffer, 0);
-                    var buffer = e.DataBuffer.Slice(4, e.DataBufferLength - 4); //delete head
+                    int id = 0;
+                    byte[] buffer = null;
+                    if (e.Mode != CallMode.NoneMode)
+                    {
+                        id = BitConverter.ToUInt16(e.DataBuffer, 0);
+                        buffer = e.DataBuffer.Slice(4, e.DataBufferLength - 4);
+                    }
                     if (e.Mode == CallMode.Sail) //水下航控或ADCP或BP
                     {
                         switch (id)
@@ -90,7 +94,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     }
                     else if (e.Mode == CallMode.DataMode) //payload or ssb
                     {
-                        LogHelper.WriteLog("收到");
                         switch (id)
                         {
                             case (int) ModuleType.SSB:
@@ -108,6 +111,28 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             case (int) ModuleType.FH:
                                 datatype = "FH";
                                 break;
+                            default:
+                                return;
+                        }
+                        if (id == (int) ModuleType.Req)
+                        {
+                            LogHelper.WriteLog("收到DSP请求");
+                            if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)
+                            {
+                                if (ACM4500Protocol.UwvdataPool.HasImg)
+                                {
+                                    var data = ACM4500Protocol.PackData(ModuleType.MPSK);
+                                    LogHelper.WriteLog("发送MPSK");
+                                    UnitCore.Instance.NetCore.Send((int) ModuleType.MPSK, data);
+                                    UnitCore.Instance.MovTraceService.Save("XMTPSK", data);
+                                    return;
+                                }
+                            }
+                            var fskdata = ACM4500Protocol.PackData(ModuleType.MFSK);
+                            LogHelper.WriteLog("发送MFSK");
+                            UnitCore.Instance.NetCore.Send((int)ModuleType.MFSK, fskdata);
+                            UnitCore.Instance.MovTraceService.Save("XMTFSK", fskdata);
+                            return;
                         }
                     }
                     UnitCore.Instance.MovTraceService.Save(datatype, buffer);//保存上面全部数据类型
@@ -115,11 +140,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     {
                         if (id == (int) ModuleType.SSB)
                         {
-                            UnitCore.Instance.Wave.Display(buffer);
+                            UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
+                            {
+                                UnitCore.Instance.Wave.Display(buffer);
+                            }));
+                            
                             return;
                         }
                         if (id == (int) ModuleType.FH)
                         {
+                            LogHelper.WriteLog("收到跳频数据");
                             if (ACM4500Protocol.ParseFH(buffer))
                             {
                                 UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
@@ -134,6 +164,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             switch (id)
                             {
                                 case (int)ModuleType.MFSK:
+                                    LogHelper.WriteLog("收到MFSK数据");
                                     UnitCore.Instance.MovTraceService.Save("FSKSRC", ret);
                                     if (ACM4500Protocol.ParseFSK(ret))
                                     {
@@ -142,6 +173,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                     }
                                     break;
                                 case (int)ModuleType.MPSK:
+                                    LogHelper.WriteLog("收到MPSK数据");
                                     UnitCore.Instance.MovTraceService.Save("PSKSRC", ret);
                                     var jpcdata = ACM4500Protocol.ParsePSK(ret);
                                     if (jpcdata!=null)//全部接收
@@ -174,7 +206,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 catch (Exception ex)
                 {
                     UnitCore.Instance.ACMMutex.ReleaseMutex();
-                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
                 }
                 
 

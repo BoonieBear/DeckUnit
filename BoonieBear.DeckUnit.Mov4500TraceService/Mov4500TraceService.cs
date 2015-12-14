@@ -1,6 +1,7 @@
 ﻿using System;
 using BoonieBear.DeckUnit.TraceFileService;
 using BoonieBear.DeckUnit.ACMP;
+using System.Text;
 namespace BoonieBear.DeckUnit.Mov4500TraceService
 {
     
@@ -212,7 +213,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
                         ret = _traceFile.WriteSingleData(sType, (byte[])bTraceBytes);
                         break;
                     case TraceType.String:
-                        ret = _traceFile.WriteString(sType, (string)bTraceBytes);
+                        ret = _traceFile.WriteString(sType, Encoding.Default.GetString((byte[])bTraceBytes));
                         break;
                     default://none
                         ret = 0;
@@ -254,5 +255,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
 
             return ret;
         }
+
+        public string EncodingbTraceBytes { get; set; }
     }
 }
