@@ -5,10 +5,11 @@ namespace BoonieBear.DeckUnit.CommLib
 {
     public class CustomEventArgs:EventArgs
     {
-        public CustomEventArgs(int id, string outstring, byte[] buf, int length, bool parseOK, string errorMsg, CallMode callmode, object callSrc)
+        public CustomEventArgs(int id, string outstring, byte[] buf, int length, bool parseOK, string errorMsg, CallMode callmode, object callSrc,Exception e=null)
         {
             var src = callSrc as SerialPort;
             DataBufferLength = length;
+            Ex = e;
             if (callmode == CallMode.DataMode&&src != null)//串口转发
             {
 
@@ -46,7 +47,7 @@ namespace BoonieBear.DeckUnit.CommLib
         public CallMode Mode { get; private set; }
         public object CallSrc { get; set; }
         public byte[] DataBuffer { get; private set; }
-
+        public Exception Ex { get; private set; }
         public string Outstring { get; set; }
         public int DataBufferLength { get; private set; }
     }

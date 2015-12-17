@@ -39,6 +39,7 @@
                     <RowDefinition Height="5"/>
                 </Grid.RowDefinitions>
                 <ViewControls:TitleBarControl 
+                    Foreground="White"
                     Title="{Binding Home_Title_ApplicationName, Mode=OneWay, Source={StaticResource Resources}}"
                     Grid.Row ="0"
                     TitleImageSource="/Assets/UWA.png"
@@ -49,7 +50,7 @@
             </Grid>
                 <!--Main area-->
                 <StackPanel Grid.Row="1"  Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Center">
-                    <Grid TextBlock.FontSize="{StaticResource Small}" TextBlock.Foreground="White">
+                    <Grid TextBlock.FontSize="{StaticResource Small}">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>

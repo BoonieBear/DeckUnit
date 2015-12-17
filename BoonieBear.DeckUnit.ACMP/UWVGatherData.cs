@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private byte[] _mfskBytes = new byte[MovGlobalVariables.MovMFSKSize];
         private byte[] _mpskBytes = new byte[MovGlobalVariables.MPSKSize];
         private Bpdata _bpdata;
-        private Bsssdata _bsssdata;
+        //private Bsssdata _bsssdata;
         private Subposition _subposition;
         private Ctddata _ctddata;
         private Lifesupply _lifesupply;
@@ -32,7 +32,7 @@ namespace BoonieBear.DeckUnit.ACMP
         {
             _msg = string.Empty;
             _bpdata = new Bpdata();
-            _bsssdata = new Bsssdata();
+            //_bsssdata = new Bsssdata();
             _ctddata = new Ctddata();
             _lifesupply = new Lifesupply();
             _energysys = new Energysys();
@@ -59,9 +59,9 @@ namespace BoonieBear.DeckUnit.ACMP
                 case MovDataType.BP:
                     _bpdata.Parse(bytes);
                     break;
-                case MovDataType.BSSS:
-                    _bsssdata.Parse(bytes);
-                    break;
+                //case MovDataType.BSSS:
+                //    _bsssdata.Parse(bytes);
+                //    break;
                 case MovDataType.ADCP:
                     _adcpdata.Parse(bytes);
                     break;
@@ -103,23 +103,23 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(bytes,0,_mfskBytes,0,26);
                     bytes = _bpdata.Pack();
                     Buffer.BlockCopy(bytes,0,_mfskBytes,26,18);
-                    bytes = _bsssdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,44,6);
+                    //bytes = _bsssdata.Pack();
+                    //Buffer.BlockCopy(bytes,0,_mfskBytes,44,6);
                     bytes = _adcpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,50,34);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,44,41);
                     bytes = _ctddata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,84,16);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,85,16);
                     bytes = _lifesupply.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,100,14);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,101,14);
                     bytes = _energysys.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,114,34);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,115,34);
                     bytes = _alertdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,148,20);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,149,20);
                     if (_msg != null)
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
                     }
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,168,40);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,169,40);
                     _msg = null;
                     return _mfskBytes;
                 case ModuleType.MPSK:
@@ -127,24 +127,24 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(bytes,0,_mpskBytes,0,26);
                     bytes = _bpdata.Pack();
                     Buffer.BlockCopy(bytes,0,_mpskBytes,26,18);
-                    bytes = _bsssdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,44,6);
+                    //bytes = _bsssdata.Pack();
+                    //Buffer.BlockCopy(bytes,0,_mpskBytes,44,6);
                     bytes = _adcpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,50,34);
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,44,41);
                     bytes = _ctddata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,84,16);
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,85,16);
                     bytes = _lifesupply.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,100,14);
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,101,14);
                     bytes = _energysys.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,114,34);
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,115,34);
                     bytes = _alertdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,148,20);
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,149,20);
                     if (_msg != null)
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
                     }
                     _msg = null;
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,168,40);
+                    Buffer.BlockCopy(bytes,0,_mpskBytes,169,40);
                     Buffer.BlockCopy(img, 0, _mpskBytes, MovGlobalVariables.MFSKSize, MovGlobalVariables.ImgSize);
                     Array.Clear(img, 0, MovGlobalVariables.ImgSize);
                     HasImg = false;

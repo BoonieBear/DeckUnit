@@ -140,7 +140,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             }
             catch (Exception exception)
             {
-                var e = new CustomEventArgs(0, null, null, 0, false, exception.Message, CallMode.ErrMode, client);
+                var e = new CustomEventArgs(0, null, null, 0, false, exception.Message, CallMode.ErrMode, client, exception);
                 OnParsed(e);
             }
             finally
@@ -183,7 +183,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             }
             catch (Exception exception)
             {
-                var e = new CustomEventArgs(0, null, null, 0, false, exception.Message, CallMode.ErrMode, client);
+                var e = new CustomEventArgs(0, null, null, 0, false, exception.Message, CallMode.ErrMode, client, exception);
                 OnParsed(e);
             }
             finally

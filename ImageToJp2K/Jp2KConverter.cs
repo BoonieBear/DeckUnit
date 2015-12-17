@@ -23,7 +23,7 @@ namespace ImageProc
         private const string ENCODD_CONVERT = "-t bmp -T jpc ";
         private const string DECODD_CONVERT = "-t jpc -T bmp ";
         private const string OPT = "-O rate=";
-        private const int MAX_SIZE = 16560;
+        private const int MAX_SIZE = 16330;
         
         public static bool LoadImage(string imgfilepath)
         {

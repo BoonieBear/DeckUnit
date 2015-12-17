@@ -21,6 +21,9 @@
       d:DesignHeight="1080" d:DesignWidth="1280"
 	Title="LiveCaptureView" Loaded="Page_Loaded" PreviewMouseDown="Page_PreviewMouseDown">
     <Page.Resources>
+        <converters:AbsConverter x:Key="AbsConverter"/>
+        <converters:BpMarkLengthConverter x:Key="BpMarkLengthConverter"/>
+        <converters:BpDistanceConverter x:Key="BpDistanceConverter"/>
         <converters:FtimeToShortTimeConverter x:Key="FtimeToShortTimeConverter"/>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <converters:BoolReverseConverter x:Key="BoolReverseConverter"/>
@@ -46,6 +49,7 @@
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <ViewControls:TitleBarControl 
+                    Foreground="White"
                     Title="{Binding Live_Title_Top, Mode=OneWay, Source={StaticResource Resources}}"
                     Grid.Row ="0"
                     Grid.Column ="0"
@@ -63,7 +67,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <wavebox:WaveControl Grid.Column="0" Name="WaveControl"/>
-                    <Controls:MetroComboBox VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsDropDownOpen="True" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="16" BorderThickness="0" Margin="5,0,0,5" Width="35" AllowDrop="True">
+                    <Controls:MetroComboBox VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="16" BorderThickness="0" Margin="5,0,0,5" Width="35" AllowDrop="True">
                         <ComboBoxItem Content="1"  Background="{DynamicResource DefaultBackgroundBrush}"/>
                         <ComboBoxItem Content="2" Background="{DynamicResource DefaultBackgroundBrush}"/>
                         <ComboBoxItem Content="3"  Background="{DynamicResource DefaultBackgroundBrush}"/>
@@ -74,7 +78,7 @@
                     <MetroControl:FlipView Grid.Column="1" MouseOverGlowEnabled ="True" SelectionChanged="FlipView_SelectionChanged" MouseEnter="FlipView_MouseEnter" MouseLeave="FlipView_MouseLeave" Margin="5,0">
                         <MetroControl:FlipView.Items>
                             <Grid Background="#2E8DEF" Margin="0">
-                                
+
                             </Grid>
                             <Grid Background="{StaticResource DefaultBackgroundBrush}">
                                 <dxchart:XYDiagram2D  EnableAxisXNavigation="True" Opacity="0.7">
@@ -154,11 +158,11 @@
                             <TextBox  Grid.Row="2" VerticalScrollBarVisibility="Auto" 
                                       Name="SendMessageBox" 
                                       Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" />
-                            <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right">
+                            <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right" Panel.ZIndex="10">
                                 <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="50" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Button Name="AddMorseBtn"  Content="摩斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-140" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
-                                    <Button Name="AddImageBtn" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="180" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
-                                    <Button Name="AddFHBtn"  Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="140" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" />
+                                    <Button Name="AddMorseBtn" Foreground="White" Content="摩斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-100" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
+                                    <Button Name="AddImageBtn" Foreground="White" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-160" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddImgCMD}"/>
+                                    <Button Name="AddFHBtn" Foreground="White" Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="140" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddFHCMD}"/>
                                 </Controls:FanPanel>
                                 <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Background, ElementName=SendMessageBox}"/>
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
@@ -181,7 +185,7 @@
                     <Grid Grid.Row="1" Column="1" Margin="20,0,0,0">
                         <MetroControl:MetroAnimatedTabControl TabStripPlacement="Bottom" Cursor="Hand" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                             <TabItem Header="位姿">
-                                <Grid>
+                                <Grid TextBlock.Foreground="White">
                                     <h:HelixViewport3D x:Name="PosViewport3D" Background="{StaticResource DefaultBackgroundBrush}" 
                                                ShowViewCube="False" 
                                                ShowCameraTarget="False" 
@@ -190,7 +194,7 @@
                                         <h:HelixViewport3D.DefaultCamera>
                                             <PerspectiveCamera x:Name ="PosCamera" Position="0,0,6000" LookDirection="0,0,-6000" UpDirection="-1,0,0" NearPlaneDistance="3000" FarPlaneDistance="60000"/>
                                         </h:HelixViewport3D.DefaultCamera>
-                                        
+
                                         <h:SunLight/>
                                         <h:GridLinesVisual3D  Fill="Cornsilk" Length ="10000" Width="10000" MinorDistance="500" MajorDistance="20000" Thickness="3">
                                             <h:GridLinesVisual3D.Transform>
@@ -239,48 +243,48 @@
                                         <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Green" HeadLength="30" ThetaDiv="36"  />
                                     </h:HelixViewport3D>
                                     <Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/>
-                                    <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Height="195">
-                                        <TextBlock FontSize="14">
+                                    <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                        <TextBlock FontSize="16">
                                             <Run Text="USBL:   "/>
                                             <Run Text="{Binding PosFromUSBLTime}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="母船经度:"/>
                                             <Run Text="{Binding ShipLongUsbl}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="母船纬度:"/>
                                             <Run Text="{Binding ShipLatUsbl}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="母船速度:"/>
                                             <Run Text="{Binding ShipSpeed}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="艏向角:"/>
                                             <Run Text="{Binding ShipHeading}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="纵倾:"/>
                                             <Run Text="{Binding ShipPitch}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="横倾:"/>
                                             <Run Text="{Binding ShipRoll}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器经度:"/>
                                             <Run Text="{Binding MovLongUsbl}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器纬度:"/>
                                             <Run Text="{Binding MovLatUsbl}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器深度:"/>
                                             <Run Text="{Binding MovDepthUsbl}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="相对距离"/>
                                             <Run Text=" X:"/>
                                             <Run Text="{Binding XDistance}"/>
@@ -291,36 +295,36 @@
                                         </TextBlock>
                                     </StackPanel>
                                     <StackPanel Name="MovPos" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,80,0">
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器:   "/>
                                             <Run Text="{Binding PosFromUwvTime}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器经度:"/>
                                             <Run Text="{Binding MovLong}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器纬度:"/>
                                             <Run Text="{Binding MovLat}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="艏向角:"/>
                                             <Run Text="{Binding MovHeading}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="纵倾:"/>
                                             <Run Text="{Binding MovPitch}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="横倾:"/>
                                             <Run Text="{Binding MovRoll}"/>
                                         </TextBlock>
-                          
-                                        <TextBlock FontSize="14">
+
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器深度:"/>
                                             <Run Text="{Binding MovDepth}"/>
                                         </TextBlock>
-                                        <TextBlock FontSize="14">
+                                        <TextBlock FontSize="16">
                                             <Run Text="潜器高度:"/>
                                             <Run Text="{Binding MovHeight}"/>
                                         </TextBlock>
@@ -335,11 +339,11 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Row="0">
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
                                         <Run Text="更新时间:"/>
                                         <Run Text="{Binding LifeTime}"/>
-                                    </TextBlock>
-                                </StackPanel>
+                                        </TextBlock>
+                                    </StackPanel>
                                     <Grid Grid.Row="1">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
@@ -458,7 +462,7 @@
                                             </dxgauge:CircularGaugeControl.Scales>
                                         </dxgauge:CircularGaugeControl>
                                         <ViewControls:TreadTile Grid.Row="4" Title="温度" Unit="°C" Value="{Binding Temperature}"/>
-                                        
+
                                         <ViewControls:TreadTile Grid.Row="4" Grid.Column="1" Title="湿度" Unit="%" Value="{Binding Humidity}"/>
                                         <dxgauge:CircularGaugeControl Grid.Row="2"  Grid.RowSpan="2" Grid.Column="2">
                                             <dxgauge:CircularGaugeControl.Scales>
@@ -480,10 +484,10 @@
                                             </dxgauge:CircularGaugeControl.Scales>
                                         </dxgauge:CircularGaugeControl>
                                         <ViewControls:TreadTile Grid.Row="4" Grid.Column="2" Title="压力" Unit="kP" Value="{Binding Pressure}"/>
+                                    </Grid>
                                 </Grid>
-                                </Grid>
-                                
-                                
+
+
                             </TabItem>
                             <TabItem Header="电压/电流">
                                 <Grid>
@@ -522,17 +526,17 @@
                                                 </dxchart:Pane>
                                             </dxchart:XYDiagram2D.DefaultPane>
                                             <dxchart:XYDiagram2D.AxisY>
-                                                <dxchart:AxisY2D>
+                                                <dxchart:AxisY2D Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="130"/>
                                                     </dxchart:AxisY2D.Range>
                                                     <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="V" />
+                                                        <dxchart:AxisLabel EndText="V" Foreground="{DynamicResource PressedBrush}"/>
                                                     </dxchart:AxisY2D.Label>
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
                                             <dxchart:XYDiagram2D.AxisX>
-                                                <dxchart:AxisX2D Reverse="True" TickmarksLength="3" TickmarksVisible="False" />
+                                                <dxchart:AxisX2D Reverse="True" TickmarksLength="3" TickmarksVisible="True" Brush="{DynamicResource PressedBrush}"/>
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.Series>
                                                 <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
@@ -540,11 +544,11 @@
                                                   ValueDataMember="{Binding EnergysysCollection/HeadmainV, Mode=OneWay}" ColorEach="True">
                                                     <dxchart:LineSeries2D.SeriesAnimation>
                                                         <dxchart:Line2DSlideFromRightAnimation/>
-                                                            </dxchart:LineSeries2D.SeriesAnimation>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
                                                     <dxchart:LineSeries2D.LineStyle>
                                                         <dxchart:LineStyle Thickness="4" />
-                                                            </dxchart:LineSeries2D.LineStyle>
-                                                        </dxchart:LineSeries2D>
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
                                                 <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
                                                   ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
                                                   ValueDataMember="{Binding EnergysysCollection/TailmainV, Mode=OneWay}" ColorEach="True">
@@ -578,10 +582,10 @@
                                             </dxchart:XYDiagram2D.Series>
                                         </dxchart:XYDiagram2D>
                                         <ViewControls:TreadTile Grid.Row="1" Grid.Column="0" Title="艏电池" Unit="V" Value="{Binding HeadmainV}"/>
-                                        <ViewControls:TreadTile Grid.Row="1" Grid.Column="1" Title="尾电池" Unit="V" Value="{Binding TailmainV}"/>
+                                        <ViewControls:TreadTile Grid.Row="1" Grid.Column="1" Title="艉电池" Unit="V" Value="{Binding TailmainV}"/>
                                         <ViewControls:TreadTile Grid.Row="1" Grid.Column="2" Title="左电池" Unit="V" Value="{Binding LeftsubV}"/>
                                         <ViewControls:TreadTile Grid.Row="1" Grid.Column="3" Title="右电池" Unit="V" Value="{Binding RightsubV}"/>
-                                        
+
                                         <dxchart:XYDiagram2D Grid.Row="2" Grid.ColumnSpan="4" EnableAxisXNavigation="True" Opacity="0.7">
                                             <dxchart:XYDiagram2D.NavigationOptions>
                                                 <dxchart:NavigationOptions/>
@@ -594,17 +598,17 @@
                                                 </dxchart:Pane>
                                             </dxchart:XYDiagram2D.DefaultPane>
                                             <dxchart:XYDiagram2D.AxisY>
-                                                <dxchart:AxisY2D>
+                                                <dxchart:AxisY2D Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="200"/>
                                                     </dxchart:AxisY2D.Range>
                                                     <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="A" />
+                                                        <dxchart:AxisLabel EndText="A" Foreground="{DynamicResource PressedBrush}"/>
                                                     </dxchart:AxisY2D.Label>
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
                                             <dxchart:XYDiagram2D.AxisX>
-                                                <dxchart:AxisX2D Reverse="True" TickmarksLength="3" TickmarksVisible="False" />
+                                                <dxchart:AxisX2D Reverse="True" TickmarksLength="3" TickmarksVisible="True" Brush="{DynamicResource PressedBrush}"/>
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.Series>
                                                 <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
@@ -649,8 +653,8 @@
                                                 </dxchart:LineSeries2D>
                                             </dxchart:XYDiagram2D.Series>
                                         </dxchart:XYDiagram2D>
-                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="0" Title="艏电池" Unit="A" Value="{Binding Headmaini}"/>
-                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="1" Title="尾电池" Unit="A" Value="{Binding TailmainI}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="0" Title="艏电池" Unit="A" Value="{Binding HeadmainI}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="1" Title="艉电池" Unit="A" Value="{Binding TailmainI}"/>
                                         <ViewControls:TreadTile Grid.Row="3" Grid.Column="2" Title="左电池" Unit="A" Value="{Binding LeftsubI}"/>
                                         <ViewControls:TreadTile Grid.Row="3" Grid.Column="3" Title="右电池" Unit="A" Value="{Binding RightsubI}"/>
                                     </Grid>
@@ -670,36 +674,203 @@
                                     </StackPanel>
                                     <Grid Grid.Row="1">
                                         <Grid.ColumnDefinitions>
-
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
                                             <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
                                         </Grid.RowDefinitions>
-                                        <dxchart:XYDiagram2D Grid.Row="0"  EnableAxisXNavigation="True" Opacity="0.7">
-                                            <dxchart:XYDiagram2D.NavigationOptions>
-                                                <dxchart:NavigationOptions/>
-                                            </dxchart:XYDiagram2D.NavigationOptions>
-                                            <dxchart:XYDiagram2D.DefaultPane>
-                                                <dxchart:Pane>
-                                                    <dxchart:Pane.AxisXScrollBarOptions>
-                                                        <dxchart:ScrollBarOptions Visible="False" />
-                                                    </dxchart:Pane.AxisXScrollBarOptions>
-                                                </dxchart:Pane>
-                                            </dxchart:XYDiagram2D.DefaultPane>
+                                        <dxchart:XYDiagram2D>
+                                            <dxchart:XYDiagram2D.AxisX>
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="能源消耗"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                    <dxchart:AxisX2D.NumericOptions>
+                                                        <dxchart:NumericOptions/>
+                                                    </dxchart:AxisX2D.NumericOptions>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
                                                 <dxchart:AxisY2D>
                                                     <dxchart:AxisY2D.Range>
-                                                        <dxchart:AxisRange MinValue="0" MaxValue="130"/>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="200"/>
                                                     </dxchart:AxisY2D.Range>
                                                     <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="V" />
+                                                        <dxchart:AxisLabel EndText="Kwh" />
                                                     </dxchart:AxisY2D.Label>
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/Headmainconsume, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/Tailmainconsume, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/Leftsubconsume, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/Rightsubconsume, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
+                                        <dxchart:XYDiagram2D Grid.Row="1">
+                                            <dxchart:XYDiagram2D.AxisX>
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="最大温度"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                    <dxchart:AxisX2D.NumericOptions>
+                                                        <dxchart:NumericOptions/>
+                                                    </dxchart:AxisX2D.NumericOptions>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX>
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="80"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel EndText="°C" />
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/HeadmainMaxTemp, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/TailmainMaxTemp, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/LeftsubMaxTemp, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/RightsubMaxTemp, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
+                                        <dxchart:XYDiagram2D Grid.Row="2">
+                                            <dxchart:XYDiagram2D.AxisX>
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="最大膨胀"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                    <dxchart:AxisX2D.NumericOptions>
+                                                        <dxchart:NumericOptions/>
+                                                    </dxchart:AxisX2D.NumericOptions>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX>
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="100"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel EndText="mm" />
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/HeadmainMaxExpand, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/TailmainMaxExpand, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/LeftsubMaxExpand, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding EnergysysCollection}"
+                                                  ArgumentDataMember="{Binding EnergysysCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding EnergysysCollection/Rightsubconsume, Mode=OneWay}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
                                         </dxchart:XYDiagram2D>
                                     </Grid>
                                 </Grid>
@@ -710,13 +881,132 @@
                                         <RowDefinition Height="Auto"/>
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
-                                    <StackPanel Grid.Row="0">
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
                                         <Run Text="更新时间:"/>
                                         <Run Text="{Binding BpTime}"/>
-                                    </TextBlock>
-                                </StackPanel>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <ViewControls:TreadTile Grid.Row="0" Title="前上" Unit="米" Value="{Binding BpFrontUp}"/>
+                                        <ViewControls:TreadTile Grid.Row="1" Title="正前" Unit="米" Value="{Binding BpFront}"/>
+                                        <ViewControls:TreadTile Grid.Row="2" Title="前下" Unit="米" Value="{Binding BpFrontDown}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Title="正下" Unit="米" Value="{Binding BpBottom}"/>
+                                        <ViewControls:TreadTile Grid.Row="4" Title="后下" Unit="米" Value="{Binding BpBottomBack}"/>
+                                        <ViewControls:TreadTile Grid.Row="5" Title="正左" Unit="米" Value="{Binding BpLeft}"/>
+                                        <ViewControls:TreadTile Grid.Row="6" Title="正右" Unit="米" Value="{Binding BpRight}"/>
                                     </Grid>
+                                    <Grid Grid.Row="1" Grid.Column="1" Width="500" Height="620" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Width="300" Height="240" Grid.Row="0">
+                                            <Image Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/UWV_Right.png"/>
+                                        </Viewbox>
+                                        <Viewbox Width="200" Height="200" Grid.Row="1">
+                                            <Image Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/Logo_nbg.png"/>
+                                        </Viewbox>
+                                        <Grid Grid.Row="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Controls:LengthMark Name="FrontMark" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Content="{Binding BpFront, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,0,0,0" Width="{Binding BpFront, Converter={StaticResource BpMarkLengthConverter}}"/>
+                                            <Controls:LengthMark  Grid.Column="1" Foreground="White" Grid.Row="0" Content="{Binding BpFrontUp, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,50,0,0" Width="{Binding BpFrontUp, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="-30"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                            <Controls:LengthMark  Grid.Column="1" Foreground="White" Grid.Row="1" Content="{Binding BpFrontDown, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,0,0,50" Width="{Binding BpFrontDown, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="30"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                            <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Center" Width="{Binding BpBottom, Converter={StaticResource BpMarkLengthConverter}}" Margin="0,0,0,70" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="90"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                            <Controls:LengthMark  Grid.Row="1"  Foreground="White"  Content="{Binding BpBottomBack, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Right" Margin="0,60,90,0" Width="{Binding BpBottomBack, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="-30"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                        </Grid>
+                                        <Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Controls:LengthMark  Grid.Column="0" Grid.RowSpan="2" Foreground="White"  
+                                                Content="{Binding BpLeft, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                HorizontalAlignment="Right" 
+                                                Width="{Binding BpLeft, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="0,0,70,0"/>
+                                            <Controls:LengthMark  Grid.Column="1" Grid.RowSpan="2" Foreground="White"  
+                                                Content="{Binding BpRight, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                HorizontalAlignment="Left" 
+                                                Width="{Binding BpRight, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="70,0,0,0"/>
+                                            <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  
+                                                Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                HorizontalAlignment="Center" 
+                                                Width="{Binding BpBottom, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,70">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="90"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
                             </TabItem>
                             <TabItem Header="CTD">
                                 <Grid>
@@ -725,12 +1015,201 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Row="0">
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
                                         <Run Text="更新时间:"/>
                                         <Run Text="{Binding CTDTime}"/>
-                                    </TextBlock>
-                                </StackPanel>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="2*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <dxchart:XYDiagram2D Grid.ColumnSpan="4" >
+                                            <dxchart:XYDiagram2D.SecondaryAxesY >
+                                                <dxchart:SecondaryAxisY2D x:Name="y2" Brush="{DynamicResource PressedBrush}" >
+                                                    <dxchart:SecondaryAxisY2D.Title >
+                                                        <dxchart:AxisTitle Content="温度(°C)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:SecondaryAxisY2D.Title>
+                                                    <dxchart:SecondaryAxisY2D.Range >
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="50"/>
+                                                    </dxchart:SecondaryAxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:SecondaryAxisY2D>
+                                            </dxchart:XYDiagram2D.SecondaryAxesY>
+                                            <dxchart:XYDiagram2D.AxisX >
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="温度/深度曲线" Foreground="{DynamicResource WinAccentBackgroundBrush}" Padding="-6,0,0,0"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX >
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="深度(m)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Title>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="5000"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel Foreground="{DynamicResource PressedBrush}" />
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="{Binding CTDCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding CTDCollection/Depth, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="{Binding CTDCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding CTDCollection/Watertemp, Mode=OneWay}" dxchart:XYDiagram2D.SeriesAxisY="{Binding ElementName=y2}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="3" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
+                                        <dxchart:XYDiagram2D Grid.ColumnSpan="4" Grid.Row="1">
+                                            <dxchart:XYDiagram2D.SecondaryAxesY>
+                                                <dxchart:SecondaryAxisY2D x:Name="y3" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:SecondaryAxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="电导率(uS/cm)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:SecondaryAxisY2D.Title>
+                                                    <dxchart:SecondaryAxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="5000"/>
+                                                    </dxchart:SecondaryAxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel  Foreground="{DynamicResource PressedBrush}" />
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:SecondaryAxisY2D>
+                                            </dxchart:XYDiagram2D.SecondaryAxesY>
+                                            <dxchart:XYDiagram2D.AxisX>
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="电导率/深度曲线" Foreground="{DynamicResource WinAccentBackgroundBrush}"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX>
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="深度(m)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Title>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="5000"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="{Binding CTDCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding CTDCollection/Depth, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="{Binding CTDCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding CTDCollection/Watercond, Mode=OneWay}" dxchart:XYDiagram2D.SeriesAxisY="{Binding ElementName=y3}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="3" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
+                                        <dxchart:XYDiagram2D Grid.ColumnSpan="4" Grid.Row="2">
+                                            <dxchart:XYDiagram2D.SecondaryAxesY>
+                                                <dxchart:SecondaryAxisY2D  x:Name="y4" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:SecondaryAxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="声速(m/s)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:SecondaryAxisY2D.Title>
+                                                    <dxchart:SecondaryAxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="1400" MaxValue="1600"/>
+                                                    </dxchart:SecondaryAxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:SecondaryAxisY2D>
+                                            </dxchart:XYDiagram2D.SecondaryAxesY>
+                                            <dxchart:XYDiagram2D.AxisX>
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="电导率/深度曲线" Foreground="{DynamicResource WinAccentBackgroundBrush}"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX>
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="深度(m)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Title>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="5000"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel  Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="{Binding CTDCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding CTDCollection/Depth, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                                <dxchart:LineSeries2D DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="{Binding CTDCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding CTDCollection/Soundvec, Mode=OneWay}" dxchart:XYDiagram2D.SeriesAxisY="{Binding ElementName=y4}">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="3" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
+                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="0" Title="海水温度" Unit="°C" Value="{Binding CTDWaterTemp}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="1" Title="深度" Unit="m" Value="{Binding CTDDepth}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="2" Title="电导率" Unit="uS/cm" Value="{Binding CTDWatercond}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Grid.Column="3" Title="声速" Unit="m/s" Value="{Binding CTDSoundvec}"/>
                                     </Grid>
+                                </Grid>
                             </TabItem>
                             <TabItem Header="ADCP">
                                 <Grid>
@@ -739,12 +1218,172 @@
                                         <RowDefinition Height="*"/>
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Row="0">
-                                    <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
                                         <Run Text="更新时间:"/>
                                         <Run Text="{Binding ADCPTime}"/>
-                                    </TextBlock>
-                                </StackPanel>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <Grid Grid.Row="1">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto"/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <DataGrid
+                                          Grid.Row="0"
+                                          Grid.Column="0"
+                                          RenderOptions.ClearTypeHint="Enabled"
+                                          TextOptions.TextFormattingMode="Display"
+                                          Margin="5"
+                                          ItemsSource="{Binding Path=xVel}"
+                                          Style="{DynamicResource AzureDataGrid}"
+                                          AutoGenerateColumns="False">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="X流速" CanUserSort="False" CanUserResize="False" Binding="{Binding Number}" CanUserReorder="False"/>
+                                                <DataGridTemplateColumn Header="" >
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <MetroControl:MetroProgressBar x:Name="PriceProgressBar"
+                                                               Value="{Binding Number, Converter={StaticResource AbsConverter}}"
+                                                               Minimum="0"
+                                                               Maximum="60"
+                                                               Foreground="{DynamicResource AccentColorBrush}"
+                                                               Background="Transparent"
+                                                               VerticalAlignment="Center"
+                                                               Height="20" />
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <DataGrid 
+                                          Grid.Row="0"
+                                          Grid.Column="1"
+                                          RenderOptions.ClearTypeHint="Enabled"
+                                          TextOptions.TextFormattingMode="Display"
+                                          Margin="5"
+                                          ItemsSource="{Binding Path=yVel}"
+                                          Style="{DynamicResource AzureDataGrid}"
+                                          AutoGenerateColumns="False" HorizontalAlignment="Left">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Y流速" CanUserSort="False" CanUserResize="False" Binding="{Binding Number}"/>
+                                                <DataGridTemplateColumn Header="">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <MetroControl:MetroProgressBar x:Name="PriceProgressBar"
+                                                       Value="{Binding Number, Converter={StaticResource AbsConverter}}"
+                                                       Minimum="0"
+                                                       Maximum="60"
+                                                       Foreground="{DynamicResource AccentColorBrush}"
+                                                       Background="Transparent"
+                                                       VerticalAlignment="Center"
+                                                       Height="20"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <DataGrid 
+                                          Grid.Row="0"
+                                          Grid.Column="2"
+                                          RenderOptions.ClearTypeHint="Enabled"
+                                          TextOptions.TextFormattingMode="Display"
+                                          Margin="5"
+                                          ItemsSource="{Binding Path=zVel}"
+                                          Style="{DynamicResource AzureDataGrid}"
+                                          AutoGenerateColumns="False" HorizontalAlignment="Left">
+                                            <DataGrid.Columns>
+                                                <DataGridTextColumn Header="Z流速" CanUserSort="False" CanUserResize="False"  Binding="{Binding Number}"/>
+                                                <DataGridTemplateColumn Header="" >
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <MetroControl:MetroProgressBar x:Name="PriceProgressBar"
+                                                       Value="{Binding Number, Converter={StaticResource AbsConverter}}"
+                                                       Minimum="0"
+                                                       Maximum="60"
+                                                       Foreground="{DynamicResource AccentColorBrush}"
+                                                       Background="Transparent"
+                                                       VerticalAlignment="Center"
+                                                       Height="20"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
+                                        </DataGrid>
+                                        <Grid  Grid.Column="3">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <ViewControls:TreadTile  Title="对底速度" Unit="m/s" Value="{Binding BottomTrack}" />
+                                            <ViewControls:TreadTile  Title="对底高度" Grid.Column="1" Unit="m" Value="{Binding ADCPHeight, StringFormat=\{0:F1\}}" />
+                                            <dxgauge:CircularGaugeControl Grid.Row="1"  Grid.ColumnSpan="2" Grid.Column="0">
+                                                <dxgauge:CircularGaugeControl.Scales>
+                                                    <dxgauge:ArcScale StartAngle="-180" EndAngle="0" EndValue="5" ShowLabels="True" MajorIntervalCount="5" >
+                                                        <dxgauge:ArcScale.LabelPresentation>
+                                                            <dxgauge:ProgressiveScaleLabelPresentation/>
+                                                        </dxgauge:ArcScale.LabelPresentation>
+                                                        <dxgauge:ArcScale.TickmarksPresentation>
+                                                            <dxgauge:ClassicTickmarksPresentation/>
+                                                        </dxgauge:ArcScale.TickmarksPresentation>
+                                                        <dxgauge:ArcScale.Needles>
+                                                            <dxgauge:ArcScaleNeedle Value="{Binding BottomTrack}">
+                                                                <dxgauge:ArcScaleNeedle.Presentation>
+                                                                    <dxgauge:CleanWhiteArcScaleNeedlePresentation/>
+                                                                </dxgauge:ArcScaleNeedle.Presentation>
+                                                            </dxgauge:ArcScaleNeedle>
+                                                        </dxgauge:ArcScale.Needles>
+                                                    </dxgauge:ArcScale>
+                                                </dxgauge:CircularGaugeControl.Scales>
+                                            </dxgauge:CircularGaugeControl>
+                                            
+                                        </Grid>
+                                        <dxchart:XYDiagram2D Grid.ColumnSpan="4" Grid.Row="1">
+                                            <dxchart:XYDiagram2D.AxisX>
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True" Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisX2D.Title>
+                                                        <dxchart:AxisTitle Content="对底高度" Foreground="{DynamicResource WinAccentBackgroundBrush}"/>
+                                                    </dxchart:AxisX2D.Title>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX>
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D  Brush="{DynamicResource PressedBrush}">
+                                                    <dxchart:AxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="高度(m)" Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Title>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="400"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel  Foreground="{DynamicResource PressedBrush}"/>
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D DataSource="{Binding AdcpdataCollection}"
+                                                  ArgumentDataMember="{Binding AdcpdataCollection/Ltime, Converter={StaticResource FtimeToShortTimeConverter}}" 
+                                                  ValueDataMember="{Binding AdcpdataCollection/Height, Mode=OneWay}" >
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
                                     </Grid>
+                                    
+                                </Grid>
                             </TabItem>
                             <TabItem Header="报警" >
                                 <Grid>
@@ -757,8 +1396,10 @@
                                         <Run Text="更新时间:"/>
                                         <Run Text="{Binding AlarmTime}"/>
                                         </TextBlock>
-                                        <UniformGrid Columns="2">
-
+                                        <UniformGrid Columns="3">
+                                            <ViewControls:TreadTile  Title="载人舱漏水" Unit="V" Value="{Binding Leak}" />
+                                            <ViewControls:TreadTile  Title="压载水舱液位" Unit="mm" Value="{Binding Cable}" />
+                                            <ViewControls:TreadTile  Title="计算机罐温度" Unit="℃" Value="{Binding AlertTemp}" />
                                         </UniformGrid>
                                         <ListView ItemsSource="{Binding AlarmList}"/>
                                     </StackPanel>

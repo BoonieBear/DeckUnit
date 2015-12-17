@@ -217,43 +217,43 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(pkg, 26, data, 0, 18);
                     bp.Parse(data);
                     Results.Add(MovDataType.BP, bp);
-
+                    /*
                     var bsss = new Bsssdata();
                     data = new byte[6];
                     Buffer.BlockCopy(pkg, 44, data, 0, 6);
                     bsss.Parse(data);
                     Results.Add(MovDataType.BSSS, bsss);
-
+                    */
                     var adcp = new Adcpdata();
-                    data = new byte[34];
-                    Buffer.BlockCopy(pkg, 50, data, 0, 34);
+                    data = new byte[41];
+                    Buffer.BlockCopy(pkg, 44, data, 0, 41);
                     adcp.Parse(data);
                     Results.Add(MovDataType.ADCP, adcp);
 
                     var ctd = new Ctddata();
                     data = new byte[16];
-                    Buffer.BlockCopy(pkg, 84, data, 0, 16);
+                    Buffer.BlockCopy(pkg, 85, data, 0, 16);
                     ctd.Parse(data);
                     Results.Add(MovDataType.CTD, ctd);
 
                     var life = new Lifesupply();
                     data = new byte[14];
-                    Buffer.BlockCopy(pkg, 100, data, 0, 14);
+                    Buffer.BlockCopy(pkg, 101, data, 0, 14);
                     life.Parse(data);
                     Results.Add(MovDataType.LIFESUPPLY, life);
 
                     var eng = new Energysys();
                     data = new byte[34];
-                    Buffer.BlockCopy(pkg, 114, data, 0, 34);
+                    Buffer.BlockCopy(pkg, 115, data, 0, 34);
                     eng.Parse(data);
                     Results.Add(MovDataType.ENERGY, eng);
 
                     var alt = new Alertdata();
                     data = new byte[20];
-                    Buffer.BlockCopy(pkg, 148, data, 0, 20);
+                    Buffer.BlockCopy(pkg, 149, data, 0, 20);
                     alt.Parse(data);
                     Results.Add(MovDataType.ALERT, alt);
-                    string msg = Encoding.Default.GetString(pkg, 168, 40);
+                    string msg = Encoding.Default.GetString(pkg, 169, 40);
                     Results.Add(MovDataType.WORD, msg);
 
                 }
@@ -299,43 +299,43 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(dataBytes, 26, data, 0, 18);
                     bp.Parse(data);
                     Results.Add(MovDataType.BP, bp);
-
+                    /*
                     var bsss = new Bsssdata();
                     data = new byte[6];
                     Buffer.BlockCopy(dataBytes, 44, data, 0, 6);
                     bsss.Parse(data);
                     Results.Add(MovDataType.BSSS, bsss);
-
+                    */
                     var adcp = new Adcpdata();
-                    data = new byte[34];
-                    Buffer.BlockCopy(dataBytes, 50, data, 0, 34);
+                    data = new byte[41];
+                    Buffer.BlockCopy(dataBytes, 44, data, 0, 41);
                     adcp.Parse(data);
                     Results.Add(MovDataType.ADCP, adcp);
 
                     var ctd = new Ctddata();
                     data = new byte[16];
-                    Buffer.BlockCopy(dataBytes, 84, data, 0, 16);
+                    Buffer.BlockCopy(dataBytes, 85, data, 0, 16);
                     ctd.Parse(data);
                     Results.Add(MovDataType.CTD, ctd);
 
                     var life = new Lifesupply();
                     data = new byte[14];
-                    Buffer.BlockCopy(dataBytes, 100, data, 0, 14);
+                    Buffer.BlockCopy(dataBytes, 101, data, 0, 14);
                     life.Parse(data);
                     Results.Add(MovDataType.LIFESUPPLY, life);
 
                     var eng = new Energysys();
                     data = new byte[34];
-                    Buffer.BlockCopy(dataBytes, 114, data, 0, 34);
+                    Buffer.BlockCopy(dataBytes, 115, data, 0, 34);
                     eng.Parse(data);
                     Results.Add(MovDataType.ENERGY, eng);
 
                     var alt = new Alertdata();
                     data = new byte[20];
-                    Buffer.BlockCopy(dataBytes, 148, data, 0, 20);
+                    Buffer.BlockCopy(dataBytes, 149, data, 0, 20);
                     alt.Parse(data);
                     Results.Add(MovDataType.ALERT, alt);
-                    string msg = Encoding.Default.GetString(pkg, 168, 40);
+                    string msg = Encoding.Default.GetString(pkg, 169, 40);
                     Results.Add(MovDataType.WORD, msg);
                     byte[] img = new byte[MovGlobalVariables.ImgSize];
                     Buffer.BlockCopy(dataBytes, MovGlobalVariables.MFSKSize, img, 0, MovGlobalVariables.ImgSize);

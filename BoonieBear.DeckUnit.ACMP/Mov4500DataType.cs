@@ -28,7 +28,7 @@ namespace BoonieBear.DeckUnit.ACMP
     {
         ALLPOST = 0x2001,
         BP = 0x2002,
-        BSSS = 0x2005,//2003,2004预留
+        //BSSS = 0x2005,//2003,2004预留
         ADCP = 0x2006,
         SUBPOST = 0x1001,
         CTD = 0x1002,
@@ -47,7 +47,7 @@ namespace BoonieBear.DeckUnit.ACMP
         LIFESUPPLY = 0x1003,
         ENERGY = 0x1004,
         ALERT = 0x1005,
-        BSSS = 0x2005,//fsk
+        //BSSS = 0x2005,//fsk
         ADCP = 0x2006,//fsk
 
         WORD = 13,//ui
@@ -60,7 +60,7 @@ namespace BoonieBear.DeckUnit.ACMP
     {
         public static int MFSKSize = 228;
         public static int ShipMFSKSize = 80;
-        public static int MovMFSKSize = 208;
+        public static int MovMFSKSize = 209;
         public static int WordSize = 40;
         public static int ImgSize = 16330;
         public static int MPSKSize = 16560;
@@ -457,7 +457,8 @@ namespace BoonieBear.DeckUnit.ACMP
         }
     };
 
-    //侧深侧扫信息和ADCP的时间取定位数据的时间
+    //侧深侧扫信息和ADCP的时间取定位数据的时间,不用
+    /*
     public class Bsssdata :IProtocol
     {
         private UInt32 _itime;//从2015年1/1/0:0:0开始的秒数
@@ -490,14 +491,14 @@ namespace BoonieBear.DeckUnit.ACMP
             Buffer.BlockCopy(bytes, 0, storebyte, 0,6);
         }
     };
-
+    */
 
     //CTD信息1002
     public class Ctddata :IProtocol
     {
         private long _ltime;
         private UInt16 _watertemp;//海水温度
-        private UInt16 _vartlevel;//
+        private UInt16 _depth;//
         private UInt16 _watercond;//海水电导率
         private UInt16 _soundvec;//声速
         byte[] storebyte = new byte[16];
@@ -513,9 +514,9 @@ namespace BoonieBear.DeckUnit.ACMP
             
         }
 
-        public float Vartlevel
+        public float Depth
         {
-            get { return (float)_vartlevel*5000/65536; }
+            get { return (float)_depth*5000/65536; }
         }
 
         public float Watercond
@@ -534,7 +535,7 @@ namespace BoonieBear.DeckUnit.ACMP
         {
             _ltime = BitConverter.ToInt64(bytes, 0);
             _watertemp = BitConverter.ToUInt16(bytes, 8);
-            _vartlevel = BitConverter.ToUInt16(bytes, 10);
+            _depth = BitConverter.ToUInt16(bytes, 10);
             _watercond = BitConverter.ToUInt16(bytes, 12);
             _soundvec = BitConverter.ToUInt16(bytes, 14);
             
@@ -1020,16 +1021,20 @@ namespace BoonieBear.DeckUnit.ACMP
 
     public class Adcpdata:IProtocol
     {
-        private UInt32 _itime;//从2015年1/1/0:0:0开始的秒数
+        private long _itime;
         private sbyte[] _floorX;
         private sbyte[] _floorY;
         private sbyte[] _floorZ;
-        byte[] storebyte = new byte[34];
+        private byte _bottomTrack;//cm
+        private UInt16 _height;//cm
+        byte[] storebyte = new byte[41];
         public Adcpdata()
         {
             _floorX = new sbyte[10];
             _floorY = new sbyte[10];
             _floorZ = new sbyte[10];
+            _bottomTrack = 0;
+            _height = 0;
         }
 
         public void Clear()
@@ -1037,6 +1042,8 @@ namespace BoonieBear.DeckUnit.ACMP
             Array.Clear(_floorX,0,10);
             Array.Clear(_floorY,0,10);
             Array.Clear(_floorZ,0,10);
+            _bottomTrack = 0;
+            _height = 0;
         }
 
         public sbyte[] FloorX
@@ -1057,21 +1064,30 @@ namespace BoonieBear.DeckUnit.ACMP
 
         public long Itime
         {
-            get
-            {
-                DateTime starTime = new DateTime(2015,1,1,0,0,0);
-                DateTime newtTime = starTime.AddSeconds(_itime);
-                return newtTime.ToFileTime();
-            }
+
+                get { return _itime; }
+                set { _itime = value; }
+        }
+
+        public byte BottomTrack
+        {
+            get { return _bottomTrack; }
+        }
+
+        public ushort Height
+        {
+            get { return _height; }
         }
 
         public void Parse(byte[] bytes)
         {
-            _itime = BitConverter.ToUInt32(bytes, 0);
-            Buffer.BlockCopy(bytes, 4, _floorX, 0, 10);
-            Buffer.BlockCopy(bytes, 14, _floorY, 0, 10);
-            Buffer.BlockCopy(bytes, 24, _floorZ, 0, 10);
-            Buffer.BlockCopy(bytes,0,storebyte,0,34);
+            _itime = BitConverter.ToInt64(bytes, 0);
+            Buffer.BlockCopy(bytes, 8, _floorX, 0, 10);
+            Buffer.BlockCopy(bytes, 18, _floorY, 0, 10);
+            Buffer.BlockCopy(bytes, 28, _floorZ, 0, 10);
+            _bottomTrack = bytes[38];
+            _height = BitConverter.ToUInt16(bytes, 39);
+            Buffer.BlockCopy(bytes,0,storebyte,0,41);
         }
 
         public byte[] Pack()

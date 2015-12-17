@@ -60,8 +60,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public byte[] RelBuoy = null;
         public WaveControl Wave = null;
         public delegate void UpdateLiveViewHandle(ModuleType type, string msg, Image img);
-
         public UpdateLiveViewHandle LiveHandle;
+
+        public delegate void AddFHLiveViewHandle(string msg);
+        public AddFHLiveViewHandle AddFHHandle;
+
+        public delegate void AddImgLiveViewHandle(Image img);
+        public AddImgLiveViewHandle AddImgHandle;
+
         public MovTraceService MovTraceService
         {
             get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }

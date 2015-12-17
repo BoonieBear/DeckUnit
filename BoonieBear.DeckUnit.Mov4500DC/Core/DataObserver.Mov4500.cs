@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Text;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
@@ -17,7 +18,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             string datatype = "";
             if (e.ParseOK)
             {
-                IProtocol pro =null;
+                IProtocol pro = null;
                 try
                 {
                     int id = 0;
@@ -61,11 +62,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                 datatype = "SAILTOACOUSTIC";
 
                                 break;
-                            case (int) ExchageType.BSSS:
-                                pro = new Bsssdata();
-                                datatype = "BSSS";
 
-                                break;
                             case (int) ExchageType.ADCP:
                                 pro = new Adcpdata();
                                 datatype = "ADCP";
@@ -130,12 +127,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             }
                             var fskdata = ACM4500Protocol.PackData(ModuleType.MFSK);
                             LogHelper.WriteLog("发送MFSK");
-                            UnitCore.Instance.NetCore.Send((int)ModuleType.MFSK, fskdata);
+                            UnitCore.Instance.NetCore.Send((int) ModuleType.MFSK, fskdata);
                             UnitCore.Instance.MovTraceService.Save("XMTFSK", fskdata);
                             return;
                         }
                     }
-                    UnitCore.Instance.MovTraceService.Save(datatype, buffer);//保存上面全部数据类型
+                    UnitCore.Instance.MovTraceService.Save(datatype, buffer); //保存上面全部数据类型
                     if (e.Mode == CallMode.DataMode)
                     {
                         if (id == (int) ModuleType.SSB)
@@ -144,12 +141,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             {
                                 UnitCore.Instance.Wave.Display(buffer);
                             }));
-                            
+
                             return;
                         }
                         if (id == (int) ModuleType.FH)
                         {
-                            LogHelper.WriteLog("收到跳频数据");
+                            LogHelper.WriteLog("收到跳频数据:" + Encoding.Default.GetString(buffer, 0, 8));
                             if (ACM4500Protocol.ParseFH(buffer))
                             {
                                 UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
@@ -163,32 +160,34 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         {
                             switch (id)
                             {
-                                case (int)ModuleType.MFSK:
+                                case (int) ModuleType.MFSK:
                                     LogHelper.WriteLog("收到MFSK数据");
                                     UnitCore.Instance.MovTraceService.Save("FSKSRC", ret);
                                     if (ACM4500Protocol.ParseFSK(ret))
                                     {
                                         UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
-                                    ModuleType.MFSK, ACM4500Protocol.Results));
+                                            ModuleType.MFSK, ACM4500Protocol.Results));
                                     }
                                     break;
-                                case (int)ModuleType.MPSK:
+                                case (int) ModuleType.MPSK:
                                     LogHelper.WriteLog("收到MPSK数据");
                                     UnitCore.Instance.MovTraceService.Save("PSKSRC", ret);
                                     var jpcdata = ACM4500Protocol.ParsePSK(ret);
-                                    if (jpcdata!=null)//全部接收
+                                    if (jpcdata != null) //全部接收
                                     {
                                         UnitCore.Instance.MovTraceService.Save("PSKJPC", jpcdata);
                                         if (Jp2KConverter.LoadJp2k(jpcdata))
                                         {
-                                            var imgbuf = Jp2KConverter.SaveImg(UnitCore.Instance.MovConfigueService.MyExecPath+"\\"+"decode.jpg");
+                                            var imgbuf =
+                                                Jp2KConverter.SaveImg(UnitCore.Instance.MovConfigueService.MyExecPath +
+                                                                      "\\" + "decode.jpg");
                                             if (imgbuf != null)
                                             {
                                                 UnitCore.Instance.MovTraceService.Save("IMG", imgbuf);
-                                                ACM4500Protocol.Results.Add(MovDataType.IMAGE,imgbuf);
+                                                ACM4500Protocol.Results.Add(MovDataType.IMAGE, imgbuf);
                                             }
                                             UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
-                                    ModuleType.MPSK, ACM4500Protocol.Results));
+                                                ModuleType.MPSK, ACM4500Protocol.Results));
                                         }
                                     }
                                     break;
@@ -197,7 +196,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         }
                         UnitCore.Instance.ACMMutex.ReleaseMutex();
                     }
-                    else if(e.Mode==CallMode.Sail)
+                    else if (e.Mode == CallMode.Sail)
                     {
                         pro.Parse(buffer); //解析UDP数据
                         //tbd
@@ -208,8 +207,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     UnitCore.Instance.ACMMutex.ReleaseMutex();
                     UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
                 }
-                
 
+
+            }
+            else
+            {
+                if (e.Mode == CallMode.ErrMode)
+                {
+                    App.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(e.Ex, LogType.Both));
+                    }));
+                    UnitCore.Instance.NetCore.StopTCpService();
+                }
             }
         }
 

@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
@@ -14,6 +16,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using DevExpress.Xpf.Ribbon.Customization;
 using DevExpress.XtraCharts.Native;
 using DevExpress.XtraRichEdit.Utils.NumberConverters;
+using MahApps.Metro.Controls.Dialogs;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.Utility.Schedular;
 using TinyMetroWpfLibrary.ViewModel;
@@ -38,15 +41,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public override void Initialize()
         {
-            
-            MovHeading = 45;
-            ShipHeading = 135;
 
             LinkStatus = "未连接通信机";
             LinkBoxColor = new SolidColorBrush(Colors.Crimson);
-            xVel = new ObservableCollection<sbyte>();
-            yVel = new ObservableCollection<sbyte>();
-            zVel = new ObservableCollection<sbyte>();
+            xVel = new ObservableCollection<AdcpInfo>();
+            yVel = new ObservableCollection<AdcpInfo>();
+            zVel = new ObservableCollection<AdcpInfo>();
+            for (int i = 0; i < 10; i++)
+            {
+                xVel.Add(new AdcpInfo(i + 1, (sbyte) (-5)));
+                yVel.Add(new AdcpInfo(i + 1, (sbyte)i));
+                zVel.Add(new AdcpInfo(i + 1, (sbyte)i));
+            }
             AlarmList = new ObservableCollection<string>();
             UsblPositionCollection = new ObservableCollection<Sysposition>();
             SubPositionCollection = new ObservableCollection<Subposition>();
@@ -57,8 +63,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             AlertdataCollection = new ObservableCollection<Alertdata>();
             AdcpdataCollection = new ObservableCollection<Adcpdata>();
             ImgCollection =new ObservableCollection<BitmapImage>();
-        
-        
+
+            AddFHCMD = RegisterCommand(ExecuteAddFHCMD, CanExecuteAddFHCMD, true);
+            AddImgCMD = RegisterCommand(ExecuteAddImgCMD, CanExecuteAddImgCMD, true);
             xVel.CollectionChanged+=xVel_CollectionChanged;
             yVel.CollectionChanged +=yVel_CollectionChanged;
             zVel.CollectionChanged+=zVel_CollectionChanged;
@@ -166,10 +173,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         {
             InInitial = true;
             BtnShow = (UnitCore.Instance.WorkMode == MonitorMode.SHIP) ? true : false;
-            XDistance = 300;
-            YDistance = 600;
-            ZDistance = 400;
-            Transfromxyz(XDistance, YDistance, ZDistance);
             if (t==null)
                 t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
             if (networkInterfaces==null)
@@ -191,17 +194,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         private void RefreshLifeInfos()
         {
             if(LiveInfos==null)
-                LiveInfos = new ObservableCollection<PieInfo>();
+                LiveInfos = new ObservableCollection<CollectionInfo>();
             LiveInfos.Clear();
-            var o2info = new PieInfo();
-            var co2info = new PieInfo();
-            var other = new PieInfo();
+            var o2info = new CollectionInfo();
+            var co2info = new CollectionInfo();
+            var other = new CollectionInfo();
             o2info.Category = "氧气";
-            o2info.Number = 16.2f;
+            o2info.Number = Oxygen;
             co2info.Category = "二氧化碳";
-            co2info.Number = 2.1f;
+            co2info.Number = Co2;
             other.Category = "其他";
-            other.Number = 100 - o2info.Number - co2info.Number;
+            other.Number = 100 - Oxygen - Co2;
             LiveInfos.Add(o2info);
             LiveInfos.Add(co2info);
             LiveInfos.Add(other);
@@ -610,20 +613,32 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             get { return GetPropertyValue(() => ADCPTime); }
             set { SetPropertyValue(() => ADCPTime, value); }
         }
-        public ObservableCollection<sbyte> xVel
+        
+        public ObservableCollection<AdcpInfo> xVel
         {
             get { return GetPropertyValue(() => xVel); }
             set { SetPropertyValue(() => xVel, value); }
         }
-        public ObservableCollection<sbyte> yVel
+        public ObservableCollection<AdcpInfo> yVel
         {
             get { return GetPropertyValue(() => yVel); }
             set { SetPropertyValue(() => yVel, value); }
         }
-        public ObservableCollection<sbyte> zVel
+        public ObservableCollection<AdcpInfo> zVel
         {
             get { return GetPropertyValue(() => zVel); }
             set { SetPropertyValue(() => zVel, value); }
+        }
+
+        public float BottomTrack
+        {
+            get { return GetPropertyValue(() => BottomTrack); }
+            set { SetPropertyValue(() => BottomTrack, value); }
+        }
+        public float ADCPHeight
+        {
+            get { return GetPropertyValue(() => ADCPHeight); }
+            set { SetPropertyValue(() => ADCPHeight, value); }
         }
         #endregion
         #region life supply
@@ -644,7 +659,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             set { SetPropertyValue(() => Co2, value); }
         }
 
-        public ObservableCollection<PieInfo> LiveInfos
+        public ObservableCollection<CollectionInfo> LiveInfos
         {
             get { return GetPropertyValue(() => LiveInfos); }
             set { SetPropertyValue(() => LiveInfos, value); }
@@ -676,10 +691,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             get { return GetPropertyValue(() => CTDWaterTemp); }
             set { SetPropertyValue(() => CTDWaterTemp, value); }
         }
-        public float CTDVartlevel
+        public float CTDDepth
         {
-            get { return GetPropertyValue(() => CTDVartlevel); }
-            set { SetPropertyValue(() => CTDVartlevel, value); }
+            get { return GetPropertyValue(() => CTDDepth); }
+            set { SetPropertyValue(() => CTDDepth, value); }
         }
 
         public float CTDWatercond
@@ -814,9 +829,26 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
 
 
-        public void ExecuteAddFHCMD(object sender, ExecutedRoutedEventArgs eventArgs)
+        public async void ExecuteAddFHCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            
+            bool ret = false;
+            Task<bool> result = null;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "发送";
+            var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SendFhDialog"];
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                dialog, md);
+
+            var textBox = dialog.FindChild<TextBox>("FHBlock");
+
+            if (textBox.Text.Count() > 0)
+            {
+                UnitCore.Instance.AddFHHandle(textBox.Text);
+                UnitCore.Instance.NetCore.Send((int) ModuleType.FH, Encoding.Default.GetBytes(textBox.Text));
+                await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                        dialog);
+            }
         }
         public ICommand AddImgCMD
         {
@@ -835,6 +867,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         #endregion
 
+        #region Data Handle
         public void Handle(MovDataEvent message)
         {
             string chartstring = null;
@@ -846,11 +879,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 {
                     ADCPTime = DateTime.FromFileTime(adcp.Itime).ToShortTimeString();
                     xVel.Clear();
-                    xVel.AddRange(adcp.FloorX);
                     yVel.Clear();
-                    yVel.AddRange(adcp.FloorY);
                     zVel.Clear();
-                    zVel.AddRange(adcp.FloorZ);
+                    for (int i = 0; i < 10; i++)
+                    {
+                        xVel.Add(new AdcpInfo(i + 1, adcp.FloorX[i]));
+                        yVel.Add(new AdcpInfo(i + 1, adcp.FloorY[i]));
+                        zVel.Add(new AdcpInfo(i + 1, adcp.FloorZ[i]));
+                    }
+                    BottomTrack = (float)adcp.BottomTrack/100.0f;
+                    ADCPHeight = (float)adcp.Height / 100.0f;
                     AdcpdataCollection.Add(adcp);
                 }
             }
@@ -930,6 +968,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     BpCollection.Add(bp);
                 }
             }
+            /*
             if (message.Data.ContainsKey(MovDataType.BSSS))
             {
                 var bsss = message.Data[MovDataType.BSSS] as Bsssdata;
@@ -939,7 +978,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     BsssHeight = bsss.Height;
 
                 }
-            }
+            }*/
             if (message.Data.ContainsKey(MovDataType.CTD))
             {
                 var ctd = message.Data[MovDataType.CTD] as Ctddata;
@@ -947,7 +986,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 {
                     CTDTime = DateTime.FromFileTime(ctd.Ltime).ToShortTimeString();
                     CTDSoundvec = ctd.Soundvec;
-                    CTDVartlevel = ctd.Vartlevel;
+                    CTDDepth = ctd.Depth;
                     CTDWaterTemp = ctd.Watertemp;
                     CTDWatercond = ctd.Watercond;
                     CTDCollection.Add(ctd);
@@ -1065,16 +1104,36 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var word = message.Data[MovDataType.WORD] as string;
                     if (word != null)
                     {
-                        if(UnitCore.Instance.WorkMode== MonitorMode.SHIP)
-                            UnitCore.Instance.MovTraceService.Save("Chart","（潜器）"+word);
+
+                        if (message.Type == ModuleType.FH)
+                        {
+                            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+                            {
+                                UnitCore.Instance.MovTraceService.Save("FH", "（潜器）" + word);
+                                UnitCore.Instance.MovTraceService.Save("Chart","（潜器-跳频）"+word);
+                            }
+                            else
+                            {
+                                UnitCore.Instance.MovTraceService.Save("FH","（母船）"+word);
+                                UnitCore.Instance.MovTraceService.Save("Chart", "（母船-跳频）" + word);
+                            }
+                        }
                         else
                         {
-                            UnitCore.Instance.MovTraceService.Save("Chart","（母船）"+word);
+                            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+                            {
+                                UnitCore.Instance.MovTraceService.Save("Chart", "（潜器）" + word);
+                            }
+                            else
+                            {
+                                UnitCore.Instance.MovTraceService.Save("Chart", "（母船）" + word);
+                            }
                         }
                         chartstring = word;
                     }
                     
             }
+            
             UnitCore.Instance.LiveHandle(message.Type, chartstring,ImgContainer);
         }
 
@@ -1099,7 +1158,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 Transfromxyz(XDistance, YDistance, ZDistance);
             }
         }
+        #endregion
 
-        
     }
 }

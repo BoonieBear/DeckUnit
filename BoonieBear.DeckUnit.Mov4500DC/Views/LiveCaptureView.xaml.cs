@@ -54,6 +54,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             WaveControl.StartPlaying();
             this.dispatcher = Dispatcher.CurrentDispatcher;
             UnitCore.Instance.LiveHandle = AppendRecvInfo;
+            UnitCore.Instance.AddFHHandle = AddSendFHToChart;
+            UnitCore.Instance.AddImgHandle = AddSendImgToChart;
         }
 
         private void RecHandle(byte[] bufBytes)
@@ -248,7 +250,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
                 img = new Image //母船的图片
                 {
-                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
+                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png"),
                     Width = 30,
                     Height = 30,
                 };
@@ -257,7 +259,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
                 img = new Image //潜器的图片
                 {
-                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo.jpg"),
+                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png"),
                     Width = 30,
                     Height = 30,
                 };

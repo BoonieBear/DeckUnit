@@ -200,8 +200,11 @@
     <Compile Include="Controls\TreadTile.xaml.cs">
       <DependentUpon>TreadTile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\AbsConverter.cs" />
     <Compile Include="Converters\BoolReverseConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
+    <Compile Include="Converters\BpDistanceConverter.cs" />
+    <Compile Include="Converters\BpMarkLengthConverter.cs" />
     <Compile Include="Converters\DoubleMultiConverter.cs" />
     <Compile Include="Converters\DoubleSumConverter.cs" />
     <Compile Include="Converters\FtimeToShortTimeConverter.cs" />
@@ -517,6 +520,15 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Assets\appbar.download.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\Logo_nbg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\UWV_Right.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Assets\shipsnapshot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />

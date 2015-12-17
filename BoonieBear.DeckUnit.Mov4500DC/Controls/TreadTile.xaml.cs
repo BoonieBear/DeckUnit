@@ -50,13 +50,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             }
             if (newvalue - lastvalue > float.Epsilon)
             {
-                SpreadTextBlock.Text = (newvalue - lastvalue).ToString("F03");
+                SpreadTextBlock.Text = (newvalue - lastvalue).ToString("F02");
                 UpMovementIcon.Visibility = Visibility.Visible;
                 DownMovementIcon.Visibility = Visibility.Hidden;
             }
             else if (lastvalue - newvalue > float.Epsilon)
             {
-                SpreadTextBlock.Text = (newvalue - lastvalue).ToString("F03");
+                SpreadTextBlock.Text = (newvalue - lastvalue).ToString("F02");
                 UpMovementIcon.Visibility = Visibility.Hidden;
                 DownMovementIcon.Visibility = Visibility.Visible;
             }

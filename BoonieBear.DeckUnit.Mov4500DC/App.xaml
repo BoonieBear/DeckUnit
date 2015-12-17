@@ -20,7 +20,7 @@
                 <!-- Important to include the Metro Styles Resource Dictionary -->
                 <ResourceDictionary Source="/TinyMetroWpfLibrary;component/Styles/MetroStyles.xaml" />
 				<ResourceDictionary Source="/TinyMetroWpfLibrary.Controls;component/Styles/ControlStyles.xaml"/>
-				<ResourceDictionary Source="/TinyMetroWpfLibrary.Controls;component/Styles/Colours.xaml"/>
+				
                 <ResourceDictionary Source="Resources/ControlStyle.xaml"/>
                 <ResourceDictionary Source="Resources/SkinStyle.xaml"/>
                 <ResourceDictionary Source="Resources/Image.xaml"/>
