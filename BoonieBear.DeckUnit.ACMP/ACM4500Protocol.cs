@@ -10,8 +10,8 @@ namespace BoonieBear.DeckUnit.ACMP
 {
     public class ACM4500Protocol
     {
-        private static  Dictionary<int,byte[]> mpskpkg; //mpsk包 72包
-        private const int TotalPkg = 72;
+        private static  Dictionary<int,byte[]> mpskpkg; //mpsk包 34包
+        private const int TotalPkg = 34;
         //母船或是潜器数据池，每次启动只会用其中一个
         public static ShipGatherData ShipdataPool;
         public static UWVGatherData UwvdataPool;
@@ -31,7 +31,7 @@ namespace BoonieBear.DeckUnit.ACMP
         {
             data = new BitArray(d);
             index = 0;
-            mpskpkg.Clear();
+            
         }
         static public int GetIntValueFromBit(int bitlen)
         {
@@ -70,11 +70,12 @@ namespace BoonieBear.DeckUnit.ACMP
             ShipdataPool.Clean();
             UwvdataPool.Clean();
             Results.Clear();
+            mpskpkg.Clear();
             Errormessage = string.Empty;
         }
         public static void Init(MonitorMode mode = MonitorMode.SUBMARINE)
         {
-
+            mpskpkg= new Dictionary<int, byte[]>();
             ShipdataPool = ShipGatherData.GetInstance();
             UwvdataPool = UWVGatherData.GetInstance();
             SetMode(mode);
@@ -125,8 +126,9 @@ namespace BoonieBear.DeckUnit.ACMP
         /// 解码fsk，psk外的acn打包
         /// </summary>
         /// <returns></returns>
-        public static byte[] DecodeACNData(byte[] encBytes)
+        public static byte[] DecodeACNData(byte[] encBytes, ModuleType type)
         {
+            GetDataForParse(encBytes);
             index = 0;
             byte[] result = null;
             int blocks = 0;//总块数
@@ -165,19 +167,24 @@ namespace BoonieBear.DeckUnit.ACMP
                             switch (sectorId)
                             {
                                 case (int) ACNType.Router:
-                                    int source = GetIntValueFromBit(8);
+                                    int source = GetIntValueFromBit(6);
                                     break;
                                 case (int) ACNType.Data:
-                                    blocks  = GetIntValueFromBit(8);
-                                    
-                                    int current = GetIntValueFromBit(8);
-                                    byte[] currentblock = GetByteValueFromBit(len - 36);
-                                    if (blocks != 1) //psk
+                                    byte[] currentblock = null;
+                                    if (type == ModuleType.MFSK)
                                     {
-                                        if(current==0)
+                                        currentblock = GetByteValueFromBit(len - 20);
+                                    }
+                                    else if (type == ModuleType.MPSK)
+                                    {
+                                        blocks  = GetIntValueFromBit(8);
+                                        int current = GetIntValueFromBit(8);
+                                        currentblock = GetByteValueFromBit(len - 36);
+                                        if (current == 0)
                                             mpskpkg.Clear();
                                         mpskpkg.Add(current, currentblock);
                                     }
+
                                     if (result == null) //first block;
                                         result = currentblock;
                                     else
@@ -254,6 +261,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     alt.Parse(data);
                     Results.Add(MovDataType.ALERT, alt);
                     string msg = Encoding.Default.GetString(pkg, 169, 40);
+                    msg = msg.TrimEnd('\0');
                     Results.Add(MovDataType.WORD, msg);
 
                 }
@@ -263,10 +271,9 @@ namespace BoonieBear.DeckUnit.ACMP
                     postion.Parse(pkg);
                     Results.Add(MovDataType.ALLPOST, postion);
                     string msg = Encoding.Default.GetString(pkg, 40, 40);
+                    msg = msg.TrimEnd('\0');
                     Results.Add(MovDataType.WORD, msg);
                 }
-
-
                 return true;
             }
             return false;

@@ -37,12 +37,42 @@
                                  Title="输入跳频信息"
                                  x:Name="SendFhDialog">
             <StackPanel Orientation="Vertical">
-                <TextBox Height="30" FontSize ="28" Width =" 200" x:Name="FHBlock"
+                <TextBox Height="50" FontSize ="28" Width =" 200" x:Name="FHBlock"
                                Foreground="{DynamicResource AccentColorBrush}" MaxLength="4" />
-                <TextBox Height="30" FontSize ="16" Width =" 200" Text="(最多输入4个字符)" x:Name="LeftSize"
-                               Foreground="White" />
+                <TextBlock Height="26" FontSize ="16"  Text="(最多输入4个字符)" x:Name="LeftSize"/>
+                <UniformGrid>
+                    <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="发送" Click="SendFH"/>
+                    <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="取消" Click="CloseFh"/>
+                </UniformGrid>
             </StackPanel>
             
+        </dialogs:CustomDialog>
+        <dialogs:CustomDialog x:Key="SendImgDialog"
+                                 Title="选取图片"
+                                 x:Name="SendImgDialog">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <Viewbox Height="600" Width =" 800" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Name="SelectImageContainer"/>
+                    </Viewbox>
+                </StackPanel>
+                <UniformGrid Columns="3">
+                    <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="浏览" Click="SelectImg"/>
+                    <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="发送" Click="SendImg"/>
+                    <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="取消" Click="CloseImg"/>
+                </UniformGrid>
+            </StackPanel>
+
         </dialogs:CustomDialog>
     </metroControl:MetroWindow.Resources>
 
@@ -101,10 +131,7 @@
                         <TextBlock Margin="0,5,0,0" Text="网络状态:" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding NetworkStatus}" TextWrapping="Wrap"/>
                     </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Margin="0,5,0,0" Text="串口状态:" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding CommStatus}" TextWrapping="Wrap"/>
-                    </StackPanel>
+                    
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="0,5,0,0" Text="数据更新:" TextWrapping="Wrap"/>
                         <TextBlock Text="{Binding LastUpdateTime}" TextWrapping="Wrap"/>
@@ -114,7 +141,7 @@
                     <ToggleButton x:Name="LogToggle" Background="#696969"
                                   IsChecked ="False"
                                   Content="系统记录"/>
-                    <ListView Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}">
+                    <ListView Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <!-- 设置控件模板 -->

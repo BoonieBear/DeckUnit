@@ -43,7 +43,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
                 return true;
             if (_mode==MonitorMode.SHIP)
             {
-                if (_traceFile.CreateFile("WORD", TraceType.String, "Chart", "txt", @"\WORD") == false)
+                if (_traceFile.CreateFile("Chart", TraceType.String, "Chart", "txt", @"\WORD") == false)
                 {
                     return false;
                 }
@@ -116,7 +116,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
             }
             else if (_mode == MonitorMode.SUBMARINE)
             {
-                if (_traceFile.CreateFile("WORD", TraceType.String, "Chart", "txt", @"\WORD") == false)
+                if (_traceFile.CreateFile("Chart", TraceType.String, "Chart", "txt", @"\WORD") == false)
                 {
                     return false;
                 }
@@ -146,6 +146,11 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
                     return false;
                 }
                 if (_traceFile.CreateFile("XMTPSK", TraceType.Binary, "Psk", "xpd", @"\XmtPSK") == false)
+                {
+
+                    return false;
+                }
+                if (_traceFile.CreateFile("XMTIMG", TraceType.Binary, "Psk", "img", @"\XmtPSK") == false)
                 {
 
                     return false;
@@ -213,7 +218,7 @@ namespace BoonieBear.DeckUnit.Mov4500TraceService
                         ret = _traceFile.WriteSingleData(sType, (byte[])bTraceBytes);
                         break;
                     case TraceType.String:
-                        ret = _traceFile.WriteString(sType, Encoding.Default.GetString((byte[])bTraceBytes));
+                        ret = _traceFile.WriteString(sType, (string)bTraceBytes);
                         break;
                     default://none
                         ret = 0;

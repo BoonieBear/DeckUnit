@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Threading;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.Mov4500UI.Models;
@@ -20,13 +21,21 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
     {
         public static MainFrameViewModel pMainFrame { get; set; }
         private IDialogCoordinator _dialogCoordinator { get; set; }
-
+        private DispatcherTimer t = null;
         public override void Initialize()
         {
             base.Initialize();
             pMainFrame = this;
             MsgLog = new ObservableCollection<string>();
             MsgLog.CollectionChanged+=MsgLog_CollectionChanged;
+            t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, RefreshStatus, Dispatcher.CurrentDispatcher);
+        }
+
+        private void RefreshStatus(object sender, EventArgs e)
+        {
+            NetworkStatus = Status.NetworkStatus;
+            LastUpdateTime = Status.LastUpdateTime;
+            ReceiveMsgCount = Status.ReceiveMsgCount.ToString();
         }
 
         private void MsgLog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -58,14 +67,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         internal void ShowAbout()
         {
             AboutVisibility = true;
-        }
-
-        internal void RefreshStatus()
-        {
-            NetworkStatus = Status.NetworkStatus;
-            LastUpdateTime = Status.LastUpdateTime;
-            ReceiveMsgCount = Status.ReceiveMsgCount.ToString();
-
         }
 
         #endregion

@@ -26,7 +26,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     if (e.Mode != CallMode.NoneMode)
                     {
                         id = BitConverter.ToUInt16(e.DataBuffer, 0);
-                        buffer = e.DataBuffer.Slice(4, e.DataBufferLength - 4);
+                        buffer = new byte[e.DataBufferLength - 4];
+                        Buffer.BlockCopy(e.DataBuffer,4,buffer,0,e.DataBufferLength - 4);
                     }
                     if (e.Mode == CallMode.Sail) //水下航控或ADCP或BP
                     {
@@ -108,28 +109,26 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             case (int) ModuleType.FH:
                                 datatype = "FH";
                                 break;
+                            case (int) ModuleType.Req:
+                                LogHelper.WriteLog("收到DSP请求");
+                                if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)
+                                {
+                                    if (ACM4500Protocol.UwvdataPool.HasImg)
+                                    {
+                                        var data = ACM4500Protocol.PackData(ModuleType.MPSK);
+                                        LogHelper.WriteLog("发送MPSK");
+                                        UnitCore.Instance.NetCore.Send((int) ModuleType.MPSK, data);
+                                        UnitCore.Instance.MovTraceService.Save("XMTPSK", data);
+                                        return;
+                                    }
+                                }
+                                var fskdata = ACM4500Protocol.PackData(ModuleType.MFSK);
+                                LogHelper.WriteLog("发送MFSK");
+                                UnitCore.Instance.NetCore.Send((int) ModuleType.MFSK, fskdata);
+                                UnitCore.Instance.MovTraceService.Save("XMTFSK", fskdata);
+                                return;
                             default:
                                 return;
-                        }
-                        if (id == (int) ModuleType.Req)
-                        {
-                            LogHelper.WriteLog("收到DSP请求");
-                            if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)
-                            {
-                                if (ACM4500Protocol.UwvdataPool.HasImg)
-                                {
-                                    var data = ACM4500Protocol.PackData(ModuleType.MPSK);
-                                    LogHelper.WriteLog("发送MPSK");
-                                    UnitCore.Instance.NetCore.Send((int) ModuleType.MPSK, data);
-                                    UnitCore.Instance.MovTraceService.Save("XMTPSK", data);
-                                    return;
-                                }
-                            }
-                            var fskdata = ACM4500Protocol.PackData(ModuleType.MFSK);
-                            LogHelper.WriteLog("发送MFSK");
-                            UnitCore.Instance.NetCore.Send((int) ModuleType.MFSK, fskdata);
-                            UnitCore.Instance.MovTraceService.Save("XMTFSK", fskdata);
-                            return;
                         }
                     }
                     UnitCore.Instance.MovTraceService.Save(datatype, buffer); //保存上面全部数据类型
@@ -155,9 +154,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             return;
                         }
                         UnitCore.Instance.ACMMutex.WaitOne();
-                        var ret = ACM4500Protocol.DecodeACNData(buffer);
+                        var ret = ACM4500Protocol.DecodeACNData(buffer, (ModuleType)Enum.Parse(typeof(ModuleType), id.ToString()));
+                        //var ret = buffer;
                         if (ret != null)
                         {
+                        
                             switch (id)
                             {
                                 case (int) ModuleType.MFSK:

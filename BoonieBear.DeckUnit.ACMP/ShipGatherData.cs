@@ -12,7 +12,7 @@ namespace BoonieBear.DeckUnit.ACMP
         private static ShipGatherData _shipGatherData;
         private Sysposition _sysposition; //最后一个位置信息,用来显示
         private string _msg;
-        private byte[] _packageBytes = new byte[MovGlobalVariables.ShipMFSKSize];
+        private byte[] _packageBytes = new byte[MovGlobalVariables.MFSKSize];
 
         private ShipGatherData()
         {
@@ -72,12 +72,12 @@ namespace BoonieBear.DeckUnit.ACMP
                 case ModuleType.MFSK:
                     var bytes = _sysposition.Pack();
                     Buffer.BlockCopy(bytes, 0, _packageBytes, 0, 40);
-                    if (_msg != null)
+                    if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
+                        Buffer.BlockCopy(bytes, 0, _packageBytes, 40, bytes.Length);
                     }
-                    Buffer.BlockCopy(bytes, 0, _packageBytes, 40, 40);
-                    _msg = null;
+                    _msg = "";
                     return _packageBytes;
                 default:
                     return null;

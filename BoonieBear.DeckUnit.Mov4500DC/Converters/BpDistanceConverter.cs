@@ -11,13 +11,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             var distance = (float)value;
-            if (distance != null)
-            {
-                if (distance > 100)
-                    return @">100";
-                return distance.ToString("F01");
-            }
-            return null;
+
+            if (distance > 100)
+                return @">100";
+            return distance.ToString("F01");
+
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

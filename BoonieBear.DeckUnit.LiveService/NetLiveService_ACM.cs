@@ -42,8 +42,30 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public string Error { get; set; }
         public bool IsInitialize { get; set; }
-        public bool IsUDPWorking { get; set; }//
-        public bool IsTCPWorking { get; set; }
+
+        public bool IsUDPWorking
+        {
+            get
+            {
+                if (_movClient != null && _uwaClient != null && _usblClient!=null)
+                {
+                    return true;
+                }
+                return false;
+            }
+        }//
+
+        public bool IsTCPWorking
+        {
+            get
+            {
+                if (_shelltcpClient != null && _datatcpClient != null)
+                {
+                    return _shelltcpClient.Connected && _datatcpClient.Connected;
+                }
+                return false;
+            }
+        }
         public int SendBytes { get; set; }
 
         public static IMovNetCore GetInstance(CommConfInfo conf, MovConfInfo movconf, Observer<CustomEventArgs> observer)
@@ -103,9 +125,8 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public void Initialize()
         {
-            
-            _movClient = new UdpClient();
-            
+            if (_movClient == null)
+                _movClient = new UdpClient(4001);
             if (_gpsClient == null)
                 _gpsClient = new UdpClient(_mocConf.GPSPort);
             if (!GpsService.Init(_gpsClient)) throw new Exception("GPS端口打开失败");
@@ -145,7 +166,13 @@ namespace BoonieBear.DeckUnit.LiveService
 
         public Task<bool> BroadCast(byte[] buf)
         {
-            throw new NotImplementedException();
+            if (_movClient != null)
+            {
+                IPEndPoint endpoint = new IPEndPoint(IPAddress.Parse("255.255.255.255"),  _mocConf.BroadCastPort);  
+                Task.Factory.StartNew(
+                    () => _movClient.Send(buf, buf.Length, endpoint));
+            }
+            return null;
         }
 
         public Task<bool> SendConsoleCMD(string cmd)
@@ -236,7 +263,7 @@ namespace BoonieBear.DeckUnit.LiveService
                 if (lastpkglenth == 0)
                     return true;
                 if (id == (int) ModuleType.MPSK)
-                    Buffer.BlockCopy(BitConverter.GetBytes((int) ModuleType.END), 0, newBytes, 0, 2);
+                    Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.PSKEND), 0, newBytes, 0, 2);
                 if (id == (int) ModuleType.SSB)
                     Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
                 Buffer.BlockCopy(BitConverter.GetBytes(lastpkglenth), 0, newBytes, 2, 2);
@@ -260,7 +287,7 @@ namespace BoonieBear.DeckUnit.LiveService
             USBLService.Register(NetDataObserver);
             if (!UwaService.Start()) return false;
             UwaService.Register(NetDataObserver);
-            IsUDPWorking = true;
+
             return true;
         }
 
@@ -280,14 +307,14 @@ namespace BoonieBear.DeckUnit.LiveService
             if (TCPShellService.Connected && TCPShellService.Start() && TCPDataService.Connected &&
                 TCPDataService.Start())
             {
-                IsTCPWorking = true;
+
                 return true;
             }
             _shelltcpClient.Close();
             _datatcpClient.Close();
             _shelltcpClient = null;
             _datatcpClient = null;
-            IsTCPWorking = false;
+
             return false;
         }
 
@@ -303,7 +330,7 @@ namespace BoonieBear.DeckUnit.LiveService
             _movClient = null;
             _usblClient = null;
             _uwaClient = null;
-            IsUDPWorking = false;
+
             IsInitialize = false;
         }
 
@@ -316,7 +343,7 @@ namespace BoonieBear.DeckUnit.LiveService
             TCPDataService.Stop();
             _shelltcpClient = null;
             _datatcpClient = null;
-            IsTCPWorking = false;
+
             IsInitialize = false;
         }
 
@@ -334,13 +361,13 @@ namespace BoonieBear.DeckUnit.LiveService
         }
 
         //水声结束包
-        public Task<bool> SendSSBEND()
+        public bool SendSSBEND()
         {
             byte[] newBytes = new byte[4];
-            Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.END), 0, newBytes, 0, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.SSBEND), 0, newBytes, 0, 2);
             Buffer.BlockCopy(BitConverter.GetBytes(2), 0, newBytes, 2, 2);
             var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
-            return Command.SendTCPAsync(cmd);
+            return Command.SendTCPSync(cmd);
         }
     }
 }

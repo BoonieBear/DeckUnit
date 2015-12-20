@@ -1,18 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.Mov4500Conf;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using System.Windows.Controls;
 using HelixToolkit.Wpf;
+using ImageProc;
 using TinyMetroWpfLibrary.EventAggregation;
 using Button = System.Windows.Controls.Button;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
@@ -238,6 +241,20 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             p.TextAlignment = TextAlignment.Left;
             MessageDocument.Blocks.Add(p);
             MessageRichTextBox.ScrollToEnd();
+            if(UnitCore.Instance.WorkMode== MonitorMode.SUBMARINE)
+                ACM4500Protocol.UwvdataPool.Add(Encoding.Default.GetBytes(SendMessageBox.Text),MovDataType.WORD);
+            else
+                ACM4500Protocol.ShipdataPool.Add(Encoding.Default.GetBytes(SendMessageBox.Text), MovDataType.WORD);
+            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+            {
+
+                UnitCore.Instance.MovTraceService.Save("Chart", "（母船）" + SendMessageBox.Text);
+            }
+            else
+            {
+
+                UnitCore.Instance.MovTraceService.Save("Chart", "（潜器）" + SendMessageBox.Text);
+            }
             SendMessageBox.Text = "";
         }
 
@@ -251,8 +268,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 img = new Image //母船的图片
                 {
                     Source = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png"),
-                    Width = 30,
-                    Height = 30,
+                    Width = 48,
+                    Height = 48,
                 };
             }
             else
@@ -260,8 +277,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 img = new Image //潜器的图片
                 {
                     Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png"),
-                    Width = 30,
-                    Height = 30,
+                    Width = 48,
+                    Height = 48,
                 };
             }
             title.Inlines.Add(img);
@@ -292,6 +309,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             chartmsg.TextAlignment = TextAlignment.Left;
             chartmsg.LineHeight = 24;
             MessageDocument.Blocks.Add(chartmsg);
+            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+            {
+                UnitCore.Instance.MovTraceService.Save("FH", "（母船）" + msg);
+                UnitCore.Instance.MovTraceService.Save("Chart", "（母船-跳频）" + msg);
+            }
+            else
+            {
+                UnitCore.Instance.MovTraceService.Save("FH", "（潜器）" + msg);
+                UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-跳频）" + msg);
+            }
         }
         private void AddSendSSBToChart(string msg)
         {
@@ -304,6 +331,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             chartmsg.TextAlignment = TextAlignment.Left;
             chartmsg.LineHeight = 24;
             MessageDocument.Blocks.Add(chartmsg);
+            UnitCore.Instance.MovTraceService.Save("Chart",  "(" + "水声摩斯码" + ")" + msg);
+
         }
         private void AddSendImgToChart(Image img)
         {
@@ -312,6 +341,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             p.Inlines.Add(img);
             p.TextAlignment = TextAlignment.Left;
             MessageDocument.Blocks.Add(p);
+            UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-MPSK）" + img.Source);
         }
         //将收到的信息填入chartbox中，靠右对齐
         private void AppendRecvInfo(ModuleType type, string msg, Image img)
@@ -529,31 +559,31 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     case "收到":
                     case "一切正常":
                         UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.RecvOrOK);
-                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        UnitCore.Instance.NetCore.SendSSBEND();
                         
                         break;
                     case "询问情况":
                     case "完成阶段工作":
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AskOrOK);
-                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "同意":
                     case "请求上浮":
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AgreeOrReqRise);
-                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "立即上浮":
                     case "进入应急程序":
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RiseOrUrgent);
-                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "不同意":
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Disg);
-                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "释放应急浮标":
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RelBuoy);
-                        await UnitCore.Instance.NetCore.SendSSBEND();
+                        UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     default:
                         break;
@@ -585,13 +615,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             switch (flipview.SelectedIndex)
             {
                 case 0:
-                    flipview.BannerText = "潜器深度/曲线";
+                    flipview.BannerText = "潜器深度";
                     break;
                 case 1:
                      flipview.BannerText = "能源数据";
                     break;
                 case 2:
-                    flipview.BannerText = "生命支持数据";
+                    flipview.BannerText = "生命支持";
                     break;
                 case 3:
                     if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)

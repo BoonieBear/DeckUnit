@@ -14,7 +14,8 @@ namespace BoonieBear.DeckUnit.ACMP
             OFDM = 0xda03,
             SSB= 0xda04,
             FH=0xda05,
-            END = 0xeded,//不会接收到
+            PSKEND = 0xed02,//不会接收到
+            SSBEND = 0xed04,//不会接收到
             Req = 0xdada,
         }
 
@@ -58,7 +59,7 @@ namespace BoonieBear.DeckUnit.ACMP
 
     public class MovGlobalVariables
     {
-        public static int MFSKSize = 228;
+        public static int MFSKSize = 224;
         public static int ShipMFSKSize = 80;
         public static int MovMFSKSize = 209;
         public static int WordSize = 40;

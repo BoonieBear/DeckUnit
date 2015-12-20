@@ -60,9 +60,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
         {
             var md = new MetroDialogSettings();
             md.AffirmativeButtonText = "确定";
-            
-            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
-                message, MessageDialogStyle.Affirmative, md);
+            App.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
+                    message, MessageDialogStyle.Affirmative, md);
+            }));
         }
 
         public void BroadCast(string message)

@@ -172,7 +172,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         public override void InitializePage(object extraData)
         {
             InInitial = true;
-            BtnShow = (UnitCore.Instance.WorkMode == MonitorMode.SHIP) ? true : false;
+            BtnShowShip = (UnitCore.Instance.WorkMode == MonitorMode.SHIP) ? true : false;
             if (t==null)
                 t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
             if (networkInterfaces==null)
@@ -258,10 +258,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         //show btn or control based on the workmode 
         //if workmode == ship tnshow = true, or btnshow=false
-        public bool BtnShow
+        public bool BtnShowShip
         {
-            get { return GetPropertyValue(() => BtnShow); }
-            set { SetPropertyValue(() => BtnShow, value); }
+            get { return GetPropertyValue(() => BtnShowShip); }
+            set { SetPropertyValue(() => BtnShowShip, value); }
         }
 
         #region data binding
@@ -328,7 +328,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         public string LinkStatus
         {
             get { return GetPropertyValue(() => LinkStatus); }
-            set { SetPropertyValue(() => LinkStatus, value); }
+            set
+            {
+                SetPropertyValue(() => LinkStatus, value);
+            }
         }
 
         public SolidColorBrush LinkBoxColor
@@ -831,24 +834,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public async void ExecuteAddFHCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            bool ret = false;
-            Task<bool> result = null;
-            var md = new MetroDialogSettings();
-            md.AffirmativeButtonText = "发送";
+            if (!UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                var md = new MetroDialogSettings();
+                md.AffirmativeButtonText = "确定";
+
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送信息",
+                    "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
+                return;
+                
+            }
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SendFhDialog"];
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
-                dialog, md);
-
-            var textBox = dialog.FindChild<TextBox>("FHBlock");
-
-            if (textBox.Text.Count() > 0)
-            {
-                UnitCore.Instance.AddFHHandle(textBox.Text);
-                UnitCore.Instance.NetCore.Send((int) ModuleType.FH, Encoding.Default.GetBytes(textBox.Text));
-                await
-                    MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,
-                        dialog);
-            }
+                dialog);
         }
         public ICommand AddImgCMD
         {
@@ -861,114 +859,133 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
 
 
-        public void ExecuteAddImgCMD(object sender, ExecutedRoutedEventArgs eventArgs)
+        public async void ExecuteAddImgCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            //tbd
+            if(UnitCore.Instance.WorkMode==MonitorMode.SHIP)
+                return;
+            if (!UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                var md = new MetroDialogSettings();
+                md.AffirmativeButtonText = "确定";
+
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送图像",
+                    "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
+                return;
+                
+            }
+            //
+            var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SendImgDialog"];
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                dialog);
         }
         #endregion
 
         #region Data Handle
         public void Handle(MovDataEvent message)
         {
-            string chartstring = null;
-            System.Windows.Controls.Image ImgContainer = null;
-            if (message.Data.ContainsKey(MovDataType.ADCP))
+            App.Current.Dispatcher.Invoke(new Action(() =>
             {
-                var adcp = message.Data[MovDataType.ADCP] as Adcpdata;
-                if (adcp != null)
+                Status.LastUpdateTime = DateTime.Now.ToString();
+                Status.ReceiveMsgCount++;
+                string chartstring = null;
+                System.Windows.Controls.Image ImgContainer = null;
+                if (message.Data.ContainsKey(MovDataType.ADCP))
                 {
-                    ADCPTime = DateTime.FromFileTime(adcp.Itime).ToShortTimeString();
-                    xVel.Clear();
-                    yVel.Clear();
-                    zVel.Clear();
-                    for (int i = 0; i < 10; i++)
+                    var adcp = message.Data[MovDataType.ADCP] as Adcpdata;
+                    if (adcp != null)
                     {
-                        xVel.Add(new AdcpInfo(i + 1, adcp.FloorX[i]));
-                        yVel.Add(new AdcpInfo(i + 1, adcp.FloorY[i]));
-                        zVel.Add(new AdcpInfo(i + 1, adcp.FloorZ[i]));
-                    }
-                    BottomTrack = (float)adcp.BottomTrack/100.0f;
-                    ADCPHeight = (float)adcp.Height / 100.0f;
-                    AdcpdataCollection.Add(adcp);
-                }
-            }
-            if (message.Data.ContainsKey(MovDataType.ALERT))
-            {
-                var alt = message.Data[MovDataType.ALERT] as Alertdata;
-                if (alt != null)
-                {
-                    AlarmTime = DateTime.FromFileTime(alt.Ltime).ToShortTimeString();
-                    Leak = alt.Leak;
-                    Cable = alt.Cable;
-                    AlertTemp = alt.Temperature;
-                    var lst = BitConverter.GetBytes(alt.Alert);
-                    BitArray ba = new BitArray(lst);
-                    int i = 0;
-                    foreach (bool a in ba)
-                    {
-                        if (a == true)
+                        ADCPTime = DateTime.FromFileTime(adcp.Itime).ToString();
+                        xVel.Clear();
+                        yVel.Clear();
+                        zVel.Clear();
+                        for (int i = 0; i < 10; i++)
                         {
-                            AlarmList.Add(Alarm.Name[i]);
+                            xVel.Add(new AdcpInfo(i + 1, adcp.FloorX[i]));
+                            yVel.Add(new AdcpInfo(i + 1, adcp.FloorY[i]));
+                            zVel.Add(new AdcpInfo(i + 1, adcp.FloorZ[i]));
                         }
-                        i++;
+                        BottomTrack = (float) adcp.BottomTrack/100.0f;
+                        ADCPHeight = (float) adcp.Height/100.0f;
+                        AdcpdataCollection.Add(adcp);
                     }
-                    AlertdataCollection.Add(alt);
-                    //广播
-                    UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
-                    byte[] posBytes = new byte[22];
-                    posBytes[0] = 0x05;
-                    posBytes[1] = 0x10;
-                    Buffer.BlockCopy(alt.Pack(), 0, posBytes, 2, 20);
-                    UnitCore.Instance.NetCore.BroadCast(posBytes);
                 }
-            }
-            if (message.Data.ContainsKey(MovDataType.ALLPOST))
-            {
+                if (message.Data.ContainsKey(MovDataType.ALERT))
+                {
+                    var alt = message.Data[MovDataType.ALERT] as Alertdata;
+                    if (alt != null)
+                    {
+                        AlarmTime = DateTime.FromFileTime(alt.Ltime).ToString();
+                        Leak = alt.Leak;
+                        Cable = alt.Cable;
+                        AlertTemp = alt.Temperature;
+                        var lst = BitConverter.GetBytes(alt.Alert);
+                        BitArray ba = new BitArray(lst);
+                        int i = 0;
+                        foreach (bool a in ba)
+                        {
+                            if (a == true)
+                            {
+                                AlarmList.Add(Alarm.Name[i]);
+                            }
+                            i++;
+                        }
+                        AlertdataCollection.Add(alt);
+                        //广播
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
+                        byte[] posBytes = new byte[22];
+                        posBytes[0] = 0x05;
+                        posBytes[1] = 0x10;
+                        Buffer.BlockCopy(alt.Pack(), 0, posBytes, 2, 20);
+                        UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    }
+                }
+                if (message.Data.ContainsKey(MovDataType.ALLPOST))
+                {
 
-                var allpos = message.Data[MovDataType.ALLPOST] as Sysposition;
-                if (allpos != null)
-                {
-                    PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToShortTimeString();
-                    ShipLongUsbl = allpos.ShipLong;
-                    ShipLatUsbl = allpos.ShipLat;
-                    ShipHeading = allpos.Shipheading;
-                    ShipPitch = allpos.Shippitch;
-                    ShipRoll = allpos.Shiproll;
-                    ShipSpeed = allpos.Shipvel;
-                    MovLongUsbl = allpos.SubLong;
-                    MovLatUsbl = allpos.SubLat;
-                    MovDepthUsbl = allpos.Subdepth;
-                    XDistance = allpos.RelateX;
-                    YDistance = allpos.RelateY;
-                    ZDistance = allpos.RelateZ;
-                    Transfromxyz(XDistance, YDistance, ZDistance);
-                    UsblPositionCollection.Add(allpos);
-                    //广播
-                    UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
-                    byte[] posBytes = new byte[42];
-                    posBytes[0] = 0x01;
-                    posBytes[1] = 0x20;
-                    Buffer.BlockCopy(allpos.Pack(),0,posBytes,2,40);
-                    UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    var allpos = message.Data[MovDataType.ALLPOST] as Sysposition;
+                    if (allpos != null)
+                    {
+                        PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToString();
+                        ShipLongUsbl = allpos.ShipLong;
+                        ShipLatUsbl = allpos.ShipLat;
+                        ShipHeading = allpos.Shipheading;
+                        ShipPitch = allpos.Shippitch;
+                        ShipRoll = allpos.Shiproll;
+                        ShipSpeed = allpos.Shipvel;
+                        MovLongUsbl = allpos.SubLong;
+                        MovLatUsbl = allpos.SubLat;
+                        MovDepthUsbl = allpos.Subdepth;
+                        XDistance = allpos.RelateX;
+                        YDistance = allpos.RelateY;
+                        ZDistance = allpos.RelateZ;
+                        Transfromxyz(XDistance, YDistance, ZDistance);
+                        UsblPositionCollection.Add(allpos);
+                        //广播
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
+                        byte[] posBytes = new byte[42];
+                        posBytes[0] = 0x01;
+                        posBytes[1] = 0x20;
+                        Buffer.BlockCopy(allpos.Pack(), 0, posBytes, 2, 40);
+                        UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    }
                 }
-            }
-            if (message.Data.ContainsKey(MovDataType.BP))
-            {
-                var bp = message.Data[MovDataType.BP] as Bpdata;
-                if (bp != null)
+                if (message.Data.ContainsKey(MovDataType.BP))
                 {
-                    BpTime = DateTime.FromFileTime(bp.Itime).ToShortTimeString();
-                    BpBottom = bp.Down;
-                    BpBottomBack = bp.Behinddown;
-                    BpFront = bp.Front;
-                    BpFrontDown = bp.Frontdown;
-                    BpFrontUp = bp.Frontup;
-                    BpLeft = bp.Left;
-                    BpRight = bp.Right;
-                    BpCollection.Add(bp);
+                    var bp = message.Data[MovDataType.BP] as Bpdata;
+                    if (bp != null)
+                    {
+                        BpTime = DateTime.FromFileTime(bp.Itime).ToString();
+                        BpBottom = bp.Down;
+                        BpBottomBack = bp.Behinddown;
+                        BpFront = bp.Front;
+                        BpFrontDown = bp.Frontdown;
+                        BpFrontUp = bp.Frontup;
+                        BpLeft = bp.Left;
+                        BpRight = bp.Right;
+                        BpCollection.Add(bp);
+                    }
                 }
-            }
-            /*
+                /*
             if (message.Data.ContainsKey(MovDataType.BSSS))
             {
                 var bsss = message.Data[MovDataType.BSSS] as Bsssdata;
@@ -979,128 +996,128 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
                 }
             }*/
-            if (message.Data.ContainsKey(MovDataType.CTD))
-            {
-                var ctd = message.Data[MovDataType.CTD] as Ctddata;
-                if (ctd != null)
+                if (message.Data.ContainsKey(MovDataType.CTD))
                 {
-                    CTDTime = DateTime.FromFileTime(ctd.Ltime).ToShortTimeString();
-                    CTDSoundvec = ctd.Soundvec;
-                    CTDDepth = ctd.Depth;
-                    CTDWaterTemp = ctd.Watertemp;
-                    CTDWatercond = ctd.Watercond;
-                    CTDCollection.Add(ctd);
-                    //广播
-                    UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
-                    byte[] posBytes = new byte[18];
-                    posBytes[0] = 0x02;
-                    posBytes[1] = 0x10;
-                    Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 16);
-                    UnitCore.Instance.NetCore.BroadCast(posBytes);
-                }
-            }
-            if (message.Data.ContainsKey(MovDataType.ENERGY))
-            {
-                var eng = message.Data[MovDataType.ENERGY] as Energysys;
-                if (eng != null)
-                {
-                    EnergyTime = DateTime.FromFileTime(eng.Ltime).ToShortTimeString();
-                    HeadmainV = eng.HeadmainV;
-                    HeadmainI = eng.HeadmainI;
-                    Headmainconsume = eng.Headmainconsume;
-                    HeadmainMaxTemp = eng.HeadmainMaxTemp;
-                    HeadmainMaxExpand = eng.HeadmainMaxExpand;
-                    TailmainV = eng.TailmainV;
-                    TailmainI = eng.TailmainI;
-                    Tailmainconsume = eng.Tailmainconsume;
-                    TailmainMaxTemp = eng.TailmainMaxTemp;
-                    TailmainMaxExpand = eng.TailmainMaxTemp;
-                    LeftsubV = eng.LeftsubV;
-                    LeftsubI = eng.LeftsubI;
-                    Leftsubconsume = eng.Leftsubconsume;
-                    LeftsubMaxTemp = eng.LeftsubMaxTemp;
-                    LeftsubMaxExpand = eng.LeftsubMaxExpand;
-                    RightsubV = eng.RightsubV;
-                    RightsubI = eng.RightsubI;
-                    Rightsubconsume = eng.Rightsubconsume;
-                    RightsubMaxTemp = eng.RightsubMaxTemp;
-                    RightsubMaxExpand = eng.RightsubMaxExpand;
-                    EnergysysCollection.Add(eng);
-                    //广播
-                    UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
-                    byte[] posBytes = new byte[36];
-                    posBytes[0] = 0x04;
-                    posBytes[1] = 0x10;
-                    Buffer.BlockCopy(eng.Pack(), 0, posBytes, 2, 34);
-                    UnitCore.Instance.NetCore.BroadCast(posBytes);
-                }
-            }
-            if (message.Data.ContainsKey(MovDataType.IMAGE))
-            {
-                byte[] bytes = message.Data[MovDataType.IMAGE] as byte[];
-                if (bytes != null)
-                {
-                    using (MemoryStream ms = new MemoryStream(bytes))
+                    var ctd = message.Data[MovDataType.CTD] as Ctddata;
+                    if (ctd != null)
                     {
-                        BitmapImage image = new BitmapImage();
-                        image.BeginInit();
-                        image.StreamSource = ms;
-                        image.EndInit();
-                        ImgContainer = new System.Windows.Controls.Image();
-                        ImgContainer.Source = image;
-                        ImgCollection.Add(image);
+                        CTDTime = DateTime.FromFileTime(ctd.Ltime).ToString();
+                        CTDSoundvec = ctd.Soundvec;
+                        CTDDepth = ctd.Depth;
+                        CTDWaterTemp = ctd.Watertemp;
+                        CTDWatercond = ctd.Watercond;
+                        CTDCollection.Add(ctd);
+                        //广播
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
+                        byte[] posBytes = new byte[18];
+                        posBytes[0] = 0x02;
+                        posBytes[1] = 0x10;
+                        Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 16);
+                        UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
                 }
-
-            }
-            if (message.Data.ContainsKey(MovDataType.LIFESUPPLY))
-            {
-                var life = message.Data[MovDataType.LIFESUPPLY] as Lifesupply;
-                if (life != null)
+                if (message.Data.ContainsKey(MovDataType.ENERGY))
                 {
-                    LifeTime = DateTime.FromFileTime(life.Ltime).ToShortTimeString();
-                    Oxygen = life.Oxygen;
-                    Co2 = life.Co2;
-                    Pressure = life.Pressure;
-                    Temperature = life.Temperature;
-                    Humidity = life.Humidity;
-                    LifesupplyCollection.Add(life);
-                    //广播
-                    UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
-                    byte[] posBytes = new byte[16];
-                    posBytes[0] = 0x03;
-                    posBytes[1] = 0x10;
-                    Buffer.BlockCopy(life.Pack(), 0, posBytes, 2, 14);
-                    UnitCore.Instance.NetCore.BroadCast(posBytes);
-                    RefreshLifeInfos();
+                    var eng = message.Data[MovDataType.ENERGY] as Energysys;
+                    if (eng != null)
+                    {
+                        EnergyTime = DateTime.FromFileTime(eng.Ltime).ToString();
+                        HeadmainV = eng.HeadmainV;
+                        HeadmainI = eng.HeadmainI;
+                        Headmainconsume = eng.Headmainconsume;
+                        HeadmainMaxTemp = eng.HeadmainMaxTemp;
+                        HeadmainMaxExpand = eng.HeadmainMaxExpand;
+                        TailmainV = eng.TailmainV;
+                        TailmainI = eng.TailmainI;
+                        Tailmainconsume = eng.Tailmainconsume;
+                        TailmainMaxTemp = eng.TailmainMaxTemp;
+                        TailmainMaxExpand = eng.TailmainMaxTemp;
+                        LeftsubV = eng.LeftsubV;
+                        LeftsubI = eng.LeftsubI;
+                        Leftsubconsume = eng.Leftsubconsume;
+                        LeftsubMaxTemp = eng.LeftsubMaxTemp;
+                        LeftsubMaxExpand = eng.LeftsubMaxExpand;
+                        RightsubV = eng.RightsubV;
+                        RightsubI = eng.RightsubI;
+                        Rightsubconsume = eng.Rightsubconsume;
+                        RightsubMaxTemp = eng.RightsubMaxTemp;
+                        RightsubMaxExpand = eng.RightsubMaxExpand;
+                        EnergysysCollection.Add(eng);
+                        //广播
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
+                        byte[] posBytes = new byte[36];
+                        posBytes[0] = 0x04;
+                        posBytes[1] = 0x10;
+                        Buffer.BlockCopy(eng.Pack(), 0, posBytes, 2, 34);
+                        UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    }
                 }
-            }
-            if (message.Data.ContainsKey(MovDataType.SUBPOST))
-            {
-
-                var subpos = message.Data[MovDataType.SUBPOST] as Subposition;
-                if (subpos != null)
+                if (message.Data.ContainsKey(MovDataType.IMAGE))
                 {
-                    PosFromUwvTime = DateTime.FromFileTime(subpos.Ltime).ToShortTimeString();
-                    MovDepth = subpos.Subdepth;
-                    MovLat = subpos.SubLat;
-                    MovLong = subpos.SubLong;
-                    MovHeading = subpos.Subheading;
-                    MovHeight = subpos.Subheight;
-                    MovPitch = subpos.Subpitch;
-                    MovRoll = subpos.Subroll;
-                    SubPositionCollection.Add(subpos);
-                    //广播
-                    UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
-                    byte[] posBytes = new byte[28];
-                    posBytes[0] = 0x01;
-                    posBytes[1] = 0x10;
-                    Buffer.BlockCopy(subpos.Pack(), 0, posBytes, 2, 26);
-                    UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    byte[] bytes = message.Data[MovDataType.IMAGE] as byte[];
+                    if (bytes != null)
+                    {
+                        using (MemoryStream ms = new MemoryStream(bytes))
+                        {
+                            BitmapImage image = new BitmapImage();
+                            image.BeginInit();
+                            image.StreamSource = ms;
+                            image.EndInit();
+                            ImgContainer = new System.Windows.Controls.Image();
+                            ImgContainer.Source = image;
+                            ImgCollection.Add(image);
+                        }
+                    }
+
                 }
-            }
-            if (message.Data.ContainsKey(MovDataType.WORD))
-            {
+                if (message.Data.ContainsKey(MovDataType.LIFESUPPLY))
+                {
+                    var life = message.Data[MovDataType.LIFESUPPLY] as Lifesupply;
+                    if (life != null)
+                    {
+                        LifeTime = DateTime.FromFileTime(life.Ltime).ToString();
+                        Oxygen = life.Oxygen;
+                        Co2 = life.Co2;
+                        Pressure = life.Pressure;
+                        Temperature = life.Temperature;
+                        Humidity = life.Humidity;
+                        LifesupplyCollection.Add(life);
+                        //广播
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
+                        byte[] posBytes = new byte[16];
+                        posBytes[0] = 0x03;
+                        posBytes[1] = 0x10;
+                        Buffer.BlockCopy(life.Pack(), 0, posBytes, 2, 14);
+                        UnitCore.Instance.NetCore.BroadCast(posBytes);
+                        RefreshLifeInfos();
+                    }
+                }
+                if (message.Data.ContainsKey(MovDataType.SUBPOST))
+                {
+
+                    var subpos = message.Data[MovDataType.SUBPOST] as Subposition;
+                    if (subpos != null)
+                    {
+                        PosFromUwvTime = DateTime.FromFileTime(subpos.Ltime).ToString();
+                        MovDepth = subpos.Subdepth;
+                        MovLat = subpos.SubLat;
+                        MovLong = subpos.SubLong;
+                        MovHeading = subpos.Subheading;
+                        MovHeight = subpos.Subheight;
+                        MovPitch = subpos.Subpitch;
+                        MovRoll = subpos.Subroll;
+                        SubPositionCollection.Add(subpos);
+                        //广播
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
+                        byte[] posBytes = new byte[28];
+                        posBytes[0] = 0x01;
+                        posBytes[1] = 0x10;
+                        Buffer.BlockCopy(subpos.Pack(), 0, posBytes, 2, 26);
+                        UnitCore.Instance.NetCore.BroadCast(posBytes);
+                    }
+                }
+                if (message.Data.ContainsKey(MovDataType.WORD))
+                {
                     var word = message.Data[MovDataType.WORD] as string;
                     if (word != null)
                     {
@@ -1110,11 +1127,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
                             {
                                 UnitCore.Instance.MovTraceService.Save("FH", "（潜器）" + word);
-                                UnitCore.Instance.MovTraceService.Save("Chart","（潜器-跳频）"+word);
+                                UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-跳频）" + word);
                             }
                             else
                             {
-                                UnitCore.Instance.MovTraceService.Save("FH","（母船）"+word);
+                                UnitCore.Instance.MovTraceService.Save("FH", "（母船）" + word);
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船-跳频）" + word);
                             }
                         }
@@ -1131,10 +1148,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         }
                         chartstring = word;
                     }
-                    
-            }
-            
-            UnitCore.Instance.LiveHandle(message.Type, chartstring,ImgContainer);
+
+                }
+                UnitCore.Instance.LiveHandle(message.Type, chartstring,ImgContainer);
+            }));
         }
 
         public void Handle(USBLEvent message)

@@ -29,11 +29,21 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
     public partial class GlobalSettingView : Page
     {
         private DispatcherTimer t;
+        private DispatcherTimer modet;
         private Stream Updatefile;
         public GlobalSettingView()
         {
             InitializeComponent();
-             
+            modet = new DispatcherTimer(TimeSpan.FromMilliseconds(500), DispatcherPriority.Background, RefreshModeBox, Dispatcher.CurrentDispatcher);
+            modet.Start();
+        }
+
+        private void RefreshModeBox(object sender, EventArgs e)
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+                ModeBox.IsEnabled = false;
+            else
+                ModeBox.IsEnabled = true;
         }
 
         private async void Button_Click(object sender, RoutedEventArgs e)

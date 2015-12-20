@@ -11,7 +11,7 @@ namespace BoonieBear.DeckUnit.ACMP
     {
         private readonly static object SyncObject = new object();
         private static UWVGatherData _uwvGatherData;
-        private byte[] _mfskBytes = new byte[MovGlobalVariables.MovMFSKSize];
+        private byte[] _mfskBytes = new byte[MovGlobalVariables.MFSKSize];
         private byte[] _mpskBytes = new byte[MovGlobalVariables.MPSKSize];
         private Bpdata _bpdata;
         //private Bsssdata _bsssdata;
@@ -39,7 +39,7 @@ namespace BoonieBear.DeckUnit.ACMP
             _alertdata = new Alertdata();
             _subposition = new Subposition();
             _adcpdata = new Adcpdata();
-            Array.Clear(_mfskBytes, 0, MovGlobalVariables.ShipMFSKSize);
+            Array.Clear(_mfskBytes, 0, MovGlobalVariables.MFSKSize);
             Array.Clear(_mpskBytes, 0, MovGlobalVariables.MPSKSize);
             Array.Clear(img, 0, MovGlobalVariables.ImgSize);
             HasImg = false;
@@ -79,7 +79,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     break;
                 case MovDataType.WORD://发一次要清空一次
                     var msg = Encoding.Default.GetString(bytes);
-                    if (msg != null)
+                    if (msg != "")
                     {
                         Msg = msg;
                     }
@@ -115,12 +115,13 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(bytes,0,_mfskBytes,115,34);
                     bytes = _alertdata.Pack();
                     Buffer.BlockCopy(bytes,0,_mfskBytes,149,20);
-                    if (_msg != null)
+                    if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
+
+                        Buffer.BlockCopy(bytes, 0, _mfskBytes, 169, bytes.Length);
                     }
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,169,40);
-                    _msg = null;
+                    _msg = "";
                     return _mfskBytes;
                 case ModuleType.MPSK:
                     bytes = _subposition.Pack();
@@ -139,12 +140,12 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(bytes,0,_mpskBytes,115,34);
                     bytes = _alertdata.Pack();
                     Buffer.BlockCopy(bytes,0,_mpskBytes,149,20);
-                    if (_msg != null)
+                    if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
+                        Buffer.BlockCopy(bytes, 0, _mpskBytes, 169, bytes.Length);
                     }
-                    _msg = null;
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,169,40);
+                    _msg = "";
                     Buffer.BlockCopy(img, 0, _mpskBytes, MovGlobalVariables.MFSKSize, MovGlobalVariables.ImgSize);
                     Array.Clear(img, 0, MovGlobalVariables.ImgSize);
                     HasImg = false;

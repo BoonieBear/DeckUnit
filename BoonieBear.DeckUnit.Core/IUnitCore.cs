@@ -46,9 +46,9 @@ namespace BoonieBear.DeckUnit.ICore
         void StopUDPService();
         void StopTCpService();
         bool Send(int id, byte[] buf);
-        Task<bool> SendSSBEND(); 
-        bool IsUDPWorking { get; set; }//
-        bool IsTCPWorking { get; set; }
+        bool SendSSBEND(); 
+        bool IsUDPWorking { get; }//
+        bool IsTCPWorking { get; }
     }
     public interface ICommCore:ICore
     {

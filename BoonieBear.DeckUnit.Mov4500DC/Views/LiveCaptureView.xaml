@@ -133,21 +133,21 @@
                         </RichTextBox>
                         <TextBlock Grid.Row="0"  Name="NolinkBlock" Grid.Column="0" Background="DarkOrange" Text="没有可用的连接" Visibility="Visible" FontSize="24" TextAlignment="Center" VerticalAlignment="Top" Margin="2" Opacity="0.4"/>
                         <UniformGrid  Name="MorseGrid"  Grid.Row="1" Columns="5" Background="{DynamicResource GrayBrush}">
-                            <Button Content="收到" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
-                            <Button Content="询问情况" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
-                            <Button Content="同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
-                            <Button Content="立即上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
-                            <Button Content="不同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow}" Click="SendMorse"/>
+                            <Button Content="收到" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip}" Click="SendMorse"/>
+                            <Button Content="询问情况" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip}" Click="SendMorse"/>
+                            <Button Content="同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip}" Click="SendMorse"/>
+                            <Button Content="立即上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip}" Click="SendMorse"/>
+                            <Button Content="不同意" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip}" Click="SendMorse"/>
                             <TextBlock Text="●●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●● ●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●●●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●● ●●●" TextAlignment="Center" FontSize="20"  />
-                            <Button Content="一切正常" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
-                            <Button Content="完成阶段工作" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
-                            <Button Content="请求上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
-                            <Button Content="进入应急程序" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
-                            <Button Content="释放应急浮标" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShow, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="一切正常" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="完成阶段工作" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="请求上浮" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="进入应急程序" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
+                            <Button Content="释放应急浮标" Style="{StaticResource ChromeButtonStyle}" Background ="{DynamicResource DefaultBackgroundBrush}" IsEnabled="{Binding BtnShowShip, Converter={StaticResource BoolReverseConverter}}" Click="SendMorse"/>
                             <TextBlock Text="●●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●●" TextAlignment="Center" FontSize="20" />
                             <TextBlock Text="●● ●●" TextAlignment="Center" FontSize="20" />
@@ -157,12 +157,12 @@
                         <Grid Grid.Row="2" Background="{Binding Background, ElementName=SendMessageBox}">
                             <TextBox  Grid.Row="2" VerticalScrollBarVisibility="Auto" 
                                       Name="SendMessageBox" 
-                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" />
-                            <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right" Panel.ZIndex="10">
+                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" MaxLength="20" />
+                            <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right">
                                 <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="50" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Button Name="AddMorseBtn" Foreground="White" Content="摩斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-100" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
-                                    <Button Name="AddImageBtn" Foreground="White" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-160" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddImgCMD}"/>
-                                    <Button Name="AddFHBtn" Foreground="White" Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="140" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddFHCMD}"/>
+                                    <Button Name="AddMorseBtn" Foreground="White" Content="摩斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-90" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
+                                    <Button Name="AddFHBtn" Foreground="White" Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-155" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddFHCMD}"/>
+                                    <Button Name="AddImageBtn" Foreground="White" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="160" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddImgCMD}"/>
                                 </Controls:FanPanel>
                                 <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Background, ElementName=SendMessageBox}"/>
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
@@ -682,9 +682,9 @@
                                         </Grid.RowDefinitions>
                                         <dxchart:XYDiagram2D>
                                             <dxchart:XYDiagram2D.AxisX>
-                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True">
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True"  Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisX2D.Title>
-                                                        <dxchart:AxisTitle Content="能源消耗"/>
+                                                        <dxchart:AxisTitle Content="能源消耗" Foreground="{DynamicResource WinAccentBackgroundBrush}"/>
                                                     </dxchart:AxisX2D.Title>
                                                     <dxchart:AxisX2D.NumericOptions>
                                                         <dxchart:NumericOptions/>
@@ -692,12 +692,12 @@
                                                 </dxchart:AxisX2D>
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
-                                                <dxchart:AxisY2D>
+                                                <dxchart:AxisY2D  Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="200"/>
                                                     </dxchart:AxisY2D.Range>
                                                     <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="Kwh" />
+                                                        <dxchart:AxisLabel EndText="Kwh"  Foreground="{DynamicResource PressedBrush}"/>
                                                     </dxchart:AxisY2D.Label>
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
@@ -746,9 +746,9 @@
                                         </dxchart:XYDiagram2D>
                                         <dxchart:XYDiagram2D Grid.Row="1">
                                             <dxchart:XYDiagram2D.AxisX>
-                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True">
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True" Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisX2D.Title>
-                                                        <dxchart:AxisTitle Content="最大温度"/>
+                                                        <dxchart:AxisTitle Content="最大温度"  Foreground="{DynamicResource WinAccentBackgroundBrush}"/>
                                                     </dxchart:AxisX2D.Title>
                                                     <dxchart:AxisX2D.NumericOptions>
                                                         <dxchart:NumericOptions/>
@@ -756,12 +756,12 @@
                                                 </dxchart:AxisX2D>
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
-                                                <dxchart:AxisY2D>
+                                                <dxchart:AxisY2D  Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="80"/>
                                                     </dxchart:AxisY2D.Range>
                                                     <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="°C" />
+                                                        <dxchart:AxisLabel EndText="°C"   Foreground="{DynamicResource PressedBrush}"/>
                                                     </dxchart:AxisY2D.Label>
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
@@ -810,22 +810,22 @@
                                         </dxchart:XYDiagram2D>
                                         <dxchart:XYDiagram2D Grid.Row="2">
                                             <dxchart:XYDiagram2D.AxisX>
-                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True">
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Minute" Reverse="True"  Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisX2D.Title>
-                                                        <dxchart:AxisTitle Content="最大膨胀"/>
+                                                        <dxchart:AxisTitle Content="最大膨胀"  Foreground="{DynamicResource WinAccentBackgroundBrush}"/>
                                                     </dxchart:AxisX2D.Title>
                                                     <dxchart:AxisX2D.NumericOptions>
                                                         <dxchart:NumericOptions/>
                                                     </dxchart:AxisX2D.NumericOptions>
-                                                </dxchart:AxisX2D>
+                                                </dxchart:AxisX2D >
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
-                                                <dxchart:AxisY2D>
+                                                <dxchart:AxisY2D  Brush="{DynamicResource PressedBrush}">
                                                     <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="100"/>
                                                     </dxchart:AxisY2D.Range>
                                                     <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="mm" />
+                                                        <dxchart:AxisLabel EndText="mm"  Foreground="{DynamicResource PressedBrush}"/>
                                                     </dxchart:AxisY2D.Label>
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>

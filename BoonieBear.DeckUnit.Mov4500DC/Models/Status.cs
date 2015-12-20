@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Models
         {
             get
             {
-                if (UnitCore.Instance.NetCore.IsWorking)
+                if (UnitCore.Instance.NetCore.IsTCPWorking)
                     return Properties.Resources.NETWORK_OK;
                 return Properties.Resources.NETWORK_DOWN;
             }
