@@ -14,7 +14,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Models
         {
             get
             {
-                if (UnitCore.Instance.NetCore.IsTCPWorking)
+                if (UnitCore.Instance.NetCore!=null&&UnitCore.Instance.NetCore.IsTCPWorking)
                     return Properties.Resources.NETWORK_OK;
                 return Properties.Resources.NETWORK_DOWN;
             }
@@ -23,7 +23,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Models
         {
             get
             {
-                if (UnitCore.Instance.CommCore.IsWorking)
+                if (UnitCore.Instance.CommCore!=null&&UnitCore.Instance.CommCore.IsWorking)
                     return Properties.Resources.Comm_OK;
                 return Properties.Resources.Comm_Failed;
             }

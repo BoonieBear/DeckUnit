@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -13,6 +14,7 @@ using BoonieBear.DeckUnit.ACMP;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
+using DevExpress.Xpf.Editors.Helpers;
 using DevExpress.Xpf.Ribbon.Customization;
 using DevExpress.XtraCharts.Native;
 using DevExpress.XtraRichEdit.Utils.NumberConverters;
@@ -28,6 +30,10 @@ using System.Collections;
 using System.IO;
 using System.Windows.Media.Imaging;
 using BoonieBear.DeckUnit.Mov4500UI.Models;
+using System.Threading;
+using System.Windows;
+using FILETIME = System.Runtime.InteropServices.FILETIME;
+
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
     public class LiveCaptureViewModel : ViewModelBase, IHandleMessage<MovDataEvent>, IHandleMessage<USBLEvent>
@@ -47,12 +53,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             xVel = new ObservableCollection<AdcpInfo>();
             yVel = new ObservableCollection<AdcpInfo>();
             zVel = new ObservableCollection<AdcpInfo>();
-            for (int i = 0; i < 10; i++)
-            {
-                xVel.Add(new AdcpInfo(i + 1, (sbyte) (-5)));
-                yVel.Add(new AdcpInfo(i + 1, (sbyte)i));
-                zVel.Add(new AdcpInfo(i + 1, (sbyte)i));
-            }
+            
             AlarmList = new ObservableCollection<string>();
             UsblPositionCollection = new ObservableCollection<Sysposition>();
             SubPositionCollection = new ObservableCollection<Subposition>();
@@ -253,8 +254,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             bytesFormerReceived = receiveByte;
             bytesFormerSent = SentBype;
-            RefreshLifeInfos();
         }
+
 
         //show btn or control based on the workmode 
         //if workmode == ship tnshow = true, or btnshow=false
@@ -883,7 +884,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         #region Data Handle
         public void Handle(MovDataEvent message)
         {
-            App.Current.Dispatcher.Invoke(new Action(() =>
+            Application.Current.Dispatcher.Invoke(new Action(() =>
             {
                 Status.LastUpdateTime = DateTime.Now.ToString();
                 Status.ReceiveMsgCount++;
@@ -894,7 +895,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var adcp = message.Data[MovDataType.ADCP] as Adcpdata;
                     if (adcp != null)
                     {
-                        ADCPTime = DateTime.FromFileTime(adcp.Itime).ToString();
+                        ADCPTime = adcp.Time;
                         xVel.Clear();
                         yVel.Clear();
                         zVel.Clear();
@@ -904,8 +905,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             yVel.Add(new AdcpInfo(i + 1, adcp.FloorY[i]));
                             zVel.Add(new AdcpInfo(i + 1, adcp.FloorZ[i]));
                         }
-                        BottomTrack = (float) adcp.BottomTrack/100.0f;
-                        ADCPHeight = (float) adcp.Height/100.0f;
+                        BottomTrack = (float) adcp.BottomTrack;
+                        ADCPHeight = (float) adcp.Height;
                         AdcpdataCollection.Add(adcp);
                     }
                 }
@@ -914,7 +915,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var alt = message.Data[MovDataType.ALERT] as Alertdata;
                     if (alt != null)
                     {
-                        AlarmTime = DateTime.FromFileTime(alt.Ltime).ToString();
+                        AlarmTime = alt.Time;
                         Leak = alt.Leak;
                         Cable = alt.Cable;
                         AlertTemp = alt.Temperature;
@@ -945,7 +946,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var allpos = message.Data[MovDataType.ALLPOST] as Sysposition;
                     if (allpos != null)
                     {
-                        PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToString();
+                        PosFromUSBLTime = allpos.Time;
+                        
                         ShipLongUsbl = allpos.ShipLong;
                         ShipLatUsbl = allpos.ShipLat;
                         ShipHeading = allpos.Shipheading;
@@ -974,7 +976,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var bp = message.Data[MovDataType.BP] as Bpdata;
                     if (bp != null)
                     {
-                        BpTime = DateTime.FromFileTime(bp.Itime).ToString();
+                        BpTime = bp.Time;
                         BpBottom = bp.Down;
                         BpBottomBack = bp.Behinddown;
                         BpFront = bp.Front;
@@ -1001,7 +1003,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var ctd = message.Data[MovDataType.CTD] as Ctddata;
                     if (ctd != null)
                     {
-                        CTDTime = DateTime.FromFileTime(ctd.Ltime).ToString();
+                        CTDTime = ctd.Time;
                         CTDSoundvec = ctd.Soundvec;
                         CTDDepth = ctd.Depth;
                         CTDWaterTemp = ctd.Watertemp;
@@ -1021,7 +1023,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var eng = message.Data[MovDataType.ENERGY] as Energysys;
                     if (eng != null)
                     {
-                        EnergyTime = DateTime.FromFileTime(eng.Ltime).ToString();
+                        EnergyTime = eng.Time;
                         HeadmainV = eng.HeadmainV;
                         HeadmainI = eng.HeadmainI;
                         Headmainconsume = eng.Headmainconsume;
@@ -1057,25 +1059,24 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     byte[] bytes = message.Data[MovDataType.IMAGE] as byte[];
                     if (bytes != null)
                     {
-                        using (MemoryStream ms = new MemoryStream(bytes))
-                        {
-                            BitmapImage image = new BitmapImage();
-                            image.BeginInit();
-                            image.StreamSource = ms;
-                            image.EndInit();
-                            ImgContainer = new System.Windows.Controls.Image();
-                            ImgContainer.Source = image;
-                            ImgCollection.Add(image);
-                        }
-                    }
+                        MemoryStream ms = new MemoryStream(bytes);
+                        BitmapImage image = new BitmapImage();
+                        image.BeginInit();
+                        image.StreamSource = ms;
+                        image.EndInit();
+                        ImgContainer = new System.Windows.Controls.Image();
+                        ImgContainer.Source = image;
+                        ImgCollection.Add(image);
 
+                    }
                 }
                 if (message.Data.ContainsKey(MovDataType.LIFESUPPLY))
                 {
                     var life = message.Data[MovDataType.LIFESUPPLY] as Lifesupply;
                     if (life != null)
                     {
-                        LifeTime = DateTime.FromFileTime(life.Ltime).ToString();
+                        LifeTime = life.Time;
+                        
                         Oxygen = life.Oxygen;
                         Co2 = life.Co2;
                         Pressure = life.Pressure;
@@ -1098,7 +1099,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var subpos = message.Data[MovDataType.SUBPOST] as Subposition;
                     if (subpos != null)
                     {
-                        PosFromUwvTime = DateTime.FromFileTime(subpos.Ltime).ToString();
+                        PosFromUwvTime = subpos.Time;
+                        
                         MovDepth = subpos.Subdepth;
                         MovLat = subpos.SubLat;
                         MovLong = subpos.SubLong;

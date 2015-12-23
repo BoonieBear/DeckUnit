@@ -343,10 +343,11 @@ namespace BoonieBear.DeckUnit.ACMP
                     alt.Parse(data);
                     Results.Add(MovDataType.ALERT, alt);
                     string msg = Encoding.Default.GetString(pkg, 169, 40);
+                    msg = msg.TrimEnd('\0');
                     Results.Add(MovDataType.WORD, msg);
                     byte[] img = new byte[MovGlobalVariables.ImgSize];
                     Buffer.BlockCopy(dataBytes, MovGlobalVariables.MFSKSize, img, 0, MovGlobalVariables.ImgSize);
-                    return dataBytes;
+                    return img;
                 }
                 
             }

@@ -32,15 +32,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             InitializeComponent();
             MainFrameViewModel.pMainFrame.DialogCoordinator = DialogCoordinator.Instance;
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
-
         }
 
         private  void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             
             Application.Current.MainWindow = this;
+            TaskEx.Run(()=>UnitCore.Instance.Start());
+            
             Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
+            BoonieBear.DeckUnit.Mov4500UI.Helpers.LogHelper.WriteLog("开始工作");
             Splasher.CloseSplash();
+            
         }
 
         private void MetroWindow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)

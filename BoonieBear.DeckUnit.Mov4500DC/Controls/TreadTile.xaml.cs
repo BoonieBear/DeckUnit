@@ -34,6 +34,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
         private string LastValue;
         private void OnValueChanged(object sender, EventArgs e)
         {
+            //Value = float.Parse(Value).ToString("F02");
             float lastvalue = 0;
             float newvalue = 0;
             if (LastValue.IsEmpty())
@@ -42,6 +43,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             {
                 lastvalue = float.Parse(LastValue);
             }
+            
             if (Value.IsEmpty())
                 newvalue = 0;
             else
@@ -62,7 +64,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             }
             else
             {
-                SpreadTextBlock.Text = "0";
+                SpreadTextBlock.Text = "";
                 UpMovementIcon.Visibility = Visibility.Hidden;
                 DownMovementIcon.Visibility = Visibility.Hidden;
             }
@@ -79,7 +81,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
         public string Value
         {
             get { return (string)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            set
+            {    
+                SetValue(ValueProperty, value);        
+            }
         }
 
         public static readonly DependencyProperty ValueProperty =

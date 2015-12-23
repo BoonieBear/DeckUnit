@@ -13,7 +13,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
         {
             if (value != null)
             {
-                return DateTime.FromFileTime((long)value).ToShortTimeString();
+                return DateTime.FromFileTime((long)value).ToString();
             }
             return null;
         }

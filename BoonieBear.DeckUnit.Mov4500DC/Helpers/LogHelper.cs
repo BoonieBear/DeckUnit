@@ -1,4 +1,5 @@
 ﻿using System;
+using BoonieBear.DeckUnit.Mov4500UI.ViewModel;
 using log4net;
 namespace BoonieBear.DeckUnit.Mov4500UI.Helpers
 {
@@ -16,6 +17,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Helpers
             if (loginfo.IsInfoEnabled)
             {
                 loginfo.Info(info);
+                App.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    if (MainFrameViewModel.pMainFrame != null)
+                        MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" + info);
+                }));
             }
         }
         /// <summary>
@@ -39,6 +45,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Helpers
                 string errorMsg = BeautyErrorMsg(ex);
                 logerror.Error(errorMsg);
             }
+            App.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                if (MainFrameViewModel.pMainFrame != null)
+                    MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" + info);
+            }));
         }
         /// <summary>
         /// 美化错误信息

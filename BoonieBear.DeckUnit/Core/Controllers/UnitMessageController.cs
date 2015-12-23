@@ -105,5 +105,11 @@ namespace BoonieBear.DeckUnit.Core.Controllers
             }
         }
         #endregion
+
+
+        public void Notice(string message)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

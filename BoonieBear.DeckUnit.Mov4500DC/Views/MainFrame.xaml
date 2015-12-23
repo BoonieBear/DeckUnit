@@ -16,6 +16,7 @@
         dialogs:DialogParticipation.Register="{Binding}"
         dx:ThemeManager.ThemeName="MetropolisDark" IgnoreTaskbarOnMaximize="True"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
+       
         ShowInTaskbar ="True" ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized" EnableDWMDropShadow="True" IsWindowDraggable="False">
     <metroControl:MetroWindow.Resources>
         <Converters:WorkAreaWidthConverter x:Key="waw"/>
@@ -81,7 +82,6 @@
 			NavigationUIVisibility="Hidden"
             HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded" FontSize="24">
         </Frame>
-        <!--About the Software Panel-->
         <Controls:AnimationSlide  
             Panel.ZIndex="90"
                                      x:Name="AboutPanel"
@@ -129,26 +129,26 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="0,5,0,0" Text="网络状态:" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding NetworkStatus}" TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,5,0,0" Text="{Binding NetworkStatus}" TextWrapping="Wrap"/>
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="0,5,0,0" Text="数据更新:" TextWrapping="Wrap"/>
-                        <TextBlock Text="{Binding LastUpdateTime}" TextWrapping="Wrap"/>
+                        <TextBlock Margin="0,5,0,0" Text="{Binding LastUpdateTime}" TextWrapping="Wrap"/>
                     </StackPanel>
                 </StackPanel>
                 <StackPanel Grid.Row="1" Margin="4" Orientation="Vertical">
                     <ToggleButton x:Name="LogToggle" Background="#696969"
                                   IsChecked ="False"
                                   Content="系统记录"/>
-                    <ListView Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}">
+                    <ListView Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}" Height="600">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <!-- 设置控件模板 -->
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
-                                            <Border Background="{TemplateBinding Background}" Height="16">
+                                            <Border Background="{TemplateBinding Background}" Height="32">
                                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               TextBlock.Foreground="{TemplateBinding Foreground}"/>
@@ -172,7 +172,7 @@
                         </ListBox.ItemContainerStyle>
                     </ListView>
                 </StackPanel>
-                <StackPanel Margin ="4,0,0,0" Orientation="Vertical" Grid.Row="2">
+                <StackPanel Margin ="4,0,0,0" Orientation="Vertical" Grid.Row="2" VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding SPLASH_COPY_RIGHT, Mode=OneWay, Source={StaticResource Resources}}" TextWrapping="Wrap" Margin="0,10,0,0"/>
                     <TextBlock Text="{Binding SPLASH_RIGHT_RESERVER, Mode=OneWay, Source={StaticResource Resources}}" TextWrapping="Wrap"/>
                 </StackPanel>

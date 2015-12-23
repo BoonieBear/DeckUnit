@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -53,8 +54,10 @@ namespace ImageProc
                         //新建一个画板
                         Graphics newg = Graphics.FromImage(newimage);
                         //设置质量
-                        newg.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
-                        newg.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
+                        newg.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                        newg.SmoothingMode = SmoothingMode.HighQuality;
+                        newg.PixelOffsetMode = PixelOffsetMode.HighQuality;
+                        newg.CompositingQuality = CompositingQuality.HighQuality;
                         newg.Clear(Color.White);
                         //画图
                         newg.DrawImage(source, new Rectangle(0, 0, newimage.Width, newimage.Height), new Rectangle(0, 0, source.Width, source.Height), GraphicsUnit.Pixel);

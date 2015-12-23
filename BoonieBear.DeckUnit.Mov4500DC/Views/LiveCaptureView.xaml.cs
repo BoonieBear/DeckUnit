@@ -142,7 +142,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 NolinkBlock.Visibility = Visibility.Hidden;
             }
             UnitCore.Instance.Wave = WaveControl;
-
+            if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)
+            {
+                MultiView.HideControlButtons();
+                MultiView.SelectedIndex = 1;
+            }
+            else
+            {
+                MultiView.ShowControlButtons();
+                MultiView.SelectedIndex = 0;
+            }
+            
         }
         private async Task<Model3DGroup> LoadAsync(string model3DPath, bool freeze)
         {
@@ -615,21 +625,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             switch (flipview.SelectedIndex)
             {
                 case 0:
-                    flipview.BannerText = "潜器深度";
+                    flipview.BannerText = "高速图像";
                     break;
                 case 1:
-                     flipview.BannerText = "能源数据";
-                    break;
-                case 2:
-                    flipview.BannerText = "生命支持";
-                    break;
-                case 3:
-                    if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE)
-                    {
-                        flipview.SelectedIndex = 0;
-                        break;
-                    }
-                    flipview.BannerText = "潜器采集图像!";
+                     flipview.BannerText = "潜器数据";
                     break;
                 default:
                     break;

@@ -48,12 +48,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
         public void WriteLog(string message)
         {
             LogHelper.WriteLog(message);
-            MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString()+":"+message);
+
         }
 
         public void ErrorLog(string message, Exception ex)
         {
             LogHelper.ErrorLog(message, ex);
+            
         }
 
         public void Alert(string message)
@@ -81,11 +82,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
             {
                 case LogType.Both:
                     WriteLog(message.Message);
-                    Alert(message.Message);
+                    Notice(message.Message);
                     break;
                 case LogType.OnlyInfo:
                     //WriteLog(message.Message);
-                    Alert(message.Message);
+                    Notice(message.Message);
                     break;
                 default:
                     WriteLog(message.Message);
@@ -101,14 +102,26 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
                     break;
                 case LogType.Both:
                     ErrorLog(message.Message, message.Ex);
-                    Alert(message.Message);
+                    Alert(message.Ex.StackTrace);
                     break;
                 default:
                     //ErrorLog(message.Message, message.Ex);
-                    Alert(message.Message);
+                    Alert(message.Ex.StackTrace);
                     break;
             }
         }
         #endregion
+
+
+        public void Notice(string message)
+        {
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            App.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
+                    message, MessageDialogStyle.Affirmative, md);
+            }));
+        }
     }
 }

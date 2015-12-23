@@ -47,9 +47,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             // 初始化消息处理函数
             UnitKernal.Instance.Controller.Init();//导航消息响应
             UnitKernal.Instance.MessageController.Init();//系统消息响应
-            UnitCore.Instance.Start();
+            
             LogHelper.WriteLog("程序启动");
-            Thread.Sleep(3000);//等待网络连接完成
+            
   
             base.OnStartup(e);
         }
@@ -74,14 +74,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI
             var o = e.ExceptionObject as Exception;
             if (o != null)
             {
-                if (App.Current.MainWindow.IsActive)
-                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(o.Message, LogType.Both));
-                else
+                App.Current.Dispatcher.Invoke(new Action(() =>
                 {
-                    LogHelper.ErrorLog(o.Message, o);
-                }
+                    if (App.Current.MainWindow.IsActive)
+                        UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(o.Message, LogType.Both));
+                    else
+                    {
+                        LogHelper.ErrorLog(o.Message, o);
+                    }
+                }));
             }
-            
         }
 
         private void Application_Exit(object sender, ExitEventArgs e)

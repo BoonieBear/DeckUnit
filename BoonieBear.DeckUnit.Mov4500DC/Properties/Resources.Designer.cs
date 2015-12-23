@@ -61,7 +61,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
-        ///   查找类似 Version {0} 的本地化字符串。
+        ///   查找类似 版本号 2.0 的本地化字符串。
         /// </summary>
         public static string About_Version {
             get {
@@ -84,6 +84,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         public static string AppBarButton_SaveResult {
             get {
                 return ResourceManager.GetString("AppBarButton_SaveResult", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 1001 的本地化字符串。
+        /// </summary>
+        public static string Build_Number {
+            get {
+                return ResourceManager.GetString("Build_Number", resourceCulture);
             }
         }
         
@@ -169,7 +178,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
-        ///   查找类似 4500米载人潜器声学显控程序 的本地化字符串。
+        ///   查找类似 4500米载人潜器声学主控程序 的本地化字符串。
         /// </summary>
         public static string Home_Title_ApplicationName {
             get {
@@ -187,7 +196,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
-        ///   查找类似 载人潜器声学显控程序 的本地化字符串。
+        ///   查找类似 载人潜器声学主控程序 的本地化字符串。
         /// </summary>
         public static string Mov4500_ApplicationName {
             get {
@@ -196,7 +205,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         }
         
         /// <summary>
-        ///   查找类似 载人潜器声学显控程序正在运行 的本地化字符串。
+        ///   查找类似 载人潜器声学主控程序正在运行 的本地化字符串。
         /// </summary>
         public static string Mov4500_RUNNING {
             get {
@@ -291,6 +300,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Properties {
         public static string SPLASH_VERSION {
             get {
                 return ResourceManager.GetString("SPLASH_VERSION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 2.0 的本地化字符串。
+        /// </summary>
+        public static string Version_Number {
+            get {
+                return ResourceManager.GetString("Version_Number", resourceCulture);
             }
         }
     }

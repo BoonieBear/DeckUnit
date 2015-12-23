@@ -160,16 +160,16 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
             {
                 using (client = o as TcpClient)
                 {
-                    var myReadBuffer = new byte[16384];
+                    var myReadBuffer = new byte[32768];
                     var stream = client.GetStream();
                     while (stream.CanRead)
                     {
-                        Array.Clear(myReadBuffer, 0, 16384);//置零
+                        Array.Clear(myReadBuffer, 0, 32768);//置零
                         int numberOfBytesRead = 0;
                         stream.Read(myReadBuffer, 0, 4);//先读包头
                         var packetLength = BitConverter.ToUInt16(myReadBuffer, 2);
                         // Incoming message may be larger than the buffer size.
-                        if (packetLength > 16384)
+                        if (packetLength > 32768)
                         {
                             while(stream.DataAvailable)
                                 stream.ReadByte();//先读包头

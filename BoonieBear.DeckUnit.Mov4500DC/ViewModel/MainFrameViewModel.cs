@@ -29,6 +29,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             MsgLog = new ObservableCollection<string>();
             MsgLog.CollectionChanged+=MsgLog_CollectionChanged;
             t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, RefreshStatus, Dispatcher.CurrentDispatcher);
+            Version = Properties.Resources.Version_Number;
+            BuildNo = Properties.Resources.Build_Number;
         }
 
         private void RefreshStatus(object sender, EventArgs e)

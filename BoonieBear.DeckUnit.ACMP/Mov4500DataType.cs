@@ -285,7 +285,11 @@ namespace BoonieBear.DeckUnit.ACMP
             _relateZ = BitConverter.ToUInt16(bytes, 38);
             Buffer.BlockCopy(bytes, 0, storebyte,0,40);
         }
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_ltime).ToString(); }
 
+        }
         public long Ltime
         {
             get { return _ltime; }
@@ -296,10 +300,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_shipLong >= 0)
-                    return "E " + (_shipLong / 60).ToString() + "°" + (_shipLong % 60).ToString() + "'";
+                    return (_shipLong / 60).ToString() + "°" + (_shipLong % 60).ToString() + "'" + " E";
                 else
                 {
-                    return "W " + (-_shipLong / 60).ToString() + "°" + (-_shipLong % 60).ToString() + "'";
+                    return (-_shipLong / 60).ToString() + "°" + (-_shipLong % 60).ToString() + "'" + " W";
                 }
             }
         }
@@ -308,10 +312,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_shipLong >= 0)
-                    return "N " + (_shipLat / 60).ToString() + "°" + (_shipLat % 60).ToString() + "'";
+                    return (_shipLat / 60).ToString() + "°" + (_shipLat % 60).ToString() + "'"+" N";
                 else
                 {
-                    return "S " + (-_shipLat / 60).ToString() + "°" + (-_shipLat % 60).ToString() + "'";
+                    return (-_shipLat / 60).ToString() + "°" + (-_shipLat % 60).ToString() + "'"+" S";
                 }
             }
         }
@@ -337,10 +341,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_subLong >= 0)
-                    return "N " + (_subLong / 60).ToString() + "°" + (_subLong % 60).ToString() + "'";
+                    return (_subLong / 60).ToString() + "°" + (_subLong % 60).ToString() + "'" + " N";
                 else
                 {
-                    return "S " + (-_subLong / 60).ToString() + "°" + (-_subLong % 60).ToString() + "'";
+                    return (-_subLong / 60).ToString() + "°" + (-_subLong % 60).ToString() + "'" + " S";
                 }
             }
         }
@@ -349,10 +353,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_subLat >= 0)
-                    return "N " + (_subLat / 60).ToString() + "°" + (_subLat % 60).ToString() + "'";
+                    return (_subLat / 60).ToString() + "°" + (_subLat % 60).ToString() + "'" + " N";
                 else
                 {
-                    return "S " + (-_subLat / 60).ToString() + "°" + (-_subLat % 60).ToString() + "'";
+                    return (-_subLat / 60).ToString() + "°" + (-_subLat % 60).ToString() + "'" + " S";
                 }
             }
         }
@@ -389,7 +393,11 @@ namespace BoonieBear.DeckUnit.ACMP
         private UInt16		_left;//左下
         private UInt16		_right;//右下	
         private byte[] storebyte = new byte[18];
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_itime).ToString(); }
 
+        }
         public long Itime
         {
             get
@@ -503,6 +511,11 @@ namespace BoonieBear.DeckUnit.ACMP
         private UInt16 _watercond;//海水电导率
         private UInt16 _soundvec;//声速
         byte[] storebyte = new byte[16];
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_ltime).ToString(); }
+
+        }
         public long Ltime
         {
             get { return _ltime; }
@@ -574,6 +587,11 @@ namespace BoonieBear.DeckUnit.ACMP
             _subdepth = depth;
             _subheight = height;
         }
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_ltime).ToString(); }
+
+        }
         public long Ltime
         {
             get { return _ltime; }
@@ -584,10 +602,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_subLong >= 0)
-                    return "E " + (_subLong/60).ToString() + "°" + (_subLong%60).ToString() + "'";
+                    return (_subLong / 60).ToString() + "°" + (_subLong % 60).ToString() + "'" + " E";
                 else
                 {
-                    return "W " + (-_subLong/60).ToString() + "°" + (-_subLong%60).ToString() + "'";
+                    return (-_subLong / 60).ToString() + "°" + (-_subLong % 60).ToString() + "'" + " W";
                 }
             }
         }
@@ -598,10 +616,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_subLat >= 0)
-                    return "N " + (_subLat / 60).ToString() + "°" + (_subLat % 60).ToString() + "'";
+                    return (_subLat / 60).ToString() + "°" + (_subLat % 60).ToString() + "'" + " N";
                 else
                 {
-                    return "S " + (-_subLat / 60).ToString() + "°" + (-_subLat % 60).ToString() + "'";
+                    return (-_subLat / 60).ToString() + "°" + (-_subLat % 60).ToString() + "'" + " S";
                 }
             }
 
@@ -692,6 +710,11 @@ namespace BoonieBear.DeckUnit.ACMP
         private byte  _temperature;//舱内温度
         private UInt16  _humidity; //舱内湿度		
         byte[] storebyte = new byte[14];
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_ltime).ToString(); }
+
+        }
         public long Ltime
         {
             get { return _ltime; }
@@ -746,8 +769,8 @@ namespace BoonieBear.DeckUnit.ACMP
     public class Energysys:IProtocol
     {
         private long _ltime;
-        private byte  _headmainV;//主电池电压
-        private UInt16  _headmainI;//主电池电流
+        private byte _headmainV;//主电池电压
+        private UInt16 _headmainI;//主电池电流
         private UInt16  _headmainconsume;//主电池能源消耗
         private byte _headmainMaxTemp;
         private byte _headmainMaxExpand;
@@ -767,6 +790,12 @@ namespace BoonieBear.DeckUnit.ACMP
         private byte _rightsubMaxTemp;
         private byte _rightsubMaxExpand;
         byte[] storeBytes = new byte[34];
+
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_ltime).ToString(); }
+            
+        }
         public long Ltime
         {
             get { return _ltime; }
@@ -915,6 +944,11 @@ namespace BoonieBear.DeckUnit.ACMP
         private UInt16	_cable;//压载水舱液位
         private byte    _temperature;//计算机罐温度
         byte[] storeBytes = new byte[20];
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_ltime).ToString(); }
+
+        }
         public long Ltime
         {
             get { return _ltime; }
@@ -1046,7 +1080,11 @@ namespace BoonieBear.DeckUnit.ACMP
             _bottomTrack = 0;
             _height = 0;
         }
+        public string Time
+        {
+            get { return DateTime.FromFileTime(_itime).ToString(); }
 
+        }
         public sbyte[] FloorX
         {
             get { return _floorX; }
@@ -1070,14 +1108,14 @@ namespace BoonieBear.DeckUnit.ACMP
                 set { _itime = value; }
         }
 
-        public byte BottomTrack
+        public float BottomTrack
         {
-            get { return _bottomTrack; }
+            get { return _bottomTrack/100f; }
         }
 
-        public ushort Height
+        public float Height
         {
-            get { return _height; }
+            get { return _height/100f; }
         }
 
         public void Parse(byte[] bytes)
