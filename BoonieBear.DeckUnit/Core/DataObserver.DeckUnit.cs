@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
 using System.Net.Sockets;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.JsonUtils;
 using BoonieBear.DeckUnit.Models;
+using BoonieBear.DeckUnit.UBP;
 using BoonieBear.DeckUnit.ViewModels;
+using MahApps.Metro.Controls.Dialogs;
 using Newtonsoft.Json;
 using System.Windows.Threading;
 using Newtonsoft.Json.Linq;
@@ -21,7 +25,7 @@ namespace BoonieBear.DeckUnit.Core
     public class DeckUnitDataObserver:Observer<CustomEventArgs>
     {
         private string str;
-        public void Handle(object sender, CustomEventArgs e)
+        public async void Handle(object sender, CustomEventArgs e)
         {
             if (e.ParseOK)
             {
@@ -84,6 +88,78 @@ namespace BoonieBear.DeckUnit.Core
                             UnitCore.Instance.UnitTraceService.SaveAD(e.DataBuffer);
                             UnitCore.Instance.EventAggregator.PublishMessage(
                                 new UpdateADByteCount((int)UnitCore.Instance.UnitTraceService.GetADCount()));
+                            break;
+                        case (int)PackType.Ack:
+                        case (int)PackType.Data:
+                            string err;
+                            var ret = DeckDataProtocol.ParseData(e.DataBuffer, out err);
+                            if (TaskStage.Failed == ret)
+                            {
+                                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(err, LogType.Both));
+                            }
+                            else if (ret == TaskStage.Continue)
+                            {
+                                ACNBuilder.PackTask(DeckDataProtocol.WorkingBdTask,false,DeckDataProtocol.LastRecvPkgId);
+                                var cmd = ACNProtocol.Package(false);
+                                var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
+                                await result;
+                                var end = result.Result;
+                                if (end == false)
+                                {
+                                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(UnitCore.Instance.NetEngine.Error, LogType.Both));
+                                }
+                                else
+                                {
+                                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("成功发送分组响应包", LogType.OnlyLog));
+                                }
+                            }
+                            else if(ret == TaskStage.Finish)
+                            {
+                                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("数据接收完毕！", LogType.Both));
+                            }
+                            break;
+                        case (int)PackType.Ans:
+                            string error;
+                            switch ((TaskState)BitConverter.ToInt16(bytes,0))
+                            {       
+                                
+                                    case TaskState.OK://查询到数据
+                                        error = "";
+                                        string ans = BitConverter.ToInt16(bytes, 0).ToString();
+                                        string ping = BitConverter.ToInt16(bytes, 2).ToString();
+                                        string length = BitConverter.ToInt32(bytes, 4).ToString();
+                                        App.Current.Dispatcher.Invoke(new Action(() =>
+                                        {
+                                            var md = new MetroDialogSettings();
+                                            md.AffirmativeButtonText = "确定";
+                                            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(
+                                                MainFrameViewModel.pMainFrame, "查询数据成功",
+                                                "应答ID：" + ans + "\n" + "Ping= " + ping + "\n" +
+                                                "数据长度= " + length, MessageDialogStyle.Affirmative,
+                                                md);
+                                        }));
+                                        break;
+                                default:
+                                    string errno="";
+                                    if ((TaskState)BitConverter.ToInt16(bytes, 0)==TaskState.DATA_FAILED)
+                                        errno = "检索时间段内无数据";
+                                    if ((TaskState)BitConverter.ToInt16(bytes, 0)== TaskState.NO_FILE)
+                                        errno = "该时段没有数据";
+                                    if ((TaskState)BitConverter.ToInt16(bytes, 0)== TaskState.RECV_FAILED)
+                                        errno = "接收数据出错";
+                                    if ((TaskState)BitConverter.ToInt16(bytes, 0)== TaskState.WAKE_FAILED)
+                                        errno = "唤醒失败";
+                                    if ((TaskState)BitConverter.ToInt16(bytes, 0)==TaskState.INVALID_CMD)
+                                        errno = "命令解析失败";
+                                    if ((TaskState)BitConverter.ToInt16(bytes, 0)== TaskState.SD_ERR)
+                                        errno = "SD卡故障";
+                                    var ms = new MetroDialogSettings();
+                                    ms.AffirmativeButtonText = "确定";
+                                    MainFrameViewModel.pMainFrame.Dispatch(()=>MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(
+                                        MainFrameViewModel.pMainFrame, "查询数据失败", errno, MessageDialogStyle.Affirmative,
+                                        ms));
+                                    break;
+                            }
                             break;
                         default:
                             break;

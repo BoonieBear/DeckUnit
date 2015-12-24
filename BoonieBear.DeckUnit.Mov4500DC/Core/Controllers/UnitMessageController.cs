@@ -57,14 +57,22 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
             
         }
 
-        public void Alert(string message)
+        public void Alert(string message, Exception ex = null)
         {
             var md = new MetroDialogSettings();
             md.AffirmativeButtonText = "确定";
             App.Current.Dispatcher.Invoke(new Action(() =>
             {
-                MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
+                if(ex==null)
+                {
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "程序错误",
                     message, MessageDialogStyle.Affirmative, md);
+                }
+                else
+                {
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, message,
+                    ex.StackTrace, MessageDialogStyle.Affirmative, md);
+                }
             }));
         }
 
@@ -102,11 +110,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core.Controllers
                     break;
                 case LogType.Both:
                     ErrorLog(message.Message, message.Ex);
-                    Alert(message.Ex.StackTrace);
+                    Alert(message.Message, message.Ex);
                     break;
                 default:
                     //ErrorLog(message.Message, message.Ex);
-                    Alert(message.Ex.StackTrace);
+                    Alert(message.Message, message.Ex);
                     break;
             }
         }

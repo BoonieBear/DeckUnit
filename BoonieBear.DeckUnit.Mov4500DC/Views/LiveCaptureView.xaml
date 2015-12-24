@@ -75,10 +75,10 @@
                     </Controls:MetroComboBox>
                     <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="60,0,0,0" Height="30" />
                     <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="240,0,0,5" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="100"/>
-                    <MetroControl:FlipView Name="MultiView" Grid.Column="1" MouseOverGlowEnabled ="True" SelectionChanged="FlipView_SelectionChanged" MouseEnter="FlipView_MouseEnter" MouseLeave="FlipView_MouseLeave" Margin="5,0">
+                    <MetroControl:FlipView Name="MultiView" Grid.Column="1" SelectionChanged="FlipView_SelectionChanged" MouseEnter="FlipView_MouseEnter" MouseLeave="FlipView_MouseLeave" Margin="2,0,0,0">
                         <MetroControl:FlipView.Items>
-                            <Grid Background="#2E8DEF" Margin="0">
-
+                            <Grid  Margin="1">
+                                <StackPanel Orientation="Horizontal" Name="ImagePanel"/>
                             </Grid>
                             <Grid >
                                 <Grid.ColumnDefinitions>
@@ -86,13 +86,52 @@
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
                                 <UniformGrid Grid.Column ="0" Rows="2" Columns="3">
-
+                                    <ViewControls:TreadTile Title="深度" Unit="m" Value="{Binding MovDepth, StringFormat=\{0:F2\}}"/>
+                                    <ViewControls:TreadTile Title="高度" Unit="m" Value="{Binding MovHeight, StringFormat=\{0:F2\}}"/>
+                                    <ViewControls:TreadTile Title="舱内温度" Unit="°C" Value="{Binding Temperature, StringFormat=\{0:F2\}}"/>
+                                    <ViewControls:TreadTile Title="氧气" Unit="%" Value="{Binding Oxygen, StringFormat=\{0:F2\}}"/>
+                                    <ViewControls:TreadTile  Title="载人舱漏水" Unit="V" Value="{Binding Leak, StringFormat=\{0:F2\}}" />
+                                    <ViewControls:TreadTile Title="艏电池" Unit="V" Value="{Binding HeadmainV, StringFormat=\{0:F2\}}"/>
                                 </UniformGrid>
-                                <dxchart:XYDiagram2D Grid.Column="1">
-                                    
-                                </dxchart:XYDiagram2D>
+                                <dxchart:ChartControl Grid.Column="1">
+                                    <dxchart:ChartControl.Diagram>
+                                        <dxchart:XYDiagram2D>
+                                            <dxchart:XYDiagram2D.AxisX >
+                                                <dxchart:AxisX2D DateTimeMeasureUnit="Second" DateTimeGridAlignment="Second" Brush="{DynamicResource Home_ConsoleBackground}">
+                                                    <dxchart:AxisX2D.DateTimeOptions>
+                                                        <dxchart:DateTimeOptions Format="LongTime"/>
+                                                    </dxchart:AxisX2D.DateTimeOptions>
+                                                </dxchart:AxisX2D>
+                                            </dxchart:XYDiagram2D.AxisX >
+                                            <dxchart:XYDiagram2D.AxisY>
+                                                <dxchart:AxisY2D Reverse="True" Brush="{DynamicResource Home_ConsoleBackground}">
+                                                    <dxchart:AxisY2D.Title>
+                                                        <dxchart:AxisTitle Content="深度(m)" Foreground="{DynamicResource Home_ConsoleBackground}"/>
+                                                    </dxchart:AxisY2D.Title>
+                                                    <dxchart:AxisY2D.Range>
+                                                        <dxchart:AxisRange MinValue="0" MaxValue="5000"/>
+                                                    </dxchart:AxisY2D.Range>
+                                                    <dxchart:AxisY2D.Label>
+                                                        <dxchart:AxisLabel Foreground="{DynamicResource Home_ConsoleBackground}" />
+                                                    </dxchart:AxisY2D.Label>
+                                                </dxchart:AxisY2D>
+                                            </dxchart:XYDiagram2D.AxisY>
+                                            <dxchart:XYDiagram2D.Series>
+                                                <dxchart:LineSeries2D ArgumentScaleType="DateTime" DataSource="{Binding CTDCollection}"
+                                                  ArgumentDataMember="Time" 
+                                                  ValueDataMember="Depth" DisplayName="深度">
+                                                    <dxchart:LineSeries2D.SeriesAnimation>
+                                                        <dxchart:Line2DSlideFromRightAnimation/>
+                                                    </dxchart:LineSeries2D.SeriesAnimation>
+                                                    <dxchart:LineSeries2D.LineStyle>
+                                                        <dxchart:LineStyle Thickness="4" />
+                                                    </dxchart:LineSeries2D.LineStyle>
+                                                </dxchart:LineSeries2D>
+                                            </dxchart:XYDiagram2D.Series>
+                                        </dxchart:XYDiagram2D>
+                                    </dxchart:ChartControl.Diagram>
+                                </dxchart:ChartControl>
                             </Grid>
-                            
                         </MetroControl:FlipView.Items>
                     </MetroControl:FlipView>
                 </Grid>

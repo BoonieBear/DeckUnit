@@ -49,7 +49,9 @@ namespace BoonieBear.DeckUnit
         private void Application_DispatcherUnhandledException(object sender, DispatcherUnhandledExceptionEventArgs e)
         {
             if (App.IsExit)
-                return;
+            {
+                App.Current.Shutdown();
+            }
             e.Handled = true;
             if(App.Current.MainWindow.IsActive)
                 UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(e.Exception.Message, LogType.Both));
@@ -63,7 +65,7 @@ namespace BoonieBear.DeckUnit
         static void UnhandledExceptionHandler(object sender, UnhandledExceptionEventArgs e)
         {
             if (App.IsExit)
-                return;
+                App.Current.Shutdown();
             var o = e.ExceptionObject as Exception;
             if (o != null)
             {

@@ -4,7 +4,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
+using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
 using BoonieBear.DeckUnit.Helps;
@@ -38,16 +40,19 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public override void InitializePage(object extraData)
         {
-            _currentBdTask = extraData as BDTask;
-            if (_currentBdTask == null)
-                return;
-            TaskID = _currentBdTask.TaskID;
-            DestID = _currentBdTask.DestID;
-            CmdId = _currentBdTask.CommID;
-            StarTime = _currentBdTask.StarTime;
+            var message = extraData as GoDownLoadingViewEvent;
+            if (message != null)
+            {
+                _currentBdTask = message.NewBdTask;
+                if (_currentBdTask == null)
+                    return;
+                TaskID = _currentBdTask.TaskID;
+                DestID = _currentBdTask.DestID;
+                CmdId = _currentBdTask.CommID;
+                StarTime = _currentBdTask.StarTime;
 
-            DeckDataProtocol.AddCallBack(this);
-
+                DeckDataProtocol.AddCallBack(this);
+            }
 
         }
 
@@ -80,7 +85,15 @@ namespace BoonieBear.DeckUnit.ViewModels
                         CmdIDDesc = "@SP";
                         break;
                     case 2:
-                        CmdIDDesc = "时间段索取-" + Encoding.Default.GetString(_currentBdTask.ParaBytes);
+                        CmdIDDesc = "时间段 " + _currentBdTask.ParaBytes[0].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[1].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[2].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[3].ToString().PadLeft(2, '0') + "-" +
+                                    _currentBdTask.ParaBytes[4].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[5].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[6].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[7].ToString().PadLeft(2, '0');
+
                         break;
                     case 3:
                         CmdIDDesc = "抽取索取-" + Encoding.Default.GetString(_currentBdTask.ParaBytes);
@@ -190,8 +203,6 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void CanExecuteDeleteTaskCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
-            eventArgs.CanExecute = false;
-            if (TaskState=="STOP"||TaskState=="COMPLETED")
                 eventArgs.CanExecute = true;
         }
 
@@ -222,9 +233,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void CanExecuteStopTaskCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
-            eventArgs.CanExecute = false;
-            if (TaskState == "WORKING")
-                eventArgs.CanExecute = true;
+            eventArgs.CanExecute = true;
         }
 
 
@@ -247,8 +256,6 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private void CanExecuteStartTaskCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
-            eventArgs.CanExecute = false;
-            if (TaskState == "WORKING")
                 eventArgs.CanExecute = true;
         }
 
@@ -258,19 +265,36 @@ namespace BoonieBear.DeckUnit.ViewModels
             if (_currentBdTask != null)
             {
                 if(TaskState=="UNSTART")
-                    if (DeckDataProtocol.StartTask(_currentBdTask.TaskID) == _currentBdTask.TaskID)//正确开始任务
+                    if (DeckDataProtocol.StartTask(_currentBdTask.TaskID) == _currentBdTask.TaskID) //正确开始任务
                     {
-                        
-                        var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
-                        dialog.Title = "开始任务";
-                        await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
-                            dialog);
-                        var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
-                        textBlock.Text = "发送成功！";
-                        TaskState = "WORKING";
-                        IsWorking = true;
-                        await TaskEx.Delay(1000);
-                        await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+                        ACNBuilder.PackTask(_currentBdTask, true, -1);
+                        var cmd = ACNProtocol.Package(false);
+                        var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
+                        await result;
+                        var end = result.Result;
+                        if (end == true)
+                        {
+
+                            var dialog = (BaseMetroDialog) App.Current.MainWindow.Resources["CustomInfoDialog"];
+                            dialog.Title = "开始任务";
+                            await
+                                MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(
+                                    MainFrameViewModel.pMainFrame,
+                                    dialog);
+                            var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                            textBlock.Text = "发送成功！";
+                            TaskState = "WORKING";
+                            IsWorking = true;
+                            await TaskEx.Delay(1000);
+                            await
+                                MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(
+                                    MainFrameViewModel.pMainFrame, dialog);
+                        }
+                        else
+                        {
+                            UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(UnitCore.Instance.NetEngine.Error, LogType.Both));
+                            DeckDataProtocol.Stop();
+                        }
                     }
                     else
                     {
@@ -296,8 +320,12 @@ namespace BoonieBear.DeckUnit.ViewModels
                     TaskState = "STOP";
                     var md = new MetroDialogSettings();
                     md.AffirmativeButtonText = "确定";
-                    await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
-                    "任务失败", MessageDialogStyle.Affirmative, md);
+                    App.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(
+                            MainFrameViewModel.pMainFrame, "提示",
+                            "任务失败", MessageDialogStyle.Affirmative, md);
+                    }));
                     break;
                 case 0:
                     TaskStatus = "任务开始";

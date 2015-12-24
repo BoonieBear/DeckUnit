@@ -123,7 +123,7 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         }
         public void Handle(GoTaskListViewEvent message)
         {
-            NavigateToPage("Views/DownLoadedView.xaml");
+            //NavigateToPage("Views/DownLoadedView.xaml");
         }
 
         public void Handle(GoADViewEvent message)

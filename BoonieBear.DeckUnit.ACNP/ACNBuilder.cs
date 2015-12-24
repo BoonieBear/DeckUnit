@@ -220,6 +220,7 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 2;//默认值
             if (CommIndex != -1)
                 dat[0] = CommIndex;
+            ACNProtocol.OutPutIntBit(dat, 8);
             ACNProtocol.AddPool(ID);
         }
         public static void Pack117(int ID, int CommIndex)
@@ -233,6 +234,7 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 2;//默认值
             if (CommIndex != -1)
                 dat[0] = CommIndex;
+            ACNProtocol.OutPutIntBit(dat, 8);
             ACNProtocol.AddPool(ID);
         }
 
@@ -274,7 +276,7 @@ namespace BoonieBear.DeckUnit.ACNP
                     dat[0] = 2;
                 if (CommIndex == 1)
                     dat[0] = 3;
-
+                ACNProtocol.OutPutIntBit(dat, 8);
                 byte[] para = Encoding.Default.GetBytes(str);
                 for (int i = 0; i < arraylen; i++)
                 {
@@ -380,7 +382,7 @@ namespace BoonieBear.DeckUnit.ACNP
         /// <summary>
         /// 任务包打包
         /// </summary>
-        /// <param name="task">任务包类型64，115</param>
+        /// <param name="task">任务包类型115</param>
 
         public static void PackTask(BDTask task,bool bNew, int lastpkgid)
         {
@@ -388,7 +390,7 @@ namespace BoonieBear.DeckUnit.ACNP
             {
                 int[] dat = new int[4];
                 int length = 20 + 8 + 8 + 64;//不包括参数
-                if (task.CommID == 2)
+                if (task.CommID == 2 || task.CommID == 5)
                     length += 8*8;
                 if (task.CommID == 3)
                     length += 6*8;
@@ -401,9 +403,29 @@ namespace BoonieBear.DeckUnit.ACNP
                 ACNProtocol.OutPutIntBit(dat, 8);
                 dat[0] = task.CommID;
                 ACNProtocol.OutPutIntBit(dat, 8);
-                var bytes = BitConverter.GetBytes(task.TaskID);
-                Buffer.BlockCopy(bytes,0,dat,0,4);
-                ACNProtocol.OutPutIntBit(dat, 64);
+                var idstring = task.TaskID.ToString();
+                string year = idstring.Substring(0, 4);
+                dat[0] = Int16.Parse(year);
+                ACNProtocol.OutPutIntBit(dat, 16);
+                string month = idstring.Substring(4, 2);
+                dat[0] = Int16.Parse(month);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string day = idstring.Substring(6, 2);
+                dat[0] = Int16.Parse(day);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string hour = idstring.Substring(8, 2);
+                dat[0] = Int16.Parse(hour);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string minute = idstring.Substring(10, 2);
+                dat[0] = Int16.Parse(minute);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string second = idstring.Substring(12, 2);
+                dat[0] = Int16.Parse(second);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string dest = idstring.Substring(14, 2);
+                dat[0] = Int16.Parse(dest);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                
                 if (task.CommID == 2)
                 {
                     var buf = new int[4];
@@ -417,6 +439,13 @@ namespace BoonieBear.DeckUnit.ACNP
                     var buf = new int[3];
                     Buffer.BlockCopy(task.ParaBytes, 0, buf, 0, 6);
                     ACNProtocol.OutPutIntBit(buf, 48);
+                    ACNProtocol.AddPool(task.DestID);
+                }
+                if (task.CommID == 5)
+                {
+                    var buf = new int[4];
+                    Buffer.BlockCopy(task.ParaBytes, 0, buf, 0, 8);
+                    ACNProtocol.OutPutIntBit(buf, 64);
                     ACNProtocol.AddPool(task.DestID);
                 }
                 
@@ -440,9 +469,28 @@ namespace BoonieBear.DeckUnit.ACNP
                 ACNProtocol.OutPutIntBit(dat, 8);
                 dat[0] = task.CommID;
                 ACNProtocol.OutPutIntBit(dat, 8);
-                var bytes = BitConverter.GetBytes(task.TaskID);
-                Buffer.BlockCopy(bytes, 0, dat, 0, 4);
-                ACNProtocol.OutPutIntBit(dat, 64);
+                var idstring = task.TaskID.ToString();
+                string year = idstring.Substring(0, 4);
+                dat[0] = Int16.Parse(year);
+                ACNProtocol.OutPutIntBit(dat, 16);
+                string month = idstring.Substring(4, 2);
+                dat[0] = Int16.Parse(month);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string day = idstring.Substring(6, 2);
+                dat[0] = Int16.Parse(day);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string hour = idstring.Substring(8, 2);
+                dat[0] = Int16.Parse(hour);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string minute = idstring.Substring(10, 2);
+                dat[0] = Int16.Parse(minute);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string second = idstring.Substring(12, 2);
+                dat[0] = Int16.Parse(second);
+                ACNProtocol.OutPutIntBit(dat, 8);
+                string dest = idstring.Substring(14, 2);
+                dat[0] = Int16.Parse(dest);
+                ACNProtocol.OutPutIntBit(dat, 8);
                 if (lastpkgid == -1) //尚未接收到数据，不需要添加重传包
                 {
                     ACNProtocol.AddPool(task.DestID);

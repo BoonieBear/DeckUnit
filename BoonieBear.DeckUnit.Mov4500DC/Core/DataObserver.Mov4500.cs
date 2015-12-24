@@ -131,7 +131,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                 return;
                         }
                     }
-                    UnitCore.Instance.MovTraceService.Save(datatype, buffer); //保存上面全部数据类型
+                    if (id == (int)ModuleType.FH)
+                        UnitCore.Instance.MovTraceService.Save(datatype, Encoding.Default.GetString(buffer)); //FH
+                    else
+                    {
+                        UnitCore.Instance.MovTraceService.Save(datatype, buffer); //保存上面除FH全部数据类型
+                    }
                     if (e.Mode == CallMode.DataMode)
                     {
                         if (id == (int) ModuleType.SSB)
@@ -145,7 +150,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         }
                         if (id == (int) ModuleType.FH)
                         {
-                            LogHelper.WriteLog("收到跳频数据:" + Encoding.Default.GetString(buffer, 0, 8));
+                            LogHelper.WriteLog("收到跳频数据:" + Encoding.Default.GetString(buffer));
                             if (ACM4500Protocol.ParseFH(buffer))
                             {
                                 UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(

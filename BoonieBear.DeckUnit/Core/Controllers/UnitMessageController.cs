@@ -55,12 +55,25 @@ namespace BoonieBear.DeckUnit.Core.Controllers
             LogHelper.ErrorLog(message, ex);
         }
 
-        public void Alert(string message)
+        public void Alert(string message, Exception ex = null)
         {
             var md = new MetroDialogSettings();
             md.AffirmativeButtonText = "确定";
-            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "",
-                message,MessageDialogStyle.Affirmative,md);
+            App.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                if (ex == null)
+                {
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,
+                        "提示",
+                        message, MessageDialogStyle.Affirmative, md);
+                }
+                else
+                {
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,
+                        message,
+                        ex.StackTrace, MessageDialogStyle.Affirmative, md);
+                }
+            }));
         }
 
         public void BroadCast(string message)

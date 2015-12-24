@@ -356,7 +356,7 @@ namespace BoonieBear.DeckUnit.ACMP
 
         public static bool ParseFH(byte[] pkg)
         {
-            string msg = Encoding.Default.GetString(pkg, 0, 8);
+            string msg = Encoding.Default.GetString(pkg);
             Results.Clear();
             Results.Add(MovDataType.WORD, msg);
             return true;

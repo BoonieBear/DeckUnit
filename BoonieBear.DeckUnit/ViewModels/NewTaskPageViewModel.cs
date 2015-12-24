@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.BaseType;
+using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Helps;
 using BoonieBear.DeckUnit.UBP;
@@ -58,6 +59,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 ShowCondition1 = false;
                 ShowCondition2 = false;
                 ShowCondition3 = false;
+                ShowCondition5 = false;
                 switch (TypeIndex)
                 {
                     case 0:
@@ -71,6 +73,10 @@ namespace BoonieBear.DeckUnit.ViewModels
                         break;
                     case 3:
                         ShowCondition4 = true;
+                        break;
+                    case 4:
+                        ShowCondition5 = true;
+                        ShowCondition2 = true;
                         break;
                     default:
                         break;
@@ -99,7 +105,11 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => ShowCondition4); }
             set { SetPropertyValue(() => ShowCondition4, value); }
         }
-
+        public bool ShowCondition5
+        {
+            get { return GetPropertyValue(() => ShowCondition4); }
+            set { SetPropertyValue(() => ShowCondition4, value); }
+        }
         public int SamplingInterval
         {
             get { return GetPropertyValue(() => SamplingInterval); }
@@ -176,14 +186,22 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private async void ExecuteCreateTask(object sender, ExecutedRoutedEventArgs eventArgs)
         {
+            if (TypeIndex == 0 || TypeIndex == 2)
+            {
+                var md = new MetroDialogSettings();
+                md.AffirmativeButtonText = "确定";
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
+                "当前命令不支持", MessageDialogStyle.Affirmative, md);
+                return;
+            }
             var tasktype = (TaskType)Enum.Parse(typeof(TaskType),(TypeIndex + 1).ToString());
             byte[] paraBytes = null;
             if (TypeIndex == 0 || TypeIndex == 3)
                 paraBytes = null;
-            if (TypeIndex == 1)
+            if (TypeIndex == 1 || TypeIndex == 4)
             {
                 paraBytes= new byte[8];
-                paraBytes[0] = (byte) SelectedFromDate.Month;
+                paraBytes[0] = (byte)SelectedFromDate.Month;
                 paraBytes[1] = (byte)SelectedFromDate.Day;
                 paraBytes[2] = (byte)SelectedFromTime.Hour;
                 paraBytes[3] = (byte)SelectedFromTime.Minute;
@@ -192,7 +210,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 paraBytes[6] = (byte)SelectedToTime.Hour;
                 paraBytes[7] = (byte)SelectedToTime.Minute;
             }
-            if (TypeIndex == 2)
+            if (TypeIndex == 2 )
             {
                 paraBytes = new byte[6];
                 paraBytes[0] = (byte)SelectedFetchDate.Month;
@@ -211,6 +229,24 @@ namespace BoonieBear.DeckUnit.ViewModels
                 "创建新任务失败", MessageDialogStyle.Affirmative, md);
                 return;
             }
+            if (TypeIndex == 3 || TypeIndex == 4)
+            {
+                ACNBuilder.PackTask(DeckDataProtocol.WorkingBdTask, true, -1);
+                var cmd = ACNProtocol.Package(false);
+                var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
+                await result;
+                var ret = result.Result;
+                if (ret == false)
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("命令发送失败", LogType.Both));
+                }
+                else
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("命令发送成功", LogType.Both));
+                }
+                return;
+            }
+            
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
             dialog.Title = "创建新任务";
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,

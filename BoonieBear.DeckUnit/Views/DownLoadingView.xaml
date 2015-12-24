@@ -35,11 +35,11 @@
             <controls:ProgressRing IsActive="{Binding IsWorking}" Margin="10,0"  IsLarge="False" Height="40"  Width="40"/>
         </StackPanel>
         <UniformGrid Grid.Row="1" Columns="2" Rows="4" Margin="5">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TextBlock Text="目标节点:" FontSize="22px" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding DestID}" FontSize="22px" VerticalAlignment="Center"/>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TextBlock Text="命令类型:" FontSize="22px" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding CmdIDDesc}" FontSize="22px" VerticalAlignment="Center"/>
             </StackPanel>

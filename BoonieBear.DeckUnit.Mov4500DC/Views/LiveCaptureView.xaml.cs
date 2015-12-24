@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -152,7 +153,31 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 MultiView.ShowControlButtons();
                 MultiView.SelectedIndex = 0;
             }
-            
+            var img = new Image();
+
+            var vew = new Viewbox();
+            vew.Child = img;
+            vew.MouseDown+=vew_MouseDown;
+            ImagePanel.Children.Add(vew);
+        }
+
+        private void vew_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2)
+            {
+                var src = sender as Viewbox;
+                if (src != null)
+                {
+                    var img = src.Child as Image;
+                    if (img != null)
+                    {
+                        Process ps = new Process();
+                        ps.StartInfo.FileName = "explorer.exe";
+                        ps.StartInfo.Arguments = img.ToString();
+                        ps.Start();
+                    }
+                }
+            }
         }
         private async Task<Model3DGroup> LoadAsync(string model3DPath, bool freeze)
         {

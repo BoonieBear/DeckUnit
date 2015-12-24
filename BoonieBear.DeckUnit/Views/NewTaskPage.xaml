@@ -61,15 +61,14 @@
                     <ComboBoxItem Content ="2：特点时间段数据"/>
                     <ComboBoxItem Content ="3：抽取数据"/>
                     <ComboBoxItem Content ="4：ADCP继续工作"/>
+                    <ComboBoxItem Content ="5：数据查询"/>
                 </ComboBox>
             </StackPanel>
             <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Text="起始时间:" FontSize="22px" VerticalAlignment="Center"/>
-                    <picker:DatePicker 
-            FullModeHeader="选择日期"
-            IsTouchSelectionEnabled="True" 
-            Value="{Binding SelectedFromDate, Mode=TwoWay}" Width="120"/>
+                    <DatePicker
+            SelectedDate="{Binding SelectedFromDate, Mode=TwoWay}" Width="240"/>
                     <picker:TimePicker 
             FullModeHeader="选择时间"
             IsTouchSelectionEnabled="True"
@@ -77,10 +76,8 @@
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0" Visibility="{Binding ShowCondition2, ConverterParameter=Collapsed, Converter={StaticResource BoolToVisibilityConverter}}">
                     <TextBlock Text="结束时间:" FontSize="22px" VerticalAlignment="Center"/>
-                    <picker:DatePicker 
-            FullModeHeader="选择日期"
-            IsTouchSelectionEnabled="True" 
-            Value="{Binding SelectedToDate, Mode=TwoWay}" Width="120"/>
+                    <DatePicker
+            SelectedDate="{Binding SelectedToDate, Mode=TwoWay}" Width="240"/>
                     <picker:TimePicker 
             FullModeHeader="选择时间"
             IsTouchSelectionEnabled="True"
@@ -109,6 +106,6 @@
             </StackPanel>
             </StackPanel>
         </Grid>
-        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="创建" Command="{Binding CreateTask}" FontFamily="SimSun" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="确定" Command="{Binding CreateTask}" FontFamily="SimSun" FontSize="18"/>
     </Grid>
 </Page>
