@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,6 +16,8 @@ using BoonieBear.DeckUnit.Mov4500Conf;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using System.Windows.Controls;
+using BoonieBear.DeckUnit.TraceFileService;
+using DevExpress.Xpf.Charts;
 using HelixToolkit.Wpf;
 using ImageProc;
 using TinyMetroWpfLibrary.EventAggregation;
@@ -36,15 +39,20 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
     /// </summary>
     public partial class LiveCaptureView : Page
     {
+
         [DllImport("user32.dll")]
         private extern static bool SwapMouseButton(bool fSwap);
         #region 变量区域
+        private bool _isPressed = false;
+        private Point _sourcePoint;
         //选择图片的文件名
         private string _fileName = string.Empty;
         private Paragraph p = null;
         //记录Span
         Dictionary<int, Span> spans = new Dictionary<int, Span>(0);
         List<Paragraph> parasList = new List<Paragraph>(0);
+        Dictionary<string, Viewbox> ImgViews = new Dictionary<string, Viewbox>(0);//收到图像的集合
+        DispatcherTimer ImgWatcher= null;
         private int index = 0;
         private bool isRecording = false;
         private short[] volumnbuffer = new short[400];//half of wavecontrol recording buffer
@@ -153,12 +161,55 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 MultiView.ShowControlButtons();
                 MultiView.SelectedIndex = 0;
             }
-            var img = new Image();
+            if (ImgWatcher == null)
+                ImgWatcher = new DispatcherTimer(TimeSpan.FromSeconds(5), DispatcherPriority.Normal, RecvImgWatcher,
+                    dispatcher);
+            ImgWatcher.Start();
+            
+        }
 
-            var vew = new Viewbox();
-            vew.Child = img;
-            vew.MouseDown+=vew_MouseDown;
-            ImagePanel.Children.Add(vew);
+        private void RecvImgWatcher(object sender, EventArgs e)
+        {
+            var imgpath = TraceFile.GetInstance().TracePath + @"\RECVPSK";
+            var filenames = Directory.GetFiles(imgpath,"*.jpg");
+            var er = ImgViews.GetEnumerator();
+            
+            List<string> Viewboxes= new List<string>();
+
+            while (er.MoveNext())
+            {
+                if (filenames.Any(s => { return s == er.Current.Key; }) == false)
+                {
+                    Viewboxes.Add(er.Current.Key);
+                }
+            }
+            foreach (var key in Viewboxes)
+            {
+                var box = ImgViews[key];
+                ImagePanel.Children.Remove(box);
+                ImgViews.Remove(key);
+            }
+
+            
+            Viewboxes.Clear();
+            foreach (var filename in filenames)
+            {
+                if (ImgViews.ContainsKey(filename) == false)
+                {
+                    Viewboxes.Add(filename);
+                }
+            }
+            foreach (var key in Viewboxes)
+            {
+                var img = new Image();
+                img.Source = new BitmapImage(new Uri(key));
+                var vew = new Viewbox();
+                vew.Child = img;
+                vew.MouseDown += vew_MouseDown;
+                ImagePanel.Children.Add(vew);
+                ImgViews.Add(key,vew);
+            }
+            
         }
 
         private void vew_MouseDown(object sender, MouseButtonEventArgs e)
@@ -173,7 +224,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     {
                         Process ps = new Process();
                         ps.StartInfo.FileName = "explorer.exe";
-                        ps.StartInfo.Arguments = img.ToString();
+                        ps.StartInfo.Arguments = img.Source.ToString();
                         ps.Start();
                     }
                 }
@@ -437,11 +488,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
        
         private void SendMessageBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (SendMessageBox.Text.Length>20)
-            {
-                SendMessageBox.Text = SendMessageBox.Text.Substring(0,20);
-                SendMessageBox.CaretIndex = 20;
-            }
             int left = 20 - SendMessageBox.Text.Length;
             LeftSize.Text = "(还可继续输入"+left+"个字)";
             if(SendMessageBox.Text.Length>0)
@@ -650,26 +696,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             switch (flipview.SelectedIndex)
             {
                 case 0:
-                    flipview.BannerText = "高速图像";
+                    //flipview.BannerText = "高速图像";
                     break;
                 case 1:
-                     flipview.BannerText = "潜器数据";
+                     //flipview.BannerText = "潜器数据";
                     break;
                 default:
                     break;
             }
         }
 
-        private void FlipView_MouseEnter(object sender, MouseEventArgs e)
+        private void PosViewport3D_LostFocus(object sender, RoutedEventArgs e)
         {
-            var flipview = ((FlipView)sender);
-            flipview.IsBannerEnabled = true;
-        }
-
-        private void FlipView_MouseLeave(object sender, MouseEventArgs e)
-        {
-            var flipview = ((FlipView)sender);
-            flipview.IsBannerEnabled = false;
+            SwapMouseButton(false);//switch back
         }
     }
 }

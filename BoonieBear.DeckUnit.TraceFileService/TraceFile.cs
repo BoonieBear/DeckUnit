@@ -18,8 +18,8 @@ namespace BoonieBear.DeckUnit.TraceFileService
         private static TraceFile _traceFile;
  
         private string _logPathDate;
-        
 
+        public string TracePath { get; set; }
         public string Errormsg { get; set; }
         
         private Hashtable _BinaryTable = new Hashtable();//二进制trace file
@@ -38,7 +38,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
         protected TraceFile()
         {
             try
-            {
+            {            
                 if (!Directory.Exists(@".\Log"))
                     Directory.CreateDirectory(@".\Log");
             }
@@ -143,6 +143,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
                 //create log directory
                 _logPathDate = DateTime.Now.Date.ToString("yyyy MM dd");
                 _logPathDate = @".\Log\" + _logPathDate;
+                TracePath = new DirectoryInfo(_logPathDate).FullName;
                 Directory.CreateDirectory(_logPathDate + path);
                 var debugPath = new DirectoryInfo(_logPathDate + path);
                 //create tracefile

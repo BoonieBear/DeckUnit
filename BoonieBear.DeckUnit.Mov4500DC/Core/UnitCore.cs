@@ -49,7 +49,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         private Observer<CustomEventArgs> _observer; 
         private bool _serviceStarted = false;
         public string Error { get; private set; }
-        public MonitorMode WorkMode{get; private set;}
+        public MonitorMode WorkMode{get; set;}
         public Mutex ACMMutex { get; set; }//全局解析锁
         public byte[] Single = null;
         public byte[] RecvOrOK = null;

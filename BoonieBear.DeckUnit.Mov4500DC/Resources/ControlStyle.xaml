@@ -971,9 +971,66 @@
             </Trigger>
         </Style.Triggers>
     </Style>
+    
+    <Style x:Key="myScrollBarStyle" TargetType="{x:Type ScrollBar}">
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Opacity" Value="0.9" />
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="False">
+                <Setter Property="Opacity" Value="0.3" />
+            </Trigger>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Width" Value="Auto"/>
+                <Setter Property="Height" Value="15" />
+                
+            </Trigger>
+            <Trigger Property="Orientation" Value="Vertical">
+                <Setter Property="Width" Value="15"/>
+                <Setter Property="Height" Value="Auto" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 
-            			
-<Style TargetType="{x:Type TabItem}">
+    <Style x:Key="TransportScrollViewer" TargetType="{x:Type ScrollViewer}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ScrollViewer}">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <ScrollContentPresenter Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+                        <ScrollBar
+                        Style="{StaticResource myScrollBarStyle}"
+                        Name="PART_VerticalScrollBar"
+                        Grid.Column="1"
+                        Value="{TemplateBinding VerticalOffset}"
+                        Maximum="{TemplateBinding ScrollableHeight}"
+                        ViewportSize="{TemplateBinding ViewportHeight}"
+                        Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}" />
+                        <ScrollBar 
+                        Style="{StaticResource myScrollBarStyle}"
+                        Name="PART_HorizontalScrollBar"
+                        Orientation="Horizontal"
+                        Grid.Row="1"
+                        Value="{TemplateBinding HorizontalOffset}"
+                        Maximum="{TemplateBinding ScrollableWidth}"
+                        ViewportSize="{TemplateBinding ViewportWidth}"
+                        Visibility="{TemplateBinding ComputedHorizontalScrollBarVisibility}" />
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style TargetType="{x:Type TabItem}">
     <Setter Property="Template">
         <Setter.Value>
             <ControlTemplate TargetType="{x:Type TabItem}">

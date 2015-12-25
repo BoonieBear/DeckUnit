@@ -75,11 +75,11 @@
                     </Controls:MetroComboBox>
                     <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="60,0,0,0" Height="30" />
                     <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="240,0,0,5" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="100"/>
-                    <MetroControl:FlipView Name="MultiView" Grid.Column="1" SelectionChanged="FlipView_SelectionChanged" MouseEnter="FlipView_MouseEnter" MouseLeave="FlipView_MouseLeave" Margin="2,0,0,0">
+                    <MetroControl:FlipView Name="MultiView" Grid.Column="1" SelectionChanged="FlipView_SelectionChanged" Margin="2,0,0,0" IsBannerEnabled="False" MouseOverGlowEnabled="False">
                         <MetroControl:FlipView.Items>
-                            <Grid  Margin="1">
+                            <ScrollViewer Name ="ImgViewer" Style="{DynamicResource TransportScrollViewer}" CanContentScroll="True" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
                                 <StackPanel Orientation="Horizontal" Name="ImagePanel"/>
-                            </Grid>
+                            </ScrollViewer>
                             <Grid >
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="Auto"/>
@@ -215,7 +215,7 @@
                                                ShowViewCube="False" 
                                                ShowCameraTarget="False" 
                                                ShowCoordinateSystem="False" 
-                                               Margin="4" MouseEnter="PosViewport3D_MouseEnter" MouseLeave="PosViewport3D_MouseLeave" IsManipulationEnabled="True">
+                                               Margin="4" MouseEnter="PosViewport3D_MouseEnter" MouseLeave="PosViewport3D_MouseLeave" IsManipulationEnabled="True" LostFocus="PosViewport3D_LostFocus">
                                         <h:HelixViewport3D.DefaultCamera>
                                             <PerspectiveCamera x:Name ="PosCamera" Position="0,0,6000" LookDirection="0,0,-6000" UpDirection="-1,0,0" NearPlaneDistance="3000" FarPlaneDistance="60000"/>
                                         </h:HelixViewport3D.DefaultCamera>

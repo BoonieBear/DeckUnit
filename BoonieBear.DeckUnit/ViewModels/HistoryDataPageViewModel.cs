@@ -176,6 +176,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             var from = new DateTime(SelectedFromDate.Year,SelectedFromDate.Month,SelectedFromDate.Day);
             var to = new DateTime(SelectedToDate.Year, SelectedToDate.Month, SelectedToDate.Day);
             var lst = UnitCore.Instance.UnitTraceService.GetCommandList(from, to);
+            IsFetching = false;
             if (lst != null)
             {
                 DataCollMt.Clear();
@@ -192,7 +193,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                     }
                 }
             }
-
+            
             RefreshVisble = Visibility.Visible;
         }
         #endregion

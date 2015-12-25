@@ -12,10 +12,10 @@
   &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\TinyMetroWpfLibrary.Controls.dll" /&gt;&#xD;
   &lt;Assembly Path="D:\work\ioa\BoonieBear\DeckUnit\Tools\CollectionMtLib.dll" /&gt;&#xD;
 &lt;/AssemblyExplorer&gt;</s:String>
-	<s:Boolean x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=B4D88731FC394AF4AAA6D74FF5AA64DC/@KeyIndexDefined">True</s:Boolean>
-	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=B4D88731FC394AF4AAA6D74FF5AA64DC/Name/@EntryValue">SaveJp2KTest</s:String>
 	
-	<s:String x:Key="/Default/Housekeeping/UnitTestingMru/UnitTestSessionPersistentData/=B4D88731FC394AF4AAA6D74FF5AA64DC/XmlSerializedElements/@EntryValue">&lt;Session&gt;&lt;Elements /&gt;&lt;/Session&gt;</s:String>
+	
+	
+	
 	
 	
 	

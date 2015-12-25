@@ -18,6 +18,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
     public class GlobalSettingViewModel : ViewModelBase
     {
+        private bool bInitial = false;
         public override void Initialize()
         {
             FetchingVersion = RegisterCommand(ExecuteFetchingVersion, CanExecuteFetchingVersion, true);
@@ -35,6 +36,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         public override void InitializePage(object extraData)
         {
+            bInitial = false;
             if(!UnitCore.Instance.LoadConfiguration())
                 return;
             var conf = UnitCore.Instance.MovConfigueService.GetCommConfInfo();
@@ -69,6 +71,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 ShipConnected = false;
                 UWVConnected = false;
             }
+            bInitial = true;
         }
         public string ShipIpAddr
         {
@@ -83,7 +86,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         public int SelectMode
         {
             get { return GetPropertyValue(() => SelectMode); }
-            set { SetPropertyValue(() => SelectMode, value); }
+            set
+            {
+                if (SelectMode != value && bInitial==true)
+                {
+                    EventAggregator.PublishMessage(new LogEvent("新的模式需在保存设置后生效！", LogType.OnlyInfo));
+                }
+                SetPropertyValue(() => SelectMode, value);
+            }
         }
         public string Version
         {
@@ -255,6 +265,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         public async void ExecuteSaveConfig(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             Save();
+            UnitCore.Instance.WorkMode = (MonitorMode) Enum.Parse(typeof (MonitorMode), SelectMode.ToString());
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
             dialog.Title = "设置";
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
