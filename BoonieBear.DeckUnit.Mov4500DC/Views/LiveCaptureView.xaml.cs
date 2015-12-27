@@ -209,7 +209,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 ImagePanel.Children.Add(vew);
                 ImgViews.Add(key,vew);
             }
-            
+            if (ImgViews.Count == 0)
+            {
+                MultiView.SelectedIndex = 1;
+                MultiView.HideControlButtons();
+            }
         }
 
         private void vew_MouseDown(object sender, MouseButtonEventArgs e)
@@ -466,6 +470,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     chartmsg.TextAlignment = TextAlignment.Right;
                     chartmsg.LineHeight = 24;
                     MessageDocument.Blocks.Add(chartmsg);
+                    MultiView.SelectedIndex = 0;
+                    MultiView.ShowControlButtons();
                 }
                 if (img != null )
                 {

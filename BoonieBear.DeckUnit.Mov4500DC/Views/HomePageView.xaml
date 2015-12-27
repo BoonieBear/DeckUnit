@@ -14,7 +14,7 @@
       Background="{StaticResource DefaultBackgroundBrush}"
       DataContext="{Binding HomePageViewModel, Source={StaticResource ViewModelLocator}}" 
       mc:Ignorable="d" 
-      d:DesignHeight="1024" d:DesignWidth="1280"
+      d:DesignHeight="720" d:DesignWidth="1080"
 	Title="MainPage">
     <Page.Resources>
         <Converters:HideZeroConverter x:Key="HideZeroConverter"/>

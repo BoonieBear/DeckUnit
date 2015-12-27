@@ -454,21 +454,16 @@ namespace BoonieBear.DeckUnit.ACNP
             {
                 int[] dat = new int[4];
                 int length = 20 + 64;//不包括参数
-                if (task.ErrIdxStr != null)
+                if (task.ErrIdxStr != "")
                 {
                     string[] split = task.ErrIdxStr.Split(';');
-                    length += split.Count()*8;
+                    length += split.Count()*16;
                 }
-
                 ACNProtocol.InitForPack(length);
                 dat[0] = 115;
                 ACNProtocol.OutPutIntBit(dat, 8);
                 dat[0] = length;
                 ACNProtocol.OutPutIntBit(dat, 12);
-                dat[0] = task.DestPort;
-                ACNProtocol.OutPutIntBit(dat, 8);
-                dat[0] = task.CommID;
-                ACNProtocol.OutPutIntBit(dat, 8);
                 var idstring = task.TaskID.ToString();
                 string year = idstring.Substring(0, 4);
                 dat[0] = Int16.Parse(year);
@@ -503,7 +498,7 @@ namespace BoonieBear.DeckUnit.ACNP
                         foreach (var strid in split)
                         {
                             dat[0] = int.Parse(strid);
-                            if(dat[0]!=0)
+                            if(dat[0]!=-1)
                                 ACNProtocol.OutPutIntBit(dat, 16);    
                         }
                         

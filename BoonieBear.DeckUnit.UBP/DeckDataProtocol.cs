@@ -50,17 +50,20 @@ namespace BoonieBear.DeckUnit.UBP
     public enum TaskStage
     {
         Failed = -1,//任务失败TaskState.NO_FILE WAKE_FAILED DATA_FAILED RECV_FAILED
-        Begin = 0,// 任务开始 
+        UnStart = 0,// 任务未开始 
         Waiting = 1,//准备数据 TaskState.RECV
         Waking=2,//正在唤醒TaskState.WAKING
         OK=3,//数据准备完毕TaskState.OK
         Continue = 4,//持续传递数据中
         Pause = 5,//暂停，等待下次发起任务
         Finish = 6,//任务完成
+        WaitForAns=7,//等待dsp响应
+        RecvReply=8,//一组数据超时或者是接满了一组数据
     }
     public class DeckDataProtocol
     {
         private static event  EventHandler<EventArgs>TimeOutCallback;
+        
         /// <summary>
         /// 数据库接口
         /// </summary>
@@ -110,6 +113,7 @@ namespace BoonieBear.DeckUnit.UBP
         /// 上一次接收最大包号
         /// </summary>
         public static int LastRecvPkgId { get; set; }
+        public static int LastRecvUnitId { get; set; }
         /// <summary>
         /// 下一次期待收到的包号，用来判断哪些包没有收到或校验出错
         /// </summary>
@@ -129,10 +133,10 @@ namespace BoonieBear.DeckUnit.UBP
                 ID = id;
                 if (_sqlite != null)
                     return true;
-                TmpDataPath = @"..\TmpDir\";
+                TmpDataPath = @".\TmpDir\";
                 Directory.CreateDirectory(TmpDataPath);
                 DBFile = dbPath;
-                SendRecvPeriod = 650;
+                SendRecvPeriod = 35;//32.88
                 WorkingBdTask = null;
                 SecondTicks = 0;
                 DALFactory.Connectstring = "Data Source=" + DBFile + ";Pooling=True";
@@ -146,6 +150,7 @@ namespace BoonieBear.DeckUnit.UBP
         {
             TimeOutCallback -= observer.IUpdateTaskHandle;
             TimeOutCallback += observer.IUpdateTaskHandle;
+
         }
         private static void TaskTimerTick(object state)
         {
@@ -158,7 +163,7 @@ namespace BoonieBear.DeckUnit.UBP
         /// </summary>
         public static void Stop()
         {
-            TmpDataPath = @"..\TmpDir\";
+            TmpDataPath = @".\TmpDir\";
             if (WorkingBdTask != null)//还没有完成任务
             {
                 if (WorkingBdTask.TaskStage != (int) TaskStage.Finish)
@@ -175,6 +180,7 @@ namespace BoonieBear.DeckUnit.UBP
             {
                 DataRecvTimer.Dispose();
                 DataOutTimeTick(null);//调用超时程序更新重传包
+                WorkingBdTask.TaskStage = (int)TaskStage.UnStart;
             }
                 
             
@@ -196,7 +202,7 @@ namespace BoonieBear.DeckUnit.UBP
         /// <returns>任务ID号，出错了返回-1</returns>
         public static Int64 CreateNewTask(int destid, int destcomm, TaskType eTaskType, byte[] paraBytes)
         {
-            TmpDataPath = @"..\TmpDir\";
+            TmpDataPath = @".\TmpDir\";
             WorkingBdTask = null;
             SecondTicks = 0;
             var id = CreateTaskID(destid);
@@ -204,7 +210,7 @@ namespace BoonieBear.DeckUnit.UBP
             {
                 var task = new BDTask();
                 task.TaskID = id;
-                task.TaskStage = (int)TaskStage.Begin;
+                task.TaskStage = (int)TaskStage.UnStart;
                 task.SourceID = ID;
                 task.DestID = destid;
                 task.DestPort = destcomm;
@@ -234,7 +240,7 @@ namespace BoonieBear.DeckUnit.UBP
                 if (ret < 1)
                     return -2;
                 WorkingBdTask = task;
-                ExpectPkgList = new []{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15};
+                ExpectPkgList = new []{0,1,2,3,4,5,6,7,8,9,10,11,12,13,14};
                 
                 Debug.WriteLine(TmpDataPath);
             }
@@ -263,7 +269,7 @@ namespace BoonieBear.DeckUnit.UBP
                     return -1;
                 WorkingBdTask = tsk;
                 WorkingBdTask.LastTime = DateTime.Now;
-                WorkingBdTask.TaskStage = (int) TaskStage.Begin;
+                WorkingBdTask.TaskStage = (int) TaskStage.WaitForAns;
                 _sqlite.UpdateTask(WorkingBdTask);
                 SecondTicks = 0;
                 if (WorkingBdTask.ErrIdxStr == "") //没有重传
@@ -272,40 +278,9 @@ namespace BoonieBear.DeckUnit.UBP
                 }
                 else //有重传，LastRecvPkgId不会等于-1，因为第一次没收到的话不写重传包
                 {
-                    string[] RetryIds = WorkingBdTask.ErrIdxStr.Split(';');
-                    if (LastRecvPkgId > int.Parse(RetryIds[RetryIds.Count() - 1])) //收到包比重传的大
-                    {
-                        for (int i = 0; i < RetryIds.Count(); i++)
-                        {
-                            ExpectPkgList[i] = int.Parse(RetryIds[i]);
-                        }
-                        for (int i = RetryIds.Count(), j = 0; i < 15; i++)
-                        {
-                            j++;
-                            ExpectPkgList[i] = LastRecvPkgId + j;
-                            if (ExpectPkgList[i] >= WorkingBdTask.TotalPkg - 1)
-                                ExpectPkgList[i] = 0;
-                            Debug.WriteLine("ExpectPkgList-{0}",ExpectPkgList[i]);
-                        }
-                    }
-                    else
-                    {
-                        for (int i = 0; i < RetryIds.Count(); i++)
-                        {
-                            ExpectPkgList[i] = int.Parse(RetryIds[i]);
-                        }
-                        for (int i = RetryIds.Count(), j = 0; i < 15; i++)
-                        {
-                            j++;
-                            ExpectPkgList[i] = int.Parse(RetryIds[RetryIds.Count() - 1]) + j;
-                            if (ExpectPkgList[i] >= WorkingBdTask.TotalPkg - 1)
-                                ExpectPkgList[i] = 0;
-                            Debug.WriteLine("ExpectPkgList-{0}", ExpectPkgList[i]);
-                        }
-                    }
+                    ReCalcRetryList();
                 }
                 totalTimer = new Timer(TaskTimerTick, null, 0, 1000);
-                DataRecvTimer = new Timer(DataOutTimeTick, null, 0, SendRecvPeriod*1000);
                 return serialId;
             }
             else
@@ -313,6 +288,47 @@ namespace BoonieBear.DeckUnit.UBP
                 return -1;
             }
         }
+
+        private static void ReCalcRetryList()
+        {
+            string[] RetryIds = WorkingBdTask.ErrIdxStr.Split(';');
+            int MaxRetry = 0;
+            if (RetryIds.Count() == 0)
+                MaxRetry = 0;
+            else
+                MaxRetry = int.Parse(RetryIds[RetryIds.Count() - 1]);
+            if (LastRecvPkgId > MaxRetry) //收到包比重传的大
+            {
+                for (int i = 0; i < RetryIds.Count(); i++)
+                {
+                    ExpectPkgList[i] = int.Parse(RetryIds[i]);
+                }
+                for (int i = RetryIds.Count(), j = 0; i < 15; i++)
+                {
+                    j++;
+                    ExpectPkgList[i] = LastRecvPkgId + j;
+                    if (ExpectPkgList[i] > WorkingBdTask.TotalPkg - 1)
+                        ExpectPkgList[i] = -1;
+                    Debug.WriteLine("ExpectPkgList-{0}", ExpectPkgList[i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < RetryIds.Count(); i++)
+                {
+                    ExpectPkgList[i] = int.Parse(RetryIds[i]);
+                }
+                for (int i = RetryIds.Count(), j = 0; i < 15; i++)
+                {
+                    j++;
+                    ExpectPkgList[i] = MaxRetry + j;
+                    if (ExpectPkgList[i] > WorkingBdTask.TotalPkg - 1)
+                        ExpectPkgList[i] = -1;
+                    Debug.WriteLine("ExpectPkgList-{0}", ExpectPkgList[i]);
+                }
+            }
+        }
+
         /// <summary>
         /// 下达任务后，接收数据超时定时器，这个定时器回调说明一组数据应该发完了，要计算重发和检查数据完整性
         /// </summary>
@@ -335,10 +351,12 @@ namespace BoonieBear.DeckUnit.UBP
                         WorkingBdTask.ErrIdxStr += id.ToString()+";";
                     }
                 }
-                var last = WorkingBdTask.ErrIdxStr.LastIndexOf(';');
-                WorkingBdTask.ErrIdxStr.Remove(last);//1;2;3;4
                 
+                var last = WorkingBdTask.ErrIdxStr.LastIndexOf(';');
+                WorkingBdTask.ErrIdxStr = WorkingBdTask.ErrIdxStr.Remove(last);//1;2;3;4重新计算前需要移除最后一个;号
+                ReCalcRetryList();
             }
+            WorkingBdTask.TaskStage = (int) TaskStage.RecvReply;
             _sqlite.UpdateTask(WorkingBdTask);
             if(TimeOutCallback!=null)
                 TimeOutCallback.Invoke(null,null);
@@ -366,15 +384,18 @@ namespace BoonieBear.DeckUnit.UBP
             {
                 WorkingBdTask.TotolTime += SecondTicks;
                 SecondTicks = 0;
+                TaskStage ts = TaskStage.UnStart;
                 if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.Ack)
                 {
                     switch ((TaskState)BitConverter.ToInt16(bytes,4))
                     {
+
                         case TaskState.OK://一般直接返回数据了，不返回这个包
                             WorkingBdTask.TaskStage = (int) TaskStage.Continue;
                             ErrorCode = 0;//没有错误
                             _sqlite.UpdateTask(WorkingBdTask);
-                            return TaskStage.Continue;
+                            ts = TaskStage.Continue;
+                            break;
                         case TaskState.DATA_FAILED: 
                         case TaskState.NO_FILE:
                         case TaskState.RECV_FAILED: 
@@ -396,47 +417,73 @@ namespace BoonieBear.DeckUnit.UBP
                             WorkingBdTask.TaskStage = (int)TaskStage.Failed;
                             ErrorCode = BitConverter.ToInt16(bytes,4);
                             _sqlite.UpdateTask(WorkingBdTask);
-                            return TaskStage.Failed;
+                            ts = TaskStage.Failed;
+                            break;
                         case TaskState.RECV:
                             DataRecvTimer.Dispose();
                             WorkingBdTask.TaskStage = (int) TaskStage.Waiting;
                             _sqlite.UpdateTask(WorkingBdTask);
-                            return TaskStage.Waiting;
+                            ts = TaskStage.Waiting;
+                            break;
                         case TaskState.WAKING:
                             DataRecvTimer.Dispose();
                             WorkingBdTask.TaskStage = (int) TaskStage.Waking;
                             _sqlite.UpdateTask(WorkingBdTask);
-                            return TaskStage.Waking;
+                            ts = TaskStage.Waking;
+                            break;
                         default:
                             DataRecvTimer.Dispose();
                             error = "未定义的包类型";
-                            return TaskStage.Failed;
+                            ts = TaskStage.Failed;
+                            break;
                     }
                     
                 }
-                if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.Data)
+                else if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.Data)
                 {
                     var ret = StoreData(bytes,15);
+                    if (DataRecvTimer!=null)
+                        DataRecvTimer.Dispose();
                     if (ret == 0)
                     {
                         WorkingBdTask.TaskStage = (int)TaskStage.Continue;
                         _sqlite.UpdateTask(WorkingBdTask);
-                        return TaskStage.Continue;
+                        int unitidx = bytes[16];
+                        if (unitidx == 15 - 1 && unitidx != LastRecvUnitId)//每组最后一包不能连续处理
+                        {
+                            DataOutTimeTick(null);
+                        }
+                        else
+                        {
+                            DataRecvTimer = new Timer(DataOutTimeTick, null, (15-1-unitidx)*SendRecvPeriod * 1000,0);
+                            ts = TaskStage.Continue;
+                        }
+                        LastRecvUnitId = unitidx;
+
                     }        
                     else if (ret == 1)
                     {
                         WorkingBdTask.TaskStage = (int)TaskStage.Finish;
                         _sqlite.UpdateTask(WorkingBdTask);
-                        return TaskStage.Finish;  
+                        ts = TaskStage.Finish;  
                     }
-                        
                     else
                     {
                         WorkingBdTask.TaskStage = (int)TaskStage.Failed;
                         _sqlite.UpdateTask(WorkingBdTask);
-                        return TaskStage.Failed;
+                        ts = TaskStage.Failed;
                     }
                 }
+                else
+                {
+                    WorkingBdTask.TaskStage = (int)TaskStage.Failed;
+                    _sqlite.UpdateTask(WorkingBdTask);
+                    error = "未定义的包类型";
+                    ts = TaskStage.Failed;
+                }
+                if (TimeOutCallback != null)
+                    TimeOutCallback.Invoke(null, null);
+                return ts;
             }
             catch (Exception e)
             {
@@ -445,12 +492,10 @@ namespace BoonieBear.DeckUnit.UBP
                 ErrorCode = -1;
                 WorkingBdTask.TaskStage = (int)TaskStage.Failed;
                 _sqlite.UpdateTask(WorkingBdTask);
+                if (TimeOutCallback != null)
+                    TimeOutCallback.Invoke(null, null);
                 return TaskStage.Failed;
             }
-            WorkingBdTask.TaskStage = (int)TaskStage.Failed;
-            _sqlite.UpdateTask(WorkingBdTask);
-            error = "未定义的包类型";
-            return TaskStage.Failed;
         }
 
         /// <summary>
@@ -470,17 +515,17 @@ namespace BoonieBear.DeckUnit.UBP
                 ExpectPkgList = new int[pkg];
                 for (int i = 0; i < pkg; i++)
                 {
-                   ExpectPkgList[i] = i+1;
+                   ExpectPkgList[i] = i;
                 }
             }
             for (int i = 0; i < pkg; i++)
             {
                 if (ExpectPkgList[i] > WorkingBdTask.TotalPkg-1)
-                    ExpectPkgList[i] = 0;
+                    ExpectPkgList[i] = -1;
             }
-            var packagelength = bytes.Length-12;
+            var packagelength = bytes.Length-17;//加上组内包号
             var stream = new FileStream(TmpDataPath + "\\" + packageid, FileMode.Create);
-            stream.Write(bytes, 12, packagelength);
+            stream.Write(bytes, 17, packagelength);
             stream.Flush();
             stream.Close();
             LastRecvPkgId = packageid;
@@ -510,7 +555,7 @@ namespace BoonieBear.DeckUnit.UBP
         ///  <param name="id">任务ID</param>
         public static bool CheckFileIntegrity(long id)
         {
-            var filename = Directory.GetFiles(TmpDataPath + "\\" + id);
+            var filename = Directory.GetFiles(TmpDataPath);
             var i = 0;
             return filename.All(s => int.Parse((new FileInfo(s)).Name) == i++);
         }
@@ -526,8 +571,8 @@ namespace BoonieBear.DeckUnit.UBP
             err = "";
             try
             {
-                Directory.CreateDirectory(@"..\TaskDir\");
-                var stream = new FileStream(@"..\TaskDir\"  + id, FileMode.Create);
+                Directory.CreateDirectory(@".\TaskDir\");
+                var stream = new FileStream(@".\TaskDir\"  + id, FileMode.Create);
                 var filename = Directory.GetFiles(TmpDataPath);
                 foreach (var streams in filename.Select(s => new FileStream(s, FileMode.Open)))
                 {
@@ -540,7 +585,7 @@ namespace BoonieBear.DeckUnit.UBP
                     File.Delete(s);
                 }
                 stream.Close();
-                var filepath = @"..\TaskDir\" + id;
+                var filepath = @".\TaskDir\" + id;
                 WorkingBdTask.FilePath = filepath;
                 _sqlite.UpdateTask(WorkingBdTask);//存入数据路径
                 return true;

@@ -97,25 +97,13 @@ namespace BoonieBear.DeckUnit.Core
                             {
                                 UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(err, LogType.Both));
                             }
-                            else if (ret == TaskStage.Continue)
+                            else if (ret == TaskStage.Continue)//不需要发reply包
                             {
-                                ACNBuilder.PackTask(DeckDataProtocol.WorkingBdTask,false,DeckDataProtocol.LastRecvPkgId);
-                                var cmd = ACNProtocol.Package(false);
-                                var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
-                                await result;
-                                var end = result.Result;
-                                if (end == false)
-                                {
-                                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(UnitCore.Instance.NetEngine.Error, LogType.Both));
-                                }
-                                else
-                                {
-                                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("成功发送分组响应包", LogType.OnlyLog));
-                                }
+                                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("收到数据包", LogType.OnlyLog));
                             }
-                            else if(ret == TaskStage.Finish)
+                            else if (ret == TaskStage.Finish)
                             {
-                                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("数据接收完毕！", LogType.Both));
+                                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("数据接收完毕！",LogType.Both));
                             }
                             break;
                         case (int)PackType.Ans:

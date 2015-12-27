@@ -23,10 +23,10 @@
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="NewTaskButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>
-            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TaskListButton" Storyboard.TargetProperty="(UIElement.Opacity)">
+            <!--DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TaskListButton" Storyboard.TargetProperty="(UIElement.Opacity)">
                 <SplineDoubleKeyFrame KeyTime="00:00:00.4" Value="0"/>
                 <SplineDoubleKeyFrame KeyTime="00:00:00.7" Value="1"/>
-            </DoubleAnimationUsingKeyFrames>
+            <-->
             <BooleanAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="TaskListButton" Storyboard.TargetProperty ="IsEnabled">
                 <DiscreteBooleanKeyFrame KeyTime="00:00:00.6" Value="True"/>
             </BooleanAnimationUsingKeyFrames>

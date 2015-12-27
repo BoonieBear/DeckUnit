@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms.VisualStyles;
 using System.Windows.Input;
+using System.Windows.Threading;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.DAL;
@@ -24,6 +26,7 @@ namespace BoonieBear.DeckUnit.ViewModels
     public class DownLoadingViewModel : ViewModelBase, BoonieBear.DeckUnit.UBP.BDObserver<EventArgs>
     {
         private BDTask _currentBdTask;
+        private DispatcherTimer t;
         public override void Initialize()
         {
             CmdId = 1;
@@ -31,10 +34,11 @@ namespace BoonieBear.DeckUnit.ViewModels
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             GoDataCommand = RegisterCommand(ExecuteGoDataCommand, CanExecuteGoDataCommand, true);
             StartTaskCommand = RegisterCommand(ExecuteStartTaskCommand, CanExecuteStartTaskCommand, true);
+            StopTaskCommand = RegisterCommand(ExecuteStopTaskCommand, CanExecuteStopTaskCommand, true);
             DeleteTaskCommand = RegisterCommand(ExecuteDeleteTaskCommand, CanExecuteDeleteTaskCommand, true);
             IsWorking = false;
             TaskState = "UNSTART";
-            
+            IUpdateTaskHandle(null,null);
         }
 
 
@@ -52,6 +56,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 StarTime = _currentBdTask.StarTime;
 
                 DeckDataProtocol.AddCallBack(this);
+                IUpdateTaskHandle(null,null);
             }
 
         }
@@ -192,7 +197,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private  void ExecuteGoDataCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            EventAggregator.PublishMessage(new GoADCPDataViewEvent(_currentBdTask));
+            //EventAggregator.PublishMessage(new GoADCPDataViewEvent(_currentBdTask));
         }
         public ICommand DeleteTaskCommand
         {
@@ -213,7 +218,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             {
                 if (UnitCore.Instance.UnitTraceService.DeleteTask(_currentBdTask.TaskID,false))
                 {
-                    EventAggregator.PublishMessage(new GoTaskListViewEvent());
+                    EventAggregator.PublishMessage(new GoBackNavigationRequest());
                 }
                 else
                 {
@@ -237,12 +242,23 @@ namespace BoonieBear.DeckUnit.ViewModels
         }
 
 
-        private void ExecuteStopTaskCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        private async void ExecuteStopTaskCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            if (_currentBdTask != null&&_currentBdTask.TaskStage==(int)UBP.TaskStage.Continue)
+            if (_currentBdTask != null)
             {
-                DeckDataProtocol.Stop();
-                IUpdateTaskHandle(null, null);
+                var md = new MetroDialogSettings();
+                md.AffirmativeButtonText = "确定";
+                md.NegativeButtonText = "取消";
+                var ret =  MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "提示",
+                "确定要取消任务吗？", MessageDialogStyle.AffirmativeAndNegative, md);
+                await ret;
+                if (ret.Result == MessageDialogResult.Affirmative)
+                {
+                    DeckDataProtocol.Stop();
+
+                    IUpdateTaskHandle(null, null);
+                    UnitCore.Instance.EventAggregator.PublishMessage(new GoBackNavigationRequest());
+                }
             }
         }
         public ICommand StartTaskCommand
@@ -285,6 +301,8 @@ namespace BoonieBear.DeckUnit.ViewModels
                             textBlock.Text = "发送成功！";
                             TaskState = "WORKING";
                             IsWorking = true;
+                            TotalSeconds = 0;
+                            t = new DispatcherTimer(TimeSpan.FromSeconds(1),DispatcherPriority.Background, Time_Tick,Dispatcher.CurrentDispatcher);
                             await TaskEx.Delay(1000);
                             await
                                 MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(
@@ -308,72 +326,114 @@ namespace BoonieBear.DeckUnit.ViewModels
                     IUpdateTaskHandle(null, null);
             }
         }
+
+        private void Time_Tick(object sender, EventArgs e)
+        {
+            TotalSeconds++;
+        }
         //状态更新：超时回调加操作动作
         public async void IUpdateTaskHandle(object sender, EventArgs e)
         {
-            _currentBdTask = DeckDataProtocol.WorkingBdTask;
-            switch (_currentBdTask.TaskStage)
+            Dispatcher.CurrentDispatcher.Invoke(new Action(async () =>  
             {
-                case -1:
-                    TaskStatus = "任务失败，错误码="+DeckDataProtocol.ErrorCode.ToString();
-                    IsWorking = false;
-                    TaskState = "STOP";
-                    var md = new MetroDialogSettings();
-                    md.AffirmativeButtonText = "确定";
-                    App.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(
-                            MainFrameViewModel.pMainFrame, "提示",
-                            "任务失败", MessageDialogStyle.Affirmative, md);
-                    }));
-                    break;
-                case 0:
-                    TaskStatus = "任务开始";
-                    TaskState = "UNSTART";
-                    IsWorking = false;
-                    break;
-                case 1:
-                    TaskStatus = "等待数据";
-                    TaskState = "STOP";
-                    IsWorking = false;
-                    break;
-                case 2:
-                    TaskStatus = "正在唤醒设备";
-                    TaskState = "STOP";
-                    IsWorking = false;
-                    break;
-                case 3:
-                    TaskStatus = "数据准备完毕";
-                    TaskState = "WORKING";
-                    IsWorking = true;
-                    break;
-                case 4:
-                    TaskStatus = "数据传输中……";
-                    TaskState = "WORKING";
-                    IsWorking = true;
-                    break;
-                case 5:
-                    TaskStatus = "暂停";
-                    TaskState = "STOP";
-                    IsWorking = false;
-                    break;
-                case 6:
-                    TaskStatus = "任务完成";
-                    TaskState = "COMPLETED";
-                    IsWorking = false;
-                    break;
-                default:
-                    TaskStatus = "未知错误";
-                    TaskState = "UNSTART";
-                    IsWorking = false;
-                    break;
-            }
-            LastTime = _currentBdTask.LastTime;
-            TotalSeconds = _currentBdTask.TotolTime;
-            RecvBytes = _currentBdTask.RecvBytes;
-            RetryRate = (double)_currentBdTask.ErrIdxStr.Split(';').Count() / 7;
+                _currentBdTask = DeckDataProtocol.WorkingBdTask;
+                switch (_currentBdTask.TaskStage)
+                {
+                    case (int) TaskStage.Failed:
+                        TaskStatus = "任务失败，错误码=" + DeckDataProtocol.ErrorCode.ToString();
+                        IsWorking = false;
+                        TaskState = "STOP";
+                        var md = new MetroDialogSettings();
+                        md.AffirmativeButtonText = "确定";
+                        App.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(
+                                MainFrameViewModel.pMainFrame, "提示",
+                                "任务失败", MessageDialogStyle.Affirmative, md);
+                        }));
+                        t.Stop();
+                        break;
+                    case (int) TaskStage.UnStart:
+                        TaskStatus = "任务未开始";
+                        TaskState = "UNSTART";
+                        IsWorking = false;
+                        break;
+                    case (int) TaskStage.WaitForAns:
+                        TaskStatus = "等待反馈";
+                        TaskState = "WORKING";
+                        IsWorking = true;
+                        break;
+                    case (int) TaskStage.Waiting:
+                        TaskStatus = "准备数据……";
+                        TaskState = "STOP";
+                        IsWorking = true;
+                        break;
+                    case (int) TaskStage.Waking:
+                        TaskStatus = "正在唤醒设备";
+                        TaskState = "STOP";
+                        IsWorking = true;
+                        break;
+                    case (int) TaskStage.OK:
+                        TaskStatus = "数据准备完毕";
+                        TaskState = "WORKING";
+                        IsWorking = true;
+                        break;
+                    case (int) TaskStage.Continue:
+                        TaskStatus = "数据传输中……";
+                        TaskState = "WORKING";
+                        IsWorking = true;
+                        break;
+                    case (int) TaskStage.Pause:
+                        TaskStatus = "暂停";
+                        TaskState = "STOP";
+                        IsWorking = false;
+                        break;
+                    case (int) TaskStage.Finish:
+                        TaskStatus = "任务完成";
+                        TaskState = "COMPLETED";
+                        IsWorking = false;
+                        t.Stop();
+                        break;
+                    case (int) TaskStage.RecvReply:
+                        TaskStatus = "发送重发数据";
+                        TaskState = "WORKING";
+                        IsWorking = true;
+                        try
+                        {
+                            ACNBuilder.PackTask(DeckDataProtocol.WorkingBdTask, false, DeckDataProtocol.LastRecvPkgId);
+                        }
+                        catch (Exception exception)
+                        {
+                            UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(exception, LogType.Both));
+                            break;
+                        }
+                        var cmd = ACNProtocol.Package(false);
+                        var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
+                        await result;
+                        var end = result.Result;
+                        if (end == false)
+                        {
+                            UnitCore.Instance.EventAggregator.PublishMessage(
+                                new LogEvent(UnitCore.Instance.NetEngine.Error, LogType.Both));
+                        }
+                        _currentBdTask.TaskStage = (int) TaskStage.WaitForAns;
+                        break;
+                    default:
+                        TaskStatus = "未知错误";
+                        TaskState = "UNSTART";
+                        IsWorking = false;
+                        break;
+                }
+                LastTime = _currentBdTask.LastTime;
+                //TotalSeconds = _currentBdTask.TotolTime;
+
+                RecvBytes = _currentBdTask.RecvBytes;
+                if (_currentBdTask.ErrIdxStr != "")
+                    RetryRate = (double) _currentBdTask.ErrIdxStr.Split(';').Count()/15;
+                else
+                    RetryRate = 0;
+            }));
         }
-        
-        
+
     }
 }

@@ -18,7 +18,7 @@
       Background="{StaticResource DefaultBackgroundBrush}"
       mc:Ignorable="d" 
       KeepAlive="True"
-      d:DesignHeight="1080" d:DesignWidth="1280"
+      d:DesignHeight="720" d:DesignWidth="1080"
 	Title="LiveCaptureView" Loaded="Page_Loaded" PreviewMouseDown="Page_PreviewMouseDown">
     <Page.Resources>
         <converters:AbsConverter x:Key="AbsConverter"/>
@@ -58,7 +58,7 @@
             </Grid>
             <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ActualWidth, ConverterParameter=0.95, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="180"/>
+                    <RowDefinition Height="150"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid  Grid.Row="0" Name="PosWaveGrid">
@@ -137,7 +137,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="540"/>
+                        <ColumnDefinition Width="480"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Margin="0,0,2,0">
@@ -384,14 +384,13 @@
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
                                             <ColumnDefinition/>
-
                                         </Grid.ColumnDefinitions>
                                         <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
                                         <ViewControls:TreadTile Title="氧气" Unit="%" Value="{Binding Oxygen, StringFormat=\{0:F2\}}"/>
                                         <ViewControls:TreadTile Grid.Row="1" Title="二氧化碳" Unit="%" Value="{Binding Co2, StringFormat=\{0:F2\}}"/>
@@ -550,9 +549,6 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
                                         <dxchart:ChartControl Grid.Row="0" Grid.ColumnSpan="4">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="电池电压数据"/>
-                                            </dxchart:ChartControl.Titles>
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Right" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -648,9 +644,6 @@
                                         <ViewControls:TreadTile Grid.Row="1" Grid.Column="2" Title="左电池" Unit="V" Value="{Binding LeftsubV, StringFormat=\{0:F2\}}"/>
                                         <ViewControls:TreadTile Grid.Row="1" Grid.Column="3" Title="右电池" Unit="V" Value="{Binding RightsubV, StringFormat=\{0:F2\}}"/>
                                         <dxchart:ChartControl Grid.Row="2" Grid.ColumnSpan="4">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="电池电流数据"/>
-                                            </dxchart:ChartControl.Titles>
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Right" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -768,9 +761,7 @@
                                             <RowDefinition/>
                                         </Grid.RowDefinitions>
                                         <dxchart:ChartControl>
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="电池消耗数据"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Right" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -785,12 +776,13 @@
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
                                                 <dxchart:AxisY2D  Brush="{DynamicResource Home_ConsoleBackground}">
-                                                    <dxchart:AxisY2D.Range>
+                                                            <dxchart:AxisY2D.Title>
+                                                                <dxchart:AxisTitle Content="消耗(Kwh)" Foreground="{DynamicResource Home_ConsoleBackground}"/>
+                                                            </dxchart:AxisY2D.Title>
+                                                            <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="200"/>
                                                     </dxchart:AxisY2D.Range>
-                                                    <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="Kwh"  Foreground="{DynamicResource Home_ConsoleBackground}"/>
-                                                    </dxchart:AxisY2D.Label>
+                                                    
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
                                             <dxchart:XYDiagram2D.Series>
@@ -851,9 +843,7 @@
                                         </dxchart:ChartControl.Diagram>
                                             </dxchart:ChartControl>
                                         <dxchart:ChartControl Grid.Row="1">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="电池最大数据"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Right" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -868,12 +858,13 @@
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
                                                 <dxchart:AxisY2D  Brush="{DynamicResource Home_ConsoleBackground}">
-                                                    <dxchart:AxisY2D.Range>
+                                                            <dxchart:AxisY2D.Title>
+                                                                <dxchart:AxisTitle Content="温度(°C)" Foreground="{DynamicResource Home_ConsoleBackground}"/>
+                                                            </dxchart:AxisY2D.Title>
+                                                            <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="80"/>
                                                     </dxchart:AxisY2D.Range>
-                                                    <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="°C"   Foreground="{DynamicResource Home_ConsoleBackground}"/>
-                                                    </dxchart:AxisY2D.Label>
+                                                    
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
                                             <dxchart:XYDiagram2D.Series>
@@ -934,9 +925,7 @@
                                                 </dxchart:ChartControl.Diagram>
                                             </dxchart:ChartControl>
                                         <dxchart:ChartControl Grid.Row="2">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="电池最大膨胀数据"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Right" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -951,12 +940,13 @@
                                             </dxchart:XYDiagram2D.AxisX>
                                             <dxchart:XYDiagram2D.AxisY>
                                                 <dxchart:AxisY2D  Brush="{DynamicResource Home_ConsoleBackground}">
-                                                    <dxchart:AxisY2D.Range>
+                                                            <dxchart:AxisY2D.Title>
+                                                                <dxchart:AxisTitle Content="最大膨胀(mm)" Foreground="{DynamicResource Home_ConsoleBackground}"/>
+                                                            </dxchart:AxisY2D.Title>
+                                                            <dxchart:AxisY2D.Range>
                                                         <dxchart:AxisRange MinValue="0" MaxValue="100"/>
                                                     </dxchart:AxisY2D.Range>
-                                                    <dxchart:AxisY2D.Label>
-                                                        <dxchart:AxisLabel EndText="mm"  Foreground="{DynamicResource Home_ConsoleBackground}"/>
-                                                    </dxchart:AxisY2D.Label>
+                                                    
                                                 </dxchart:AxisY2D>
                                             </dxchart:XYDiagram2D.AxisY>
                                             <dxchart:XYDiagram2D.Series>
@@ -1178,9 +1168,7 @@
                                             <RowDefinition Height="*"/>
                                         </Grid.RowDefinitions>
                                         <dxchart:ChartControl Grid.ColumnSpan="4">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="温度/深度曲线"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Center" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -1251,9 +1239,7 @@
                                                 </dxchart:ChartControl.Diagram>
                                             </dxchart:ChartControl>
                                         <dxchart:ChartControl Grid.ColumnSpan="4" Grid.Row="1">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="电导率/深度曲线"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Center" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -1324,9 +1310,7 @@
                                                 </dxchart:ChartControl.Diagram>
                                             </dxchart:ChartControl>
                                         <dxchart:ChartControl Grid.ColumnSpan="4" Grid.Row="2">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="声速/深度曲线"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Center" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -1431,7 +1415,7 @@
                                           Grid.Column="0"
                                           RenderOptions.ClearTypeHint="Enabled"
                                           TextOptions.TextFormattingMode="Display"
-                                          Margin="5"
+                                          Margin="2"
                                           ItemsSource="{Binding Path=xVel}"
                                           Style="{DynamicResource AzureDataGrid}"
                                           AutoGenerateColumns="False">
@@ -1447,7 +1431,7 @@
                                                                Foreground="{DynamicResource AccentColorBrush}"
                                                                Background="Transparent"
                                                                VerticalAlignment="Center"
-                                                               Height="20" />
+                                                               Height="15" />
                                                         </DataTemplate>
                                                     </DataGridTemplateColumn.CellTemplate>
                                                 </DataGridTemplateColumn>
@@ -1540,9 +1524,7 @@
                                             
                                         </Grid>
                                         <dxchart:ChartControl Grid.ColumnSpan="4" Grid.Row="1">
-                                            <dxchart:ChartControl.Titles>
-                                                <dxchart:Title Content="对底高度"/>
-                                            </dxchart:ChartControl.Titles>
+
                                             <dxchart:ChartControl.Legend>
                                                 <dxchart:Legend HorizontalPosition="Center" IndentFromDiagram="5" Opacity="0.7"/>
                                             </dxchart:ChartControl.Legend>
@@ -1606,7 +1588,7 @@
                                             <ViewControls:TreadTile  Title="压载水舱液位" Unit="mm" Value="{Binding Cable, StringFormat=\{0:F2\}}" />
                                             <ViewControls:TreadTile  Title="计算机罐温度" Unit="℃" Value="{Binding AlertTemp, StringFormat=\{0:F2\}}" />
                                         </UniformGrid>
-                                        <Grid Grid.Row="1" Height="500">
+                                        <ScrollViewer Grid.Row="1" Style="{DynamicResource TransportScrollViewer}" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
                                             <ListView ItemsSource="{Binding AlarmList}" FontSize="18">
                                                 <ListBox.ItemContainerStyle>
                                                     <Style TargetType="ListBoxItem">
@@ -1637,7 +1619,7 @@
                                                     </Style>
                                                 </ListBox.ItemContainerStyle>
                                             </ListView>
-                                        </Grid>
+                                        </ScrollViewer>
                                     </StackPanel>
                                 </Grid>
                             </TabItem>

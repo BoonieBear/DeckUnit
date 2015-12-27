@@ -17,7 +17,7 @@
         dx:ThemeManager.ThemeName="MetropolisDark" IgnoreTaskbarOnMaximize="True"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
        
-        ShowInTaskbar ="True" ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" WindowState="Maximized" EnableDWMDropShadow="True" IsWindowDraggable="False">
+        ShowInTaskbar ="True" ShowTitleBar ="False"  ShowCloseButton="False" WindowStartupLocation="CenterScreen" WindowState="Maximized" ResizeMode="NoResize" WindowStyle="None"  EnableDWMDropShadow="True" IsWindowDraggable="False">
     <metroControl:MetroWindow.Resources>
         <Converters:WorkAreaWidthConverter x:Key="waw"/>
         <Converters:WorkAreaHeightConverter x:Key="wah"/>
