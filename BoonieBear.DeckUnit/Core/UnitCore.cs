@@ -88,7 +88,7 @@ namespace BoonieBear.DeckUnit.Core
                 _deckUnitConf = DeckUnitConf.GetInstance();
                 _modemConf = _deckUnitConf.GetModemConfigure();
                 _commConf = _deckUnitConf.GetCommConfInfo();
-                _commConf.LinkIP = "127.0.0.1";
+                //_commConf.LinkIP = "127.0.0.1";
                 _baseInfo = _deckUnitConf.GetBaseInfo();
                 if(_deckUnitConf==null)
                     throw new Exception("甲板单元配置信息丢失");

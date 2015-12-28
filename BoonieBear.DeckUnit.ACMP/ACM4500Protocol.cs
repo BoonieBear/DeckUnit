@@ -262,7 +262,8 @@ namespace BoonieBear.DeckUnit.ACMP
                     Results.Add(MovDataType.ALERT, alt);
                     string msg = Encoding.Default.GetString(pkg, 169, 40);
                     msg = msg.TrimEnd('\0');
-                    Results.Add(MovDataType.WORD, msg);
+                    if (msg != "")
+                        Results.Add(MovDataType.WORD, msg);
 
                 }
                 else
@@ -272,7 +273,8 @@ namespace BoonieBear.DeckUnit.ACMP
                     Results.Add(MovDataType.ALLPOST, postion);
                     string msg = Encoding.Default.GetString(pkg, 40, 40);
                     msg = msg.TrimEnd('\0');
-                    Results.Add(MovDataType.WORD, msg);
+                    if (msg != "")
+                        Results.Add(MovDataType.WORD, msg);
                 }
                 return true;
             }
@@ -344,7 +346,8 @@ namespace BoonieBear.DeckUnit.ACMP
                     Results.Add(MovDataType.ALERT, alt);
                     string msg = Encoding.Default.GetString(pkg, 169, 40);
                     msg = msg.TrimEnd('\0');
-                    Results.Add(MovDataType.WORD, msg);
+                    if(msg!="")
+                        Results.Add(MovDataType.WORD, msg);
                     byte[] img = new byte[MovGlobalVariables.ImgSize];
                     Buffer.BlockCopy(dataBytes, MovGlobalVariables.MFSKSize, img, 0, MovGlobalVariables.ImgSize);
                     return img;

@@ -460,7 +460,7 @@ namespace BoonieBear.DeckUnit.ACNP
                     length += split.Count()*16;
                 }
                 ACNProtocol.InitForPack(length);
-                dat[0] = 115;
+                dat[0] = 64;
                 ACNProtocol.OutPutIntBit(dat, 8);
                 dat[0] = length;
                 ACNProtocol.OutPutIntBit(dat, 12);

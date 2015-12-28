@@ -59,11 +59,11 @@ namespace BoonieBear.DeckUnit.ACMP
 
     public class MovGlobalVariables
     {
-        public static int MFSKSize = 224;
+        public static int MFSKSize = 210;
         public static int ShipMFSKSize = 80;
         public static int MovMFSKSize = 209;
         public static int WordSize = 40;
-        public static int ImgSize = 16330;
+        public static int ImgSize = 16340;
         public static int MPSKSize = 16560;
     }
 

@@ -188,17 +188,8 @@ namespace BoonieBear.DeckUnit.LiveService
         /// <returns></returns>
         public Task<bool> SendCMD(byte[] buf)
         {
-
-            var ret = SendConsoleCMD("gd -n");
-
-            if (ret.Result)
-            {
-                TaskEx.Delay(100);
                 var cmd = new ACNTCPDataCommand(_datatcpClient, buf);
                 return Command.SendTCPAsync(cmd);
-            }
-            return ret;
-
         }
 
         public async Task<bool> SendFile(Stream file)

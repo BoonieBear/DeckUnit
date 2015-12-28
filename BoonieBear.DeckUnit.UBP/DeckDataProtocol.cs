@@ -448,14 +448,15 @@ namespace BoonieBear.DeckUnit.UBP
                     {
                         WorkingBdTask.TaskStage = (int)TaskStage.Continue;
                         _sqlite.UpdateTask(WorkingBdTask);
-                        int unitidx = bytes[16];
-                        if (unitidx == 15 - 1 && unitidx != LastRecvUnitId)//每组最后一包不能连续处理
+                        int unitidx = bytes[17];
+                        int unitnum = bytes[16];
+                        if (unitidx == unitnum - 1 && unitidx != LastRecvUnitId)//每组最后一包不能连续处理
                         {
                             DataOutTimeTick(null);
                         }
                         else
                         {
-                            DataRecvTimer = new Timer(DataOutTimeTick, null, (15-1-unitidx)*SendRecvPeriod * 1000,0);
+                            DataRecvTimer = new Timer(DataOutTimeTick, null, (unitnum - 1 - unitidx) * SendRecvPeriod * 1000, 0);
                             ts = TaskStage.Continue;
                         }
                         LastRecvUnitId = unitidx;
@@ -523,9 +524,9 @@ namespace BoonieBear.DeckUnit.UBP
                 if (ExpectPkgList[i] > WorkingBdTask.TotalPkg-1)
                     ExpectPkgList[i] = -1;
             }
-            var packagelength = bytes.Length-17;//加上组内包号
+            var packagelength = bytes.Length-18;//加上组内包数包号
             var stream = new FileStream(TmpDataPath + "\\" + packageid, FileMode.Create);
-            stream.Write(bytes, 17, packagelength);
+            stream.Write(bytes, 18, packagelength);
             stream.Flush();
             stream.Close();
             LastRecvPkgId = packageid;
