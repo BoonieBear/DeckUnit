@@ -10,6 +10,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
         /// </summary>
         private static Window mSplash;
 
+        private static int ExitNo = 0;//0,正常，其他自定义
         /// <summary>
         /// Get or set the splash screen window
         /// </summary>
@@ -38,7 +39,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
         /// <summary>
         /// Close splash screen
         /// </summary>
-        public static void CloseSplash()
+        public static void CloseSplash(int exit=0)
         {
             if (mSplash != null)
             {
@@ -47,6 +48,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
                 if (mSplash is IDisposable)
                     (mSplash as IDisposable).Dispose();
             }
+            ExitNo = exit;
         }
     }
 }

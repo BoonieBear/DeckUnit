@@ -76,7 +76,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 UnitCore.Instance.MovTraceService.Save("XMTVOICE", bufBytes);
-                UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);
+                if(isRecording)
+                    UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);
                 //WaveControl.Display(bufBytes);
                 VoiceBar.Value = UpdateVolumn(bufBytes);
             }) );
@@ -171,6 +172,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private void RecvImgWatcher(object sender, EventArgs e)
         {
             var imgpath = TraceFile.GetInstance().TracePath + @"\RECVPSK";
+            if(!Directory.Exists(imgpath))
+                return;
             var filenames = Directory.GetFiles(imgpath,"*.jpg");
             var er = ImgViews.GetEnumerator();
             
@@ -575,13 +578,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 LogHelper.WriteLog("开始录音");
                 if (UnitCore.Instance.NetCore.IsTCPWorking)
                 {
+                    UnitCore.Instance.NetCore.SendSSBNon();
                     UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.Single);
                     LogHelper.WriteLog("开始发送语音");
                 }
+                isRecording = true;
                 WaveControl.StartRecording();
                 SSBToolTip.Content = "释放后发送语音";
                 
-                isRecording = true;
+                
                 
             }
             else
@@ -589,13 +594,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 if (isRecording)
                 {
                     WaveControl.StopRecoding();
+                    isRecording = false;
                     UnitCore.Instance.NetCore.SendSSBEND();
                     LogHelper.WriteLog("结束录音");
                     SSBToolTip.Content = "按住说话";
                     UnitCore.Instance.MovTraceService.EndSave("XMTVOICE");
                     LogHelper.WriteLog("结束语音发送");
                 }
-                isRecording = false;
+                
             }
             VoiceBar.Value = 0;
             
@@ -645,30 +651,36 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     {
                     case "收到":
                     case "一切正常":
+                        UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.RecvOrOK);
                         UnitCore.Instance.NetCore.SendSSBEND();
                         
                         break;
                     case "询问情况":
                     case "完成阶段工作":
+                        UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AskOrOK);
                         UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "同意":
                     case "请求上浮":
+                        UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.AgreeOrReqRise);
                         UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "立即上浮":
                     case "进入应急程序":
+                        UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RiseOrUrgent);
                         UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "不同意":
+                        UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Disg);
                         UnitCore.Instance.NetCore.SendSSBEND();
                         break;
                     case "释放应急浮标":
+                        UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.RelBuoy);
                         UnitCore.Instance.NetCore.SendSSBEND();
                         break;

@@ -44,15 +44,15 @@
                 <TextBlock Text="{Binding CmdIDDesc}" FontSize="22px" VerticalAlignment="Center"/>
             </StackPanel>
             <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
-                <TextBlock Text="创建时间:" FontSize="22px" VerticalAlignment="Center"/>
-                <TextBlock Text="{Binding StarTime}" FontSize="22px" VerticalAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
                 <TextBlock Text="更新时间:" FontSize="22px" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding LastTime}" FontSize="22px" VerticalAlignment="Center"/>
             </StackPanel>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                <TextBlock Text="预计剩余时间:" FontSize="22px" VerticalAlignment="Center"/>
+                <TextBlock Text="{Binding LeftTime}" FontSize="22px" VerticalAlignment="Center"/>
+            </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                <TextBlock Text="任务总时间: " FontSize="22px" VerticalAlignment="Center"/>
+                <TextBlock Text="任务运行时间: " FontSize="22px" VerticalAlignment="Center"/>
                 <TextBlock Text="{Binding TotalSeconds}" FontSize="22px" VerticalAlignment="Center"/>
                 <TextBlock Text=" 秒" FontSize="22px" VerticalAlignment="Center"/>
             </StackPanel>

@@ -115,6 +115,7 @@ namespace BoonieBear.DeckUnit.Core
                                         error = "";
                                         string ans = BitConverter.ToInt16(bytes, 0).ToString();
                                         string ping = BitConverter.ToInt16(bytes, 2).ToString();
+                                        int byteslength = BitConverter.ToInt32(bytes, 4);
                                         string length = BitConverter.ToInt32(bytes, 4).ToString();
                                         App.Current.Dispatcher.Invoke(new Action(() =>
                                         {
@@ -123,7 +124,7 @@ namespace BoonieBear.DeckUnit.Core
                                             MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(
                                                 MainFrameViewModel.pMainFrame, "查询数据成功",
                                                 "应答ID：" + ans + "\n" + "Ping= " + ping + "\n" +
-                                                "数据长度= " + length, MessageDialogStyle.Affirmative,
+                                                "数据长度= " + length + "字节\n" + "下载时间约 " + TimeSpan.FromSeconds(byteslength / 1400 * 35).ToString("g") + "\n", MessageDialogStyle.Affirmative,
                                                 md);
                                         }));
                                         break;

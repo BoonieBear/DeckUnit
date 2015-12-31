@@ -230,15 +230,7 @@ namespace BoonieBear.DeckUnit.LiveService
             else if (id == (int) ModuleType.MPSK || id == (int) ModuleType.SSB)
             {
                 
-
                 byte[] newBytes = new byte[PkgLimit + 4];
-                if (id == (int) ModuleType.SSB)
-                {
-                    Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
-                    Buffer.BlockCopy(BitConverter.GetBytes(PkgLimit), 0, newBytes, 2, 2);
-                    var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
-                    Command.SendTCPSync(cmd);
-                }
                 int pkgnum = 0;
                 pkgnum = buf.Length/PkgLimit;
                 for (int i = 0; i < pkgnum - 1; i++)
@@ -359,6 +351,17 @@ namespace BoonieBear.DeckUnit.LiveService
             Buffer.BlockCopy(BitConverter.GetBytes(2), 0, newBytes, 2, 2);
             var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
             return Command.SendTCPSync(cmd);
+        }
+
+        //发送空包，用于ssb和voice第一包之前
+        public bool SendSSBNon()
+        {
+            byte[] newBytes = new byte[PkgLimit + 4];
+            Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.SSB), 0, newBytes, 0, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(PkgLimit), 0, newBytes, 2, 2);
+            var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
+            return Command.SendTCPSync(cmd);
+
         }
     }
 }

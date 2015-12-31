@@ -106,9 +106,13 @@ namespace BoonieBear.DeckUnit.UBP
         public static BDTask WorkingBdTask { get; set; }
 
         /// <summary>
-        /// 从任务表下发到接收最后一包的最长时间
+        /// 从每包数据发送时间
         /// </summary>
         public static int SendRecvPeriod { get; set; }
+        /// <summary>
+        /// 当前任务接收到的包数
+        /// </summary>
+        public static int RecvPkg { get; set; }
         /// <summary>
         /// 上一次接收最大包号
         /// </summary>
@@ -353,7 +357,8 @@ namespace BoonieBear.DeckUnit.UBP
                 }
                 
                 var last = WorkingBdTask.ErrIdxStr.LastIndexOf(';');
-                WorkingBdTask.ErrIdxStr = WorkingBdTask.ErrIdxStr.Remove(last);//1;2;3;4重新计算前需要移除最后一个;号
+                if (last>0)
+                    WorkingBdTask.ErrIdxStr = WorkingBdTask.ErrIdxStr.Remove(last);//1;2;3;4重新计算前需要移除最后一个;号
                 ReCalcRetryList();
             }
             WorkingBdTask.TaskStage = (int) TaskStage.RecvReply;
@@ -536,6 +541,7 @@ namespace BoonieBear.DeckUnit.UBP
                     ExpectPkgList[i] = -1;
             }//在期望列表里去掉收到的节点
             var filename = Directory.GetFiles(TmpDataPath);
+            RecvPkg = filename.Count();
             var totalbytes = filename.Select(s => new FileInfo(s)).Select(file => (int) file.Length).Sum();//LINQ
             WorkingBdTask.RecvBytes = totalbytes;
             if (CheckFileIntegrity(WorkingBdTask.TaskID) && filename.Count() == WorkingBdTask.TotalPkg)

@@ -181,7 +181,7 @@
 									TouchKeyBoard:TabKeyBoard.Type="Num" 
 									TouchKeyBoard:TabKeyBoard.Width="480" />
                         </StackPanel>
-                        <ListBox MinHeight="100" Height="100" x:Name ="filterbox" >
+                        <ListBox MinHeight="120" Height="140" x:Name ="filterbox" >
                             <ListBox.ItemsSource>
                                 <MultiBinding Converter="{StaticResource TraceMessgaeFilterConverter}">
                                     <Binding Path="Filterlayer"/>
@@ -195,7 +195,7 @@
                                     <Setter Property="Template">
                                         <Setter.Value>
                                             <ControlTemplate TargetType="ListBoxItem">
-                                                <Border Background="{TemplateBinding Background}" Height="16">
+                                                <Border Background="{TemplateBinding Background}" Height="30">
                                                     <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               TextBlock.Foreground="{TemplateBinding Foreground}"/>

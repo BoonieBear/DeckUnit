@@ -53,7 +53,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 TaskID = _currentBdTask.TaskID;
                 DestID = _currentBdTask.DestID;
                 CmdId = _currentBdTask.CommID;
-                StarTime = _currentBdTask.StarTime;
+                //StarTime = _currentBdTask.StarTime;
 
                 DeckDataProtocol.AddCallBack(this);
                 IUpdateTaskHandle(null,null);
@@ -119,10 +119,10 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => RetryRate); }
             set { SetPropertyValue(() => RetryRate, value); }
         }
-        public  DateTime StarTime
+        public  string LeftTime
         {
-            get { return GetPropertyValue(() => StarTime); }
-            set { SetPropertyValue(() => StarTime, value); }
+            get { return GetPropertyValue(() => LeftTime); }
+            set { SetPropertyValue(() => LeftTime, value); }
         }
         public  DateTime LastTime
         {
@@ -426,7 +426,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 }
                 LastTime = _currentBdTask.LastTime;
                 //TotalSeconds = _currentBdTask.TotolTime;
-
+                LeftTime = TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg)*35).ToString("g");
                 RecvBytes = _currentBdTask.RecvBytes;
                 if (_currentBdTask.ErrIdxStr != "")
                     RetryRate = (double) _currentBdTask.ErrIdxStr.Split(';').Count()/15;

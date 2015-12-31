@@ -186,6 +186,11 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         private async void ExecuteCreateTask(object sender, ExecutedRoutedEventArgs eventArgs)
         {
+            if (!UnitCore.Instance.NetEngine.IsWorking)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("没有网络连接", LogType.OnlyInfo));
+                return;
+            }
             if (TypeIndex == 0 || TypeIndex == 2)
             {
                 var md = new MetroDialogSettings();
@@ -233,6 +238,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             {
                 ACNBuilder.PackTask(DeckDataProtocol.WorkingBdTask, true, -1);
                 var cmd = ACNProtocol.Package(false);
+                
                 var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
                 await result;
                 var ret = result.Result;
@@ -243,6 +249,13 @@ namespace BoonieBear.DeckUnit.ViewModels
                 else
                 {
                     UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("命令发送成功", LogType.Both));
+                }
+                if (TypeIndex == 4)
+                {
+                    var md = new MetroDialogSettings();
+                    md.AffirmativeButtonText = "确定";
+                    await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,
+                        "正在查询数据", "查询数据需要一定时间，请稍后……", MessageDialogStyle.Affirmative, md);
                 }
                 return;
             }
