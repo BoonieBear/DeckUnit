@@ -17,6 +17,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
         private LogFile traceFile;
         private LogFile shelLogFile;
         public string Error { get; set; }
+        public string AdPath { get; set; }
         public string LogPath { get; set; }
         public bool IsOK { get; set; }
         public string FileName
@@ -31,6 +32,19 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             }
         }
 
+        public void SetADFilePath(string path)
+        {
+            AdPath = path + @"\AD";
+            var adInfo = new DirectoryInfo(AdPath);
+            Ch1adFile = new ADFile("AD1_", "dat");
+            Ch1adFile.SetPath(adInfo);
+            Ch2adFile = new ADFile("AD2_", "dat");
+            Ch2adFile.SetPath(adInfo);
+            Ch3adFile = new ADFile("AD3_", "dat");
+            Ch3adFile.SetPath(adInfo);
+            Ch4adFile = new ADFile("AD4_", "dat");
+            Ch4adFile.SetPath(adInfo);
+        }
         public bool CreateService(string connectstr = "")
         {
 
@@ -50,16 +64,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
             shelLogFile = new LogFile("Shell", "txt");
             shelLogFile.SetPath(recordPath);
 
-            string AdPath = LogPath + @"\AD";
-            var adInfo = new DirectoryInfo(AdPath);
-            Ch1adFile = new ADFile("AD1_", "dat");
-            Ch1adFile.SetPath(adInfo);
-            Ch2adFile = new ADFile("AD2_", "dat");
-            Ch2adFile.SetPath(adInfo);
-            Ch3adFile = new ADFile("AD3_", "dat");
-            Ch3adFile.SetPath(adInfo);
-            Ch4adFile = new ADFile("AD4_", "dat");
-            Ch4adFile.SetPath(adInfo);
+            SetADFilePath(LogPath);
 
             traceFile = new LogFile("Trace", "txt");
             traceFile.SetPath(recordPath);

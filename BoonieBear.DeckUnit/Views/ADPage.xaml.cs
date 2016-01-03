@@ -28,7 +28,7 @@ namespace BoonieBear.DeckUnit.Views
 
         private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            string path = UnitCore.Instance.UnitTraceService.LogPath + @"\AD";
+            string path = UnitCore.Instance.UnitTraceService.AdPath;
             if (Directory.Exists(path))
                 System.Diagnostics.Process.Start("explorer.exe", path);
         }

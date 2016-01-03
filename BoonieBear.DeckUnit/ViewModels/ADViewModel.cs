@@ -1,4 +1,5 @@
-﻿using System.Windows.Threading;
+﻿using System.Windows.Forms;
+using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
 using BoonieBear.DeckUnit.Models;
@@ -78,7 +79,11 @@ namespace BoonieBear.DeckUnit.ViewModels
             get { return GetPropertyValue(() => TotalADByte); }
             set { SetPropertyValue(() => TotalADByte, value); }
         }
-
+        public string ADPath
+        {
+            get { return GetPropertyValue(() => ADPath); }
+            set { SetPropertyValue(() => ADPath, value); }
+        }
         public ObservableCollection<SystemInfo> MemInfos
         {
             get { return GetPropertyValue(() => MemInfos); }
@@ -130,12 +135,30 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public async void ExecuteBeginAD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            string NetInput = "ad";
-            await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
-            t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
-            IsWorking = true;
-            lastCount = 0;
-            currentCount = 0;
+            FolderBrowserDialog fbd = new FolderBrowserDialog();
+            fbd.Description = "选择AD保存目录";
+            fbd.RootFolder = Environment.SpecialFolder.MyComputer;
+            fbd.ShowNewFolderButton = true;
+            if (fbd.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    UnitCore.Instance.UnitTraceService.SetADFilePath(fbd.SelectedPath);
+                    string NetInput = "ad";
+                    if(!UnitCore.Instance.NetEngine.IsWorking)
+                        throw new Exception("没有有效网络连接");
+                    await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
+                    t = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
+                    IsWorking = true;
+                    lastCount = 0;
+                    currentCount = 0;
+                }
+                catch (Exception ex)
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+ 
+                }
+            }
         }
         void Tick(object sender, EventArgs e)
         {
