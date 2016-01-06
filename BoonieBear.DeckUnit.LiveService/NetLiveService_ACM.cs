@@ -233,7 +233,7 @@ namespace BoonieBear.DeckUnit.LiveService
                 byte[] newBytes = new byte[PkgLimit + 4];
                 int pkgnum = 0;
                 pkgnum = buf.Length/PkgLimit;
-                for (int i = 0; i < pkgnum - 1; i++)
+                for (int i = 0; i < pkgnum; i++)
                 {
                     Buffer.BlockCopy(BitConverter.GetBytes(id), 0, newBytes, 0, 2);
                     Buffer.BlockCopy(BitConverter.GetBytes(PkgLimit), 0, newBytes, 2, 2);
@@ -244,7 +244,17 @@ namespace BoonieBear.DeckUnit.LiveService
                 //last pkg
                 int lastpkglenth = buf.Length - pkgnum*PkgLimit;
                 if (lastpkglenth == 0)
+                {
+                    if (id == (int) ModuleType.MPSK)
+                    {
+                        Buffer.BlockCopy(BitConverter.GetBytes((int) ModuleType.PSKEND), 0, newBytes, 0, 2);
+                        Buffer.BlockCopy(BitConverter.GetBytes(lastpkglenth), 0, newBytes, 2, 2);
+                        var endcmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
+                        return Command.SendTCPSync(endcmd);
+                    }
                     return true;
+                }
+                    
                 if (id == (int) ModuleType.MPSK)
                     Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.PSKEND), 0, newBytes, 0, 2);
                 if (id == (int) ModuleType.SSB)

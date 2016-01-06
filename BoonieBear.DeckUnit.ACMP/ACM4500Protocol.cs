@@ -344,7 +344,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     Buffer.BlockCopy(dataBytes, 149, data, 0, 20);
                     alt.Parse(data);
                     Results.Add(MovDataType.ALERT, alt);
-                    string msg = Encoding.Default.GetString(pkg, 169, 40);
+                    string msg = Encoding.Default.GetString(dataBytes, 169, 40);
                     msg = msg.TrimEnd('\0');
                     if(msg!="")
                         Results.Add(MovDataType.WORD, msg);

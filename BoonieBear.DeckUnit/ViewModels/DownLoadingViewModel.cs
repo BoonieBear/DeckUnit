@@ -54,7 +54,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 DestID = _currentBdTask.DestID;
                 CmdId = _currentBdTask.CommID;
                 //StarTime = _currentBdTask.StarTime;
-
+                TotalSeconds = 0;
                 DeckDataProtocol.AddCallBack(this);
                 IUpdateTaskHandle(null,null);
             }
@@ -216,8 +216,11 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             if (_currentBdTask != null)
             {
+                DeckDataProtocol.Stop();
+                t.Stop();
                 if (UnitCore.Instance.UnitTraceService.DeleteTask(_currentBdTask.TaskID,false))
                 {
+                    
                     EventAggregator.PublishMessage(new GoBackNavigationRequest());
                 }
                 else
@@ -255,7 +258,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 if (ret.Result == MessageDialogResult.Affirmative)
                 {
                     DeckDataProtocol.Stop();
-
+                    t.Stop();
                     IUpdateTaskHandle(null, null);
                     UnitCore.Instance.EventAggregator.PublishMessage(new GoBackNavigationRequest());
                 }
@@ -302,6 +305,8 @@ namespace BoonieBear.DeckUnit.ViewModels
                             TaskState = "WORKING";
                             IsWorking = true;
                             TotalSeconds = 0;
+                            if(t!=null)
+                                t.Stop();
                             t = new DispatcherTimer(TimeSpan.FromSeconds(1),DispatcherPriority.Background, Time_Tick,Dispatcher.CurrentDispatcher);
                             await TaskEx.Delay(1000);
                             await
@@ -426,7 +431,11 @@ namespace BoonieBear.DeckUnit.ViewModels
                 }
                 LastTime = _currentBdTask.LastTime;
                 //TotalSeconds = _currentBdTask.TotolTime;
-                LeftTime = TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg)*35).ToString("g");
+                if (_currentBdTask.TotalPkg > 0)
+                    LeftTime =
+                        TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg)*35).ToString("g");
+                else
+                    LeftTime = "";
                 RecvBytes = _currentBdTask.RecvBytes;
                 if (_currentBdTask.ErrIdxStr != "")
                     RetryRate = (double) _currentBdTask.ErrIdxStr.Split(';').Count()/15;

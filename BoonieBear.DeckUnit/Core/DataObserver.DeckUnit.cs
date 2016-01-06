@@ -165,7 +165,7 @@ namespace BoonieBear.DeckUnit.Core
             }
             else
             {
-                Debug.WriteLine(e.ErrorMsg);
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("接收数据出错："+e.ErrorMsg+"\n"+"请排除故障后重启程序", LogType.Both));
             }
         }
 

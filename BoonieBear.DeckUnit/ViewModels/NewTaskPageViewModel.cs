@@ -205,15 +205,17 @@ namespace BoonieBear.DeckUnit.ViewModels
                 paraBytes = null;
             if (TypeIndex == 1 || TypeIndex == 4)
             {
-                paraBytes= new byte[8];
-                paraBytes[0] = (byte)SelectedFromDate.Month;
-                paraBytes[1] = (byte)SelectedFromDate.Day;
-                paraBytes[2] = (byte)SelectedFromTime.Hour;
-                paraBytes[3] = (byte)SelectedFromTime.Minute;
-                paraBytes[4] = (byte)SelectedToDate.Month;
-                paraBytes[5] = (byte)SelectedToDate.Day;
-                paraBytes[6] = (byte)SelectedToTime.Hour;
-                paraBytes[7] = (byte)SelectedToTime.Minute;
+                paraBytes= new byte[10];
+                paraBytes[0] = (byte)(SelectedFromDate.Year-2000);
+                paraBytes[1] = (byte)SelectedFromDate.Month;
+                paraBytes[2] = (byte)SelectedFromDate.Day;
+                paraBytes[3] = (byte)SelectedFromTime.Hour;
+                paraBytes[4] = (byte)SelectedFromTime.Minute;
+                paraBytes[5] = (byte)(SelectedToDate.Year - 2000);
+                paraBytes[6] = (byte)SelectedToDate.Month;
+                paraBytes[7] = (byte)SelectedToDate.Day;
+                paraBytes[8] = (byte)SelectedToTime.Hour;
+                paraBytes[9] = (byte)SelectedToTime.Minute;
             }
             if (TypeIndex == 2 )
             {

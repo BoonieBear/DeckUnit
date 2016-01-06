@@ -391,7 +391,7 @@ namespace BoonieBear.DeckUnit.ACNP
                 int[] dat = new int[4];
                 int length = 20 + 8 + 8 + 64;//不包括参数
                 if (task.CommID == 2 || task.CommID == 5)
-                    length += 8*8;
+                    length += 10*8;
                 if (task.CommID == 3)
                     length += 6*8;
                 ACNProtocol.InitForPack(length);
@@ -429,8 +429,8 @@ namespace BoonieBear.DeckUnit.ACNP
                 if (task.CommID == 2)
                 {
                     var buf = new int[4];
-                    Buffer.BlockCopy(task.ParaBytes,0,buf,0,8);
-                    ACNProtocol.OutPutIntBit(buf, 64);
+                    Buffer.BlockCopy(task.ParaBytes,0,buf,0,10);
+                    ACNProtocol.OutPutIntBit(buf, 80);
                     ACNProtocol.AddPool(task.DestID);
                 }
 
@@ -444,8 +444,8 @@ namespace BoonieBear.DeckUnit.ACNP
                 if (task.CommID == 5)
                 {
                     var buf = new int[4];
-                    Buffer.BlockCopy(task.ParaBytes, 0, buf, 0, 8);
-                    ACNProtocol.OutPutIntBit(buf, 64);
+                    Buffer.BlockCopy(task.ParaBytes, 0, buf, 0, 10);
+                    ACNProtocol.OutPutIntBit(buf, 80);
                     ACNProtocol.AddPool(task.DestID);
                 }
                 
@@ -492,7 +492,7 @@ namespace BoonieBear.DeckUnit.ACNP
                 }
                 else
                 {
-                    if (task.ErrIdxStr != null)
+                    if (task.ErrIdxStr != "")
                     {
                         string[] split = task.ErrIdxStr.Split(';');
                         foreach (var strid in split)

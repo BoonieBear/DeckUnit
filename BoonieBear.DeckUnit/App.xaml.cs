@@ -54,7 +54,7 @@ namespace BoonieBear.DeckUnit
             }
             e.Handled = true;
             if(App.Current.MainWindow.IsActive)
-                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(e.Exception.Message, LogType.Both));
+                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(e.Exception, LogType.Both));
             else
             {
                 LogHelper.ErrorLog(e.Exception.Message,e.Exception);
@@ -70,7 +70,7 @@ namespace BoonieBear.DeckUnit
             if (o != null)
             {
                 if (App.Current.MainWindow.IsActive)
-                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(o.Message, LogType.Both));
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(o, LogType.Both));
                 else
                 {
                     LogHelper.ErrorLog(o.Message, o);

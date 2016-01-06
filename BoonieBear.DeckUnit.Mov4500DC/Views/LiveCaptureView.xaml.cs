@@ -18,6 +18,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using System.Windows.Controls;
 using BoonieBear.DeckUnit.TraceFileService;
 using DevExpress.Xpf.Charts;
+using DevExpress.Xpf.Core;
 using HelixToolkit.Wpf;
 using ImageProc;
 using TinyMetroWpfLibrary.EventAggregation;
@@ -209,7 +210,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 var vew = new Viewbox();
                 vew.Child = img;
                 vew.MouseDown += vew_MouseDown;
-                ImagePanel.Children.Add(vew);
+                vew.ToolTip = key;
+                ImagePanel.Children.Insert(0,vew);
                 ImgViews.Add(key,vew);
             }
             if (ImgViews.Count == 0)

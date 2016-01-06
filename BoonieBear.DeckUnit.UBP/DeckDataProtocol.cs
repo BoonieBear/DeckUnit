@@ -131,7 +131,6 @@ namespace BoonieBear.DeckUnit.UBP
         /// <returns>true成功，false失败</returns>
         public  static bool Init(int id,string dbPath)
         {
-            
             if (System.IO.File.Exists(dbPath))
             {
                 ID = id;
@@ -297,8 +296,16 @@ namespace BoonieBear.DeckUnit.UBP
         {
             string[] RetryIds = WorkingBdTask.ErrIdxStr.Split(';');
             int MaxRetry = 0;
-            if (RetryIds.Count() == 0)
-                MaxRetry = 0;
+            if (WorkingBdTask.ErrIdxStr == "") //无erridx
+            {
+                for (int i = 0; i < 15; i++)
+                {
+                    ExpectPkgList[i] = LastRecvPkgId + i;
+                    if (ExpectPkgList[i] > WorkingBdTask.TotalPkg - 1)
+                        ExpectPkgList[i] = -1;
+                }
+                return;
+            }
             else
                 MaxRetry = int.Parse(RetryIds[RetryIds.Count() - 1]);
             if (LastRecvPkgId > MaxRetry) //收到包比重传的大

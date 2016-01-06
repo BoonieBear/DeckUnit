@@ -42,7 +42,7 @@
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row ="0" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                 <TextBlock Text="目标节点:" FontSize="22px" VerticalAlignment="Center"/>
-                <controls:NumericUpDown Width="150" Value="{Binding DestID}" Minimum ="1" Maximum="63" FontSize="22px" VerticalAlignment="Center" Margin="20,0,0,0"/>
+                <controls:NumericUpDown Width="150" Value="{Binding DestID}" Minimum ="1" Maximum="63" FontSize="22px" VerticalAlignment="Center" Margin="20,0,0,0" UpDownButtonsWidth="40"/>
             </StackPanel>
             <StackPanel Grid.Row ="0" Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Left" Margin="10,0,0,0">
                 <TextBlock Text="设备端口" FontSize="22px" VerticalAlignment="Center"/>
