@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -189,15 +190,16 @@ namespace BoonieBear.DeckUnit.ViewModels
         private void CanExecuteGoDataCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
         {
             eventArgs.CanExecute = true;
-            if(_currentBdTask!=null)
-                if(_currentBdTask.TaskStage!=(int) TaskStage.Finish)
-                    eventArgs.CanExecute = false;
         }
 
 
         private  void ExecuteGoDataCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             //EventAggregator.PublishMessage(new GoADCPDataViewEvent(_currentBdTask));
+            Process ps = new Process();
+            ps.StartInfo.FileName = "explorer.exe";
+            ps.StartInfo.Arguments =_currentBdTask.FilePath;
+            ps.Start();
         }
         public ICommand DeleteTaskCommand
         {
@@ -364,7 +366,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                         IsWorking = false;
                         break;
                     case (int) TaskStage.WaitForAns:
-                        TaskStatus = "等待反馈";
+                        TaskStatus = "等待下组数据";
                         TaskState = "WORKING";
                         IsWorking = true;
                         break;
@@ -400,7 +402,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                         t.Stop();
                         break;
                     case (int) TaskStage.RecvReply:
-                        TaskStatus = "发送重发数据";
+                        TaskStatus = "发送下一组任务数据";
                         TaskState = "WORKING";
                         IsWorking = true;
                         try
@@ -433,7 +435,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 //TotalSeconds = _currentBdTask.TotolTime;
                 if (_currentBdTask.TotalPkg > 0)
                     LeftTime =
-                        TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg)*35).ToString("g");
+                        TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg) * DeckDataProtocol.SendRecvPeriod).ToString("g");
                 else
                     LeftTime = "";
                 RecvBytes = _currentBdTask.RecvBytes;

@@ -76,9 +76,9 @@
             <Button Style="{DynamicResource SquareButtonStyle}"
 				Margin="2"
 				Content="停止" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=停止, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StopTaskCommand}"/>
-            <Button Style="{DynamicResource SquareButtonStyle}" 
+            <!--Button Style="{DynamicResource SquareButtonStyle}" 
 				Margin="2"
-				Content="删除" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=删除, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding DeleteTaskCommand}"/>
+				Content="删除" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=删除, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding DeleteTaskCommand}"/-->
             <Button Style="{DynamicResource SquareButtonStyle}" 
 				Margin="2"
 				Content="数据" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=数据, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding GoDataCommand}"/>

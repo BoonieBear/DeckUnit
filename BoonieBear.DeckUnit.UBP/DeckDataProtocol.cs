@@ -139,7 +139,7 @@ namespace BoonieBear.DeckUnit.UBP
                 TmpDataPath = @".\TmpDir\";
                 Directory.CreateDirectory(TmpDataPath);
                 DBFile = dbPath;
-                SendRecvPeriod = 35;//32.88
+                SendRecvPeriod = 40;//32.88
                 WorkingBdTask = null;
                 SecondTicks = 0;
                 DALFactory.Connectstring = "Data Source=" + DBFile + ";Pooling=True";
@@ -182,7 +182,7 @@ namespace BoonieBear.DeckUnit.UBP
             if (DataRecvTimer != null)
             {
                 DataRecvTimer.Dispose();
-                DataOutTimeTick(null);//调用超时程序更新重传包
+                //DataOutTimeTick(null);//调用超时程序更新重传包
                 WorkingBdTask.TaskStage = (int)TaskStage.UnStart;
             }
                 
@@ -354,6 +354,8 @@ namespace BoonieBear.DeckUnit.UBP
             }
             else//收到过数据
             {
+                if (ExpectPkgList==null)
+                    ExpectPkgList = new int[15];
                 WorkingBdTask.ErrIdxStr = "";
                 foreach (var id in ExpectPkgList)
                 {
@@ -368,7 +370,8 @@ namespace BoonieBear.DeckUnit.UBP
                     WorkingBdTask.ErrIdxStr = WorkingBdTask.ErrIdxStr.Remove(last);//1;2;3;4重新计算前需要移除最后一个;号
                 ReCalcRetryList();
             }
-            WorkingBdTask.TaskStage = (int) TaskStage.RecvReply;
+            if(WorkingBdTask.TaskStage != (int)TaskStage.Pause)//stop状态下不设置为重传包状态
+                WorkingBdTask.TaskStage = (int) TaskStage.RecvReply;
             _sqlite.UpdateTask(WorkingBdTask);
             if(TimeOutCallback!=null)
                 TimeOutCallback.Invoke(null,null);
@@ -380,6 +383,7 @@ namespace BoonieBear.DeckUnit.UBP
             long id = 0;
             if (Int64.TryParse(strid, out id))
                 return id;
+            ErrorCode = -2;
             return -1;
         }
 
@@ -468,7 +472,7 @@ namespace BoonieBear.DeckUnit.UBP
                         }
                         else
                         {
-                            DataRecvTimer = new Timer(DataOutTimeTick, null, (unitnum - 1 - unitidx) * SendRecvPeriod * 1000, 0);
+                            DataRecvTimer = new Timer(DataOutTimeTick, null, ((unitnum - 1 - unitidx) * SendRecvPeriod) * 1000, 0);
                             ts = TaskStage.Continue;
                         }
                         LastRecvUnitId = unitidx;
@@ -502,7 +506,7 @@ namespace BoonieBear.DeckUnit.UBP
             {
                 Debug.WriteLine(e.Message);
                 error = e.Message;
-                ErrorCode = -1;
+                ErrorCode = -2;
                 WorkingBdTask.TaskStage = (int)TaskStage.Failed;
                 _sqlite.UpdateTask(WorkingBdTask);
                 if (TimeOutCallback != null)
@@ -551,12 +555,15 @@ namespace BoonieBear.DeckUnit.UBP
             RecvPkg = filename.Count();
             var totalbytes = filename.Select(s => new FileInfo(s)).Select(file => (int) file.Length).Sum();//LINQ
             WorkingBdTask.RecvBytes = totalbytes;
-            if (CheckFileIntegrity(WorkingBdTask.TaskID) && filename.Count() == WorkingBdTask.TotalPkg)
+            if (filename.Count() == WorkingBdTask.TotalPkg && CheckFileIntegrity(WorkingBdTask.TaskID))
             {
+                string err;
                 ExpectPkgList = null;
-                ret = 1;
+                ret = -1;
+                if(DeckDataProtocol.BuildFile(WorkingBdTask.TaskID,out err))
+                    ret = 1;
+                
             }
-            
             return ret;
 
         }
@@ -570,8 +577,18 @@ namespace BoonieBear.DeckUnit.UBP
         public static bool CheckFileIntegrity(long id)
         {
             var filename = Directory.GetFiles(TmpDataPath);
-            var i = 0;
-            return filename.All(s => int.Parse((new FileInfo(s)).Name) == i++);
+            List<int> fileList = new List<int>(15);
+            foreach (var name in filename)
+            {
+                fileList.Add(int.Parse(name.Substring(name.LastIndexOf("\\")+1)));
+            }
+            fileList.Sort();
+            for (int j = 0; j < fileList.Count; j++)
+            {
+                if(fileList.Exists((s) => s == j)==false)
+                    return false;
+            }
+            return true;
         }
 
         /// <summary>
@@ -585,8 +602,8 @@ namespace BoonieBear.DeckUnit.UBP
             err = "";
             try
             {
-                Directory.CreateDirectory(@".\TaskDir\");
-                var stream = new FileStream(@".\TaskDir\"  + id, FileMode.Create);
+                string TaskDIR = Directory.CreateDirectory(@".\TaskDir\").FullName;
+                var stream = new FileStream(TaskDIR+id, FileMode.Create);
                 var filename = Directory.GetFiles(TmpDataPath);
                 foreach (var streams in filename.Select(s => new FileStream(s, FileMode.Open)))
                 {
@@ -594,13 +611,8 @@ namespace BoonieBear.DeckUnit.UBP
                     streams.Close();
                     
                 }
-                foreach (var s in filename)
-                {
-                    File.Delete(s);
-                }
                 stream.Close();
-                var filepath = @".\TaskDir\" + id;
-                WorkingBdTask.FilePath = filepath;
+                WorkingBdTask.FilePath = TaskDIR;
                 _sqlite.UpdateTask(WorkingBdTask);//存入数据路径
                 return true;
             }
