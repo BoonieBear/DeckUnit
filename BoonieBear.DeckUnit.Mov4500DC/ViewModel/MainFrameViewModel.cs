@@ -42,10 +42,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void MsgLog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if(MsgLog.Count>200)
-                MsgLog.RemoveAt(0);
-            else
-                base.OnPropertyChanged(() => MsgLog);
+            base.OnPropertyChanged(() => MsgLog);
         }
 
         #region action

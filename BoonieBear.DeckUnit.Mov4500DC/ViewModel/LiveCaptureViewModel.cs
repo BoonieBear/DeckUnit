@@ -84,8 +84,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void AlertdataCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (AlertdataCollection.Count > 600)
-                AlertdataCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => AlertdataCollection);
         }
 
@@ -96,50 +95,42 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void AdcpdataCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (AdcpdataCollection.Count>600)
-                AdcpdataCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => AdcpdataCollection);
         }
 
         private void EnergysysCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (EnergysysCollection.Count > 600)
-                EnergysysCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => EnergysysCollection);
         }
 
         private void LifesupplyCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (LifesupplyCollection.Count > 600)
-                LifesupplyCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => LifesupplyCollection);
         }
 
         private void CTDCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (CTDCollection.Count > 600)
-                CTDCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => CTDCollection);
         }
 
         private void BpCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (BpCollection.Count > 600)
-                BpCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => BpCollection);
         }
 
         private void SubPositionCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            if (SubPositionCollection.Count > 600)
-                SubPositionCollection.RemoveAt(0);
+
             base.OnPropertyChanged(() => SubPositionCollection);
         }
 
         private void UsblPositionCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (UsblPositionCollection.Count > 600)
-                UsblPositionCollection.RemoveAt(0);
+        { 
             base.OnPropertyChanged(() => UsblPositionCollection);
         }
 
@@ -908,6 +899,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BottomTrack = (float) adcp.BottomTrack;
                         ADCPHeight = (float) adcp.Height;
                         AdcpdataCollection.Add(adcp);
+                        if (AdcpdataCollection.Count > 600)
+                            AdcpdataCollection.RemoveAt(0);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.ALERT))
@@ -931,6 +924,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             i++;
                         }
                         AlertdataCollection.Add(alt);
+                        if (AlertdataCollection.Count > 600)
+                            AlertdataCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
                         byte[] posBytes = new byte[22];
@@ -962,6 +957,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         ZDistance = allpos.RelateZ;
                         Transfromxyz(XDistance, YDistance, ZDistance);
                         UsblPositionCollection.Add(allpos);
+                        if (UsblPositionCollection.Count > 600)
+                            UsblPositionCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
                         byte[] posBytes = new byte[42];
@@ -985,6 +982,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BpLeft = bp.Left;
                         BpRight = bp.Right;
                         BpCollection.Add(bp);
+                        if (BpCollection.Count > 600)
+                            BpCollection.RemoveAt(0);
                     }
                 }
                 /*
@@ -1009,6 +1008,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         CTDWaterTemp = ctd.Watertemp;
                         CTDWatercond = ctd.Watercond;
                         CTDCollection.Add(ctd);
+                        if (CTDCollection.Count > 600)
+                            CTDCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
                         byte[] posBytes = new byte[18];
@@ -1045,6 +1046,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         RightsubMaxTemp = eng.RightsubMaxTemp;
                         RightsubMaxExpand = eng.RightsubMaxExpand;
                         EnergysysCollection.Add(eng);
+                        if (EnergysysCollection.Count > 600)
+                            EnergysysCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
                         byte[] posBytes = new byte[36];
@@ -1083,6 +1086,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         Temperature = life.Temperature;
                         Humidity = life.Humidity;
                         LifesupplyCollection.Add(life);
+                        if (LifesupplyCollection.Count > 600)
+                            LifesupplyCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
                         byte[] posBytes = new byte[16];
@@ -1109,6 +1114,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovPitch = subpos.Subpitch;
                         MovRoll = subpos.Subroll;
                         SubPositionCollection.Add(subpos);
+                        if (SubPositionCollection.Count > 600)
+                            SubPositionCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
                         byte[] posBytes = new byte[28];

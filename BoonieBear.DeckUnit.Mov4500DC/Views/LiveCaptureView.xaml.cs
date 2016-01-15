@@ -308,6 +308,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 string dspmode = (mode == MonitorMode.SHIP) ? "2" : "1";
                 var cmd = "synseq " + dspmode;
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                await TaskEx.Delay(100);
                 cmd = "channel " + channel + " -w";
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("发射换能器设置为"+channel);
@@ -323,6 +324,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 cmd = "g " + gain;
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("接收增益设置为" + gain);
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                DateTime dt = DateTime.Now;
+                cmd = "date " + dt.Year+" "+dt.Month+" "+dt.Day+" "+dt.Hour +" "+dt.Minute +" "+ dt.Second;
+                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
             }
         }
 
@@ -357,24 +362,36 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private void SetTiltle(bool sender)
         {
             var title = new Span();
-            Image img;
+            Image img,shipImg,movImage;
+            shipImg = new Image //母船的图片
+            {
+                Source = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png"),
+                Width = 48,
+                Height = 48,
+            };
+            movImage = new Image //潜器的图片
+            {
+                Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png"),
+                Width = 48,
+                Height = 48,
+            };
             if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
             {
-                img = new Image //母船的图片
+                if (sender)
+                    img = shipImg;
+                else
                 {
-                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png"),
-                    Width = 48,
-                    Height = 48,
-                };
+                    img = movImage;
+                }
             }
             else
             {
-                img = new Image //潜器的图片
+                if (sender)
+                    img = movImage;
+                else
                 {
-                    Source = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png"),
-                    Width = 48,
-                    Height = 48,
-                };
+                    img = shipImg;
+                }
             }
             title.Inlines.Add(img);
             var run = new Run("  (" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + ")")
@@ -475,8 +492,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     chartmsg.TextAlignment = TextAlignment.Right;
                     chartmsg.LineHeight = 24;
                     MessageDocument.Blocks.Add(chartmsg);
-                    MultiView.SelectedIndex = 0;
-                    MultiView.ShowControlButtons();
+                    
                 }
                 if (img != null )
                 {
@@ -484,6 +500,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     p.Inlines.Add(img);
                     p.TextAlignment = TextAlignment.Right;
                     MessageDocument.Blocks.Add(p);
+                    MultiView.SelectedIndex = 0;
+                    MultiView.ShowControlButtons();
                 }
             }
 
