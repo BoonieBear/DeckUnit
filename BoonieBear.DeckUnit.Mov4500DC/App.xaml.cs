@@ -77,7 +77,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI
                 App.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     if (App.Current.MainWindow.IsActive)
-                        UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(o.Message, LogType.Both));
+                        UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(o, LogType.Both));
                     else
                     {
                         LogHelper.ErrorLog(o.Message, o);

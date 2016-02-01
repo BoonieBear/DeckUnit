@@ -17,6 +17,7 @@ namespace BoonieBear.DeckUnit.ACMP
             PSKEND = 0xed02,//不会接收到
             SSBEND = 0xed04,//不会接收到
             Req = 0xdada,
+            SSBNULL = 0xdaa4//发射时上传的空包，用于填充语音的空白处
         }
 
     public enum MonitorMode

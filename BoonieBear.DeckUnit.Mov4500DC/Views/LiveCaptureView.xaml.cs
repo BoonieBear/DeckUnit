@@ -33,6 +33,7 @@ using System.Windows.Threading;
 using System.Runtime.InteropServices;
 using MahApps.Metro.Controls;
 using DevExpress.XtraCharts;
+using BoonieBear.DeckUnit.Comm.GPIO;
 namespace BoonieBear.DeckUnit.Mov4500UI.Views
 {
     /// <summary>
@@ -44,6 +45,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         [DllImport("user32.dll")]
         private extern static bool SwapMouseButton(bool fSwap);
         #region 变量区域
+        GPIOService GPIO = new GPIOService();
         private bool _isPressed = false;
         private Point _sourcePoint;
         //选择图片的文件名
@@ -54,6 +56,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         List<Paragraph> parasList = new List<Paragraph>(0);
         Dictionary<string, Viewbox> ImgViews = new Dictionary<string, Viewbox>(0);//收到图像的集合
         DispatcherTimer ImgWatcher= null;
+        DispatcherTimer GPIOWatcher = null;
         private int index = 0;
         private bool isRecording = false;
         private short[] volumnbuffer = new short[400];//half of wavecontrol recording buffer
@@ -61,7 +64,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         #endregion
         public LiveCaptureView()
         {
-            InitializeComponent();
+            InitializeComponent();            
+            GPIO.Initialize_SUSI();
             WaveControl.Initailize();
             WaveControl.AddRecDoneHandle(RecHandle);
             WaveControl.StartPlaying();
@@ -69,6 +73,51 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             UnitCore.Instance.LiveHandle = AppendRecvInfo;
             UnitCore.Instance.AddFHHandle = AddSendFHToChart;
             UnitCore.Instance.AddImgHandle = AddSendImgToChart;
+        }
+
+        void Tick(object sender, EventArgs e)
+        {
+            try
+            {
+               if(UnitCore.Instance.NetCore.IsTCPWorking)
+               {
+                   GPIO.IORead();
+                   if ((GPIO.StatusMask & 0x00000002) == 2)//GPIO口接的是第二个，未录音时状态是0b11111101
+                   {
+                       if (!isRecording)
+                       {
+                           Recording(true);
+                       }
+
+                   }
+                   else
+                   {
+                       if (isRecording)
+                       {
+                           Recording(false);
+                       }
+
+                   }
+
+               }
+               else
+               {
+                   if (isRecording)
+                   {
+                       Recording(false);
+                   }
+                   
+
+               }
+                
+
+            }
+            catch (Exception ex)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+            }
+
+
         }
 
         private void RecHandle(byte[] bufBytes)
@@ -167,6 +216,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 ImgWatcher = new DispatcherTimer(TimeSpan.FromSeconds(5), DispatcherPriority.Normal, RecvImgWatcher,
                     dispatcher);
             ImgWatcher.Start();
+            if(GPIOWatcher==null)
+                GPIOWatcher = new DispatcherTimer(TimeSpan.FromSeconds(200), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
+            GPIOWatcher.Start();
             
         }
 
@@ -604,7 +656,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 }
                 isRecording = true;
                 WaveControl.StartRecording();
-                SSBToolTip.Content = "释放后发送语音";
+                SSBToolTip.Content = "正在发送语音";
                 
                 
                 
@@ -620,6 +672,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     SSBToolTip.Content = "按住说话";
                     UnitCore.Instance.MovTraceService.EndSave("XMTVOICE");
                     LogHelper.WriteLog("结束语音发送");
+                    VoiceBar.IsEnabled = false;
+                    Thread.Sleep(500);
+                    VoiceBar.IsEnabled = true;
                 }
                 
             }

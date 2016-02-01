@@ -358,7 +358,7 @@ namespace BoonieBear.DeckUnit.LiveService
         {
             byte[] newBytes = new byte[4];
             Buffer.BlockCopy(BitConverter.GetBytes((int)ModuleType.SSBEND), 0, newBytes, 0, 2);
-            Buffer.BlockCopy(BitConverter.GetBytes(2), 0, newBytes, 2, 2);
+            Buffer.BlockCopy(BitConverter.GetBytes(0), 0, newBytes, 2, 2);
             var cmd = new ACNTCPDataCommand(_datatcpClient, newBytes);
             return Command.SendTCPSync(cmd);
         }

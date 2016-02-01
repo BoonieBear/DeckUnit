@@ -94,6 +94,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     {
                         switch (id)
                         {
+                            case (int) ModuleType.SSBNULL:
                             case (int) ModuleType.SSB:
                                 datatype = "RECVVOICE";
 
@@ -135,10 +136,18 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         UnitCore.Instance.MovTraceService.Save(datatype, Encoding.Default.GetString(buffer)); //FH
                     else
                     {
+                        if (id == (int) ModuleType.SSBNULL)
+                        {
+                            int length = BitConverter.ToUInt16(buffer,0);
+                            buffer = new byte[length*2];
+                            Array.Clear(buffer,0,length*2);
+                        }
                         UnitCore.Instance.MovTraceService.Save(datatype, buffer); //保存上面除FH全部数据类型
                     }
                     if (e.Mode == CallMode.DataMode)
                     {
+                        if (id == (int)ModuleType.SSBNULL)
+                            return;
                         if (id == (int) ModuleType.SSB)
                         {
                             UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
