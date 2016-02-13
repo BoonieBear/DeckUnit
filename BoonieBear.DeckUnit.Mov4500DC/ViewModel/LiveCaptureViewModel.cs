@@ -36,7 +36,7 @@ using FILETIME = System.Runtime.InteropServices.FILETIME;
 
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
-    public class LiveCaptureViewModel : ViewModelBase, IHandleMessage<MovDataEvent>, IHandleMessage<USBLEvent>
+    public class LiveCaptureViewModel : ViewModelBase, IHandleMessage<MovDataEvent>, IHandleMessage<USBLEvent>,IHandleMessage<SailEvent>
     {
         private DispatcherTimer t;
         private NetworkInterface currentInterface = null;
@@ -1186,5 +1186,167 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         #endregion
 
+
+        public void Handle(SailEvent message)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                if (message.Type == ExchageType.ADCP)
+                {
+                    var adcp = message.SailData as Adcpdata;
+                    if (adcp != null)
+                    {
+                        ADCPTime = adcp.Time;
+                        xVel.Clear();
+                        yVel.Clear();
+                        zVel.Clear();
+                        for (int i = 0; i < 10; i++)
+                        {
+                            xVel.Add(new AdcpInfo(i + 1, adcp.FloorX[i]));
+                            yVel.Add(new AdcpInfo(i + 1, adcp.FloorY[i]));
+                            zVel.Add(new AdcpInfo(i + 1, adcp.FloorZ[i]));
+                        }
+                        BottomTrack = (float) adcp.BottomTrack;
+                        ADCPHeight = (float) adcp.Height;
+                        AdcpdataCollection.Add(adcp);
+                        if (AdcpdataCollection.Count > 600)
+                            AdcpdataCollection.RemoveAt(0);
+                    }
+                }
+                if (message.Type == ExchageType.ALERT)
+                {
+                    var alt = message.SailData as Alertdata;
+                    if (alt != null)
+                    {
+                        AlarmTime = alt.Time;
+                        Leak = alt.Leak;
+                        Cable = alt.Cable;
+                        AlertTemp = alt.Temperature;
+                        var lst = BitConverter.GetBytes(alt.Alert);
+                        BitArray ba = new BitArray(lst);
+                        int i = 0;
+                        foreach (bool a in ba)
+                        {
+                            if (a == true)
+                            {
+                                AlarmList.Add(Alarm.Name[i]);
+                            }
+                            i++;
+                        }
+                        AlertdataCollection.Add(alt);
+                        if (AlertdataCollection.Count > 600)
+                            AlertdataCollection.RemoveAt(0);
+                        
+                    }
+                }
+                
+                if (message.Type == ExchageType.BP)
+                {
+                    var bp = message.SailData as Bpdata;
+                    if (bp != null)
+                    {
+                        BpTime = bp.Time;
+                        BpBottom = bp.Down;
+                        BpBottomBack = bp.Behinddown;
+                        BpFront = bp.Front;
+                        BpFrontDown = bp.Frontdown;
+                        BpFrontUp = bp.Frontup;
+                        BpLeft = bp.Left;
+                        BpRight = bp.Right;
+                        BpCollection.Add(bp);
+                        if (BpCollection.Count > 600)
+                            BpCollection.RemoveAt(0);
+                    }
+                }
+               
+                if (message.Type == ExchageType.CTD)
+                {
+                    var ctd = message.SailData as Ctddata;
+                    if (ctd != null)
+                    {
+                        CTDTime = ctd.Time;
+                        CTDSoundvec = ctd.Soundvec;
+                        CTDDepth = ctd.Depth;
+                        CTDWaterTemp = ctd.Watertemp;
+                        CTDWatercond = ctd.Watercond;
+                        CTDCollection.Add(ctd);
+                        if (CTDCollection.Count > 600)
+                            CTDCollection.RemoveAt(0);
+                        
+                    }
+                }
+                if (message.Type == ExchageType.ENERGY)
+                {
+                    var eng = message.SailData as Energysys;
+                    if (eng != null)
+                    {
+                        EnergyTime = eng.Time;
+                        HeadmainV = eng.HeadmainV;
+                        HeadmainI = eng.HeadmainI;
+                        Headmainconsume = eng.Headmainconsume;
+                        HeadmainMaxTemp = eng.HeadmainMaxTemp;
+                        HeadmainMaxExpand = eng.HeadmainMaxExpand;
+                        TailmainV = eng.TailmainV;
+                        TailmainI = eng.TailmainI;
+                        Tailmainconsume = eng.Tailmainconsume;
+                        TailmainMaxTemp = eng.TailmainMaxTemp;
+                        TailmainMaxExpand = eng.TailmainMaxTemp;
+                        LeftsubV = eng.LeftsubV;
+                        LeftsubI = eng.LeftsubI;
+                        Leftsubconsume = eng.Leftsubconsume;
+                        LeftsubMaxTemp = eng.LeftsubMaxTemp;
+                        LeftsubMaxExpand = eng.LeftsubMaxExpand;
+                        RightsubV = eng.RightsubV;
+                        RightsubI = eng.RightsubI;
+                        Rightsubconsume = eng.Rightsubconsume;
+                        RightsubMaxTemp = eng.RightsubMaxTemp;
+                        RightsubMaxExpand = eng.RightsubMaxExpand;
+                        EnergysysCollection.Add(eng);
+                        if (EnergysysCollection.Count > 600)
+                            EnergysysCollection.RemoveAt(0);
+                        
+                    }
+                }
+                
+                if (message.Type == ExchageType.LIFESUPPLY)
+                {
+                    var life = message.SailData as Lifesupply;
+                    if (life != null)
+                    {
+                        LifeTime = life.Time;
+                        
+                        Oxygen = life.Oxygen;
+                        Co2 = life.Co2;
+                        Pressure = life.Pressure;
+                        Temperature = life.Temperature;
+                        Humidity = life.Humidity;
+                        LifesupplyCollection.Add(life);
+                        if (LifesupplyCollection.Count > 600)
+                            LifesupplyCollection.RemoveAt(0);
+                        
+                    }
+                }
+                if (message.Type == ExchageType.SUBPOST)
+                {
+
+                    var subpos = message.SailData as Subposition;
+                    if (subpos != null)
+                    {
+                        PosFromUwvTime = subpos.Time;
+                        
+                        MovDepth = subpos.Subdepth;
+                        MovLat = subpos.SubLat;
+                        MovLong = subpos.SubLong;
+                        MovHeading = subpos.Subheading;
+                        MovHeight = subpos.Subheight;
+                        MovPitch = subpos.Subpitch;
+                        MovRoll = subpos.Subroll;
+                        SubPositionCollection.Add(subpos);
+                        if (SubPositionCollection.Count > 600)
+                            SubPositionCollection.RemoveAt(0);
+                    }
+                }
+            }));
+        }
     }
 }

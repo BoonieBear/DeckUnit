@@ -222,6 +222,7 @@
     <Compile Include="Events\GoSettingNavigation.cs" />
     <Compile Include="Events\LogEvent.cs" />
     <Compile Include="Events\MovDataEvent.cs" />
+    <Compile Include="Events\SailEvent.cs" />
     <Compile Include="Events\USBLEvent.cs" />
     <Compile Include="Helpers\ResourcesHelper.cs" />
     <Compile Include="Helpers\TreeHelper.cs" />
@@ -384,6 +385,10 @@
     <ProjectReference Include="..\BoonieBear.DeckUnit.Core\BoonieBear.DeckUnit.ICore.csproj">
       <Project>{0faf0e99-79b6-4f10-9a22-ed1839e22387}</Project>
       <Name>BoonieBear.DeckUnit.ICore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BoonieBear.DeckUnit.DeviceParser\BoonieBear.DeckUnit.Device.csproj">
+      <Project>{2db044fa-29cf-411c-a50e-5ee0910c1b09}</Project>
+      <Name>BoonieBear.DeckUnit.Device</Name>
     </ProjectReference>
     <ProjectReference Include="..\BoonieBear.DeckUnit.FileService\BoonieBear.DeckUnit.FileService.csproj">
       <Project>{bf8892b7-ca8f-4ff8-b7c3-766cd512c7f4}</Project>

@@ -8,11 +8,12 @@ using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using DevExpress.Xpf.Core;
 using Microsoft.Win32;
 using ImageProc;
-
+using BoonieBear.DeckUnit.Device.USBL;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     public class Mov4500DataObserver:Observer<CustomEventArgs>
     {
+        USBLParser usblParser = new USBLParser();
         public async void Handle(object sender, CustomEventArgs e)
         {
             string datatype = "";
@@ -29,6 +30,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         buffer = new byte[e.DataBufferLength - 4];
                         Buffer.BlockCopy(e.DataBuffer,4,buffer,0,e.DataBufferLength - 4);
                     }
+                    //类型标志
                     if (e.Mode == CallMode.Sail) //水下航控或ADCP或BP
                     {
                         switch (id)
@@ -72,22 +74,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             default:
                                 throw new Exception("未知的UDP数据类型");
                                 break;
-                        }
-                        ACM4500Protocol.UwvdataPool.Add(buffer, (MovDataType) id);
+                        }     
 
                     }
                     else if (e.Mode == CallMode.USBL)
                     {
-                        var pos = new Sysposition();
-                        //tbd
                         datatype = "USBL";
-                        ACM4500Protocol.ShipdataPool.Add(pos.Pack(), MovDataType.ALLPOST);
-                        UnitCore.Instance.EventAggregator.PublishMessage(new USBLEvent(pos));
-
                     }
                     else if (e.Mode == CallMode.GPS)
                     {
-                        //tbd
                         datatype = "GPS";
                     }
                     else if (e.Mode == CallMode.DataMode) //payload or ssb
@@ -132,6 +127,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                 return;
                         }
                     }
+                    //保持数据
                     if (id == (int)ModuleType.FH)
                         UnitCore.Instance.MovTraceService.Save(datatype, Encoding.Default.GetString(buffer)); //FH
                     else
@@ -144,6 +140,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         }
                         UnitCore.Instance.MovTraceService.Save(datatype, buffer); //保存上面除FH全部数据类型
                     }
+                    //开始处理
                     if (e.Mode == CallMode.DataMode)
                     {
                         if (id == (int)ModuleType.SSBNULL)
@@ -213,8 +210,34 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     }
                     else if (e.Mode == CallMode.Sail)
                     {
+                        ACM4500Protocol.UwvdataPool.Add(buffer, (MovDataType)id);
                         pro.Parse(buffer); //解析UDP数据
-                        //tbd
+                        UnitCore.Instance.EventAggregator.PublishMessage(new SailEvent(
+                                                (ExchageType)id, pro));
+                    }
+                    else if (e.Mode == CallMode.USBL)
+                    {
+                        var pos = new Sysposition();
+                        if (usblParser.Parse(Encoding.ASCII.GetString(buffer)))
+                        {
+                            pos._ltime = usblParser.Time;
+                            pos._relateX = usblParser.X;
+                            pos._relateY = usblParser.Y;
+                            pos._relateZ = usblParser.Z;
+                            pos._shipLat = usblParser.ShipLat;
+                            pos._shipLong = usblParser.ShipLng;
+                            pos._shipheading = usblParser.Heading;
+                            pos._shippitch = usblParser.Pitch;
+                            pos._shiproll = usblParser.Roll;
+                            pos._shipvel = usblParser.ShipVelocity;
+                            pos._subLat = usblParser.MovLat;
+                            pos._subLong = usblParser.MovLng;
+                            pos._subdepth = usblParser.MovDepth;
+
+                        }
+                        ACM4500Protocol.ShipdataPool.Add(pos.Pack(), MovDataType.ALLPOST);
+                        UnitCore.Instance.EventAggregator.PublishMessage(new USBLEvent(pos));
+
                     }
                 }
                 catch (Exception ex)

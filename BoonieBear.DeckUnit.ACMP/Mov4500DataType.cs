@@ -210,27 +210,27 @@ namespace BoonieBear.DeckUnit.ACMP
     /// <summary>
     /// 接口
     /// </summary>
-    public interface IProtocol
+    public  interface IProtocol
     {
-         byte[] Pack();
+        byte[] Pack();
         void Parse(byte[] bytes);
     }
     //定位信息0x2001
     public class Sysposition : IProtocol
     {
-        private long _ltime;
-        private float _shipLong;//母船经度
-        private float _shipLat; //母船纬度
-        private Int16 _shipvel;//母船速度
-        private UInt16 _shipheading;//母船艏向角
-        private Int16 _shippitch;//母船纵倾角
-        private Int16 _shiproll;//母船横倾角
-        private float _subLong; //潜水器经度
-        private float _subLat;//潜水器纬度
-        private UInt16 _subdepth;//潜水器深度
-        private Int16 _relateX;//潜水器相对母船x轴位移
-        private Int16 _relateY;//潜水器相对母船y轴位移
-        private UInt16 _relateZ;//潜水器相对母船z轴位移	
+        public long _ltime;
+        public float _shipLong;//母船经度
+        public float _shipLat; //母船纬度
+        public Int16 _shipvel;//母船速度
+        public UInt16 _shipheading;//母船艏向角
+        public Int16 _shippitch;//母船纵倾角
+        public Int16 _shiproll;//母船横倾角
+        public float _subLong; //潜水器经度
+        public float _subLat;//潜水器纬度
+        public UInt16 _subdepth;//潜水器深度
+        public Int16 _relateX;//潜水器相对母船x轴位移
+        public Int16 _relateY;//潜水器相对母船y轴位移
+        public UInt16 _relateZ;//潜水器相对母船z轴位移	
         private byte[] storebyte = new byte[40];
 
         /// <summary>
