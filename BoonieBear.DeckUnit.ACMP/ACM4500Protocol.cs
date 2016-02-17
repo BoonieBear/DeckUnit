@@ -222,7 +222,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     var bp = new Bpdata();
                     data = new byte[18];
                     Buffer.BlockCopy(pkg, 26, data, 0, 18);
-                    bp.Parse(data);
+                    bp.ParseFSK(data);
                     Results.Add(MovDataType.BP, bp);
                     /*
                     var bsss = new Bsssdata();
@@ -306,7 +306,7 @@ namespace BoonieBear.DeckUnit.ACMP
                     var bp = new Bpdata();
                     data = new byte[18];
                     Buffer.BlockCopy(dataBytes, 26, data, 0, 18);
-                    bp.Parse(data);
+                    bp.ParseFSK(data);
                     Results.Add(MovDataType.BP, bp);
                     /*
                     var bsss = new Bsssdata();

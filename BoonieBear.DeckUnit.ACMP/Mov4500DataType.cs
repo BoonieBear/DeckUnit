@@ -453,9 +453,33 @@ namespace BoonieBear.DeckUnit.ACMP
             return storebyte;
         }
 
+        /// <summary>
+        /// 水下显控解析UDP中的bp信息，源数据是22字节的，时间是64位的，转换成32位，总数据打包成18字节
+        /// </summary>
+        /// <param name="bytes"></param>
         public void Parse(byte[] bytes)
         {
-            _itime = BitConverter.ToUInt32(bytes, 2);
+            long ftime = BitConverter.ToInt64(bytes, 0);
+            DateTime starTime = new DateTime(2015, 1, 1, 0, 0, 0);
+            _itime = (uint) DateTime.FromFileTime(ftime).Subtract(starTime).TotalSeconds;
+            
+            _frontup = BitConverter.ToUInt16(bytes, 8);
+            _front = BitConverter.ToUInt16(bytes, 10);
+            _frontdown = BitConverter.ToUInt16(bytes, 12);
+            _down = BitConverter.ToUInt16(bytes, 14);
+            _behinddown = BitConverter.ToUInt16(bytes, 16);
+            _left = BitConverter.ToUInt16(bytes, 18);
+            _right = BitConverter.ToUInt16(bytes, 20);
+            Buffer.BlockCopy(bytes, 8, storebyte,4,18);
+            Buffer.BlockCopy(BitConverter.GetBytes(_itime), 0, storebyte, 0, 4);
+        }
+        /// <summary>
+        /// 水面解析水下数据中的bp信息，源数据应该是18字节的，将32位时间解出，转换成64位，不打包数据
+        /// </summary>
+        /// <param name="bytes"></param>
+        public void ParseFSK(byte[] bytes)
+        {
+            _itime = BitConverter.ToUInt32(bytes, 0);
             _frontup = BitConverter.ToUInt16(bytes, 4);
             _front = BitConverter.ToUInt16(bytes, 6);
             _frontdown = BitConverter.ToUInt16(bytes, 8);
@@ -463,7 +487,6 @@ namespace BoonieBear.DeckUnit.ACMP
             _behinddown = BitConverter.ToUInt16(bytes, 12);
             _left = BitConverter.ToUInt16(bytes, 14);
             _right = BitConverter.ToUInt16(bytes, 16);
-            Buffer.BlockCopy(bytes, 0, storebyte,0,18);
         }
     };
 

@@ -929,8 +929,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
                         byte[] posBytes = new byte[22];
-                        posBytes[0] = 0x05;
-                        posBytes[1] = 0x10;
+                        posBytes[0] = 0x15;
+                        posBytes[1] = 0x20;
                         Buffer.BlockCopy(alt.Pack(), 0, posBytes, 2, 20);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
@@ -960,12 +960,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (UsblPositionCollection.Count > 600)
                             UsblPositionCollection.RemoveAt(0);
                         //广播
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
-                        byte[] posBytes = new byte[42];
-                        posBytes[0] = 0x01;
-                        posBytes[1] = 0x20;
-                        Buffer.BlockCopy(allpos.Pack(), 0, posBytes, 2, 40);
-                        UnitCore.Instance.NetCore.BroadCast(posBytes);
+                        //UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
+                        //byte[] posBytes = new byte[42];
+                        //posBytes[0] = 0x01;
+                        //posBytes[1] = 0x20;
+                        //Buffer.BlockCopy(allpos.Pack(), 0, posBytes, 2, 40);
+                        //UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.BP))
@@ -984,6 +984,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BpCollection.Add(bp);
                         if (BpCollection.Count > 600)
                             BpCollection.RemoveAt(0);
+                        //广播
+                        //byte[] posBytes = new byte[18];
+                        //UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", bp.Pack());//
+                        //byte[] posBytes = new byte[18];
+                        //posBytes[0] = 0x16;
+                        //posBytes[1] = 0x20;
+                        //Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 16);
+                        //UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
                 }
                 /*
@@ -1013,8 +1021,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
                         byte[] posBytes = new byte[18];
-                        posBytes[0] = 0x02;
-                        posBytes[1] = 0x10;
+                        posBytes[0] = 0x12;
+                        posBytes[1] = 0x20;
                         Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 16);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
@@ -1051,8 +1059,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
                         byte[] posBytes = new byte[36];
-                        posBytes[0] = 0x04;
-                        posBytes[1] = 0x10;
+                        posBytes[0] = 0x14;
+                        posBytes[1] = 0x20;
                         Buffer.BlockCopy(eng.Pack(), 0, posBytes, 2, 34);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
@@ -1070,7 +1078,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         ImgContainer = new System.Windows.Controls.Image();
                         ImgContainer.Source = image;
                         ImgCollection.Add(image);
-
+                        //转发给水面航控
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.LIFESUPPLY))
@@ -1091,8 +1099,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
                         byte[] posBytes = new byte[16];
-                        posBytes[0] = 0x03;
-                        posBytes[1] = 0x10;
+                        posBytes[0] = 0x13;
+                        posBytes[1] = 0x20;
                         Buffer.BlockCopy(life.Pack(), 0, posBytes, 2, 14);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
                         RefreshLifeInfos();
@@ -1119,8 +1127,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
                         byte[] posBytes = new byte[28];
-                        posBytes[0] = 0x01;
-                        posBytes[1] = 0x10;
+                        posBytes[0] = 0x11;
+                        posBytes[1] = 0x20;
                         Buffer.BlockCopy(subpos.Pack(), 0, posBytes, 2, 26);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
