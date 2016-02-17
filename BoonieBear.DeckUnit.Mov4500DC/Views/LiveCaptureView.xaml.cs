@@ -360,25 +360,26 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 string dspmode = (mode == MonitorMode.SHIP) ? "2" : "1";
                 var cmd = "synseq " + dspmode;
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
-                await TaskEx.Delay(100);
+                await TaskEx.Delay(200);
                 cmd = "channel " + channel + " -w";
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("发射换能器设置为"+channel);
-                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
                 cmd = "opent " + channel + " -w";
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("接收换能器设置为" + channel);
-                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
                 cmd = "a " + amp;
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("发射幅度设置为" + amp);
-                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
                 cmd = "g " + gain;
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("接收增益设置为" + gain);
-                await TaskEx.Delay(TimeSpan.FromMilliseconds(100));
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
                 DateTime dt = DateTime.Now;
-                cmd = "date " + dt.Year+" "+dt.Month+" "+dt.Day+" "+dt.Hour +" "+dt.Minute +" "+ dt.Second;
+                cmd = "date " + dt.Year.ToString("D4") + " " + dt.Month.ToString("D2") + " " + dt.Day.ToString("D2") +
+                      " " + dt.Hour.ToString("D2") + " " + dt.Minute.ToString("D2") + " " + dt.Second.ToString("D2");
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
             }
         }

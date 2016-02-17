@@ -27,8 +27,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     if (e.Mode != CallMode.NoneMode)
                     {
                         id = BitConverter.ToUInt16(e.DataBuffer, 0);
-                        buffer = new byte[e.DataBufferLength - 4];
-                        Buffer.BlockCopy(e.DataBuffer,4,buffer,0,e.DataBufferLength - 4);
+                        if (e.Mode == CallMode.Sail)
+                        {
+                            buffer = new byte[e.DataBufferLength - 2];
+                            Buffer.BlockCopy(e.DataBuffer, 2, buffer, 0, e.DataBufferLength - 2);
+                        }
+                        else
+                        {
+                            buffer = new byte[e.DataBufferLength - 4];
+                            Buffer.BlockCopy(e.DataBuffer, 4, buffer, 0, e.DataBufferLength - 4);
+                        }
+                        
                     }
                     //类型标志
                     if (e.Mode == CallMode.Sail) //水下航控或ADCP或BP
