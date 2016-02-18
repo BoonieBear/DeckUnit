@@ -90,7 +90,8 @@ namespace BoonieBear.DeckUnit.Core
                                 new UpdateADByteCount((int)UnitCore.Instance.UnitTraceService.GetADCount()));
                             break;
                         case (int)PackType.Ack:
-                        case (int)PackType.Data:
+                        case (int)PackType.FSKData:
+                        case (int)PackType.PSKData:
                             string err;
                             var ret = DeckDataProtocol.ParseData(e.DataBuffer, out err);
                             if (TaskStage.Failed == ret)

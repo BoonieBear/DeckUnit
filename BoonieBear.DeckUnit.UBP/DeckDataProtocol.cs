@@ -19,7 +19,8 @@ namespace BoonieBear.DeckUnit.UBP
     {
         Task = 115,//任务包
         Ack = 0xbdac,//确认包
-        Data = 0xbd01,//fsk数据包
+        FSKData = 0xbd01,//fsk数据包
+        PSKData = 0xbd02,//psk数据包
         Ans = 0xbdcc,//查询回应包
     }
     //任务类型，相当于命令ID
@@ -139,7 +140,7 @@ namespace BoonieBear.DeckUnit.UBP
                 TmpDataPath = @".\TmpDir\";
                 Directory.CreateDirectory(TmpDataPath);
                 DBFile = dbPath;
-                SendRecvPeriod = 40;//32.88
+                SendRecvPeriod = 40;//fsk 32.88
                 WorkingBdTask = null;
                 SecondTicks = 0;
                 DALFactory.Connectstring = "Data Source=" + DBFile + ";Pooling=True";
@@ -455,8 +456,12 @@ namespace BoonieBear.DeckUnit.UBP
                     }
                     
                 }
-                else if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.Data)
+                else if ((BitConverter.ToUInt16(bytes, 0) == (int)PackType.FSKData) || (BitConverter.ToUInt16(bytes, 0) == (int)PackType.PSKData))
                 {
+                    if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.FSKData)
+                        SendRecvPeriod = 40;//fsk
+                    if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.PSKData)
+                        SendRecvPeriod = 5;//psk
                     var ret = StoreData(bytes,15);
                     if (DataRecvTimer!=null)
                         DataRecvTimer.Dispose();
