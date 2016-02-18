@@ -48,6 +48,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         private CommConfInfo _commConf;//通信设置
         private Observer<CustomEventArgs> _observer; 
         private bool _serviceStarted = false;
+        //通信机版本信息
+        public string Version = "";
         public string Error { get; private set; }
         public MonitorMode WorkMode{get; set;}
         public Mutex ACMMutex { get; set; }//全局解析锁

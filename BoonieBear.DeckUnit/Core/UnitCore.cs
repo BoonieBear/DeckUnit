@@ -128,10 +128,10 @@ namespace BoonieBear.DeckUnit.Core
                 
                 if (CommEngine != null)
                 {
-                    //CommEngine.Initialize();
-                    //CommEngine.Start();
-                    //var cmd = MSPHexBuilder.Pack250(true);
-                    //CommEngine.SendCMD(cmd);//进入调试模式，开启网络
+                    CommEngine.Initialize();
+                    CommEngine.Start();
+                    var cmd = MSPHexBuilder.Pack250(true);
+                    CommEngine.SendCMD(cmd);//进入调试模式，开启网络
                 }
                 if (NetEngine != null)
                 {

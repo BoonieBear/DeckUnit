@@ -24,6 +24,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 {
                     int id = 0;
                     byte[] buffer = null;
+                    
                     if (e.Mode != CallMode.NoneMode)
                     {
                         id = BitConverter.ToUInt16(e.DataBuffer, 0);
@@ -38,6 +39,21 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             Buffer.BlockCopy(e.DataBuffer, 4, buffer, 0, e.DataBufferLength - 4);
                         }
                         
+                    }
+                    else//shell
+                    {
+                        string shell = e.Outstring;
+                        if (shell.Contains("ver\r\n"))
+                        {
+                            UnitCore.Instance.Version = shell.Substring(shell.LastIndexOf("ver\r\n") + 5);
+                           
+                        }
+                        if (shell.Contains("浮点处理器"))
+                        {
+                            UnitCore.Instance.Version += shell;
+                            if (shell.Contains("/>"))
+                                UnitCore.Instance.Version  = UnitCore.Instance.Version.Replace("/>","");
+                        }
                     }
                     //类型标志
                     if (e.Mode == CallMode.Sail) //水下航控或ADCP或BP

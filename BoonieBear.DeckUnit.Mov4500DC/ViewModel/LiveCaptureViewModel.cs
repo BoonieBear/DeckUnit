@@ -1173,24 +1173,27 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public void Handle(USBLEvent message)
         {
-            var allpos = message.Position as Sysposition;
-            if (allpos != null)
+            Application.Current.Dispatcher.Invoke(new Action(() =>
             {
-                PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToShortTimeString();
-                ShipLongUsbl = allpos.ShipLong;
-                ShipLatUsbl = allpos.ShipLat;
-                ShipHeading = allpos.Shipheading;
-                ShipPitch = allpos.Shippitch;
-                ShipRoll = allpos.Shiproll;
-                ShipSpeed = allpos.Shipvel;
-                MovLongUsbl = allpos.SubLong;
-                MovLatUsbl = allpos.SubLat;
-                MovDepthUsbl = allpos.Subdepth;
-                XDistance = allpos.RelateX;
-                YDistance = allpos.RelateY;
-                ZDistance = allpos.RelateZ;
-                Transfromxyz(XDistance, YDistance, ZDistance);
-            }
+                var allpos = message.Position as Sysposition;
+                if (allpos != null)
+                {
+                    PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToShortTimeString();
+                    ShipLongUsbl = allpos.ShipLong;
+                    ShipLatUsbl = allpos.ShipLat;
+                    ShipHeading = allpos.Shipheading;
+                    ShipPitch = allpos.Shippitch;
+                    ShipRoll = allpos.Shiproll;
+                    ShipSpeed = allpos.Shipvel;
+                    MovLongUsbl = allpos.SubLong;
+                    MovLatUsbl = allpos.SubLat;
+                    MovDepthUsbl = allpos.Subdepth;
+                    XDistance = allpos.RelateX;
+                    YDistance = allpos.RelateY;
+                    ZDistance = allpos.RelateZ;
+                    Transfromxyz(XDistance, YDistance, ZDistance);
+                }
+            }));
         }
         #endregion
 

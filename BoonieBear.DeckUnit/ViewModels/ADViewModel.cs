@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System.Threading.Tasks;
+using System.Windows.Forms;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
@@ -190,6 +191,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             await UnitCore.Instance.NetEngine.SendConsoleCMD(cesc.ToString());
             t.Stop();
             t.IsEnabled = false;
+            await TaskEx.Delay(3000);
             Status = "";
             IsWorking = false;
         }
@@ -198,7 +200,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         public void Handle(UpdateADByteCount message)
         {
             Status = "接收AD数据中……";
-            IsWorking = true;
+            //IsWorking = true;
             currentCount = message.AdCount;
             if (currentCount > 1024*1024)
                 TotalADByte = ((float)currentCount/1024/1024).ToString("F2") + " MB";

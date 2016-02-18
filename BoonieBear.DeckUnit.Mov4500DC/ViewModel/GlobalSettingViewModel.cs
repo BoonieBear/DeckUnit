@@ -235,15 +235,17 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             IsFetching = true;
             RefreshVisble = Visibility.Collapsed;
             //fetch data...
-            if (!UnitCore.Instance.NetCore.IsTCPWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
+                await UnitCore.Instance.NetCore.SendConsoleCMD("ver");
                 await TaskEx.Delay(500);
-                Version = "0.0.0";
+                Version = UnitCore.Instance.Version;
 
             }
             else
             {
-                
+                IsFetching = false;
+                RefreshVisble = Visibility.Visible;
             }
             IsFetching = false;
             RefreshVisble = Visibility.Visible;
