@@ -172,11 +172,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             return;
                         if (id == (int) ModuleType.SSB)
                         {
-                            UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
+                            if (UnitCore.Instance.Wave != null)
                             {
-                                UnitCore.Instance.Wave.Display(buffer);
-                            }));
-
+                                UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    UnitCore.Instance.Wave.Display(buffer);
+                                }));
+                            }
                             return;
                         }
                         if (id == (int) ModuleType.FH)

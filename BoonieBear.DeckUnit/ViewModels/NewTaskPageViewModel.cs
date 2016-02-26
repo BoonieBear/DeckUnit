@@ -21,7 +21,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
             CreateTask = RegisterCommand(ExecuteCreateTask, CanExecuteCreateTask, true);
-            CommIndex = 0;
+            CommIndex = 1;
             DestID = 1;
             TypeIndex = 0;
             SelectedFromDate = DateTime.Now;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Eventing.Reader;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -219,6 +220,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             if(GPIOWatcher==null)
                 GPIOWatcher = new DispatcherTimer(TimeSpan.FromSeconds(200), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
             GPIOWatcher.Start();
+
+            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+            {
+                    LiveTitle.TitleImageSource = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png");
+                    var LastComboItem = EmitSelBox.Items[3] as ComboBoxItem;
+                    LastComboItem.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LiveTitle.TitleImageSource = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png");
+                var LastComboItem = EmitSelBox.Items[3] as ComboBoxItem;
+                LastComboItem.Visibility = Visibility.Hidden;
+            }
             
         }
 
@@ -402,11 +416,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
 
                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船）" + SendMessageBox.Text);
+                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                                                         "（母船）" + SendMessageBox.Text);
             }
             else
             {
 
                 UnitCore.Instance.MovTraceService.Save("Chart", "（潜器）" + SendMessageBox.Text);
+                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                                                         "（潜器）" + SendMessageBox.Text);
             }
             SendMessageBox.Text = "";
         }
@@ -637,6 +655,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             SSBToolTip.Visibility = Visibility.Visible;
             VoiceBar.Visibility = Visibility.Visible;
             LeftSize.Visibility = Visibility.Hidden;
+            SendMessageBox.Visibility = Visibility.Hidden;
         }
 
         private void VoiceBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -701,6 +720,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             SSBToolTip.Visibility = Visibility.Hidden;
             VoiceBar.Visibility = Visibility.Hidden;
             LeftSize.Visibility = Visibility.Visible;
+            SendMessageBox.Visibility = Visibility.Visible;
         }
 
         private void NorthButton_Click(object sender, RoutedEventArgs e)
@@ -803,6 +823,26 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private void PosViewport3D_LostFocus(object sender, RoutedEventArgs e)
         {
             SwapMouseButton(false);//switch back
+        }
+
+
+        private void HeadChoser_Unchecked(object sender, RoutedEventArgs e)
+        {
+            HeadChoser.Content = "北方为正前";
+        }
+
+        private void HeadChoser_Checked(object sender, RoutedEventArgs e)
+        {
+            HeadChoser.Content = "船艏为正前";
+        }
+
+        private void PosViewport3D_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            var distance = PosViewport3D.CameraController.CameraPosition.DistanceTo(new Point3D(0,0,0));
+            if (distance > 12000&&e.Delta<0)
+                e.Handled = true;
+            if (distance < 6000&&e.Delta>0)
+                e.Handled = true;
         }
     }
 }

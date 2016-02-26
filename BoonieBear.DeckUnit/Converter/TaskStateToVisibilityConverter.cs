@@ -24,6 +24,8 @@ namespace BoonieBear.DeckUnit.Converter
                         return Visibility.Visible;
                     if (content == "数据")
                         return Visibility.Collapsed;
+                    if (content == "重试")
+                        return Visibility.Collapsed;
                     break;
                 case "STOP":
                     if (content == "开始")
@@ -33,6 +35,8 @@ namespace BoonieBear.DeckUnit.Converter
                     if (content == "删除")
                         return Visibility.Visible;
                     if (content == "数据")
+                        return Visibility.Collapsed;
+                    if (content == "重试")
                         return Visibility.Collapsed;
                     break;
                 case "WORKING":
@@ -44,6 +48,8 @@ namespace BoonieBear.DeckUnit.Converter
                         return Visibility.Collapsed;
                     if (content == "数据")
                         return Visibility.Collapsed;
+                    if (content == "重试")
+                        return Visibility.Collapsed;
                     break;
                 case "COMPLETED":
                     if (content == "开始")
@@ -54,6 +60,20 @@ namespace BoonieBear.DeckUnit.Converter
                         return Visibility.Visible;
                     if (content == "数据")
                         return Visibility.Visible;
+                    if (content == "重试")
+                        return Visibility.Collapsed;
+                    break;
+                case "WAITING":
+                    if (content == "开始")
+                        return Visibility.Collapsed;
+                    if (content == "停止")
+                        return Visibility.Collapsed;
+                    if (content == "删除")
+                        return Visibility.Visible;
+                    if (content == "数据")
+                        return Visibility.Collapsed;
+                    if (content == "重试")
+                        return Visibility.Visible;
                     break;
                 default:
                     if (content == "开始")
@@ -63,6 +83,8 @@ namespace BoonieBear.DeckUnit.Converter
                     if (content == "删除")
                         return Visibility.Collapsed;
                     if (content == "数据")
+                        return Visibility.Collapsed;
+                    if (content == "重试")
                         return Visibility.Collapsed;
                     break;
             } return Visibility.Collapsed;

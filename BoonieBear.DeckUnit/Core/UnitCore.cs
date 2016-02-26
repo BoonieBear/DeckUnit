@@ -103,7 +103,7 @@ namespace BoonieBear.DeckUnit.Core
             catch (Exception ex)
             {
                 ret = false;
-                EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
             }
             return ret;
         }
@@ -144,7 +144,7 @@ namespace BoonieBear.DeckUnit.Core
             catch (Exception e)
             {
                 _serviceStarted = false;
-                EventAggregator.PublishMessage(new LogEvent(e.Message, LogType.Both));
+                EventAggregator.PublishMessage(new ErrorEvent(e, LogType.Both));
             }
             return _serviceStarted;
 

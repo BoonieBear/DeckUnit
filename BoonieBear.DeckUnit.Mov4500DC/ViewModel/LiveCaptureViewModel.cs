@@ -157,12 +157,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         //将x,y,z参数转化为3D图上的相对坐标
         private void Transfromxyz(float x, float y,float z)
         {
-            X = -x*2.5f;
-            Y = y*2.5f;
-            Z = -z*2.5f;
+            X = -x;
+            Y = y;
+            Z = -z;
         }
         public override void InitializePage(object extraData)
         {
+            SetShipHeadingFront = false;
             InInitial = true;
             BtnShowShip = (UnitCore.Instance.WorkMode == MonitorMode.SHIP) ? true : false;
             if (t==null)
@@ -181,6 +182,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             XMTIndex = int.Parse(UnitCore.Instance.MovConfigueService.GetXmtChannel()) - 1;
             InInitial = false;
             RefreshLifeInfos();
+            //ShipHeading = 90.0F;
+            //Transfromxyz(1000, 600, 800);
         }
 
         private void RefreshLifeInfos()
@@ -204,6 +207,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void Tick(object sender, EventArgs e)
         {
+            double receiveByte, SentBype, bytesReceived, bytesSent;
+            Time = DateTime.Now.ToLongTimeString();
             if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 LinkStatus = "已连接通信机";
@@ -214,37 +219,45 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 LinkStatus = "未连接通信机";
                 LinkBoxColor = new SolidColorBrush(Colors.Crimson);
             }
-            currentInterface = networkInterfaces[0];
-            IPv4InterfaceStatistics ipStats = currentInterface.GetIPv4Statistics();
-
+            receiveByte = 0;
+            SentBype = 0;
             NumberFormatInfo numberFormat = NumberFormatInfo.CurrentInfo;
+            foreach (var currentInterface in networkInterfaces)
+            {
+                IPv4InterfaceStatistics ipStats = currentInterface.GetIPv4Statistics();
 
-            double receiveByte = ipStats.BytesReceived / 1024;
-            double SentBype = ipStats.BytesSent / 1024;
-            double bytesReceived = receiveByte - bytesFormerReceived ;
-            double bytesSent = SentBype - bytesFormerSent;
-            if (bytesReceived < 1024)
-                LinkRxSpeed = bytesReceived.ToString("N0", numberFormat) + " B/s";
-            else if (bytesReceived < 1024*1024)
-            {
-                LinkRxSpeed = bytesReceived.ToString("N0", numberFormat) + " KB/s";
+                receiveByte += ipStats.BytesReceived / 1024;
+                SentBype += ipStats.BytesSent / 1024;
+                
             }
-            else
+            bytesReceived = receiveByte - bytesFormerReceived;
+            bytesSent = SentBype - bytesFormerSent;
+
+            if (bytesFormerReceived == 0 && bytesFormerSent == 0) //第一次
             {
-                LinkRxSpeed = bytesReceived.ToString("N0", numberFormat) + " MB/s";
-            }
-            if (bytesSent < 1024)
-                LinkTxSpeed = bytesSent.ToString("N0", numberFormat) + " B/s";
-            else if (bytesSent < 1024 * 1024)
-            {
-                LinkTxSpeed = bytesSent.ToString("N0", numberFormat) + " KB/s";
-            }
-            else
-            {
-                LinkTxSpeed = bytesSent.ToString("N0", numberFormat) + " MB/s";
+                bytesFormerReceived = receiveByte;
+                bytesFormerSent = SentBype;
+                return;
             }
             bytesFormerReceived = receiveByte;
             bytesFormerSent = SentBype;
+            if (bytesReceived < 1024)
+            {
+                LinkRxSpeed = bytesReceived.ToString("N1", numberFormat) + " KB/s";
+            }
+            else
+            {
+                LinkRxSpeed = bytesReceived.ToString("N1", numberFormat) + " MB/s";
+            }
+            if (bytesSent < 1024)
+            {
+                LinkTxSpeed = bytesSent.ToString("N1", numberFormat) + " KB/s";
+            }
+            else
+            {
+                LinkTxSpeed = bytesSent.ToString("N1", numberFormat) + " MB/s";
+            }
+            
         }
 
 
@@ -257,6 +270,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
 
         #region data binding
+
+        public bool SetShipHeadingFront
+        {
+            get { return GetPropertyValue(() => SetShipHeadingFront); }
+            set { SetPropertyValue(() => SetShipHeadingFront, value); }
+        }
         public int XMTIndex
         {
             get { return GetPropertyValue(() => XMTIndex); }
@@ -307,6 +326,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         }
         
         #region status
+        public string Time
+        {
+            get { return GetPropertyValue(() => Time); }
+            set { SetPropertyValue(() => Time, value); }
+        }
         public string LinkRxSpeed
         {
             get { return GetPropertyValue(() => LinkRxSpeed); }
@@ -855,16 +879,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         {
             if(UnitCore.Instance.WorkMode==MonitorMode.SHIP)
                 return;
-            if (!UnitCore.Instance.NetCore.IsTCPWorking)
-            {
-                var md = new MetroDialogSettings();
-                md.AffirmativeButtonText = "确定";
+            //if (!UnitCore.Instance.NetCore.IsTCPWorking)
+            //{
+            //    var md = new MetroDialogSettings();
+            //    md.AffirmativeButtonText = "确定";
 
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送图像",
-                    "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
-                return;
+            //    await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送图像",
+            //        "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
+            //    return;
                 
-            }
+            //}
             //
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SendImgDialog"];
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
@@ -948,7 +972,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         ShipHeading = allpos.Shipheading;
                         ShipPitch = allpos.Shippitch;
                         ShipRoll = allpos.Shiproll;
-                        ShipSpeed = allpos.Shipvel;
+                        //ShipSpeed = allpos.Shipvel/1000/0.5144444;//mm/s->(knot=每秒0.5144444米（m/s）)
                         MovLongUsbl = allpos.SubLong;
                         MovLatUsbl = allpos.SubLat;
                         MovDepthUsbl = allpos.Subdepth;
@@ -1145,11 +1169,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             {
                                 UnitCore.Instance.MovTraceService.Save("FH", "（潜器）" + word);
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-跳频）" + word);
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                                                         "（潜器-跳频）" + word);
                             }
                             else
                             {
                                 UnitCore.Instance.MovTraceService.Save("FH", "（母船）" + word);
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船-跳频）" + word);
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                                                         "（母船-跳频）" + word);
                             }
                         }
                         else
@@ -1157,10 +1185,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
                             {
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（潜器）" + word);
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                                                         "（潜器）" + word);
                             }
                             else
                             {
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船）" + word);
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                                                         "（母船）" + word);
                             }
                         }
                         chartstring = word;

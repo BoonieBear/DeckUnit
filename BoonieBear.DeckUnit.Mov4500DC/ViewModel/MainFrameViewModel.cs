@@ -4,10 +4,12 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using BoonieBear.DeckUnit.Mov4500UI.Models;
+using BoonieBear.DeckUnit.Mov4500UI.Views;
 using DevExpress.Data.Async.Helpers;
 using TinyMetroWpfLibrary.Controller;
 using TinyMetroWpfLibrary.Events;
@@ -43,6 +45,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         private void MsgLog_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             base.OnPropertyChanged(() => MsgLog);
+            var bar = (ScrollViewer)((MainFrame)App.Current.MainWindow).scrollbar;
+            if (bar != null)
+                bar.ScrollToEnd();
         }
 
         #region action

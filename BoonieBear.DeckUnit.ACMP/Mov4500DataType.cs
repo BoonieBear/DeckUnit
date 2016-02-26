@@ -470,7 +470,7 @@ namespace BoonieBear.DeckUnit.ACMP
             _behinddown = BitConverter.ToUInt16(bytes, 16);
             _left = BitConverter.ToUInt16(bytes, 18);
             _right = BitConverter.ToUInt16(bytes, 20);
-            Buffer.BlockCopy(bytes, 8, storebyte,4,18);
+            Buffer.BlockCopy(bytes, 8, storebyte,4,14);
             Buffer.BlockCopy(BitConverter.GetBytes(_itime), 0, storebyte, 0, 4);
         }
         /// <summary>

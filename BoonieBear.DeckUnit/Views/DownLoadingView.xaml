@@ -73,6 +73,9 @@
             <Button Style="{DynamicResource SquareButtonStyle}" 
                  Margin="2"
 				Content="开始" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=开始, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StartTaskCommand}"/>
+            <Button Style="{DynamicResource SquareButtonStyle}" 
+				Margin="2"
+				Content="重试" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=重试, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding RetryCommand}"/>
             <Button Style="{DynamicResource SquareButtonStyle}"
 				Margin="2"
 				Content="停止" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=停止, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding StopTaskCommand}"/>
@@ -82,6 +85,7 @@
             <Button Style="{DynamicResource SquareButtonStyle}" 
 				Margin="2"
 				Content="数据" Background ="{StaticResource GrayBrush2}" Visibility="{Binding TaskState, ConverterParameter=数据, Converter={StaticResource TaskStateToVisibilityConverter}}" Command="{Binding GoDataCommand}"/>
+            
         </UniformGrid>
         
     </Grid>

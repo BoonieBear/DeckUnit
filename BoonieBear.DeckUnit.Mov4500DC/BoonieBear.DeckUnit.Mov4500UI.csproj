@@ -200,6 +200,8 @@
     <Compile Include="Controls\TreadTile.xaml.cs">
       <DependentUpon>TreadTile.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Converters\3DChartFrontAngleMovConverter.cs" />
+    <Compile Include="Converters\3DChartFrontAngleShipConverter.cs" />
     <Compile Include="Converters\AbsConverter.cs" />
     <Compile Include="Converters\BoolReverseConverter.cs" />
     <Compile Include="Converters\BoolToVisibilityConverter.cs" />
@@ -222,6 +224,7 @@
     <Compile Include="Events\GoSettingNavigation.cs" />
     <Compile Include="Events\LogEvent.cs" />
     <Compile Include="Events\MovDataEvent.cs" />
+    <Compile Include="Events\RefreshLog.cs" />
     <Compile Include="Events\SailEvent.cs" />
     <Compile Include="Events\USBLEvent.cs" />
     <Compile Include="Helpers\ResourcesHelper.cs" />

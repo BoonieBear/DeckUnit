@@ -30,6 +30,8 @@
         <converters:VisibilityBoolToggleConverter x:Key="VisibilityBoolToggleConverter"/>
         <converters:HideZeroConverter x:Key="HideZeroConverter"/>
         <converters:DoubleMultiConverter x:Key="DoubleMultiConverter"/>
+        <converters:_3DChartFrontAngleShipConverter x:Key="_3DChartFrontAngleShipConverter"/>
+        <converters:_3DChartFrontAngleMovConverter x:Key="_3DChartFrontAngleMovConverter"/>
     </Page.Resources>
     <Controls:MetroContentControl>
         <Grid Name="RootGrid">
@@ -48,7 +50,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <ViewControls:TitleBarControl 
+                <ViewControls:TitleBarControl x:Name="LiveTitle" 
                     Foreground="White"
                     Title="{Binding Live_Title_Top, Mode=OneWay, Source={StaticResource Resources}}"
                     Grid.Row ="0"
@@ -67,14 +69,20 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <wavebox:WaveControl Grid.Column="0" Name="WaveControl"/>
-                    <Controls:MetroComboBox VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="16" BorderThickness="0" Margin="5,0,0,5" Width="35" AllowDrop="True">
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="16" Foreground="White" Margin="5,0,0,8">
+                        <Run Text="发射换能器"/>
+                    </TextBlock>
+                    <Controls:MetroComboBox x:Name="EmitSelBox" VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="16" BorderThickness="0" Margin="95,0,0,5" Width="35" AllowDrop="True">
                         <ComboBoxItem Content="1"  Background="{DynamicResource DefaultBackgroundBrush}"/>
-                        <ComboBoxItem Content="2" Background="{DynamicResource DefaultBackgroundBrush}"/>
+                        <ComboBoxItem Content="2"   Background="{DynamicResource DefaultBackgroundBrush}"/>
                         <ComboBoxItem Content="3"  Background="{DynamicResource DefaultBackgroundBrush}"/>
-                        <ComboBoxItem Content="4" Background="{DynamicResource DefaultBackgroundBrush}"/>
+                        <ComboBoxItem Content="4"  Background="{DynamicResource DefaultBackgroundBrush}"/>
                     </Controls:MetroComboBox>
-                    <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="60,0,0,0" Height="30" />
-                    <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="240,0,0,5" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="100"/>
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="16" Foreground="White" Margin="145,0,0,8">
+                        <Run Text="发射幅度"/>
+                    </TextBlock>
+                    <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="215,0,0,3" Height="30" />
+                    <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="385,0,0,8"  Foreground="White" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="50"/>
                     <MetroControl:FlipView Name="MultiView" Grid.Column="1" SelectionChanged="FlipView_SelectionChanged" Margin="2,0,0,0" IsBannerEnabled="False" MouseOverGlowEnabled="False">
                         <MetroControl:FlipView.Items>
                             <ScrollViewer Name ="ImgViewer" Style="{DynamicResource TransportScrollViewer}" CanContentScroll="True" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
@@ -184,10 +192,10 @@
                                       Name="SendMessageBox" 
                                       Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" MaxLength="20" />
                             <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right">
-                                <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="50" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                    <Button Name="AddMorseBtn" Foreground="White" Content="摩斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-90" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
-                                    <Button Name="AddFHBtn" Foreground="White" Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-155" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddFHCMD}"/>
-                                    <Button Name="AddImageBtn" Foreground="White" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="160" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddImgCMD}"/>
+                                <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="60" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                    <Button Name="AddMorseBtn" Foreground="White" Content="摩尔斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-180" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
+                                    <Button Name="AddFHBtn" Foreground="White" Content="跳频" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-140" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddFHCMD}"/>
+                                    <Button Name="AddImageBtn" Foreground="White" Content="图像" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="140" VerticalAlignment="Center"  Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Command="{Binding AddImgCMD}"/>
                                 </Controls:FanPanel>
                                 <Ellipse  Width="45" Height="45" HorizontalAlignment="Center" VerticalAlignment="Center" Fill="{Binding Background, ElementName=SendMessageBox}"/>
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
@@ -215,13 +223,13 @@
                                                ShowViewCube="False" 
                                                ShowCameraTarget="False" 
                                                ShowCoordinateSystem="False" 
-                                               Margin="4" MouseEnter="PosViewport3D_MouseEnter" MouseLeave="PosViewport3D_MouseLeave" IsManipulationEnabled="True" LostFocus="PosViewport3D_LostFocus">
+                                               Margin="4" MouseEnter="PosViewport3D_MouseEnter" MouseLeave="PosViewport3D_MouseLeave" IsManipulationEnabled="True" LostFocus="PosViewport3D_LostFocus" PreviewMouseWheel="PosViewport3D_PreviewMouseWheel">
                                         <h:HelixViewport3D.DefaultCamera>
                                             <PerspectiveCamera x:Name ="PosCamera" Position="0,0,6000" LookDirection="0,0,-6000" UpDirection="-1,0,0" NearPlaneDistance="3000" FarPlaneDistance="60000"/>
                                         </h:HelixViewport3D.DefaultCamera>
 
                                         <h:SunLight/>
-                                        <h:GridLinesVisual3D  Fill="Cornsilk" Length ="10000" Width="10000" MinorDistance="500" MajorDistance="20000" Thickness="3">
+                                        <h:GridLinesVisual3D  Fill="Cornsilk" Length ="10000" Width="10000" MinorDistance="500" MajorDistance="20000" Thickness="6">
                                             <h:GridLinesVisual3D.Transform>
                                                 <Transform3DGroup>
                                                     <TranslateTransform3D OffsetZ="-100"/>
@@ -234,7 +242,14 @@
                                                     <TranslateTransform3D OffsetZ="100"/>
                                                     <RotateTransform3D>
                                                         <RotateTransform3D.Rotation>
-                                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding ShipHeading}"/>
+                                                            <AxisAngleRotation3D Axis="0,0,1">
+                                                                <AxisAngleRotation3D.Angle>
+                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleShipConverter}">
+                                                                        <Binding Path="ShipHeading"/>
+                                                                        <Binding Path="SetShipHeadingFront"/>
+                                                                    </MultiBinding>
+                                                                </AxisAngleRotation3D.Angle>
+                                                            </AxisAngleRotation3D>
                                                         </RotateTransform3D.Rotation>
                                                     </RotateTransform3D>
                                                 </Transform3DGroup>
@@ -243,6 +258,7 @@
                                         <ModelVisual3D x:Name="MovD">
                                             <ModelVisual3D.Transform>
                                                 <Transform3DGroup>
+                                                    
                                                     <RotateTransform3D>
                                                         <RotateTransform3D.Rotation>
                                                             <AxisAngleRotation3D Axis="1,0,0" Angle="-90"/>
@@ -255,7 +271,15 @@
                                                     </RotateTransform3D>
                                                     <RotateTransform3D>
                                                         <RotateTransform3D.Rotation>
-                                                            <AxisAngleRotation3D Axis="0,0,1" Angle="{Binding MovHeading}"/>
+                                                            <AxisAngleRotation3D Axis="0,0,1">
+                                                                <AxisAngleRotation3D.Angle>
+                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleMovConverter}">
+                                                                        <Binding Path="ShipHeading"/>
+                                                                        <Binding Path="MovHeading"/>
+                                                                        <Binding Path="SetShipHeadingFront"/>
+                                                                    </MultiBinding>
+                                                                </AxisAngleRotation3D.Angle>
+                                                            </AxisAngleRotation3D>
                                                         </RotateTransform3D.Rotation>
                                                     </RotateTransform3D>
                                                     <TranslateTransform3D OffsetZ="{Binding Z}"/>
@@ -267,7 +291,9 @@
                                         <h:ArrowVisual3D Point1="6000 0 -100" Point2="-6000 0 -100" Diameter="20" Fill="Red"  HeadLength="30" ThetaDiv="36"  />
                                         <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Green" HeadLength="30" ThetaDiv="36"  />
                                     </h:HelixViewport3D>
-                                    <Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/>
+                                    <MetroControl:ToggleSwitch x:Name="HeadChoser"  Foreground ="White" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center" Content="北方为正前" ThumbIndicatorWidth="25" OffLabel="" OnLabel="" IsChecked="{Binding SetShipHeadingFront}" Unchecked="HeadChoser_Unchecked" Checked="HeadChoser_Checked"/>
+                                    <TextBlock Foreground ="White" VerticalAlignment="Bottom" FontSize="16" HorizontalAlignment="Center" Text="网格距离500米"/>
+                                    <!--Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/-->
                                     <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
                                         <TextBlock FontSize="16">
                                             <Run Text="USBL:   "/>
@@ -1115,14 +1141,14 @@
                                                 <RowDefinition/>
                                             </Grid.RowDefinitions>
                                             <Controls:LengthMark  Grid.Column="0" Grid.RowSpan="2" Foreground="White"  
-                                                Content="{Binding BpLeft, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                Content="{Binding BpRight, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
                                                 HorizontalAlignment="Right" 
-                                                Width="{Binding BpLeft, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                Width="{Binding BpRight, Converter={StaticResource BpMarkLengthConverter}}" 
                                                 VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="0,0,70,0"/>
                                             <Controls:LengthMark  Grid.Column="1" Grid.RowSpan="2" Foreground="White"  
-                                                Content="{Binding BpRight, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                Content="{Binding BpLeft, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
                                                 HorizontalAlignment="Left" 
-                                                Width="{Binding BpRight, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                Width="{Binding BpLeft, Converter={StaticResource BpMarkLengthConverter}}" 
                                                 VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="70,0,0,0"/>
                                             <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  
                                                 Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
@@ -1631,12 +1657,15 @@
                 <Run Text="网络状态："/>
                 <Run Text="{Binding LinkStatus}" />
             </TextBlock>
-            <TextBlock Grid.Row ="2" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,25,0">
+            <TextBlock Grid.Row ="2" Foreground="White" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,155,0">
                 <Run Text="网速："/>
-                <Run Text="Rx-"/>
+                <Run Text="Rx- "/>
                  <Run Text="{Binding LinkRxSpeed}" />
-                <Run Text="| Tx-"/>
+                <Run Text="| Tx- "/>
                  <Run Text="{Binding LinkTxSpeed}" />
+            </TextBlock>
+            <TextBlock Grid.Row ="2" Foreground="White" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" FontSize="16" Margin="0,0,0,0">
+                 <Run Text="{Binding Time}" />
             </TextBlock>
         </Grid>
 

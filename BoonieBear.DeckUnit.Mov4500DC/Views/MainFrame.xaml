@@ -50,17 +50,17 @@
 							Content="取消" Click="CloseFh"/>
                 </UniformGrid>
             </StackPanel>
-            
+
         </dialogs:CustomDialog>
         <dialogs:CustomDialog x:Key="SendImgDialog"
                                  Title="选取图片"
                                  x:Name="SendImgDialog">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <Viewbox Height="600" Width =" 800" HorizontalAlignment="Center" VerticalAlignment="Center">
-                        <Image Name="SelectImageContainer"/>
+            <Grid x:Name="MainGrid" Background="#696969">
+                <StackPanel Orientation="Vertical">
+                    <Viewbox x:Name="vb" Width="800" Height="636">
+                        <Image Name="SelectImageContainer" Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/UWV_Right.png" Stretch="None"/>
                     </Viewbox>
-                </StackPanel>
+                    <CheckBox x:Name="CropImgChk" Content="截取图像" Checked="CropImgChk_Checked" Unchecked="CropImgChk_Unchecked"/>
                 <UniformGrid Columns="3">
                     <Button Style="{DynamicResource SquareButtonStyle}"
 							Margin="5"
@@ -73,7 +73,20 @@
 							Content="取消" Click="CloseImg"/>
                 </UniformGrid>
             </StackPanel>
-
+                <Canvas Name="container" Cursor="ScrollAll" Visibility="Hidden">
+                    <Viewbox Width="256" Height="256"
+                             Name="vb1" 
+                             Stretch="Uniform" 
+                             StretchDirection="Both"
+                             HorizontalAlignment="Center" 
+                             PreviewMouseLeftButtonDown="vb1_PreviewMouseLeftButtonDown" PreviewMouseUp="vb1_PreviewMouseUp" PreviewMouseMove="vb1_PreviewMouseMove" PreviewMouseWheel="vb1_PreviewMouseWheel">
+                        <StackPanel>
+                            <Button x:Name ="CropSection" Content="截取图像部分" Width="256" Height="256" Opacity="0.4"/>
+                        </StackPanel>
+                    </Viewbox>
+                </Canvas>
+                <Image x:Name="cropimg" Width="256" Height="256" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Hidden" Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/UWV_Right.png" Margin="0,0,-256,0"/>
+            </Grid>
         </dialogs:CustomDialog>
     </metroControl:MetroWindow.Resources>
 
@@ -131,17 +144,18 @@
                         <TextBlock Margin="0,5,0,0" Text="网络状态:" TextWrapping="Wrap"/>
                         <TextBlock Margin="0,5,0,0" Text="{Binding NetworkStatus}" TextWrapping="Wrap"/>
                     </StackPanel>
-                    
+
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Margin="0,5,0,0" Text="数据更新:" TextWrapping="Wrap"/>
                         <TextBlock Margin="0,5,0,0" Text="{Binding LastUpdateTime}" TextWrapping="Wrap"/>
                     </StackPanel>
                 </StackPanel>
-                <StackPanel Grid.Row="1" Margin="4" Orientation="Vertical">
+                <StackPanel x:Name="stackPanel" Grid.Row="1" Margin="4" Orientation="Vertical">
                     <ToggleButton x:Name="LogToggle" Background="#696969"
                                   IsChecked ="False"
                                   Content="系统记录"/>
-                    <ListView Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}" Height="600">
+                    <ScrollViewer Name="scrollbar" VerticalScrollBarVisibility="Auto">
+                    <ListView x:Name="SysLogList" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}" Height="356">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <!-- 设置控件模板 -->
@@ -167,11 +181,13 @@
                                         <Setter Property="Background" Value="LemonChiffon"/>
                                         <Setter Property="Foreground" Value="Black"/>
                                     </Trigger>
+                                    
                                 </Style.Triggers>
                             </Style>
                         </ListBox.ItemContainerStyle>
                     </ListView>
-                </StackPanel>
+                    </ScrollViewer>
+                    </StackPanel>
                 <StackPanel Margin ="4,0,0,0" Orientation="Vertical" Grid.Row="2" VerticalAlignment="Bottom">
                     <TextBlock Text="{Binding SPLASH_COPY_RIGHT, Mode=OneWay, Source={StaticResource Resources}}" TextWrapping="Wrap" Margin="0,10,0,0"/>
                     <TextBlock Text="{Binding SPLASH_RIGHT_RESERVER, Mode=OneWay, Source={StaticResource Resources}}" TextWrapping="Wrap"/>

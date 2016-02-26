@@ -275,6 +275,7 @@ namespace BoonieBear.DeckUnit.UBP
                 WorkingBdTask.LastTime = DateTime.Now;
                 WorkingBdTask.TaskStage = (int) TaskStage.WaitForAns;
                 _sqlite.UpdateTask(WorkingBdTask);
+                DataRecvTimer = new Timer(DataOutTimeTick, null, 500 * 1000, 0);//默认超时，防止无数据一直等待
                 SecondTicks = 0;
                 if (WorkingBdTask.ErrIdxStr == "") //没有重传
                 {
@@ -351,7 +352,7 @@ namespace BoonieBear.DeckUnit.UBP
             SecondTicks = 0;
             if(LastRecvPkgId==-1)//还没有收到过正确数据
             {
-                
+                WorkingBdTask.TaskStage = (int)TaskStage.WaitForAns;
             }
             else//收到过数据
             {
@@ -397,6 +398,8 @@ namespace BoonieBear.DeckUnit.UBP
         public static TaskStage ParseData(byte[] bytes, out string error)
         {
             error = "";
+            if (WorkingBdTask.TaskStage == (int)TaskStage.Pause || WorkingBdTask.TaskStage == (int)TaskStage.UnStart || WorkingBdTask.TaskStage == (int)TaskStage.RecvReply)
+                return TaskStage.UnStart;
             try
             {
                 WorkingBdTask.TotolTime += SecondTicks;
@@ -459,7 +462,7 @@ namespace BoonieBear.DeckUnit.UBP
                 else if ((BitConverter.ToUInt16(bytes, 0) == (int)PackType.FSKData) || (BitConverter.ToUInt16(bytes, 0) == (int)PackType.PSKData))
                 {
                     if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.FSKData)
-                        SendRecvPeriod = 40;//fsk
+                        SendRecvPeriod = 33;//fsk
                     if (BitConverter.ToUInt16(bytes, 0) == (int)PackType.PSKData)
                         SendRecvPeriod = 5;//psk
                     var ret = StoreData(bytes,15);
@@ -474,10 +477,12 @@ namespace BoonieBear.DeckUnit.UBP
                         if (unitidx == unitnum - 1 && unitidx != LastRecvUnitId)//每组最后一包不能连续处理
                         {
                             DataOutTimeTick(null);
+                            LastRecvUnitId = unitidx;
+                            return TaskStage.RecvReply;
                         }
                         else
                         {
-                            DataRecvTimer = new Timer(DataOutTimeTick, null, ((unitnum - 1 - unitidx) * SendRecvPeriod) * 1000, 0);
+                            DataRecvTimer = new Timer(DataOutTimeTick, null, ((unitnum - 1 - unitidx) * SendRecvPeriod+15) * 1000, 0);
                             ts = TaskStage.Continue;
                         }
                         LastRecvUnitId = unitidx;

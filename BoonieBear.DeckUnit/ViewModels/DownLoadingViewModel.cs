@@ -37,6 +37,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             StartTaskCommand = RegisterCommand(ExecuteStartTaskCommand, CanExecuteStartTaskCommand, true);
             StopTaskCommand = RegisterCommand(ExecuteStopTaskCommand, CanExecuteStopTaskCommand, true);
             DeleteTaskCommand = RegisterCommand(ExecuteDeleteTaskCommand, CanExecuteDeleteTaskCommand, true);
+            RetryCommand = RegisterCommand(ExecuteRetryCommand, CanExecuteRetryCommand, true);
             IsWorking = false;
             TaskState = "UNSTART";
             IUpdateTaskHandle(null,null);
@@ -91,14 +92,16 @@ namespace BoonieBear.DeckUnit.ViewModels
                         CmdIDDesc = "@SP";
                         break;
                     case 2:
-                        CmdIDDesc = "时间段 " + _currentBdTask.ParaBytes[0].ToString().PadLeft(2, '0') +
+                        CmdIDDesc = "时间段\n " + _currentBdTask.ParaBytes[0].ToString().PadLeft(2, '0') +
                                     _currentBdTask.ParaBytes[1].ToString().PadLeft(2, '0') +
                                     _currentBdTask.ParaBytes[2].ToString().PadLeft(2, '0') +
-                                    _currentBdTask.ParaBytes[3].ToString().PadLeft(2, '0') + "-" +
-                                    _currentBdTask.ParaBytes[4].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[3].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[4].ToString().PadLeft(2, '0') + "-" +
                                     _currentBdTask.ParaBytes[5].ToString().PadLeft(2, '0') +
                                     _currentBdTask.ParaBytes[6].ToString().PadLeft(2, '0') +
-                                    _currentBdTask.ParaBytes[7].ToString().PadLeft(2, '0');
+                                    _currentBdTask.ParaBytes[7].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[8].ToString().PadLeft(2, '0') +
+                                    _currentBdTask.ParaBytes[9].ToString().PadLeft(2, '0');
 
                         break;
                     case 3:
@@ -168,7 +171,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         private async void ExecuteGoBackCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
 
-                if(TaskState=="WORKING") //正在工作
+            if (TaskState == "WORKING" || TaskState == "WAITING") //正在工作
                 {
                     var md = new MetroDialogSettings();
                     md.AffirmativeButtonText = "确定";
@@ -200,6 +203,40 @@ namespace BoonieBear.DeckUnit.ViewModels
             ps.StartInfo.FileName = "explorer.exe";
             ps.StartInfo.Arguments =_currentBdTask.FilePath;
             ps.Start();
+        }
+        public ICommand RetryCommand
+        {
+            get { return GetPropertyValue(() => RetryCommand); }
+            set { SetPropertyValue(() => RetryCommand, value); }
+        }
+
+
+        private void CanExecuteRetryCommand(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        private async void ExecuteRetryCommand(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            try
+            {
+                ACNBuilder.PackTask(DeckDataProtocol.WorkingBdTask, false, DeckDataProtocol.LastRecvPkgId);
+            }
+            catch (Exception exception)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(exception, LogType.Both));
+                return;
+            }
+            var cmd = ACNProtocol.Package(false);
+            var result = UnitCore.Instance.NetEngine.SendCMD(cmd);
+            await result;
+            var end = result.Result;
+            if (end == false)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(
+                    new LogEvent(UnitCore.Instance.NetEngine.Error, LogType.Both));
+            }
         }
         public ICommand DeleteTaskCommand
         {
@@ -367,7 +404,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                         break;
                     case (int) TaskStage.WaitForAns:
                         TaskStatus = "等待下组数据";
-                        TaskState = "WORKING";
+                        TaskState = "WAITING";
                         IsWorking = true;
                         break;
                     case (int) TaskStage.Waiting:
@@ -403,7 +440,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                         break;
                     case (int) TaskStage.RecvReply:
                         TaskStatus = "发送下一组任务数据";
-                        TaskState = "WORKING";
+                        TaskState = "WAITING";
                         IsWorking = true;
                         try
                         {
@@ -435,7 +472,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 //TotalSeconds = _currentBdTask.TotolTime;
                 if (_currentBdTask.TotalPkg > 0)
                     LeftTime =
-                        TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg) * DeckDataProtocol.SendRecvPeriod).ToString("g");
+                        TimeSpan.FromSeconds((_currentBdTask.TotalPkg - DeckDataProtocol.RecvPkg) * DeckDataProtocol.SendRecvPeriod+15).ToString("g");
                 else
                     LeftTime = "";
                 RecvBytes = _currentBdTask.RecvBytes;

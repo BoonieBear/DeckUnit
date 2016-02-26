@@ -105,7 +105,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
         {
             var remoteIpEndPoint = new IPEndPoint(IPAddress.Any, 0);
             var flag =true;
-            var buffer = new byte[4096];
+            var buffer = new byte[4096*2];
             string error = string.Empty;
             var numberOfBytesRead = 0;
             var mode = CallMode.DataMode;
@@ -114,7 +114,7 @@ namespace BoonieBear.DeckUnit.CommLib.UDP
                 try
                 {
 
-                    Array.Clear(buffer, 0, 4096);
+                    Array.Clear(buffer, 0, 4096*2);
                     var receiveBytes = _udpClient.Receive(ref remoteIpEndPoint);
                     if (BitConverter.ToUInt16(receiveBytes, 0) != 0xEE01)
                         continue;
