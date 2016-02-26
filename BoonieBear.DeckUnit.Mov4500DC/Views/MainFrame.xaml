@@ -85,7 +85,7 @@
                         </StackPanel>
                     </Viewbox>
                 </Canvas>
-                <Image x:Name="cropimg" Width="256" Height="256" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Hidden" Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/UWV_Right.png" Margin="0,0,-256,0"/>
+                <Image x:Name="cropimg" Width="256" Height="256" HorizontalAlignment="Right" VerticalAlignment="Center" Visibility="Hidden" Margin="0,0,-256,0"/>
             </Grid>
         </dialogs:CustomDialog>
     </metroControl:MetroWindow.Resources>

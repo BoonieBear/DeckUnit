@@ -247,7 +247,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             else
             {
-                LinkRxSpeed = bytesReceived.ToString("N1", numberFormat) + " MB/s";
+                LinkRxSpeed = (bytesReceived/1024).ToString("N1", numberFormat) + " MB/s";
             }
             if (bytesSent < 1024)
             {
@@ -255,7 +255,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             else
             {
-                LinkTxSpeed = bytesSent.ToString("N1", numberFormat) + " MB/s";
+                LinkTxSpeed = (bytesSent/1024).ToString("N1", numberFormat) + " MB/s";
             }
             
         }
@@ -879,16 +879,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         {
             if(UnitCore.Instance.WorkMode==MonitorMode.SHIP)
                 return;
-            //if (!UnitCore.Instance.NetCore.IsTCPWorking)
-            //{
-            //    var md = new MetroDialogSettings();
-            //    md.AffirmativeButtonText = "确定";
+            if (!UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                var md = new MetroDialogSettings();
+                md.AffirmativeButtonText = "确定";
 
-            //    await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送图像",
-            //        "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
-            //    return;
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送图像",
+                    "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
+                return;
                 
-            //}
+            }
             //
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SendImgDialog"];
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,

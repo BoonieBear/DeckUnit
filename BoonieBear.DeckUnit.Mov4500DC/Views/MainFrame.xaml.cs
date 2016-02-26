@@ -58,7 +58,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             BoonieBear.DeckUnit.Mov4500UI.Helpers.LogHelper.WriteLog("开始工作");
             Splasher.CloseSplash();
             SwapMouseButton(false);//switch back
-            
         }
 
         private void MetroWindow_MouseDoubleClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -148,7 +147,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 var offset = Section.TranslatePoint(new System.Windows.Point(0, 0), imgBox);
                 if (offset.X < 0 || offset.X + 256 > imgBox.ActualWidth || offset.Y < 0 || offset.Y + 256 > imgBox.ActualHeight)
                     return;
-                cropimgBox.Source = BitmapToImageSource(IMGTool.CutImage(img, (int)(offset.X), (int)(offset.Y), (int)(256 / factor), (int)(256 / factor)));
+                cropimgBox.Source =
+                    BitmapToImageSource(IMGTool.CutImage(img, (int)(offset.X / imgBox.ActualWidth * img.Width),
+                        (int)(offset.Y / imgBox.ActualHeight * img.Height), (int)(256 / factor), (int)(256 / factor)));
             }
         }
         [System.Runtime.InteropServices.DllImport("gdi32.dll")]
@@ -192,7 +193,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
                 img.Source = imgBox.Source;
                 UnitCore.Instance.AddImgHandle(img);
-                bload = Jp2KConverter.LoadImage(selectimgpath);
+                bload = Jp2KConverter.LoadImage(WpfImageSourceToBitmap((BitmapSource)imgBox.Source));
             }
             if (bload)
             {
@@ -258,7 +259,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 if (offset.X < 0 || offset.X + 256 > imgBox.ActualWidth || offset.Y < 0 || offset.Y + 256 > imgBox.ActualHeight)
                     return;
                 //offset don`t have been scaled so start point do not need to moved 
-                cropimgBox.Source = BitmapToImageSource(IMGTool.CutImage(img, (int)(offset.X), (int)(offset.Y), (int)(256 / factor), (int)(256 / factor)));
+                cropimgBox.Source =
+                    BitmapToImageSource(IMGTool.CutImage(img, (int) (offset.X/imgBox.ActualWidth*img.Width),
+                        (int) (offset.Y/imgBox.ActualHeight*img.Height), (int) (256/factor), (int) (256/factor)));
             }
         }
         private void vb1_PreviewMouseWheel(object sender, System.Windows.Input.MouseWheelEventArgs e)
@@ -312,7 +315,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             var offset = Section.TranslatePoint(new System.Windows.Point(0, 0), imgBox);
             if (offset.X < 0 || offset.X + 256 > imgBox.ActualWidth || offset.Y < 0 || offset.Y + 256 > imgBox.ActualHeight)
                 return;
-            cropimgBox.Source = BitmapToImageSource(IMGTool.CutImage(img, (int)(offset.X), (int)(offset.Y), (int)(256 / factor), (int)(256 / factor)));
+            cropimgBox.Source =
+                    BitmapToImageSource(IMGTool.CutImage(img, (int)(offset.X / imgBox.ActualWidth * img.Width),
+                        (int)(offset.Y / imgBox.ActualHeight * img.Height), (int)(256 / factor), (int)(256 / factor)));
         }
         private System.Windows.Point GetPosition(Visual item,Visual parent)
         {
