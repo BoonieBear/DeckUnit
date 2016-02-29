@@ -884,12 +884,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 var md = new MetroDialogSettings();
                 md.AffirmativeButtonText = "确定";
 
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"无法发送图像",
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "无法发送图像",
                     "尚未连接通信机网络或连接出错", MessageDialogStyle.Affirmative, md);
                 return;
-                
+
             }
-            //
+            
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SendImgDialog"];
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
                 dialog);

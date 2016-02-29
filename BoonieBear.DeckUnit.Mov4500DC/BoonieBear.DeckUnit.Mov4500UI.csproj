@@ -250,10 +250,6 @@
     <Compile Include="Views\LiveCaptureView.xaml.cs">
       <DependentUpon>LiveCaptureView.xaml</DependentUpon>
     </Compile>
-    <Page Include="Controls\MsgBox.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\TitleBarControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -301,9 +297,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Controls\MsgBox.xaml.cs">
-      <DependentUpon>MsgBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Core\Controllers\UnitMessageController.cs" />
     <Compile Include="Core\Controllers\UnitNavigationController.cs" />

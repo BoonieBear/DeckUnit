@@ -58,7 +58,7 @@
                     Grid.ColumnSpan ="2"
                     HorizontalAlignment ="Stretch"/>
             </Grid>
-            <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ActualWidth, ConverterParameter=0.95, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
+            <Grid Grid.Row="1" Grid.Column="1" Width="{Binding ActualWidth, ConverterParameter=0.98, Converter={StaticResource DoubleMultiConverter}, ElementName=RootGrid, Mode=OneWay}">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="150"/>
                     <RowDefinition Height="*"/>
@@ -145,7 +145,7 @@
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="480"/>
+                        <ColumnDefinition Width="516"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Margin="0,0,2,0">
@@ -215,7 +215,7 @@
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="BackToEditBtn" Style="{StaticResource EditTextAppBarButtonStyle}" Grid.Row="2" HorizontalAlignment="Left" VerticalAlignment="Center" Width="55" Height="45" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" Click="BackToEditBtn_Click" />
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="1" Column="1" Margin="20,0,0,0">
+                    <Grid Grid.Row="1" Column="1" Margin="15,0,0,0">
                         <MetroControl:MetroAnimatedTabControl TabStripPlacement="Bottom" Cursor="Hand" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
                             <TabItem Header="位姿">
                                 <Grid TextBlock.Foreground="White">
@@ -392,6 +392,62 @@
                                     </StackPanel>
 
                                 </Grid>
+                            </TabItem>
+                            <TabItem Header="潜器数据">
+                                <ScrollViewer>
+                                    <StackPanel Orientation="Vertical">
+                                        <dx:GroupFrame  Header="电池电压" >
+                                            <UniformGrid  Columns="4">
+                                                <ViewControls:TreadTile  Grid.Column="0" Title="艏电池" Unit="V" Value="{Binding HeadmainV, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Grid.Column="1" Title="艉电池" Unit="V" Value="{Binding TailmainV, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Grid.Column="2" Title="左电池" Unit="V" Value="{Binding LeftsubV, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Grid.Column="3" Title="右电池" Unit="V" Value="{Binding RightsubV, StringFormat=\{0:F1\}}"/>
+                                            </UniformGrid>
+                                        </dx:GroupFrame>
+                                        <dx:GroupFrame Header="电池电流">
+                                            <UniformGrid Columns="4">
+                                                <ViewControls:TreadTile  Grid.Column="0" Title="艏电池" Unit="A" Value="{Binding HeadmainI, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Grid.Column="1" Title="艉电池" Unit="A" Value="{Binding TailmainI, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Grid.Column="2" Title="左电池" Unit="A" Value="{Binding LeftsubI, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Grid.Column="3" Title="右电池" Unit="A" Value="{Binding RightsubI, StringFormat=\{0:F1\}}"/>
+                                            </UniformGrid>
+                                        </dx:GroupFrame>
+                                        <dx:GroupFrame Header="电池状态">
+                                            <UniformGrid Rows="6" Columns="2">
+                                                <ViewControls:TreadTile  Title="艏电池消耗" Unit="Kwh" Value="{Binding Headmainconsume, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="艉电池消耗" Unit="Kwh" Value="{Binding Tailmainconsume, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="左电池消耗" Unit="Kwh" Value="{Binding Leftsubconsume, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="右电池消耗" Unit="Kwh" Value="{Binding Rightsubconsume, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="艏电池膨胀" Unit="mm" Value="{Binding HeadmainMaxExpand, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="艉电池膨胀" Unit="mm" Value="{Binding TailmainMaxExpand, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="左电池膨胀" Unit="mm" Value="{Binding LeftsubMaxExpand, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="右电池膨胀" Unit="mm" Value="{Binding RightsubMaxExpand, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="艏电池温度" Unit="℃" Value="{Binding HeadmainMaxTemp, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="艉电池温度" Unit="℃" Value="{Binding TailmainMaxTemp, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="左电池温度" Unit="℃" Value="{Binding LeftsubMaxTemp, StringFormat=\{0:F2\}}"/>
+                                                <ViewControls:TreadTile  Title="右电池温度" Unit="℃" Value="{Binding RightsubMaxTemp, StringFormat=\{0:F2\}}"/>
+                                            </UniformGrid>
+                                        </dx:GroupFrame>
+                                        <dx:GroupFrame  Header="生命支持" >
+                                            <UniformGrid  Columns="3">
+                                                <ViewControls:TreadTile Title="氧气" Unit="%" Value="{Binding Oxygen, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile Title="二氧化碳" Unit="%" Value="{Binding Co2, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile Title="温度" Unit="℃" Value="{Binding Temperature, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile Title="湿度" Unit="%" Value="{Binding Humidity, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile Title="压力" Unit="KP" Value="{Binding Pressure, StringFormat=\{0:F1\}}"/>
+                                            </UniformGrid>
+                                        </dx:GroupFrame>
+                                        <dx:GroupFrame  Header="CTD" >
+                                            <UniformGrid  Columns="4">
+                                                <ViewControls:TreadTile  Title="海水温度" Unit="°C" Value="{Binding CTDWaterTemp, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Title="深度" Unit="m" Value="{Binding CTDDepth, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Title="电导率" Unit="uS/cm" Value="{Binding CTDWatercond, StringFormat=\{0:F1\}}"/>
+                                                <ViewControls:TreadTile  Title="声速" Unit="m/s" Value="{Binding CTDSoundvec, StringFormat=\{0:F1\}}"/>
+                                            </UniformGrid>
+                                        </dx:GroupFrame>
+                                    </StackPanel>
+                                </ScrollViewer>
+                                
                             </TabItem>
                             <TabItem Header="生命支持">
                                 <Grid>
@@ -1035,139 +1091,6 @@
                                             </Grid>
                                 </Grid>
                             </TabItem>
-                            <TabItem Header="避碰">
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="*"/>
-                                    </Grid.ColumnDefinitions>
-                                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
-                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
-                                        <Run Text="更新时间:"/>
-                                        <Run Text="{Binding BpTime}"/>
-                                        </TextBlock>
-                                    </StackPanel>
-                                    <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-                                        <ViewControls:TreadTile Grid.Row="0" Title="前上" Unit="米" Value="{Binding BpFrontUp, StringFormat=\{0:F2\}}"/>
-                                        <ViewControls:TreadTile Grid.Row="1" Title="正前" Unit="米" Value="{Binding BpFront, StringFormat=\{0:F2\}}"/>
-                                        <ViewControls:TreadTile Grid.Row="2" Title="前下" Unit="米" Value="{Binding BpFrontDown, StringFormat=\{0:F2\}}"/>
-                                        <ViewControls:TreadTile Grid.Row="3" Title="正下" Unit="米" Value="{Binding BpBottom, StringFormat=\{0:F2\}}"/>
-                                        <ViewControls:TreadTile Grid.Row="4" Title="后下" Unit="米" Value="{Binding BpBottomBack, StringFormat=\{0:F2\}}"/>
-                                        <ViewControls:TreadTile Grid.Row="5" Title="正左" Unit="米" Value="{Binding BpLeft, StringFormat=\{0:F2\}}"/>
-                                        <ViewControls:TreadTile Grid.Row="6" Title="正右" Unit="米" Value="{Binding BpRight, StringFormat=\{0:F2\}}"/>
-                                    </Grid>
-                                    <Grid Grid.Row="1" Grid.Column="1" Width="500" Height="620" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="*"/>
-                                            <RowDefinition Height="*"/>
-                                        </Grid.RowDefinitions>
-                                        <Viewbox Width="300" Height="240" Grid.Row="0">
-                                            <Image Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/UWV_Right.png"/>
-                                        </Viewbox>
-                                        <Viewbox Width="200" Height="200" Grid.Row="1">
-                                            <Image Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/Logo_nbg.png"/>
-                                        </Viewbox>
-                                        <Grid Grid.Row="0">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="*"/>
-                                                <RowDefinition Height="*"/>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*"/>
-                                                <ColumnDefinition Width="*"/>
-                                            </Grid.ColumnDefinitions>
-                                            <Controls:LengthMark Name="FrontMark" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Content="{Binding BpFront, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,0,0,0" Width="{Binding BpFront, Converter={StaticResource BpMarkLengthConverter}}"/>
-                                            <Controls:LengthMark  Grid.Column="1" Foreground="White" Grid.Row="0" Content="{Binding BpFrontUp, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,50,0,0" Width="{Binding BpFrontUp, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                                                <Controls:LengthMark.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform Angle="-30"/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Controls:LengthMark.RenderTransform>
-                                            </Controls:LengthMark>
-                                            <Controls:LengthMark  Grid.Column="1" Foreground="White" Grid.Row="1" Content="{Binding BpFrontDown, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,0,0,50" Width="{Binding BpFrontDown, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
-                                                <Controls:LengthMark.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform Angle="30"/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Controls:LengthMark.RenderTransform>
-                                            </Controls:LengthMark>
-                                            <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Center" Width="{Binding BpBottom, Converter={StaticResource BpMarkLengthConverter}}" Margin="0,0,0,70" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
-                                                <Controls:LengthMark.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform Angle="90"/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Controls:LengthMark.RenderTransform>
-                                            </Controls:LengthMark>
-                                            <Controls:LengthMark  Grid.Row="1"  Foreground="White"  Content="{Binding BpBottomBack, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Right" Margin="0,60,90,0" Width="{Binding BpBottomBack, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
-                                                <Controls:LengthMark.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform Angle="-30"/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Controls:LengthMark.RenderTransform>
-                                            </Controls:LengthMark>
-                                        </Grid>
-                                        <Grid Grid.Row="1">
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition/>
-                                                <ColumnDefinition/>
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition/>
-                                                <RowDefinition/>
-                                            </Grid.RowDefinitions>
-                                            <Controls:LengthMark  Grid.Column="0" Grid.RowSpan="2" Foreground="White"  
-                                                Content="{Binding BpRight, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
-                                                HorizontalAlignment="Right" 
-                                                Width="{Binding BpRight, Converter={StaticResource BpMarkLengthConverter}}" 
-                                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="0,0,70,0"/>
-                                            <Controls:LengthMark  Grid.Column="1" Grid.RowSpan="2" Foreground="White"  
-                                                Content="{Binding BpLeft, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
-                                                HorizontalAlignment="Left" 
-                                                Width="{Binding BpLeft, Converter={StaticResource BpMarkLengthConverter}}" 
-                                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="70,0,0,0"/>
-                                            <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  
-                                                Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
-                                                HorizontalAlignment="Center" 
-                                                Width="{Binding BpBottom, Converter={StaticResource BpMarkLengthConverter}}" 
-                                                VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,70">
-                                                <Controls:LengthMark.RenderTransform>
-                                                    <TransformGroup>
-                                                        <ScaleTransform/>
-                                                        <SkewTransform/>
-                                                        <RotateTransform Angle="90"/>
-                                                        <TranslateTransform/>
-                                                    </TransformGroup>
-                                                </Controls:LengthMark.RenderTransform>
-                                            </Controls:LengthMark>
-                                        </Grid>
-                                    </Grid>
-                                </Grid>
-                            </TabItem>
                             <TabItem Header="CTD">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -1413,6 +1336,190 @@
                                     </Grid>
                                 </Grid>
                             </TabItem>
+                            <TabItem Header="报警" >
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding AlarmTime}"/>
+                                        </TextBlock>
+                                        <UniformGrid Columns="3">
+                                            <ViewControls:TreadTile  Title="载人舱漏水" Unit="V" Value="{Binding Leak, StringFormat=\{0:F2\}}" />
+                                            <ViewControls:TreadTile  Title="压载水舱液位" Unit="mm" Value="{Binding Cable, StringFormat=\{0:F2\}}" />
+                                            <ViewControls:TreadTile  Title="计算机罐温度" Unit="℃" Value="{Binding AlertTemp, StringFormat=\{0:F2\}}" />
+                                        </UniformGrid>
+                                        <ScrollViewer Grid.Row="1" Style="{DynamicResource TransportScrollViewer}" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                            <ListView ItemsSource="{Binding AlarmList}" FontSize="18">
+                                                <ListBox.ItemContainerStyle>
+                                                    <Style TargetType="ListBoxItem">
+                                                        <!-- 设置控件模板 -->
+                                                        <Setter Property="Template">
+                                                            <Setter.Value>
+                                                                <ControlTemplate TargetType="ListBoxItem">
+                                                                    <Border Background="{TemplateBinding Background}" Height="30">
+                                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
+                                                                    </Border>
+                                                                </ControlTemplate>
+                                                            </Setter.Value>
+                                                        </Setter>
+
+                                                        <!-- 设置触发器 -->
+                                                        <Style.Triggers>
+                                                            <Trigger Property="IsSelected" Value="true">
+                                                                <Setter Property="Background" Value="#CC119EDA"/>
+                                                                <Setter Property="Foreground" Value="Black"/>
+                                                            </Trigger>
+                                                            <Trigger Property="IsMouseOver" Value="true">
+                                                                <Setter Property="Background" Value="LemonChiffon"/>
+                                                                <Setter Property="Foreground" Value="Black"/>
+                                                            </Trigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ListBox.ItemContainerStyle>
+                                            </ListView>
+                                        </ScrollViewer>
+                                    </StackPanel>
+                                </Grid>
+                            </TabItem>
+                            <TabItem Header="避碰">
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
+                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
+                                        <Run Text="更新时间:"/>
+                                        <Run Text="{Binding BpTime}"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <Grid Grid.Column="0" Grid.Row="1" Grid.RowSpan="2">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <ViewControls:TreadTile Grid.Row="0" Title="前上" Unit="米" Value="{Binding BpFrontUp, StringFormat=\{0:F2\}}"/>
+                                        <ViewControls:TreadTile Grid.Row="1" Title="正前" Unit="米" Value="{Binding BpFront, StringFormat=\{0:F2\}}"/>
+                                        <ViewControls:TreadTile Grid.Row="2" Title="前下" Unit="米" Value="{Binding BpFrontDown, StringFormat=\{0:F2\}}"/>
+                                        <ViewControls:TreadTile Grid.Row="3" Title="正下" Unit="米" Value="{Binding BpBottom, StringFormat=\{0:F2\}}"/>
+                                        <ViewControls:TreadTile Grid.Row="4" Title="后下" Unit="米" Value="{Binding BpBottomBack, StringFormat=\{0:F2\}}"/>
+                                        <ViewControls:TreadTile Grid.Row="5" Title="正左" Unit="米" Value="{Binding BpLeft, StringFormat=\{0:F2\}}"/>
+                                        <ViewControls:TreadTile Grid.Row="6" Title="正右" Unit="米" Value="{Binding BpRight, StringFormat=\{0:F2\}}"/>
+                                    </Grid>
+                                    <Grid Grid.Row="1" Grid.Column="1" Width="500" Height="620" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="*"/>
+                                            <RowDefinition Height="*"/>
+                                        </Grid.RowDefinitions>
+                                        <Viewbox Width="300" Height="240" Grid.Row="0">
+                                            <Image Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/UWV_Right.png"/>
+                                        </Viewbox>
+                                        <Viewbox Width="200" Height="200" Grid.Row="1">
+                                            <Image Source="/BoonieBear.DeckUnit.Mov4500UI;component/Assets/Logo_nbg.png"/>
+                                        </Viewbox>
+                                        <Grid Grid.Row="0">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="*"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Controls:LengthMark Name="FrontMark" Foreground="White" Grid.Column="1" Grid.RowSpan="2" Content="{Binding BpFront, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,0,0,0" Width="{Binding BpFront, Converter={StaticResource BpMarkLengthConverter}}"/>
+                                            <Controls:LengthMark  Grid.Column="1" Foreground="White" Grid.Row="0" Content="{Binding BpFrontUp, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,50,0,0" Width="{Binding BpFrontUp, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="-30"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                            <Controls:LengthMark  Grid.Column="1" Foreground="White" Grid.Row="1" Content="{Binding BpFrontDown, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Left" Margin="100,0,0,50" Width="{Binding BpFrontDown, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="30"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                            <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Center" Width="{Binding BpBottom, Converter={StaticResource BpMarkLengthConverter}}" Margin="0,0,0,70" VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="90"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                            <Controls:LengthMark  Grid.Row="1"  Foreground="White"  Content="{Binding BpBottomBack, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" HorizontalAlignment="Right" Margin="0,60,90,0" Width="{Binding BpBottomBack, Converter={StaticResource BpMarkLengthConverter}}" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="-30"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                        </Grid>
+                                        <Grid Grid.Row="1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition/>
+                                                <RowDefinition/>
+                                            </Grid.RowDefinitions>
+                                            <Controls:LengthMark  Grid.Column="0" Grid.RowSpan="2" Foreground="White"  
+                                                Content="{Binding BpRight, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                HorizontalAlignment="Right" 
+                                                Width="{Binding BpRight, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="0,0,70,0"/>
+                                            <Controls:LengthMark  Grid.Column="1" Grid.RowSpan="2" Foreground="White"  
+                                                Content="{Binding BpLeft, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                HorizontalAlignment="Left" 
+                                                Width="{Binding BpLeft, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5" Margin="70,0,0,0"/>
+                                            <Controls:LengthMark  Grid.Row="1" Grid.ColumnSpan="2" Foreground="White"  
+                                                Content="{Binding BpBottom, Converter={StaticResource BpDistanceConverter}, Mode=OneWay}" 
+                                                HorizontalAlignment="Center" 
+                                                Width="{Binding BpBottom, Converter={StaticResource BpMarkLengthConverter}}" 
+                                                VerticalAlignment="Bottom" RenderTransformOrigin="0.5,0.5" Margin="0,0,0,70">
+                                                <Controls:LengthMark.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform Angle="90"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </Controls:LengthMark.RenderTransform>
+                                            </Controls:LengthMark>
+                                        </Grid>
+                                    </Grid>
+                                </Grid>
+                            </TabItem>
                             <TabItem Header="ADCP">
                                 <Grid>
                                     <Grid.RowDefinitions>
@@ -1598,57 +1705,7 @@
                                     
                                 </Grid>
                             </TabItem>
-                            <TabItem Header="报警" >
-                                <Grid>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto"/>
-                                        <RowDefinition Height="*"/>
-                                    </Grid.RowDefinitions>
-                                    <StackPanel Grid.Row="0">
-                                        <TextBlock VerticalAlignment="Top" HorizontalAlignment="Center"  FontSize="18" Height="30">
-                                        <Run Text="更新时间:"/>
-                                        <Run Text="{Binding AlarmTime}"/>
-                                        </TextBlock>
-                                        <UniformGrid Columns="3">
-                                            <ViewControls:TreadTile  Title="载人舱漏水" Unit="V" Value="{Binding Leak, StringFormat=\{0:F2\}}" />
-                                            <ViewControls:TreadTile  Title="压载水舱液位" Unit="mm" Value="{Binding Cable, StringFormat=\{0:F2\}}" />
-                                            <ViewControls:TreadTile  Title="计算机罐温度" Unit="℃" Value="{Binding AlertTemp, StringFormat=\{0:F2\}}" />
-                                        </UniformGrid>
-                                        <ScrollViewer Grid.Row="1" Style="{DynamicResource TransportScrollViewer}" CanContentScroll="True" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
-                                            <ListView ItemsSource="{Binding AlarmList}" FontSize="18">
-                                                <ListBox.ItemContainerStyle>
-                                                    <Style TargetType="ListBoxItem">
-                                                        <!-- 设置控件模板 -->
-                                                        <Setter Property="Template">
-                                                            <Setter.Value>
-                                                                <ControlTemplate TargetType="ListBoxItem">
-                                                                    <Border Background="{TemplateBinding Background}" Height="30">
-                                                                        <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                              TextBlock.Foreground="{TemplateBinding Foreground}"/>
-                                                                    </Border>
-                                                                </ControlTemplate>
-                                                            </Setter.Value>
-                                                        </Setter>
-
-                                                        <!-- 设置触发器 -->
-                                                        <Style.Triggers>
-                                                            <Trigger Property="IsSelected" Value="true">
-                                                                <Setter Property="Background" Value="#CC119EDA"/>
-                                                                <Setter Property="Foreground" Value="Black"/>
-                                                            </Trigger>
-                                                            <Trigger Property="IsMouseOver" Value="true">
-                                                                <Setter Property="Background" Value="LemonChiffon"/>
-                                                                <Setter Property="Foreground" Value="Black"/>
-                                                            </Trigger>
-                                                        </Style.Triggers>
-                                                    </Style>
-                                                </ListBox.ItemContainerStyle>
-                                            </ListView>
-                                        </ScrollViewer>
-                                    </StackPanel>
-                                </Grid>
-                            </TabItem>
+                            
                         </MetroControl:MetroAnimatedTabControl>
                     </Grid>
                 </Grid>

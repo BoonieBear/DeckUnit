@@ -521,8 +521,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         {
             SetTiltle(true);
             var p = new Paragraph();
+            //var vew = new Viewbox();
+            //vew.Child = img;
             p.Inlines.Add(img);
             p.TextAlignment = TextAlignment.Left;
+            //vew.HorizontalAlignment = HorizontalAlignment.Left;
             MessageDocument.Blocks.Add(p);
             UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-MPSK）" + img.Source);
         }
