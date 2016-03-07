@@ -90,15 +90,27 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
         private async void ExecuteSendCMD(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             bool ret = false;
-            IsProcessing = true;
             Task<bool> result = null;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            DateTime dt = new DateTime(SelectedDate.Year, SelectedDate.Month, SelectedDate.Day, SelectedTime.Hour, SelectedTime.Minute, 0);
+            if (dt<DateTime.Now)
+            {
+                
+                await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,
+                        "发送失败",
+                       "选择时间无效", MessageDialogStyle.Affirmative, md);
+                return;
+            }
+            IsProcessing = true;
             switch (Title)
             {
                 case "设置系统时间":
-                    result = SetSystemTime();
+                    result = SetSystemTime(dt);
                     break;
                 case "设置休眠时间":
-                    result = SetSleepTime();
+                    result = SetSleepTime(dt);
                     break;
                 default:
                     break;
@@ -106,8 +118,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             await result;
             ret = result.Result;
             IsProcessing = false;
-            var md = new MetroDialogSettings();
-            md.AffirmativeButtonText = "确定";
+
             if (ret == false)
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
                 UnitCore.Instance.CommEngine.Error,MessageDialogStyle.Affirmative,md);
@@ -127,15 +138,15 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             }
         }
 
-        private Task<bool> SetSleepTime()
+        private Task<bool> SetSleepTime(DateTime dt)
         {
-            DateTime dt = new DateTime(SelectedDate.Year, SelectedDate.Month, SelectedDate.Day, SelectedTime.Hour, SelectedTime.Minute, SelectedTime.Second);
+            
             var cmd = MSPHexBuilder.Pack251(dt);
             return UnitCore.Instance.CommEngine.SendCMD(cmd);
         }
-        private Task<bool> SetSystemTime()
+        private Task<bool> SetSystemTime(DateTime dt)
         {
-            DateTime dt = new DateTime(SelectedDate.Year, SelectedDate.Month, SelectedDate.Day, SelectedTime.Hour, SelectedTime.Minute, SelectedTime.Second);
+            
             var cmd = MSPHexBuilder.Pack252(dt);
             return UnitCore.Instance.CommEngine.SendCMD(cmd);
 

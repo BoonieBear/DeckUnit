@@ -98,7 +98,23 @@ namespace BoonieBear.DeckUnit.ACNP
             cmd[0] = 0xF2;//空命令
             return ACNProtocol.CommPackage(242, cmd);
         }
-        
+
+        //bhigh:true 高压用外电，false 高压用内电
+        public static byte[] Pack241(int HighSelect, int LowSelect)
+        {
+            string high = "0";
+            string low = "0";
+            if (HighSelect==0)
+            {
+                high = "1";
+            }
+            if (LowSelect==0)
+            {
+                low = "1";
+            }
+            string cmd = high + low;
+            return ACNProtocol.CommPackage(241, StringHexConverter.ConvertHexToChar(cmd));
+        }
 
         public static byte[] Pack20()
         {

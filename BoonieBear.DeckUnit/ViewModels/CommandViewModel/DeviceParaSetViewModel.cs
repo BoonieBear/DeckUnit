@@ -20,6 +20,7 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
         public override void Initialize()
         {
             GoBackCommand = RegisterCommand(ExecuteGoBackCommand, CanExecuteGoBackCommand, true);
+            SendCMD = RegisterCommand(ExecuteSendCMD, CanExecuteSendCMD, true);
             ID = new List<FilterItem>();
             for (int i = 1; i < 64; i++)
             {

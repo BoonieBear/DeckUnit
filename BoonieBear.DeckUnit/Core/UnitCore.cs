@@ -130,7 +130,11 @@ namespace BoonieBear.DeckUnit.Core
                 {
                     CommEngine.Initialize();
                     CommEngine.Start();
-                    var cmd = MSPHexBuilder.Pack250(true);
+
+                    var cmd = MSPHexBuilder.Pack252(DateTime.Now);
+                    CommEngine.SendCMD(cmd);//设置系统时间
+                    TaskEx.Delay(TimeSpan.FromMilliseconds(200));
+                    cmd = MSPHexBuilder.Pack250(true);
                     CommEngine.SendCMD(cmd);//进入调试模式，开启网络
                 }
                 if (NetEngine != null)

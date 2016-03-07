@@ -40,6 +40,7 @@ namespace BoonieBear.DeckUnit.ViewModels
            
             SwapMode = RegisterCommand(ExecuteSwapMode, CanExecuteSwapMode, true);
             SendCMD = RegisterCommand(ExecuteSendCMD, CanExecuteSendCMD, true);
+            ClearCmd = RegisterCommand(ExecuteClearCmd, CanExecuteClearCmd, true);
             pMainFrame = this;
             //绑定属性初始化
             AddPropertyChangedNotification(() => StatusHeader);
@@ -232,8 +233,37 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
             else
             {
-              //  await UnitCore.Instance.CommEngine.SendConsoleCMD(CommInput);//没有这个应用
+               //await UnitCore.Instance.CommEngine.SendConsoleCMD(CommInput);//没有这个应用
 
+            }
+        }
+        #endregion
+
+        #region ClearCmd
+        public ICommand ClearCmd
+        {
+            get { return GetPropertyValue(() => ClearCmd); }
+            set { SetPropertyValue(() => ClearCmd, value); }
+        }
+
+
+
+
+        private void CanExecuteClearCmd(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        private async void ExecuteClearCmd(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            if (ModeType)
+            {
+                Shellstring = "";
+            }
+            else
+            {
+                Serialstring = "";
             }
         }
         #endregion

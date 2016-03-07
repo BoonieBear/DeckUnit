@@ -33,7 +33,13 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <GroupBox Header="状态" Margin="4" Custom:ControlsHelper.HeaderFontSize="24">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="增益设置" FontFamily="SimSun" FontSize="24" Margin="8" />
+                    <Custom:NumericUpDown Value="{Binding SetGain}" Width="100" Maximum="74" Minimum="10" Speedup="False"/>
+                </StackPanel>
+                
+                <GroupBox Header="状态" Margin="4" Custom:ControlsHelper.HeaderFontSize="24">
                 <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition />
@@ -58,6 +64,8 @@
                     </StackPanel>
                 </Grid>
             </GroupBox>
+            </StackPanel>
+            
             <metroChart:PieChart  x:Name="SysChart"
 				Style="{StaticResource ChartStyleVariableSize}"
 				FontFamily="SimHei"

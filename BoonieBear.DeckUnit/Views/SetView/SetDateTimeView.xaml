@@ -35,14 +35,12 @@
                 
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Foreground ="DarkBlue" Text="设定时间："  FontSize="36" Margin="60,0,0,0" />
-                    <picker:DatePicker 
-            FullModeHeader="选择日期"
-            IsTouchSelectionEnabled="True"
-            Value="{Binding SelectedDate, Mode=TwoWay}" Width="150"/>
+                    <DatePicker 
+            SelectedDate="{Binding SelectedDate, Mode=TwoWay}" Width="150"/>
                     <picker:TimePicker 
             FullModeHeader="选择时间"
             IsTouchSelectionEnabled="True"
-            Value="{Binding SelectedTime, Mode=TwoWay}" Width="100" Margin="30,0,0,0"/>
+            Value="{Binding SelectedTime, Mode=TwoWay}" Width="100" Margin="10,0,0,0"/>
                 </StackPanel>
                 
             </StackPanel>

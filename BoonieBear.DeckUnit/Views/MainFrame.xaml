@@ -37,7 +37,7 @@
                                  Title="设置AD门限"
                                  x:Name="SetADDialog">
                 <StackPanel Orientation="Vertical">
-                    <metroControl:NumericUpDown x:Name="ADNumUp" Value="39"  Foreground="{DynamicResource AccentColorBrush}"/>
+                    <metroControl:NumericUpDown x:Name="ADNumUp" Value="13"  Foreground="{DynamicResource AccentColorBrush}"/>
                     <UniformGrid>
                         <Button Style="{DynamicResource SquareButtonStyle}"
 							Margin="5"
@@ -61,8 +61,56 @@
 							Margin="5"
 							Content="确定" Click="SetWakeBtn" />
                         <Button Style="{DynamicResource SquareButtonStyle}"
-							Margin="5"
+                            Margin="5"
 							Content="取消" Click="CloseWakeTimeBtn" />
+                    </UniformGrid>
+                </StackPanel>
+            </Dialog:CustomDialog>
+            <Dialog:CustomDialog x:Key="SupplySetDialog"
+                                 Title="电源配置"
+                                 x:Name="SupplySetDialog">
+                <StackPanel Orientation="Vertical">
+                    <TextBlock Text="高压电源配置"/>
+                    <ComboBox x:Name="HighSet" SelectedIndex="0" Foreground="{DynamicResource AccentColorBrush}">
+                        <ComboBoxItem Content="使用外电"/>
+                        <ComboBoxItem Content="使用内电"/>
+                    </ComboBox>
+                    <TextBlock Text="低压电源配置"/>
+                    <ComboBox x:Name="LowSet"  SelectedIndex="0"  Foreground="{DynamicResource AccentColorBrush}">
+                        <ComboBoxItem Content="使用外电"/>
+                        <ComboBoxItem Content="使用内电"/>
+                    </ComboBox>
+                    <UniformGrid>
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="确定" Click="SetSupplyBtn" />
+                        <Button Style="{DynamicResource SquareButtonStyle}"
+                            Margin="5"
+						    Content="取消" Click="CloseSupplyBtn" />
+                    </UniformGrid>
+                </StackPanel>
+            </Dialog:CustomDialog>
+            <Dialog:CustomDialog x:Key="DownloadDialog"
+                                 Title="下载波形/程序"
+                                 x:Name="DownloadDialog">
+                <StackPanel Orientation="Vertical">
+                    <ComboBox x:Name="SelectModeBox" SelectedIndex="0" Foreground="{DynamicResource AccentColorBrush}">
+                        <ComboBoxItem Content="下载波形"/>
+                        <ComboBoxItem Content="使用内电"/>
+                    </ComboBox>
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name ="SelectBtn" Style="{DynamicResource SquareButtonStyle}"
+                            Margin="5"  Content="选择文件" Click="SelectDownLoadFile"/>
+                            <TextBlock x:Name ="StatusBlock" Text="未选择文件"/>
+                    </StackPanel>
+                    <metroControl:MetroProgressBar x:Name="Percentbar" Visibility="Collapsed"/>
+                    <UniformGrid>
+                        <Button IsEnabled="False" x:Name="DownLoadBtn" Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="下载" Click="SendFileBtn" />
+                        <Button x:Name="CancelBtn"  Style="{DynamicResource SquareButtonStyle}"
+                            Margin="5"
+						    Content="取消" Click="CloseDownloadDialog" />
                     </UniformGrid>
                 </StackPanel>
             </Dialog:CustomDialog>
@@ -80,6 +128,12 @@
 			FadeDuration="0:0:0.20"
 			FadeOffset="0:0:0.20" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
         <metroControl:WindowCommands VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="99" Height="40" Margin="0,0,30,0">
+            <Button Click="LaunchDownLoadView" Width="50"
+				ToolTip="下载程序/数据">
+                <Button.Background>
+                    <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.download.png" Stretch="UniformToFill" />
+                </Button.Background>
+            </Button>
             <Button Click="LaunchDebugView" Width="50"
 				ToolTip="调试信息">
                 <Button.Background>
@@ -144,11 +198,12 @@
 									TouchKeyBoard:TabKeyBoard.Type="Char" 
 									TouchKeyBoard:TabKeyBoard.Width="480" IsEnabled="{Binding ModeType}"/>
                                 <ToggleButton x:Name ="LoadcheckButton" ToolTip ="串口进入loader模式" Height="30" Content  ="Loader"
-									IsChecked="{Binding LoaderMode}" Click="ToggleButton_Click" />
+									IsChecked="{Binding LoaderMode}" Click="ToggleButton_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
                                 <Button  ToolTip ="选择固件" Height="30" Width="40" Content  ="..."
-									Visibility="{Binding LoaderMode, Converter={StaticResource BoolToVisibilityConverter}}" Click="SelectFileButton_Click" />
+									Visibility="{Binding LoaderMode, Converter={StaticResource BoolToVisibilityConverter}}" Click="SelectFileButton_Click" HorizontalAlignment="Left" />
                             </StackPanel>
-                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" HorizontalAlignment="Right" FontFamily="SimSun" FontSize="14" IsEnabled="{Binding ModeType}" />
+                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="14" IsEnabled="{Binding ModeType}" />
+                            <Button  Width ="80" Height="30" Content="清空接收" Command="{Binding ClearCmd}" FontFamily="SimSun" FontSize="14" Margin="10,0,0,0" />
                         </StackPanel>
                         <TextBox x:Name ="DebugLog" Height ="140" FontFamily="SimSun" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="DebugLog_TextChanged">
                             <TextBox.Text>

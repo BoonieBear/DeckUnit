@@ -25,6 +25,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             GoSetSleepView = RegisterCommand(ExecuteGoSetSleepView, CanExecuteGoSetSleepView, true);
             ShowSetADView = RegisterCommand(ExecuteShowSetADView, CanExecuteShowSetADView, true);
             ShowWakeUpView = RegisterCommand(ExecuteShowWakeUpView, CanExecuteShowWakeUpView, true);
+            ShowSupplyView = RegisterCommand(ExecuteShowSupplyView, CanExecuteShowSupplyView, true);
             IsProcessing = false;
         }
 
@@ -130,7 +131,25 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
                 dialog);
         }
-        
+        public ICommand ShowSupplyView
+        {
+            get { return GetPropertyValue(() => ShowSupplyView); }
+            set { SetPropertyValue(() => ShowSupplyView, value); }
+        }
+
+
+        private void CanExecuteShowSupplyView(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        private async void ExecuteShowSupplyView(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SupplySetDialog"];
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                dialog);
+        }
         #endregion
     }
 }

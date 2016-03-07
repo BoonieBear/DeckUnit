@@ -344,11 +344,13 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
                                         info.AppendLine("串口3定时唤醒时间:" + int.Parse(hexStr.Substring(158, 10)) + "秒");
                                         info.AppendLine("单片机重启次数:" + int.Parse(hexStr.Substring(168, 4)));
                                         info.AppendLine("浮标工作状态:" + (hexStr.Substring(172, 2) == "00" ? "休眠" : "工作"));
+                                        info.AppendLine("高压电源配置:" + (hexStr.Substring(174, 1) == "0" ? "内电" : "外电"));
+                                        info.AppendLine("低压电源配置:" + (hexStr.Substring(175, 1) == "0" ? "内电" : "外电"));
                                         info.AppendLine("版本信息:" +
-                                                        (double.Parse(hexStr.Substring(174, 4))/1000).ToString("F03") +
-                                                        " " + hexStr.Substring(178, 4) + "年" + hexStr.Substring(182, 2) +
+                                                        (double.Parse(hexStr.Substring(176, 4))/1000).ToString("F03") +
+                                                        " " + hexStr.Substring(180, 4) + "年" + hexStr.Substring(184, 2) +
                                                         "月"
-                                                        + hexStr.Substring(184, 2) + "日");
+                                                        + hexStr.Substring(186, 2) + "日");
 
                                         break;
                                     case 14: //版本号。2013年1月14日之后舍弃

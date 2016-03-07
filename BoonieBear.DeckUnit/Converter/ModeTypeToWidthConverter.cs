@@ -15,7 +15,7 @@ namespace BoonieBear.DeckUnit.Converter
             var type = (string) parameter;
             if ((bmode && type=="net")||(!bmode && type =="comm"))
             {
-                return 400d;
+                return 300d;
             }
             else
             {

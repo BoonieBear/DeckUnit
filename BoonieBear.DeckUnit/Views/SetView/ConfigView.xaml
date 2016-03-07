@@ -38,6 +38,7 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="80"/>
                             <RowDefinition Height="80"/>
+                            <RowDefinition Height="80"/>
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="160"/>
@@ -63,7 +64,11 @@
                                     设置唤醒时间
                             </TextBlock>
                         </Button>
-                        
+                        <Button TextBlock.FontSize="20" Grid.Row="2" Grid.ColumnSpan="2" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding ShowSupplyView}" FontFamily="SimSun">
+                            <TextBlock>
+                                    外电配置
+                            </TextBlock>
+                        </Button>
                     </Grid>
                 </StackPanel>
             </ScrollViewer>

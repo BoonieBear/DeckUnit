@@ -63,6 +63,7 @@ namespace BoonieBear.DeckUnit.Views
             FlyOutView(0);
         }
 
+        
         private void LaunchDataView(object sender, System.Windows.RoutedEventArgs e)
         {
             var flyout = this.flyoutsControl.Items[2] as Flyout;
@@ -70,6 +71,7 @@ namespace BoonieBear.DeckUnit.Views
             flyout = this.flyoutsControl.Items[0] as Flyout;
             flyout.IsOpen = false;
             FlyOutView(1);
+            MainFrameViewModel.pMainFrame.RecvMessage = 0;
         }
 
         private async void ToggleButton_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -331,5 +333,70 @@ namespace BoonieBear.DeckUnit.Views
   
         }
 
+        private async void SetSupplyBtn(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var newdialog = (BaseMetroDialog)App.Current.MainWindow.Resources["SupplySetDialog"];
+            var HighSetBox = newdialog.FindChild<ComboBox>("HighSet");
+            var LowSetBox = newdialog.FindChild<ComboBox>("LowSet");
+            var cmd = MSPHexBuilder.Pack241(HighSetBox.SelectedIndex, LowSetBox.SelectedIndex);
+            var result = UnitCore.Instance.CommEngine.SendCMD(cmd);
+            await result;
+            var ret = result.Result;
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            if (ret == false)
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
+                UnitCore.Instance.NetEngine.Error, MessageDialogStyle.Affirmative, md);
+            else
+            {
+                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
+                dialog.Title = "外电配置命令";
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                    dialog);
+
+                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
+                textBlock.Text = "发送成功！";
+
+                await TaskEx.Delay(2000);
+
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, newdialog);
+            }
+        }
+
+        private async void CloseSupplyBtn(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["SupplySetDialog"]);
+        }
+        private async void LaunchDownLoadView(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"];
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                dialog);
+        }
+
+        private void SendFileBtn(object sender, System.Windows.RoutedEventArgs e)
+        {
+            
+        }
+
+        private async void CloseDownloadDialog(object sender, System.Windows.RoutedEventArgs e)
+        {
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["SupplySetDialog"]);
+        }
+
+        private async void SelectDownLoadFile(object sender, System.Windows.RoutedEventArgs e)
+        {
+            var newdialog = (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"];
+            var status = newdialog.FindChild<TextBlock>("StatusBlock");
+            var btn = newdialog.FindChild<Button>("DownLoadBtn");
+            var box = newdialog.FindChild<ComboBox>("SelectModeBox");
+            OpenFileDialog OpenFileDlg = new OpenFileDialog();
+            if (OpenFileDlg.ShowDialog() == true)
+            {
+                status.Text =box.SelectedItem.ToString() +"-已选择文件:"+OpenFileDlg.SafeFileName;
+                btn.IsEnabled = true;
+            }
+        }
     }
 }

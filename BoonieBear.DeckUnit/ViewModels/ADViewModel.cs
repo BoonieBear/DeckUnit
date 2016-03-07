@@ -35,6 +35,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         public override void InitializePage(object extraData)
         {
             IsWorking = false;
+            SetGain = 39;
             TotalADByte = "-";
             RefreshInfos();
         }
@@ -74,6 +75,11 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             get { return GetPropertyValue(() => IsWorking); }
             set { SetPropertyValue(() => IsWorking, value); }
+        }
+        public int SetGain
+        {
+            get { return GetPropertyValue(() => SetGain); }
+            set { SetPropertyValue(() => SetGain, value); }
         }
         public string TotalADByte
         {
@@ -145,7 +151,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                 try
                 {
                     UnitCore.Instance.UnitTraceService.SetADFilePath(fbd.SelectedPath);
-                    string NetInput = "ad";
+                    string NetInput = "ad -r "+SetGain.ToString();
                     if(!UnitCore.Instance.NetEngine.IsWorking)
                         throw new Exception("没有有效网络连接");
                     await UnitCore.Instance.NetEngine.SendConsoleCMD(NetInput);
