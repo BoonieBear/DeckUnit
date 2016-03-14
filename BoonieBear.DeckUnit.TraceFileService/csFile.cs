@@ -128,6 +128,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
 		//-----------
         public virtual void Close()
         {
+            length = 0;
             writeOpened = false;
             if (ts!=null)
 				ts.Close();
@@ -150,7 +151,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
                 fileName = file_name;
                 ws = new StreamWriter(File.Open(fileName, FileMode.Append, FileAccess.Write, FileShare.Read));
                 ws.AutoFlush = true;
-				
+                length = 0;
 				writeOpened = true;
 				return true;
 			}
@@ -173,6 +174,7 @@ namespace BoonieBear.DeckUnit.TraceFileService
                 bw = new BinaryWriter(File.Open(file_name, FileMode.OpenOrCreate,FileAccess.Write,FileShare.Read));
                 fileName = file_name;
                 writeOpened = true;
+                length = 0;
                 return true;
             }
             catch (FileNotFoundException e)

@@ -23,7 +23,7 @@
         <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
         <Converter:NotifyLevelToBrushConverter x:Key="NotifyLevelToBrushConverter"/>
         <Converter:BooleanToModeConverter x:Key="BooleanToModeConverter"/>
-        <Converter:BooleanToWidthConverter x:Key="BooleanToWidthConverter"/>
+            <Converter:ModeTypeToVisibleConverter x:Key="ModeTypeToVisibleConverter"/>
         <Converter:HideZeroConverter x:Key="HideZeroConverter"/>
             <Converter:MultiDebugStringConverter x:Key="MultiDebugStringConverter"/>
             <Converter:TraceMessageFilterConverter x:Key="TraceMessgaeFilterConverter"/>
@@ -96,12 +96,17 @@
                 <StackPanel Orientation="Vertical">
                     <ComboBox x:Name="SelectModeBox" SelectedIndex="0" Foreground="{DynamicResource AccentColorBrush}">
                         <ComboBoxItem Content="下载波形"/>
-                        <ComboBoxItem Content="使用内电"/>
+                        <ComboBoxItem Content="在线更新程序"/>
+                        <ComboBoxItem Content="更新定点程序"/>
+                        <ComboBoxItem Content="更新浮点程序(m2)"/>
+                        <ComboBoxItem Content="更新浮点程序(m4)"/>
+                        <ComboBoxItem Content="下载FPGA"/>
+                        <ComboBoxItem Content="下载BootLoader"/>
                     </ComboBox>
                     <StackPanel Orientation="Horizontal">
                         <Button x:Name ="SelectBtn" Style="{DynamicResource SquareButtonStyle}"
                             Margin="5"  Content="选择文件" Click="SelectDownLoadFile"/>
-                            <TextBlock x:Name ="StatusBlock" Text="未选择文件"/>
+                            <TextBlock  x:Name ="StatusBlock" Text="未选择文件"/>
                     </StackPanel>
                     <metroControl:MetroProgressBar x:Name="Percentbar" Visibility="Collapsed"/>
                     <UniformGrid>
@@ -128,12 +133,6 @@
 			FadeDuration="0:0:0.20"
 			FadeOffset="0:0:0.20" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
         <metroControl:WindowCommands VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="99" Height="40" Margin="0,0,30,0">
-            <Button Click="LaunchDownLoadView" Width="50"
-				ToolTip="下载程序/数据">
-                <Button.Background>
-                    <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.download.png" Stretch="UniformToFill" />
-                </Button.Background>
-            </Button>
             <Button Click="LaunchDebugView" Width="50"
 				ToolTip="调试信息">
                 <Button.Background>
@@ -175,10 +174,12 @@
                     </Grid.RowDefinitions>
                     <StackPanel Grid.Row="0" Orientation="Vertical" >
                         <StackPanel  Orientation="Horizontal" Margin="0,5">
-                            <Button FontFamily="SimSun" FontSize="14" Width ="80" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Command ="{Binding SwapMode}" 
+                            <Button FontFamily="SimSun" FontSize="14" Width ="60" Height="30" HorizontalAlignment="Left" VerticalAlignment="Center" Command ="{Binding SwapMode}" 
 								Content="{Binding ModeType, Converter={StaticResource BooleanToModeConverter}}"  
-								Margin="0,0,3,0"/>
-                            <TextBox  x:Name ="NetTextBox" FontFamily="SimSun" FontSize="14" Width ="{Binding ModeType, ConverterParameter=net, Converter={StaticResource BooleanToWidthConverter}}" 
+								Margin="0,0,3,0"
+                                Style="{DynamicResource SquareButtonStyle}"/>
+                            <StackPanel Visibility ="{Binding ModeType, ConverterParameter=net, Converter={StaticResource ModeTypeToVisibleConverter}}" Orientation="Horizontal" Margin="3,0">
+                                <TextBox  x:Name ="NetTextBox" FontFamily="SimSun" FontSize="14" Width ="200" 
 								Text="{Binding NetInput, Mode=TwoWay}" 
 								metroControl:TextBoxHelper.Watermark="网络" Margin="3,0" 
 								TouchKeyBoard:TabKeyBoard.Placement="Bottom" 
@@ -187,8 +188,17 @@
 								TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
 								TouchKeyBoard:TabKeyBoard.Width="480"
 								TouchKeyBoard:TabKeyBoard.Type="Char" />
-                            <StackPanel  Width ="{Binding ModeType, ConverterParameter=comm, Converter={StaticResource BooleanToWidthConverter}}" Orientation="Horizontal" Margin="3,0">
-                                <TextBox x:Name ="CommTextBox" FontFamily="SimSun" FontSize="14"  Width ="300" Text="{Binding CommInput, Mode=TwoWay}" 
+                                <CheckBox x:Name ="NetLinkCheckBox" ToolTip ="网络连接状态" Height="30" Content  ="连接"
+									Click="NetLinkCheckBox_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
+                                <Button Click="LaunchDownLoadView" Width="50"
+				                        ToolTip="下载程序/数据">
+                                    <Button.Background>
+                                        <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.download.png" Stretch="UniformToFill" />
+                                    </Button.Background>
+                                </Button>
+                            </StackPanel>
+                            <StackPanel  Visibility ="{Binding ModeType, ConverterParameter=comm, Converter={StaticResource ModeTypeToVisibleConverter}}" Orientation="Horizontal" Margin="3,0">
+                                <TextBox x:Name ="CommTextBox" FontFamily="SimSun" FontSize="14"  Width ="200" Text="{Binding CommInput, Mode=TwoWay}" 
 									metroControl:TextBoxHelper.Watermark="串口" 
 									Margin="0,0,3,0" 
 									TouchKeyBoard:TabKeyBoard.Placement="Bottom" 
@@ -196,13 +206,14 @@
 									TouchKeyBoard:TabKeyBoard.VerticalOffset="10"
 									TouchKeyBoard:TabKeyBoard.IsEnabled="True" 
 									TouchKeyBoard:TabKeyBoard.Type="Char" 
-									TouchKeyBoard:TabKeyBoard.Width="480" IsEnabled="{Binding ModeType}"/>
-                                <ToggleButton x:Name ="LoadcheckButton" ToolTip ="串口进入loader模式" Height="30" Content  ="Loader"
-									IsChecked="{Binding LoaderMode}" Click="ToggleButton_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
+									TouchKeyBoard:TabKeyBoard.Width="480"/>
+                                
+                                <CheckBox x:Name ="LoadcheckButton" ToolTip ="MSP430进入loader" Height="30" Content  ="Loader"
+									Click="ToggleButton_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
                                 <Button  ToolTip ="选择固件" Height="30" Width="40" Content  ="..."
-									Visibility="{Binding LoaderMode, Converter={StaticResource BoolToVisibilityConverter}}" Click="SelectFileButton_Click" HorizontalAlignment="Left" />
+									Click="SelectFileButton_Click" HorizontalAlignment="Left" />
                             </StackPanel>
-                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="14" IsEnabled="{Binding ModeType}" />
+                            <Button  Width ="80" Height="30" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="14" />
                             <Button  Width ="80" Height="30" Content="清空接收" Command="{Binding ClearCmd}" FontFamily="SimSun" FontSize="14" Margin="10,0,0,0" />
                         </StackPanel>
                         <TextBox x:Name ="DebugLog" Height ="140" FontFamily="SimSun" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="DebugLog_TextChanged">

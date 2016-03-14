@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.ACMP;
+using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using DevExpress.Xpf.Core;
@@ -60,7 +61,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                         Updatefile = OpenMspFile.OpenFile();
                         ConfigViewer.Opacity = 0.2;
                         PercentageRing.IsOpen = true;
-                        var ret = await UnitCore.Instance.NetCore.SendFile(Updatefile);
+                        var ret = await UnitCore.Instance.NetCore.DownloadFile(Updatefile,DownLoadFileType.FixFirm);
                         if (ret)
                         {
                             UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("下载数据完成", LogType.OnlyInfo));

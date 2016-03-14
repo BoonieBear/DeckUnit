@@ -2,11 +2,14 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 using BoonieBear.DeckUnit.ACNP;
 using BoonieBear.DeckUnit.CommLib;
 using BoonieBear.DeckUnit.Core;
 using BoonieBear.DeckUnit.Events;
+using BoonieBear.DeckUnit.ICore;
 using BoonieBear.DeckUnit.JsonUtils;
 using BoonieBear.DeckUnit.Models;
 using Microsoft.Win32;
@@ -22,6 +25,10 @@ namespace BoonieBear.DeckUnit.Views
 
     public partial class MainFrame
     {
+        private Stream Updatefile;
+        private string DownLoadFile = "";
+        private DispatcherTimer t;
+        private DispatcherTimer networkTimer;
         public MainFrame()
         {
             InitializeComponent();
@@ -31,6 +38,7 @@ namespace BoonieBear.DeckUnit.Views
             Kernel.Instance.Controller.SetRootFrame(ContentFrame);
             //this.DebugLog.Text = MainFrameViewModel.pMainFrame.Shellstring;
             filterbox.Items.CurrentChanged += (_1, _2) => filterbox.ScrollIntoView(filterbox.Items[filterbox.Items.Count-1]);
+
         }
 
         private void ContentFrame_Loaded(object sender, System.Windows.RoutedEventArgs e)
@@ -40,7 +48,21 @@ namespace BoonieBear.DeckUnit.Views
             
             UnitCore.Instance.EventAggregator.PublishMessage(new GoHomePageNavigationEvent());
             UnitCore.Instance.Start();
+            if(networkTimer==null)
+                networkTimer = new DispatcherTimer(TimeSpan.FromMilliseconds(2000), DispatcherPriority.Background, RefreshNetStatus, Dispatcher.CurrentDispatcher);
+            networkTimer.Start();
+        }
 
+        private void RefreshNetStatus(object sender, EventArgs e)
+        {
+            if (UnitCore.GetInstance().NetEngine.IsWorking)
+            {
+                NetLinkCheckBox.IsChecked = true;
+            }
+            else
+            {
+                NetLinkCheckBox.IsChecked = false;
+            }
         }
 
         private void FlyOutView(int index)
@@ -74,6 +96,19 @@ namespace BoonieBear.DeckUnit.Views
             MainFrameViewModel.pMainFrame.RecvMessage = 0;
         }
 
+        private async void NetLinkCheckBox_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (NetLinkCheckBox.IsChecked == true && UnitCore.Instance.NetEngine.IsWorking==false)
+            {
+                UnitCore.Instance.NetEngine.Start();
+            }
+            else
+            {
+                if (UnitCore.Instance.NetEngine.IsWorking == true)
+                    UnitCore.Instance.NetEngine.Stop();
+            }
+        }
+
         private async void ToggleButton_Click(object sender, System.Windows.RoutedEventArgs e)
         {
              
@@ -87,7 +122,7 @@ namespace BoonieBear.DeckUnit.Views
                     //FirstAuxiliaryButtonText = "Cancel",
                     ColorScheme = MetroDialogOptions.ColorScheme
                 };
-                MessageDialogResult result = await this.ShowMessageAsync("串口模式", "进入Loader模式？",
+                MessageDialogResult result = await this.ShowMessageAsync("串口", "进入Loader模式？",
                 MessageDialogStyle.AffirmativeAndNegative, LoaderCheck);
                 if (result == MessageDialogResult.Affirmative)
                 {
@@ -113,7 +148,7 @@ namespace BoonieBear.DeckUnit.Views
                     //FirstAuxiliaryButtonText = "Cancel",
                     ColorScheme = MetroDialogOptions.ColorScheme
                 };
-                MessageDialogResult result = await this.ShowMessageAsync("串口模式", "退出Loader模式？",
+                MessageDialogResult result = await this.ShowMessageAsync("串口", "退出Loader模式？",
                 MessageDialogStyle.AffirmativeAndNegative, LoaderCheck);
                 if (result == MessageDialogResult.Affirmative)
                 {
@@ -375,14 +410,101 @@ namespace BoonieBear.DeckUnit.Views
                 dialog);
         }
 
-        private void SendFileBtn(object sender, System.Windows.RoutedEventArgs e)
+        private async void SendFileBtn(object sender, System.Windows.RoutedEventArgs e)
         {
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await this.ShowMessageAsync("下载",
+                "确定要下载文件?-" + DownLoadFile,
+                MessageDialogStyle.AffirmativeAndNegative, mySettings);
+            if (result != MessageDialogResult.Affirmative)
+                return;
             
+            try
+            {
+                if (UnitCore.Instance.NetEngine.IsWorking)
+                {
+                    t = new DispatcherTimer(TimeSpan.FromMilliseconds(100), DispatcherPriority.Background, RefreshPercentage, Dispatcher.CurrentDispatcher);
+                    t.Start();
+                    var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"];
+                    var statusbar = dialog.FindChild<MetroProgressBar>("Percentbar");
+                    statusbar.Visibility = Visibility.Visible;
+                    statusbar.Value = 0;
+                    ComboBox box = dialog.FindChild<ComboBox>("SelectModeBox");
+                    DownLoadFileType dt = DownLoadFileType.Wave;
+                    switch (box.SelectedIndex)
+                    {
+                        case 0:
+                            dt = DownLoadFileType.Wave;
+                            break;
+                        case 1:
+                            dt = DownLoadFileType.RltUpdate;
+                            break;
+                        case 2:
+                            dt = DownLoadFileType.FixFirm;
+                            break;
+                        case 3:
+                            dt = DownLoadFileType.FloatM2;
+                            break;
+                        case 4:
+                            dt = DownLoadFileType.FloatM4;
+                            break;
+                        case 5:
+                            dt = DownLoadFileType.FPGA;
+                            break;
+                        case 6:
+                            dt = DownLoadFileType.BootLoader;
+                            break;
+                        default:
+                            dt = DownLoadFileType.Wave;
+                            break;
+                    }
+                    await UnitCore.Instance.NetEngine.DownloadFile(Updatefile,dt);
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("下载完成:" + DownLoadFile, LogType.OnlyInfo));
+                    Updatefile.Close();
+                    statusbar.Visibility = Visibility.Collapsed;
+                    if (t != null)
+                        t.Stop();
+                }
+                else
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("当前没有网络连接", LogType.OnlyInfo));
+                }
+
+            }
+            catch (Exception MyEx)
+            {
+                Updatefile.Close();
+                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(MyEx, LogType.Both));
+            }
+        }
+
+        private void RefreshPercentage(object sender, EventArgs e)
+        {
+            var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"];
+            var statusbar = dialog.FindChild<MetroProgressBar>("Percentbar");
+            statusbar.Value = UnitCore.Instance.NetEngine.SendBytes * 100 / (int)Updatefile.Length;
         }
 
         private async void CloseDownloadDialog(object sender, System.Windows.RoutedEventArgs e)
         {
-            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["SupplySetDialog"]);
+            if (t != null)
+                t.Stop();
+            var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"];
+            var statusbar = dialog.FindChild<MetroProgressBar>("Percentbar");
+            statusbar.Value = 0;
+            statusbar.Visibility = Visibility.Collapsed;
+            var status = dialog.FindChild<TextBlock>("StatusBlock");
+            status = "";
+            DownLoadFile = "";
+            Updatefile.Close();
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"]);
         }
 
         private async void SelectDownLoadFile(object sender, System.Windows.RoutedEventArgs e)
@@ -394,7 +516,9 @@ namespace BoonieBear.DeckUnit.Views
             OpenFileDialog OpenFileDlg = new OpenFileDialog();
             if (OpenFileDlg.ShowDialog() == true)
             {
-                status.Text =box.SelectedItem.ToString() +"-已选择文件:"+OpenFileDlg.SafeFileName;
+                Updatefile = OpenFileDlg.OpenFile();
+                DownLoadFile = OpenFileDlg.FileName;
+                status.Text =OpenFileDlg.SafeFileName;
                 btn.IsEnabled = true;
             }
         }

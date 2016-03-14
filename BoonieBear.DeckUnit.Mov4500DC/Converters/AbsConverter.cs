@@ -11,7 +11,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            return Math.Abs((sbyte) value);
+            sbyte a = (sbyte)value;
+            return Math.Abs((int)a);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)

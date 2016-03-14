@@ -192,10 +192,39 @@ namespace BoonieBear.DeckUnit.LiveService
                 return Command.SendTCPAsync(cmd);
         }
 
-        public async Task<bool> SendFile(Stream file)
+        public async Task<bool> DownloadFile(Stream file, DownLoadFileType type)
         {
             SendBytes = 0;
-            var shellcmd = new ACNTCPShellCommand(_shelltcpClient, "gd");
+            string argu = "";
+            switch (type)
+            {
+                    case DownLoadFileType.BootLoader:
+                        argu = " -b";
+                        break;
+                    case DownLoadFileType.FPGA:
+                        argu = " -f";
+                        break;
+                    case DownLoadFileType.FixFirm:
+                        argu = " -u";
+                        break;
+                    case DownLoadFileType.FloatM2:
+                        argu = " -t -m2";
+                        break;
+                    case DownLoadFileType.FloatM4:
+                        argu = " -t - m4";
+                        break;
+                    case DownLoadFileType.RltUpdate:
+                        argu = " -l";
+                        break;
+                    case DownLoadFileType.Wave:
+                        argu = "";
+                        break;
+                default:
+                        argu = "";
+                    break;
+
+            }
+            var shellcmd = new ACNTCPShellCommand(_shelltcpClient, "gd" + argu);
             var ret = Command.SendTCPAsync(shellcmd);
             if (await ret)
             {

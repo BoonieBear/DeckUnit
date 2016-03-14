@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Data;
 
 namespace BoonieBear.DeckUnit.Converter
 {
-    public class BooleanToWidthConverter : IValueConverter
+    public class ModeTypeToVisibleConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -15,11 +16,11 @@ namespace BoonieBear.DeckUnit.Converter
             var type = (string) parameter;
             if ((bmode && type=="net")||(!bmode && type =="comm"))
             {
-                return 300d;
+                return Visibility.Visible;
             }
             else
             {
-                return 0d;
+                return Visibility.Collapsed;
             }
 
         }

@@ -15,11 +15,11 @@ namespace BoonieBear.DeckUnit.Converter
 
              if (bmode)
              {
-                 return "网络";
+                 return "网 络";
              }
             else
              {
-                 return "串口";
+                 return "串 口";
              }
 
         }

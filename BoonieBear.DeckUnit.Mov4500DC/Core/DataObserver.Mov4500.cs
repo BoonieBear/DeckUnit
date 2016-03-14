@@ -269,8 +269,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 }
                 catch (Exception ex)
                 {
-                    UnitCore.Instance.ACMMutex.ReleaseMutex();
-                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+                    App.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        UnitCore.Instance.ACMMutex.ReleaseMutex();
+                        UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+                    }));
                 }
 
 

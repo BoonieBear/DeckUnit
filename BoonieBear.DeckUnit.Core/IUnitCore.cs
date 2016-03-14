@@ -7,6 +7,17 @@ using System.Threading;
 using System.Threading.Tasks;
 namespace BoonieBear.DeckUnit.ICore
 {
+    public enum DownLoadFileType
+    {
+        Wave,
+        RltUpdate,
+        FixFirm,
+        FloatM2,
+        FloatM4,
+        FPGA,
+        BootLoader,
+
+    }
     public interface ICore
     {
         void Initialize();
@@ -28,7 +39,7 @@ namespace BoonieBear.DeckUnit.ICore
         Task<bool> SendConsoleCMD(string cmd);
 
         Task <bool> SendCMD(byte[] buf);
-        Task<bool> SendFile(Stream file);
+        Task<bool> DownloadFile(Stream file,DownLoadFileType type);
         Task<bool> BroadCast(byte[] buf);
         int SendBytes { get;}
         /// <summary>

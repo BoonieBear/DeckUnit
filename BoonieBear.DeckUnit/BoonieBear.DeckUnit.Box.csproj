@@ -140,7 +140,7 @@
     <Compile Include="Converter\BooleanToModeConverter.cs" />
     <Compile Include="Converter\BoolToVisibilityConverter.cs" />
     <Compile Include="Converter\HideZeroConverter.cs" />
-    <Compile Include="Converter\ModeTypeToWidthConverter.cs" />
+    <Compile Include="Converter\ModeTypeToVisibleConverter.cs" />
     <Compile Include="Converter\MultiDebugStringConverter.cs" />
     <Compile Include="Converter\NotifyLevelToBrushConverter.cs" />
     <Compile Include="Converter\IndexToBooleanConverter.cs" />

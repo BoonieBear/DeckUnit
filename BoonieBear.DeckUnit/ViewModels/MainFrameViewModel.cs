@@ -259,11 +259,11 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             if (ModeType)
             {
-                Shellstring = "";
+                Shellstring = string.Empty;
             }
             else
             {
-                Serialstring = "";
+                Serialstring = string.Empty;
             }
         }
         #endregion
