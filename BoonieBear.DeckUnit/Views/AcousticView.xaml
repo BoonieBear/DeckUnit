@@ -130,7 +130,7 @@
                             </Grid.ColumnDefinitions>
                             <Button  Style="{DynamicResource SquareButtonStyle}" FontFamily="SimSun" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNeiborListPage}">
                                 <TextBlock>
-                                   获取邻接点表
+                                   获取邻节点表
                                 </TextBlock>
                             </Button>
                             <Button FontFamily="SimSun" TextBlock.FontSize="20" Grid.Row="0" Grid.Column="1" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoGetNetListPage}">

@@ -54,6 +54,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             AddPropertyChangedNotification(() => SelectIndex);
             IsDataActive = true;
             IsCmdActive = false;
+            ExecuteFetchingData(null, null);
         }
 
         #endregion

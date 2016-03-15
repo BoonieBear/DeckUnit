@@ -188,7 +188,7 @@ namespace BoonieBear.DeckUnit.Core
                             savedata.SourceID = int.Parse(parsestr[2]);
                         if (parsestr[1] == "目的地址")
                             savedata.DestID = int.Parse(parsestr[2]);
-                        if (savedata.CommID == 101) //ping
+                        if (savedata.CommID == 102) //ping
                         {
                             UnitCore.Instance.EventAggregator.PublishMessage(new PingNotifyEvent(parsestr[3]));
                             UnitCore.Instance.EventAggregator.PublishMessage(new StatusNotify("回环测试", "收到回环测试数据，请查看测试页面", NotifyLevel.Info));

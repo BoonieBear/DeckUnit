@@ -202,8 +202,8 @@
                             </Grid>
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="SendBtn" Style="{StaticResource SquareButtonStyle}" Content="发送" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="55" Height="45" Click="SendBtn_Click" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" />
                             <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入20个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
-                            <Label Name="SSBToolTip" Foreground="Black" Content="按住说话" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Visibility="Hidden"/>
-                            <MetroControl:MetroProgressBar Name="VoiceBar"  Visibility="Hidden" EllipseDiameter="80" EllipseOffset="40" Value="0" Margin="55,0" MouseLeftButtonDown="VoiceBar_MouseLeftButtonDown" MouseLeftButtonUp="VoiceBar_MouseLeftButtonUp" MouseLeave="VoiceBar_MouseLeave" Opacity="0.4">
+                            <Label Name="SSBToolTip" Foreground="Black" Content="按住说话" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Visibility="Hidden" Margin="0,20,0,0"/>
+                            <MetroControl:MetroProgressBar Name="VoiceBar"  Visibility="Hidden" EllipseDiameter="80" EllipseOffset="40" Value="0" Margin="55,20,55,0" MouseLeftButtonDown="VoiceBar_MouseLeftButtonDown" MouseLeftButtonUp="VoiceBar_MouseLeftButtonUp" MouseLeave="VoiceBar_MouseLeave" Opacity="0.4" Height="40">
                                 <MetroControl:MetroProgressBar.Foreground>
                                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                                         <GradientStop Color="#FF4B3333" Offset="0.386"/>

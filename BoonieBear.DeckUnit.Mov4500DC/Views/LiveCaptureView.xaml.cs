@@ -91,6 +91,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                        {
                            if (!isRecording)
                            {
+                               SendSSBBtn_Click(null,null);
                                Recording(true);
                            }
 
@@ -99,6 +100,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                        {
                            if (isRecording)
                            {
+                               BackToEditBtn_Click(null, null);
                                Recording(false);
                            }
 
@@ -112,6 +114,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                {
                    if (isRecording)
                    {
+                       BackToEditBtn_Click(null, null);
                        Recording(false);
                    }
                    

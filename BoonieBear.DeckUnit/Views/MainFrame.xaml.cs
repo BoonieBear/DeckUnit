@@ -100,6 +100,7 @@ namespace BoonieBear.DeckUnit.Views
         {
             if (NetLinkCheckBox.IsChecked == true && UnitCore.Instance.NetEngine.IsWorking==false)
             {
+                UnitCore.Instance.NetEngine.Initialize();
                 UnitCore.Instance.NetEngine.Start();
             }
             else
@@ -503,7 +504,8 @@ namespace BoonieBear.DeckUnit.Views
             var status = dialog.FindChild<TextBlock>("StatusBlock");
             status.Text = "";
             DownLoadFile = "";
-            Updatefile.Close();
+            if (Updatefile!=null)
+                Updatefile.Close();
             await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"]);
         }
 

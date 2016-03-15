@@ -52,17 +52,23 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
             {
                 case "获取设备状态":
                     ShowComm = true;
+                    ShowRebuild = false;
                     break;
                 case "获取设备数据":
                     ShowComm = true;
+                    ShowRebuild = false;
                     break;
-                case "获取邻接点表":
+                case "获取邻节点表":
+                    ShowComm = false;
                     ShowRebuild = true;
                     break;
                 case "获取网络表":
+                    ShowComm = false;
                     ShowRebuild = true;
                     break;
                 default:
+                    ShowComm = false;
+                    ShowRebuild = false;
                     break;
             }
         }
@@ -161,7 +167,7 @@ namespace BoonieBear.DeckUnit.ViewModels.CommandViewModel
                 case "获取设备数据":
                     result = GetDeviceData();
                     break;
-                case "获取邻接点表":
+                case "获取邻节点表":
                     result = GetNeiborList();
                     break;
                 case "获取网络表":

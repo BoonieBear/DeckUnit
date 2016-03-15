@@ -340,7 +340,7 @@ namespace BoonieBear.DeckUnit.ViewModels
 
         public void ExecuteGoGetNeiborListPage(object sender, ExecutedRoutedEventArgs eventArgs)
         {
-            EventAggregator.PublishMessage(new GoSimplePage("获取邻接点表"));
+            EventAggregator.PublishMessage(new GoSimplePage("获取邻节点表"));
         }
 
         public ICommand GoGetNetListPage

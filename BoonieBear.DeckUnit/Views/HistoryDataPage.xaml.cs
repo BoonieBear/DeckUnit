@@ -34,22 +34,23 @@ namespace BoonieBear.DeckUnit.Views
         private void FilterableListView_SelectionChanged(object sender,
             System.Windows.Controls.SelectionChangedEventArgs e)
         {
+            //UnitCore.Instance.AcnMutex.WaitOne();
             try
             {
-                CommandLog cl = (CommandLog)DataListView.SelectedItem;
+                CommandLog cl = (CommandLog) DataListView.SelectedItem;
                 if (cl == null)
                     return;
                 var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var br = new BinaryReader(fr);
-                UnitCore.Instance.AcnMutex.WaitOne();
-                ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
+                
+                ACNProtocol.GetDataForParse(br.ReadBytes((int) fr.Length));
                 if (ACNProtocol.Parse())
                 {
                     var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     var datatree = new DataTreeModel(tree);
                     MainFrame mf = Application.Current.MainWindow as MainFrame;
-                    if(mf==null)
+                    if (mf == null)
                         return;
                     mf._tree.Model = datatree;
                     MainFrameViewModel.pMainFrame.DataRecvTime = cl.LogTime.ToString();
@@ -58,15 +59,22 @@ namespace BoonieBear.DeckUnit.Views
                 }
                 else
                 {
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
-                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    UnitCore.Instance.EventAggregator.PublishMessage(
+                        new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
                 }
             }
             catch (Exception ex)
             {
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
-                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+                App.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    
+                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+                }));
             }
+           
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
+
         }
 
         private void DataListView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -78,12 +86,12 @@ namespace BoonieBear.DeckUnit.Views
                     return;
                 var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var br = new BinaryReader(fr);
-                UnitCore.Instance.AcnMutex.WaitOne();
+                //UnitCore.Instance.AcnMutex.WaitOne();
                 ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
                 if (ACNProtocol.Parse())
                 {
                     var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     var datatree = new DataTreeModel(tree);
                     MainFrame mf = Application.Current.MainWindow as MainFrame;
                     if(mf==null)
@@ -95,13 +103,13 @@ namespace BoonieBear.DeckUnit.Views
                 }
                 else
                 {
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
                 }
             }
             catch (Exception ex)
             {
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
                 UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
             }
         }
@@ -115,12 +123,12 @@ namespace BoonieBear.DeckUnit.Views
                     return;
                 var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var br = new BinaryReader(fr);
-                UnitCore.Instance.AcnMutex.WaitOne();
+                //UnitCore.Instance.AcnMutex.WaitOne();
                 ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
                 if (ACNProtocol.Parse())
                 {
                     var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     var datatree = new DataTreeModel(tree);
                     MainFrame mf = Application.Current.MainWindow as MainFrame;
                     if (mf == null)
@@ -132,13 +140,13 @@ namespace BoonieBear.DeckUnit.Views
                 }
                 else
                 {
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
                 }
             }
             catch (Exception ex)
             {
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
                 UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
             }
         }
@@ -152,12 +160,12 @@ namespace BoonieBear.DeckUnit.Views
                     return;
                 var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var br = new BinaryReader(fr);
-                UnitCore.Instance.AcnMutex.WaitOne();
+                //UnitCore.Instance.AcnMutex.WaitOne();
                 ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
                 if (ACNProtocol.Parse())
                 {
                     var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     var datatree = new DataTreeModel(tree);
                     MainFrame mf = Application.Current.MainWindow as MainFrame;
                     if (mf == null)
@@ -169,13 +177,13 @@ namespace BoonieBear.DeckUnit.Views
                 }
                 else
                 {
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
                 }
             }
             catch (Exception ex)
             {
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
                 UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
             }
         }

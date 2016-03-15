@@ -49,7 +49,7 @@ namespace BoonieBear.DeckUnit.CommLib.TCP
         private static readonly AutoResetEvent EAutoResetEvent = new AutoResetEvent(false);
         
         private  ReportProgressEvent ReportSendBytes;
-        private const int TimeOut = 20000;
+        private const int TimeOut = 10000;
         private static readonly object Lockobject = new object();
         public ACNTCPStreamCommand(TcpClient tcpClient,Stream stream,ReportProgressEvent sendBytesAction)
         {
