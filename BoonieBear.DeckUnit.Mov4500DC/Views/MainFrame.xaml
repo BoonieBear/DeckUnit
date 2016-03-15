@@ -118,7 +118,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="*"/>
-                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="50"/>
                 </Grid.RowDefinitions>
                 <StackPanel Margin="3,20,5,20" Grid.Row="0">
                     <Image x:Name="companylogo" Width="226" Height="51" Source="/Assets/iacas.jpg" HorizontalAlignment="Left"/>
@@ -154,8 +154,8 @@
                     <ToggleButton x:Name="LogToggle" Background="#696969"
                                   IsChecked ="False"
                                   Content="系统记录"/>
-                    <ScrollViewer Name="scrollbar" VerticalScrollBarVisibility="Auto">
-                    <ListView x:Name="SysLogList" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}" Height="356">
+                    <ScrollViewer Name="scrollbar" VerticalScrollBarVisibility="Auto" Height="356">
+                    <ListView x:Name="SysLogList" Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=LogToggle}" ItemsSource="{Binding MsgLog}">
                         <ListBox.ItemContainerStyle>
                             <Style TargetType="ListBoxItem">
                                 <!-- 设置控件模板 -->

@@ -310,6 +310,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             var cmd = "a " + XMTValue.ToString("F03");
             UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
             LogHelper.WriteLog("发射幅度设置为" + XMTValue.ToString("F03"));
+            var ans = UnitCore.Instance.MovConfigueService.SetXmtAmp(XMTValue);//保存幅度
+            if (ans == false)
+            {
+                EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
+                return;
+            }
         }
 
         private async void ChangeXMTIndex(int index)
@@ -322,6 +328,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 cmd = "opent " + (index + 1).ToString() + " -w";
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("接收换能器设置为" + (index + 1).ToString());
+            }
+            var ans = UnitCore.Instance.MovConfigueService.SetXmtChannel(index + 1);//保存通道
+            if (ans == false)
+            {
+                EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
+                return;
             }
         }
         
@@ -1289,7 +1301,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     if (bp != null)
                     {
                         BpTime = bp.Time;
-                        BpBottom = bp.Down;
+                       // BpBottom = bp.Down;
+                        BpBottom = 101;
                         BpBottomBack = bp.Behinddown;
                         BpFront = bp.Front;
                         BpFrontDown = bp.Frontdown;

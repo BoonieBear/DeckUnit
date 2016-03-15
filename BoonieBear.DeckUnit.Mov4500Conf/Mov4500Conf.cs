@@ -50,6 +50,18 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
             string[] str = { "Setup", "Mode" };
             return SetValue(str,value);
         }
+
+        public MonitorGMode GetGMode()
+        {
+            string[] str = { "Setup", "GMode" };
+            return (MonitorGMode)Enum.Parse(typeof(MonitorGMode), GetValue(str));
+        }
+        public bool SetGMode(MonitorGMode mode)
+        {
+            string value = ((int)mode).ToString();
+            string[] str = { "Setup", "GMode" };
+            return SetValue(str, value);
+        }
         public string GetShipIP()
         {
             string[] str = { "Net", "ShipIP" };

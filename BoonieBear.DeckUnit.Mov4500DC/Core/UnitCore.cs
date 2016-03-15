@@ -101,6 +101,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 _commConf = _mov4500Conf.GetCommConfInfo();
                 _movConfInfo = _mov4500Conf.GetMovConfInfo();
                 WorkMode = (MonitorMode)Enum.Parse(typeof(MonitorMode),_movConfInfo.Mode.ToString());
+                NetLiveService_ACM.RenewNetLiveService_ACM(_commConf, _movConfInfo);
             }
             catch (Exception ex)
             {

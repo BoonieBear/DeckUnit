@@ -78,7 +78,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             if (textBox.Text.Length> 0)
             {
                 UnitCore.Instance.AddFHHandle(textBox.Text);
-                bool ret = UnitCore.Instance.NetCore.Send((int)ModuleType.FH, Encoding.Default.GetBytes(textBox.Text));
+                byte[] newBytes = new byte[8];//跳频固定8字节
+                Buffer.BlockCopy(Encoding.Default.GetBytes(textBox.Text), 0, newBytes, 0, textBox.Text.Length);
+                bool ret = UnitCore.Instance.NetCore.Send((int)ModuleType.FH, newBytes);
                 await
                     MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,
                         newdialog);

@@ -182,13 +182,13 @@ namespace SUSI.Library
         public static extern int SusiIOAvailable();
 
         // Programmable
-        [DllImport("SUSI")]
+        [DllImport("SUSI", CallingConvention = CallingConvention.Cdecl)]
         public unsafe static extern bool SusiIOCountEx(UInt32* inCount, UInt32* outCount);
         [DllImport("SUSI")]
         public unsafe static extern bool SusiIOQueryMask(UInt32 flag, UInt32* Mask);
-        [DllImport("SUSI")]
+        [DllImport("SUSI", CallingConvention = CallingConvention.Cdecl)]
         public unsafe static extern bool SusiIOReadEx(byte PinNum, UInt32* status);
-        [DllImport("SUSI")]
+        [DllImport("SUSI", CallingConvention = CallingConvention.Cdecl)]
         public unsafe static extern bool SusiIOReadMultiEx(UInt32 TargetPinMask, UInt32* StatusMask);
         [DllImport("SUSI")]
         public unsafe static extern bool SusiIOSetDirection(byte PinNum, byte IO, UInt32* PinDirMask);
@@ -204,7 +204,7 @@ namespace SUSI.Library
         public unsafe static extern bool SusiIOCount(UInt16* inCount, UInt16* outCount);
         [DllImport("SUSI")]
         public static extern bool SusiIOInitial(UInt32 statuses);
-        [DllImport("SUSI")]
+        [DllImport("SUSI", CallingConvention = CallingConvention.Cdecl)]
         public unsafe static extern bool SusiIORead(byte pin, bool* status);
         [DllImport("SUSI")]
         public unsafe static extern bool SusiIOReadMulti(UInt32 pins, UInt32* statuses);

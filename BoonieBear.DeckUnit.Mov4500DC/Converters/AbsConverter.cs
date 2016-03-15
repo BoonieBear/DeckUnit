@@ -11,7 +11,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            sbyte a = (sbyte)value;
+            sbyte a = (sbyte)value;//特殊数据-128在球abs前需先赋值
             return Math.Abs((int)a);
         }
 

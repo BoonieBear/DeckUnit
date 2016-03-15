@@ -47,6 +47,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 UWVIpAddr = UnitCore.Instance.MovConfigueService.GetUWVIP();
                 XmtIndex = int.Parse(UnitCore.Instance.MovConfigueService.GetXmtChannel()) - 1;
                 XMTValue = float.Parse(UnitCore.Instance.MovConfigueService.GetXmtAmp());
+                SelectGMode = (int)UnitCore.Instance.MovConfigueService.GetGMode();
                 Gain = int.Parse(UnitCore.Instance.MovConfigueService.GetGain());
             }
             if (UnitCore.Instance.NetCore.IsTCPWorking)
@@ -93,6 +94,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     EventAggregator.PublishMessage(new LogEvent("新的模式需在保存设置后生效！", LogType.OnlyInfo));
                 }
                 SetPropertyValue(() => SelectMode, value);
+            }
+        }
+
+        public int SelectGMode
+        {
+            get { return GetPropertyValue(() => SelectGMode); }
+            set
+            {
+                if (SelectGMode != value && bInitial == true)
+                {
+                    EventAggregator.PublishMessage(new LogEvent("新的模式需在保存设置后生效！", LogType.OnlyInfo));
+                }
+                SetPropertyValue(() => SelectGMode, value);
             }
         }
         public string Version
@@ -238,7 +252,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 await UnitCore.Instance.NetCore.SendConsoleCMD("ver");
-                await TaskEx.Delay(500);
+                await TaskEx.Delay(800);//等待接收DSP反馈的版本信息
                 Version = UnitCore.Instance.Version;
 
             }
@@ -268,6 +282,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         {
             Save();
             UnitCore.Instance.WorkMode = (MonitorMode) Enum.Parse(typeof (MonitorMode), SelectMode.ToString());
+            UnitCore.Instance.LoadConfiguration();
             var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
             dialog.Title = "设置";
             await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
@@ -276,11 +291,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             textBlock.Text = "修改成功！";
             await TaskEx.Delay(1000);
             await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+            
         }
 
         private void Save()
         {
-            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            if (UnitCore.Instance.NetCore.IsTCPWorking)//修改参数前先断开连接
             {
                 if (UnitCore.Instance.LoadConfiguration() == false)
                 {
@@ -343,6 +359,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             var ans = UnitCore.Instance.MovConfigueService.SetXmtChannel(XmtIndex + 1) &&
                   UnitCore.Instance.MovConfigueService.SetXmtAmp(XMTValue) &&
+                  UnitCore.Instance.MovConfigueService.SetGMode((MonitorGMode)Enum.Parse(typeof(MonitorGMode), SelectMode.ToString())) &&
                   UnitCore.Instance.MovConfigueService.SetGain(Gain);
             if (ans == false)
             {

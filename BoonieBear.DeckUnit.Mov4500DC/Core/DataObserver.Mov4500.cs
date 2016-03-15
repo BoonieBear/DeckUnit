@@ -148,6 +148,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                 UnitCore.Instance.NetCore.Send((int) ModuleType.MFSK, fskdata);
                                 UnitCore.Instance.MovTraceService.Save("XMTFSK", fskdata);
                                 return;
+                            case (int)ModuleType.FeedBack:
+                                LogHelper.WriteLog("收到DSP反馈的增益");
+                                UnitCore.Instance.MovConfigueService.SetGain(BitConverter.ToInt16(buffer,0));
+                                return;
                             default:
                                 return;
                         }
@@ -183,7 +187,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         }
                         if (id == (int) ModuleType.FH)
                         {
-                            LogHelper.WriteLog("收到跳频数据:" + Encoding.Default.GetString(buffer));
+                            LogHelper.WriteLog("收到跳频数据:" + Encoding.Default.GetString(buffer).Replace("\0",""));
                             if (ACM4500Protocol.ParseFH(buffer))
                             {
                                 UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(

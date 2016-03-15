@@ -83,6 +83,7 @@
                                   Content="运行参数" FontFamily="Microsoft YaHei"/>
                     <StackPanel Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=SonarConfigButton}" HorizontalAlignment="Center" VerticalAlignment="Center">
                         <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            
                             <TextBlock FontSize="18" VerticalAlignment="Center" Text="默认通道："/>
                             <Controls:MetroComboBox FontSize="16" FontFamily="Microsoft YaHei" SelectedIndex="{Binding XmtIndex}">
                                 <ComboBoxItem Content="1" Background="{x:Null}"/>
@@ -91,20 +92,25 @@
                                 <ComboBoxItem Content="4" Background="{x:Null}"/>
                             </Controls:MetroComboBox>
                         </StackPanel>
-                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                        <StackPanel Orientation="Horizontal" Margin="4,4,0,4">                            
                             <TextBlock FontSize="18" VerticalAlignment="Center" Text="默认幅度："/>
                             <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" Width="200" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" />
                             <TextBlock FontSize="18" VerticalAlignment="Center" Margin="15,4,4,4" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}"/>
                         </StackPanel>
                         <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
+                            <TextBlock FontSize="18" Text="增益模式选择：" VerticalAlignment="Center"/>
+                            <Controls:MetroComboBox FontSize="16" FontFamily="Microsoft YaHei" SelectedIndex="{Binding SelectGMode}" Width="94">
+                                <ComboBoxItem x:Name="comboBoxItemHand" Content="手动模式" Background="{x:Null}"/>
+                                <ComboBoxItem x:Name="comboBoxItemAuto" Content="自动模式" Background="{x:Null}"/>
+                            </Controls:MetroComboBox>
                             <TextBlock FontSize="18" VerticalAlignment="Center" Text="默认增益："/>
                             <MetroControl:NumericUpDown Value="{Binding Gain}" Margin="15,4,4,4" Minimum="0" Maximum="74"/>
                         </StackPanel>
                     </StackPanel>
                     <ToggleButton x:Name="OtherOption" Background="{StaticResource AccentColorBrush2}"
-                                  IsChecked ="False"
+                                  IsChecked ="True"
                                   Content="其他设置" FontFamily="Microsoft YaHei"/>
-                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=OtherOption}">
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center"  Visibility="{Binding IsChecked, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=OtherOption}" Margin="238,0,239,0" >
                         <StackPanel Orientation="Horizontal" Margin="4,4,0,4">
                             <TextBlock  FontSize="18" VerticalAlignment="Center" Text="获取通信机软件版本:"/> 
                             <Button  Style="{StaticResource ChromeButtonStyle}"  Command="{Binding FetchingVersion }" Visibility="{Binding RefreshVisble}" Height="40"  Width="40" VerticalAlignment="Center" Margin="15" RenderTransformOrigin="0.5,0.5">

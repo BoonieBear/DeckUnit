@@ -17,6 +17,7 @@ namespace BoonieBear.DeckUnit.ACMP
             PSKEND = 0xed02,//不会接收到
             SSBEND = 0xed04,//不会接收到
             Req = 0xdada,
+            FeedBack=0xdaa1,//DSP反馈的增益
             SSBNULL = 0xdaa4//发射时上传的空包，用于填充语音的空白处
         }
 
@@ -25,6 +26,13 @@ namespace BoonieBear.DeckUnit.ACMP
         SHIP = 0,
         SUBMARINE = 1,
     }
+
+    public enum MonitorGMode
+    {
+        HAND = 0,
+        AUTO = 1,
+    }
+
     //潜器中交换数据，只用于udp
     public enum ExchageType
     {
@@ -342,10 +350,10 @@ namespace BoonieBear.DeckUnit.ACMP
             get
             {
                 if (_subLong >= 0)
-                    return (_subLong / 60).ToString() + "°" + (_subLong % 60).ToString() + "'" + " N";
+                    return (_subLong / 60).ToString() + "°" + (_subLong % 60).ToString() + "'" + " E";
                 else
                 {
-                    return (-_subLong / 60).ToString() + "°" + (-_subLong % 60).ToString() + "'" + " S";
+                    return (-_subLong / 60).ToString() + "°" + (-_subLong % 60).ToString() + "'" + " W";
                 }
             }
         }
@@ -675,7 +683,7 @@ namespace BoonieBear.DeckUnit.ACMP
 
         public float Subheight
         {
-            get { return (float)_subheight*256/65535; }
+            get { return (float)_subheight*256/65536; }
         }
     
         //前两个字节ID，parse完后数据存在成员里，属性表示真正的含义

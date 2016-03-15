@@ -46,6 +46,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         [DllImport("user32.dll")]
         private extern static bool SwapMouseButton(bool fSwap);
         #region 变量区域
+		bool VoiceBar_MouseLeftButton = false;//记录界面是否在录音
+        bool VoiceBarIsable = true;
         GPIOService GPIO = new GPIOService();
         private bool _isPressed = false;
         private Point _sourcePoint;
@@ -82,23 +84,28 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
                if(UnitCore.Instance.NetCore.IsTCPWorking)
                {
-                   GPIO.IORead();
-                   if ((GPIO.StatusMask & 0x00000002) == 2)//GPIO口接的是第二个，未录音时状态是0b11111101
+                   if (VoiceBar_MouseLeftButton==false)//界面不在录音
                    {
-                       if (!isRecording)
+                       GPIO.IORead();
+                       if ((GPIO.StatusMask & 0x00000002) == 2)//GPIO口接的是第二个，未录音时状态是0b11111101
                        {
-                           Recording(true);
+                           if (!isRecording)
+                           {
+                               Recording(true);
+                           }
+
+                       }
+                       else
+                       {
+                           if (isRecording)
+                           {
+                               Recording(false);
+                           }
+
                        }
 
                    }
-                   else
-                   {
-                       if (isRecording)
-                       {
-                           Recording(false);
-                       }
-
-                   }
+                   
 
                }
                else
@@ -123,15 +130,31 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private void RecHandle(byte[] bufBytes)
         {
-            
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 UnitCore.Instance.MovTraceService.Save("XMTVOICE", bufBytes);
-                if(isRecording)
-                    UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);
-                //WaveControl.Display(bufBytes);
-                VoiceBar.Value = UpdateVolumn(bufBytes);
-            }) );
+                try
+                {
+                    if (isRecording)
+                    {
+                        if (UnitCore.Instance.NetCore.IsTCPWorking)
+                        {
+                            UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);
+                        }
+                        VoiceBar.Value = UpdateVolumn(bufBytes);
+                    }
+                                                
+                    //WaveControl.Display(bufBytes);
+                    
+                }
+                catch (Exception ex)
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
+                }
+                
+            }));
+            
+            
         }
         /// <summary>
         /// 计算音量，输出离散化
@@ -172,6 +195,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+
+            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+            {
+                LiveTitle.TitleImageSource = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png");
+                var LastComboItem = EmitSelBox.Items[3] as ComboBoxItem;
+                LastComboItem.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                LiveTitle.TitleImageSource = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png");
+                var LastComboItem = EmitSelBox.Items[3] as ComboBoxItem;
+                LastComboItem.Visibility = Visibility.Hidden;
+            }
             try
             {
                 if (ShipD.Content == null)
@@ -196,6 +232,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 
             }
             SwapMouseButton(false);
+
+            
+
             await TryConnnect();
             if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
@@ -218,21 +257,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                     dispatcher);
             ImgWatcher.Start();
             if(GPIOWatcher==null)
-                GPIOWatcher = new DispatcherTimer(TimeSpan.FromSeconds(200), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
+                GPIOWatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(250), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
             GPIOWatcher.Start();
 
-            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
-            {
-                    LiveTitle.TitleImageSource = ResourcesHelper.LoadBitmapFromResource("Assets\\shipsnapshot.png");
-                    var LastComboItem = EmitSelBox.Items[3] as ComboBoxItem;
-                    LastComboItem.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                LiveTitle.TitleImageSource = ResourcesHelper.LoadBitmapFromResource("Assets\\Logo_nbg.png");
-                var LastComboItem = EmitSelBox.Items[3] as ComboBoxItem;
-                LastComboItem.Visibility = Visibility.Hidden;
-            }
+
             
         }
 
@@ -387,9 +415,22 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("发射幅度设置为" + amp);
                 await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
-                cmd = "g " + gain;
-                await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
-                LogHelper.WriteLog("接收增益设置为" + gain);
+                if (UnitCore.Instance.MovConfigueService.GetGMode() == MonitorGMode.HAND)
+                {
+                    cmd = "gm 1";
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    cmd = "gm "+gain;
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    LogHelper.WriteLog("接收增益设置为" + gain);
+                }
+                else
+                {
+                    cmd = "gm 2";
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    LogHelper.WriteLog("接收增益设置为自动增益模式");
+
+                }
+                
                 await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
                 DateTime dt = DateTime.Now;
                 cmd = "date " + dt.Year.ToString("D4") + " " + dt.Month.ToString("D2") + " " + dt.Day.ToString("D2") +
@@ -492,6 +533,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             chartmsg.TextAlignment = TextAlignment.Left;
             chartmsg.LineHeight = 24;
             MessageDocument.Blocks.Add(chartmsg);
+            MessageRichTextBox.ScrollToEnd();
             if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
             {
                 UnitCore.Instance.MovTraceService.Save("FH", "（母船）" + msg);
@@ -514,6 +556,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             chartmsg.TextAlignment = TextAlignment.Left;
             chartmsg.LineHeight = 24;
             MessageDocument.Blocks.Add(chartmsg);
+            MessageRichTextBox.ScrollToEnd();
             UnitCore.Instance.MovTraceService.Save("Chart",  "(" + "水声摩斯码" + ")" + msg);
 
         }
@@ -527,6 +570,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             p.TextAlignment = TextAlignment.Left;
             //vew.HorizontalAlignment = HorizontalAlignment.Left;
             MessageDocument.Blocks.Add(p);
+            MessageRichTextBox.ScrollToEnd();
             UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-MPSK）" + img.Source);
         }
         //将收到的信息填入chartbox中，靠右对齐
@@ -537,7 +581,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             if (type == ModuleType.MFSK)
             {
                 if(msg==null)
+                {
+                    MessageRichTextBox.ScrollToEnd();
                     return;
+                }               
                 run = new Run(msg);
                 run.FontSize = 22;
                 var chartmsg = new Paragraph(run);
@@ -663,52 +710,97 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private void VoiceBar_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            Recording(true);
+           // if (VoiceBarIsable==true)
+           // {
+                VoiceBar_MouseLeftButton = true;//按钮按下后，界面获取主动权
+
+                if (!isRecording)
+                {
+                    Recording(true);
+                }
+                else
+                {
+                    return;
+                }
+           // }
+            
+
+            
         }
         
         private void Recording(bool start = true)
         {
-            if (start)
+            try
             {
-                LogHelper.WriteLog("开始录音");
-                if (UnitCore.Instance.NetCore.IsTCPWorking)
+                if (start)
                 {
-                    UnitCore.Instance.NetCore.SendSSBNon();
-                    UnitCore.Instance.NetCore.Send((int) ModuleType.SSB, UnitCore.Instance.Single);
-                    LogHelper.WriteLog("开始发送语音");
+                    LogHelper.WriteLog("开始录音");
+                    if (UnitCore.Instance.NetCore.IsTCPWorking)
+                    {
+                        UnitCore.Instance.NetCore.SendSSBNon();
+                        UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Single);
+                        LogHelper.WriteLog("开始发送语音");
+                        isRecording = true;
+                        WaveControl.StartRecording();
+                        SSBToolTip.Content = "正在发送语音";
+                    }
+
                 }
-                isRecording = true;
-                WaveControl.StartRecording();
-                SSBToolTip.Content = "正在发送语音";
-                
-                
-                
+                else
+                {
+                    if (isRecording)
+                    {
+                       // VoiceBarIsable = false;
+                        VoiceBar.IsEnabled = false;
+                        WaveControl.StopRecoding();
+                        isRecording = false;//此处给出停止录音标志，语音线程停止发送，之后再发END包
+                        if (UnitCore.Instance.NetCore.IsTCPWorking)
+                        {
+                            UnitCore.Instance.NetCore.SendSSBEND();
+                            LogHelper.WriteLog("结束录音");
+                            UnitCore.Instance.MovTraceService.EndSave("XMTVOICE");
+                            LogHelper.WriteLog("结束语音发送");
+
+                        }
+                        VoiceBarDealy();//留出一段时间给DSP处理单频
+                        
+                        
+                    }
+
+                }
+                VoiceBar.Value = 0;
+
             }
-            else
+            catch (Exception ex)
             {
-                if (isRecording)
-                {
-                    WaveControl.StopRecoding();
-                    isRecording = false;
-                    UnitCore.Instance.NetCore.SendSSBEND();
-                    LogHelper.WriteLog("结束录音");
-                    SSBToolTip.Content = "按住说话";
-                    UnitCore.Instance.MovTraceService.EndSave("XMTVOICE");
-                    LogHelper.WriteLog("结束语音发送");
-                    VoiceBar.IsEnabled = false;
-                    Thread.Sleep(500);
-                    VoiceBar.IsEnabled = true;
-                }
-                
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
             }
-            VoiceBar.Value = 0;
             
+            
+        }
+
+        private async Task VoiceBarDealy()
+        {
+            await TaskEx.Delay(500);
+          //  VoiceBarIsable = true;
+            VoiceBar.IsEnabled = true;
+            VoiceBar_MouseLeftButton = false;//界面停止录音后再交出主动权
+            SSBToolTip.Content = "按住说话";
+
+
         }
 
         private void VoiceBar_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-
-            Recording(false);
+           // if (VoiceBarIsable==true)
+          //  {
+                if (isRecording)
+                {
+                    Recording(false);
+                }
+                
+          //  }
+            
             
         }
         //和释放动作效果一样

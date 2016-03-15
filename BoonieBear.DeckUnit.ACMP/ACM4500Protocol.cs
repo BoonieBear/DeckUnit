@@ -360,6 +360,7 @@ namespace BoonieBear.DeckUnit.ACMP
         public static bool ParseFH(byte[] pkg)
         {
             string msg = Encoding.Default.GetString(pkg);
+            msg=msg.Replace("\0","");
             Results.Clear();
             Results.Add(MovDataType.WORD, msg);
             return true;

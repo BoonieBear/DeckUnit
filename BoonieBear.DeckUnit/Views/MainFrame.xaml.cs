@@ -501,7 +501,7 @@ namespace BoonieBear.DeckUnit.Views
             statusbar.Value = 0;
             statusbar.Visibility = Visibility.Collapsed;
             var status = dialog.FindChild<TextBlock>("StatusBlock");
-            status = "";
+            status.Text = "";
             DownLoadFile = "";
             Updatefile.Close();
             await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["DownloadDialog"]);

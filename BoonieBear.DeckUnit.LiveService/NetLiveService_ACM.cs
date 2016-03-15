@@ -35,8 +35,8 @@ namespace BoonieBear.DeckUnit.LiveService
         private IUDPService _uwaService;
         private IUDPService _usblService;
 
-        private CommConfInfo _commConf;
-        private MovConfInfo _mocConf;
+        private static CommConfInfo _commConf;
+        private static MovConfInfo _mocConf;
         private Observer<CustomEventArgs> _DataObserver;
         private int PkgLimit = 1456;
 
@@ -88,7 +88,11 @@ namespace BoonieBear.DeckUnit.LiveService
             _DataObserver = observer;
         }
 
-
+        public static void  RenewNetLiveService_ACM(CommConfInfo conf, MovConfInfo movconf)
+        {
+            _commConf = conf;
+            _mocConf = movconf;
+        }
 
         public ITCPClientService TCPDataService
         {
