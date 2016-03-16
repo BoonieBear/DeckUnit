@@ -462,6 +462,21 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             set { SetPropertyValue(() => MovRoll, value); }
         }
 
+        public float MovHeaveVelocity
+        {
+            get { return GetPropertyValue(() => MovHeaveVelocity); }
+            set { SetPropertyValue(() => MovHeaveVelocity, value); }
+        }
+        public float MovPitVelocity
+        {
+            get { return GetPropertyValue(() => MovPitVelocity); }
+            set { SetPropertyValue(() => MovPitVelocity, value); }
+        }
+        public float MovRollVelocity
+        {
+            get { return GetPropertyValue(() => MovRollVelocity); }
+            set { SetPropertyValue(() => MovRollVelocity, value); }
+        }
         public float MovHeight
         {
             get { return GetPropertyValue(() => MovHeight); }
@@ -921,7 +936,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var adcp = message.Data[MovDataType.ADCP] as Adcpdata;
                     if (adcp != null)
                     {
-                        ADCPTime = adcp.Time;
+                        ADCPTime = DateTime.Now.ToLongTimeString();
                         xVel.Clear();
                         yVel.Clear();
                         zVel.Clear();
@@ -943,7 +958,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var alt = message.Data[MovDataType.ALERT] as Alertdata;
                     if (alt != null)
                     {
-                        AlarmTime = alt.Time;
+                        AlarmTime = DateTime.Now.ToLongTimeString();
                         Leak = alt.Leak;
                         Cable = alt.Cable;
                         AlertTemp = alt.Temperature;
@@ -976,7 +991,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var allpos = message.Data[MovDataType.ALLPOST] as Sysposition;
                     if (allpos != null)
                     {
-                        PosFromUSBLTime = allpos.Time;
+                        PosFromUSBLTime = DateTime.Now.ToLongTimeString();
                         
                         ShipLongUsbl = allpos.ShipLong;
                         ShipLatUsbl = allpos.ShipLat;
@@ -1008,7 +1023,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var bp = message.Data[MovDataType.BP] as Bpdata;
                     if (bp != null)
                     {
-                        BpTime = bp.Time;
+                        BpTime = DateTime.Now.ToLongTimeString();
                         BpBottom = bp.Down;
                         BpBottomBack = bp.Behinddown;
                         BpFront = bp.Front;
@@ -1045,7 +1060,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var ctd = message.Data[MovDataType.CTD] as Ctddata;
                     if (ctd != null)
                     {
-                        CTDTime = ctd.Time;
+                        CTDTime = DateTime.Now.ToLongTimeString();
                         CTDSoundvec = ctd.Soundvec;
                         CTDDepth = ctd.Depth;
                         CTDWaterTemp = ctd.Watertemp;
@@ -1067,7 +1082,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var eng = message.Data[MovDataType.ENERGY] as Energysys;
                     if (eng != null)
                     {
-                        EnergyTime = eng.Time;
+                        EnergyTime = DateTime.Now.ToLongTimeString();
                         HeadmainV = eng.HeadmainV;
                         HeadmainI = eng.HeadmainI;
                         Headmainconsume = eng.Headmainconsume;
@@ -1121,7 +1136,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var life = message.Data[MovDataType.LIFESUPPLY] as Lifesupply;
                     if (life != null)
                     {
-                        LifeTime = life.Time;
+                        LifeTime = DateTime.Now.ToLongTimeString();
                         
                         Oxygen = life.Oxygen;
                         Co2 = life.Co2;
@@ -1147,7 +1162,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var subpos = message.Data[MovDataType.SUBPOST] as Subposition;
                     if (subpos != null)
                     {
-                        PosFromUwvTime = subpos.Time;
+                        PosFromUwvTime = DateTime.Now.ToLongTimeString();
                         
                         MovDepth = subpos.Subdepth;
                         MovLat = subpos.SubLat;
@@ -1156,6 +1171,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovHeight = subpos.Subheight;
                         MovPitch = subpos.Subpitch;
                         MovRoll = subpos.Subroll;
+                        MovHeaveVelocity = subpos.SubHV;
+                        MovPitVelocity = subpos.SubPitV;
+                        MovRollVelocity = subpos.SubRollV;
                         SubPositionCollection.Add(subpos);
                         if (SubPositionCollection.Count > 10)
                             SubPositionCollection.RemoveAt(0);
@@ -1221,7 +1239,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 var allpos = message.Position as Sysposition;
                 if (allpos != null)
                 {
-                    PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToShortTimeString();
+                    PosFromUSBLTime = DateTime.Now.ToLongTimeString();
                     ShipLongUsbl = allpos.ShipLong;
                     ShipLatUsbl = allpos.ShipLat;
                     ShipHeading = allpos.Shipheading;
@@ -1250,7 +1268,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var adcp = message.SailData as Adcpdata;
                     if (adcp != null)
                     {
-                        ADCPTime = adcp.Time;
+                        ADCPTime = DateTime.Now.ToLongTimeString();
                         xVel.Clear();
                         yVel.Clear();
                         zVel.Clear();
@@ -1272,7 +1290,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var alt = message.SailData as Alertdata;
                     if (alt != null)
                     {
-                        AlarmTime = alt.Time;
+                        AlarmTime = DateTime.Now.ToLongTimeString();
                         Leak = alt.Leak;
                         Cable = alt.Cable;
                         AlertTemp = alt.Temperature;
@@ -1299,7 +1317,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var bp = message.SailData as Bpdata;
                     if (bp != null)
                     {
-                        BpTime = bp.Time;
+                        BpTime = DateTime.Now.ToLongTimeString();
                        // BpBottom = bp.Down;
                         BpBottom = 101;
                         BpBottomBack = bp.Behinddown;
@@ -1319,7 +1337,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var ctd = message.SailData as Ctddata;
                     if (ctd != null)
                     {
-                        CTDTime = ctd.Time;
+                        CTDTime = DateTime.Now.ToLongTimeString();
                         CTDSoundvec = ctd.Soundvec;
                         CTDDepth = ctd.Depth;
                         CTDWaterTemp = ctd.Watertemp;
@@ -1335,7 +1353,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var eng = message.SailData as Energysys;
                     if (eng != null)
                     {
-                        EnergyTime = eng.Time;
+                        EnergyTime = DateTime.Now.ToLongTimeString();
                         HeadmainV = eng.HeadmainV;
                         HeadmainI = eng.HeadmainI;
                         Headmainconsume = eng.Headmainconsume;
@@ -1368,7 +1386,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var life = message.SailData as Lifesupply;
                     if (life != null)
                     {
-                        LifeTime = life.Time;
+                        LifeTime = DateTime.Now.ToLongTimeString();
                         
                         Oxygen = life.Oxygen;
                         Co2 = life.Co2;
@@ -1387,7 +1405,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var subpos = message.SailData as Subposition;
                     if (subpos != null)
                     {
-                        PosFromUwvTime = subpos.Time;
+                        //PosFromUwvTime = subpos.Time;
                         
                         MovDepth = subpos.Subdepth;
                         MovLat = subpos.SubLat;

@@ -251,7 +251,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         var pos = new Sysposition();
                         if (usblParser.Parse(Encoding.ASCII.GetString(buffer)))
                         {
-                            pos._ltime = usblParser.Time;
+                            //pos._ltime = usblParser.Time;
                             pos._relateX = usblParser.X;
                             pos._relateY = usblParser.Y;
                             pos._relateZ = usblParser.Z;
