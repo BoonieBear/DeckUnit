@@ -24,7 +24,7 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
         {
             get
             {
-                if (_adFile.FileLen>0)
+                if (_adFile!=null)
                 {
                     return _adFile.FileName;
                 }

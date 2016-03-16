@@ -7,11 +7,13 @@
       xmlns:picker="clr-namespace:TinyMetroWpfLibrary.FrameControls.Picker;assembly=TinyMetroWpfLibrary"
       xmlns:Controls="clr-namespace:TinyMetroWpfLibrary.Controls;assembly=TinyMetroWpfLibrary.Controls"
       xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity" 
+      xmlns:wfi ="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+      xmlns:wf ="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=SetDateTimeViewModel}"
       mc:Ignorable="d" 
       KeepAlive="True"
 	 d:DesignHeight="480" d:DesignWidth="640"
-	Title="SimpleView" x:Name="SimplePage">
+	Title="SimpleView" x:Name="SimplePage" Loaded="SimplePage_Loaded">
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
@@ -28,25 +30,22 @@
                     <ImageBrush ImageSource="/Assets/left.png" Stretch="Uniform" />
                 </Button.Background>
             </Button>
-            <TextBlock  Text="{Binding Title}" VerticalAlignment="Center" FontSize="34px"/>
+            <TextBlock  x:Name ="TitleBox" Text="{Binding Title}" VerticalAlignment="Center" FontSize="34px"/>
         </StackPanel>
         <Grid Grid.Row="1">
-            <StackPanel  Orientation="Horizontal" VerticalAlignment="Center">
+            <StackPanel  Orientation="Horizontal" VerticalAlignment="Bottom">
                 
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Foreground ="DarkBlue" Text="设定时间："  FontSize="36" Margin="60,0,0,0" />
-                    <DatePicker 
-            SelectedDate="{Binding SelectedDate, Mode=TwoWay}" Width="150"/>
-                    <picker:TimePicker 
-            FullModeHeader="选择时间"
-            IsTouchSelectionEnabled="True"
-            Value="{Binding SelectedTime, Mode=TwoWay}" Width="100" Margin="10,0,0,0"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
+                    <TextBlock Foreground ="DarkBlue" Text="设定时间："  FontSize="36" Margin="60,00,0,0" />
+                    <wfi:WindowsFormsHost Width="280" Height="60" FontSize="18">
+                        <wf:DateTimePicker x:Name="StartTime"  Format="Custom" ShowUpDown="True" CustomFormat="yyyy年MM月dd日 HH:mm:ss"/>
+                    </wfi:WindowsFormsHost>
                 </StackPanel>
                 
             </StackPanel>
         </Grid>
-        <ProgressBar Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+        <ProgressBar x:Name ="ProgressBar"  Grid.Row ="1" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom"/>
-        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="设置" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="18"/>
+        <Button Background ="{StaticResource GrayBrush2}" Grid.Row ="2" Style="{StaticResource SquareButtonStyle}" Content="设置" FontFamily="SimSun" FontSize="18" Click="Button_Click"/>
     </Grid>
 </Page>

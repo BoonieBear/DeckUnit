@@ -223,14 +223,16 @@ namespace BoonieBear.DeckUnit.Views
                 CommandLog cl = (CommandLog)DataListView.SelectedItem;
                 if (cl == null)
                     return;
+                if (cl.FilePath == null)
+                    return;
                 var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var br = new BinaryReader(fr);
-                UnitCore.Instance.AcnMutex.WaitOne();
+                //UnitCore.Instance.AcnMutex.WaitOne();
                 ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
                 if (ACNProtocol.Parse())
                 {
                     var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     var datatree = new DataTreeModel(tree);
                     this._tree.Model = datatree;
                     MainFrameViewModel.pMainFrame.DataRecvTime = cl.LogTime.ToString();
@@ -239,13 +241,13 @@ namespace BoonieBear.DeckUnit.Views
                 }
                 else
                 {
-                    UnitCore.Instance.AcnMutex.ReleaseMutex();
+                    //UnitCore.Instance.AcnMutex.ReleaseMutex();
                     UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(new Exception(ACNProtocol.Errormessage), LogType.Both));
                 }
             }
             catch (Exception ex)
             {
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
                 UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
             }
             
@@ -413,6 +415,16 @@ namespace BoonieBear.DeckUnit.Views
 
         private async void SendFileBtn(object sender, System.Windows.RoutedEventArgs e)
         {
+            var md = new MetroDialogSettings();
+            md.AffirmativeButtonText = "确定";
+            if (DownLoadFile == "" || Updatefile==null)
+            {    await
+                    MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,
+                        "错误",
+                       "请选择一个下载文件", MessageDialogStyle.Affirmative, md);
+                return;
+            }
+
             var mySettings = new MetroDialogSettings()
             {
                 AffirmativeButtonText = "确定",

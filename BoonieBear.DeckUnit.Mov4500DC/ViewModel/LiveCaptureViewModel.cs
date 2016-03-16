@@ -84,7 +84,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         private void AlertdataCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-
             base.OnPropertyChanged(() => AlertdataCollection);
         }
 
@@ -935,7 +934,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BottomTrack = (float) adcp.BottomTrack;
                         ADCPHeight = (float) adcp.Height;
                         AdcpdataCollection.Add(adcp);
-                        if (AdcpdataCollection.Count > 600)
+                        if (AdcpdataCollection.Count > 10)
                             AdcpdataCollection.RemoveAt(0);
                     }
                 }
@@ -960,7 +959,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             i++;
                         }
                         AlertdataCollection.Add(alt);
-                        if (AlertdataCollection.Count > 600)
+                        if (AlertdataCollection.Count > 10)
                             AlertdataCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
@@ -993,7 +992,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         ZDistance = allpos.RelateZ;
                         Transfromxyz(XDistance, YDistance, ZDistance);
                         UsblPositionCollection.Add(allpos);
-                        if (UsblPositionCollection.Count > 600)
+                        if (UsblPositionCollection.Count > 10)
                             UsblPositionCollection.RemoveAt(0);
                         //广播
                         //UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
@@ -1018,7 +1017,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BpLeft = bp.Left;
                         BpRight = bp.Right;
                         BpCollection.Add(bp);
-                        if (BpCollection.Count > 600)
+                        if (BpCollection.Count > 10)
                             BpCollection.RemoveAt(0);
                         //广播
                         //byte[] posBytes = new byte[18];
@@ -1052,7 +1051,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         CTDWaterTemp = ctd.Watertemp;
                         CTDWatercond = ctd.Watercond;
                         CTDCollection.Add(ctd);
-                        if (CTDCollection.Count > 600)
+                        if (CTDCollection.Count > 10)
                             CTDCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
@@ -1090,7 +1089,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         RightsubMaxTemp = eng.RightsubMaxTemp;
                         RightsubMaxExpand = eng.RightsubMaxExpand;
                         EnergysysCollection.Add(eng);
-                        if (EnergysysCollection.Count > 600)
+                        if (EnergysysCollection.Count > 10)
                             EnergysysCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
@@ -1130,7 +1129,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         Temperature = life.Temperature;
                         Humidity = life.Humidity;
                         LifesupplyCollection.Add(life);
-                        if (LifesupplyCollection.Count > 600)
+                        if (LifesupplyCollection.Count > 10)
                             LifesupplyCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
@@ -1158,7 +1157,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovPitch = subpos.Subpitch;
                         MovRoll = subpos.Subroll;
                         SubPositionCollection.Add(subpos);
-                        if (SubPositionCollection.Count > 600)
+                        if (SubPositionCollection.Count > 10)
                             SubPositionCollection.RemoveAt(0);
                         //广播
                         UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
@@ -1264,7 +1263,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BottomTrack = (float) adcp.BottomTrack;
                         ADCPHeight = (float) adcp.Height;
                         AdcpdataCollection.Add(adcp);
-                        if (AdcpdataCollection.Count > 600)
+                        if (AdcpdataCollection.Count > 10)
                             AdcpdataCollection.RemoveAt(0);
                     }
                 }
@@ -1289,7 +1288,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             i++;
                         }
                         AlertdataCollection.Add(alt);
-                        if (AlertdataCollection.Count > 600)
+                        if (AlertdataCollection.Count > 10)
                             AlertdataCollection.RemoveAt(0);
                         
                     }
@@ -1310,7 +1309,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         BpLeft = bp.Left;
                         BpRight = bp.Right;
                         BpCollection.Add(bp);
-                        if (BpCollection.Count > 600)
+                        if (BpCollection.Count > 10)
                             BpCollection.RemoveAt(0);
                     }
                 }
@@ -1326,7 +1325,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         CTDWaterTemp = ctd.Watertemp;
                         CTDWatercond = ctd.Watercond;
                         CTDCollection.Add(ctd);
-                        if (CTDCollection.Count > 600)
+                        if (CTDCollection.Count > 10)
                             CTDCollection.RemoveAt(0);
                         
                     }
@@ -1358,7 +1357,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         RightsubMaxTemp = eng.RightsubMaxTemp;
                         RightsubMaxExpand = eng.RightsubMaxExpand;
                         EnergysysCollection.Add(eng);
-                        if (EnergysysCollection.Count > 600)
+                        if (EnergysysCollection.Count > 10)
                             EnergysysCollection.RemoveAt(0);
                         
                     }
@@ -1377,7 +1376,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         Temperature = life.Temperature;
                         Humidity = life.Humidity;
                         LifesupplyCollection.Add(life);
-                        if (LifesupplyCollection.Count > 600)
+                        if (LifesupplyCollection.Count > 10)
                             LifesupplyCollection.RemoveAt(0);
                         
                     }
@@ -1398,7 +1397,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovPitch = subpos.Subpitch;
                         MovRoll = subpos.Subroll;
                         SubPositionCollection.Add(subpos);
-                        if (SubPositionCollection.Count > 600)
+                        if (SubPositionCollection.Count > 10)
                             SubPositionCollection.RemoveAt(0);
                     }
                 }

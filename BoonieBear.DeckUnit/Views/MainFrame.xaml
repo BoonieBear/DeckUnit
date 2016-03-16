@@ -110,7 +110,7 @@
                     </StackPanel>
                     <metroControl:MetroProgressBar x:Name="Percentbar" Visibility="Collapsed"/>
                     <UniformGrid>
-                        <Button IsEnabled="False" x:Name="DownLoadBtn" Style="{DynamicResource SquareButtonStyle}"
+                        <Button x:Name="DownLoadBtn" Style="{DynamicResource SquareButtonStyle}"
 							Margin="5"
 							Content="下载" Click="SendFileBtn" />
                         <Button x:Name="CancelBtn"  Style="{DynamicResource SquareButtonStyle}"
