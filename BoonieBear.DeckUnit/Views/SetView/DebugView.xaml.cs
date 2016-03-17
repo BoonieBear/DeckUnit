@@ -89,70 +89,174 @@ namespace BoonieBear.DeckUnit.Views.SetView
             }
         }
 
-        private async void DSPPowerOn_Checked(object sender, RoutedEventArgs e)
+
+
+        private async void DSPOn_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as DebugViewModel;
-            if (vm != null)
-                vm.IsProcessing = true;
-            var cmd = MSPHexBuilder.Pack244();
-            await UnitCore.Instance.CommEngine.SendCMD(cmd);
-            if (vm != null)
-                vm.IsProcessing = false;
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定要给DSP上电？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack244();
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
         }
 
-        private async void DSPPowerOff_Unchecked(object sender, RoutedEventArgs e)
+        private async void DSPOff_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as DebugViewModel;
-            if (vm != null)
-                vm.IsProcessing = true;
-            var cmd = MSPHexBuilder.Pack245();
-            await UnitCore.Instance.CommEngine.SendCMD(cmd);
-            if (vm != null)
-                vm.IsProcessing = false;
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定要给DSP断电？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack245();
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
         }
 
-        private async void WatchDog_Checked(object sender, RoutedEventArgs e)
+        private async void WatchDogOn_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as DebugViewModel;
-            if (vm != null)
-                vm.IsProcessing = true;
-            var cmd = MSPHexBuilder.Pack246(true);
-            await UnitCore.Instance.CommEngine.SendCMD(cmd);
-            if (vm != null)
-                vm.IsProcessing = false;
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定要打开看门狗？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack246(true);
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
         }
 
-        private async void WatchDog_Unchecked(object sender, RoutedEventArgs e)
+        private async void WatchDogOff_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as DebugViewModel;
-            if (vm != null)
-                vm.IsProcessing = true;
-            var cmd = MSPHexBuilder.Pack246(false);
-            await UnitCore.Instance.CommEngine.SendCMD(cmd);
-            if (vm != null)
-                vm.IsProcessing = false;
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定要关闭看门狗？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack246(false);
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
         }
 
-        private async void Debug_Checked(object sender, RoutedEventArgs e)
+        private async void DebugOn_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as DebugViewModel;
-            if (vm != null)
-                vm.IsProcessing = true;
-            var cmd = MSPHexBuilder.Pack250(true);
-            await UnitCore.Instance.CommEngine.SendCMD(cmd);
-            if (vm != null)
-                vm.IsProcessing = false;
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定要打开调试模式？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack250(true);
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
         }
 
-        private async void Debug_Unchecked(object sender, RoutedEventArgs e)
+        private async void DebugOff_Click(object sender, RoutedEventArgs e)
         {
-            var vm = this.DataContext as DebugViewModel;
-            if (vm != null)
-                vm.IsProcessing = true;
-            var cmd = MSPHexBuilder.Pack250(false);
-            await UnitCore.Instance.CommEngine.SendCMD(cmd);
-            if (vm != null)
-                vm.IsProcessing = false;
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定要关闭调试模式？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack250(false);
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
         }
     }
 }

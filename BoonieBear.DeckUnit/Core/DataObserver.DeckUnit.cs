@@ -172,7 +172,7 @@ namespace BoonieBear.DeckUnit.Core
 
         private void ParseData(byte[] bytes)
         {
-            UnitCore.Instance.AcnMutex.WaitOne();
+            //UnitCore.Instance.AcnMutex.WaitOne();
             ACNProtocol.GetDataForParse(bytes);
             try
             {
@@ -206,11 +206,11 @@ namespace BoonieBear.DeckUnit.Core
                     MainFrameViewModel.pMainFrame.DataRecvTime = savedata.LogTime.ToString();
                     
                 }
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
             }
             catch (Exception ex)
             {
-                UnitCore.Instance.AcnMutex.ReleaseMutex();
+                //UnitCore.Instance.AcnMutex.ReleaseMutex();
                 UnitCore.Instance.EventAggregator.PublishMessage(new StatusNotify("数据解析", ex.Message, NotifyLevel.Warning));
             }
  

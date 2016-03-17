@@ -61,6 +61,8 @@ namespace BoonieBear.DeckUnit.Views
             }
             else
             {
+                if (UnitCore.GetInstance().NetEngine.IsInitialize)
+                    UnitCore.GetInstance().NetEngine.IsInitialize = false;
                 NetLinkCheckBox.IsChecked = false;
             }
         }
@@ -100,6 +102,13 @@ namespace BoonieBear.DeckUnit.Views
         {
             if (NetLinkCheckBox.IsChecked == true && UnitCore.Instance.NetEngine.IsWorking==false)
             {
+                if (UnitCore.Instance.CommEngine!=null && UnitCore.Instance.CommEngine.IsWorking)
+                {
+                    var cmd = MSPHexBuilder.Pack250(true);
+
+                    UnitCore.Instance.CommEngine.SendCMD(cmd); //进入调试模式，开启网络
+                    TaskEx.Delay(1000);
+                }
                 UnitCore.Instance.NetEngine.Initialize();
                 UnitCore.Instance.NetEngine.Start();
             }
@@ -269,17 +278,7 @@ namespace BoonieBear.DeckUnit.Views
                 UnitCore.Instance.NetEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
-                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
-                dialog.Title = "设备命令";
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
-                    dialog);
-
-                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
-                textBlock.Text = "发送成功！";
-
-                await TaskEx.Delay(2000);
-
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,dialog);
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("配置AD门限命令已发送", LogType.Both));
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, newdialog);
             }
         }
@@ -305,17 +304,7 @@ namespace BoonieBear.DeckUnit.Views
                 UnitCore.Instance.NetEngine.Error,MessageDialogStyle.Affirmative,md);
             else
             {
-                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
-                dialog.Title = "设备命令";
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
-                    dialog);
-
-                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
-                textBlock.Text = "发送成功！";
-
-                await TaskEx.Delay(2000);
-
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("唤醒命令已发送", LogType.Both));
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, newdialog);
             }
         }
@@ -387,17 +376,8 @@ namespace BoonieBear.DeckUnit.Views
                 UnitCore.Instance.NetEngine.Error, MessageDialogStyle.Affirmative, md);
             else
             {
-                var dialog = (BaseMetroDialog)App.Current.MainWindow.Resources["CustomInfoDialog"];
-                dialog.Title = "外电配置命令";
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
-                    dialog);
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("外电配置命令已发送", LogType.Both));
 
-                var textBlock = dialog.FindChild<TextBlock>("MessageTextBlock");
-                textBlock.Text = "发送成功！";
-
-                await TaskEx.Delay(2000);
-
-                await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, dialog);
                 await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, newdialog);
             }
         }

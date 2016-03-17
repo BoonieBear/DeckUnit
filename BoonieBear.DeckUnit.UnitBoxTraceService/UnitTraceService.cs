@@ -34,7 +34,10 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
 
         public void SetADFilePath(string path)
         {
+            if (path.EndsWith("\\"))
+                path = path.TrimEnd('\\');
             AdPath = path + @"\AD";
+            Directory.CreateDirectory(AdPath);
             var adInfo = new DirectoryInfo(AdPath);
             Ch1adFile = new ADFile("AD1_", "dat");
             Ch1adFile.SetPath(adInfo);

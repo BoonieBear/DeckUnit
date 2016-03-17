@@ -20,6 +20,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="60"/>
             <RowDefinition/>
+            <RowDefinition/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Left">
@@ -30,19 +31,33 @@
             </Button>
             <TextBlock  Text="调试选项" VerticalAlignment="Center" FontSize="34px"/>
         </StackPanel>
-        <UniformGrid Grid.Row="1" Columns="2" Rows="5">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
             <TextBlock Foreground ="Black" Text="DSP上电 "  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Margin="50,0,0,0"/>
-            <metroControl:ToggleSwitchButton Width ="120"  Height="45"  ThumbIndicatorWidth="60" Checked="DSPPowerOn_Checked" Unchecked="DSPPowerOff_Unchecked"/>
-            <TextBlock Foreground ="Black" Text="看门狗开关"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Margin="50,0,0,0"/>
-            <metroControl:ToggleSwitchButton Width ="120"  Height="45" ThumbIndicatorWidth="60" Checked="WatchDog_Checked" Unchecked="WatchDog_Unchecked"/>
-            <TextBlock Foreground ="Black" Text="调试开关"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Margin="50,0,0,0"/>
-            <metroControl:ToggleSwitchButton Width ="120"  Height="45"  ThumbIndicatorWidth="60"  Checked="Debug_Checked" Unchecked="Debug_Unchecked"/>
-        </UniformGrid>
-        <UniformGrid  Grid.Row ="2" Columns="2">
+            <Button Margin="3" Grid.Row="0" Grid.Column ="1" Content="上电" Foreground ="DarkBlue" Background ="{StaticResource GrayBrush2}" FontSize="22" FontFamily="SimSun" BorderThickness="1,1" Height="50" Click="DSPOn_Click"/>
+            <Button Margin="3" Grid.Row="0" Grid.Column ="2" Content="断电" Foreground ="DarkBlue" FontSize="22" Background ="{StaticResource GrayBrush2}" FontFamily="SimSun" BorderThickness="1,1" Height="50" Click="DSPOff_Click"/>
+            <TextBlock Grid.Row="1" Foreground ="Black" Text="看门狗开关"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Margin="50,0,0,0"/>
+            <Button Margin="3" Grid.Row="1" Grid.Column ="1" Content="打开" Foreground ="DarkBlue" Background ="{StaticResource GrayBrush2}" FontSize="22" FontFamily="SimSun" BorderThickness="1,1" Height="50" Click="WatchDogOn_Click"/>
+            <Button Margin="3" Grid.Row="1" Grid.Column ="2" Content="关闭" Foreground ="DarkBlue" FontSize="22" Background ="{StaticResource GrayBrush2}" FontFamily="SimSun" BorderThickness="1,1" Height="50" Click="WatchDogOff_Click"/>
+            <TextBlock Grid.Row="2" Foreground ="Black" Text="调试开关"  HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="30" Margin="50,0,0,0"/>
+            <Button Margin="3" Grid.Row="2" Grid.Column ="1" Content="打开" Foreground ="DarkBlue" Background ="{StaticResource GrayBrush2}" FontSize="22" FontFamily="SimSun" BorderThickness="1,1" Height="50" Click="DebugOn_Click"/>
+            <Button Margin="3" Grid.Row="2" Grid.Column ="2" Content="关闭" Foreground ="DarkBlue" FontSize="22" Background ="{StaticResource GrayBrush2}" FontFamily="SimSun" BorderThickness="1,1" Height="50" Click="DebugOff_Click"/>
+        </Grid>
+        <ProgressBar Grid.Row ="2" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
+                     Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
+        <UniformGrid  Grid.Row ="3" Columns="2">
             <Button Margin="3" Content="重启MSP430" Foreground ="DarkBlue" Background ="{StaticResource GrayBrush2}" FontSize="26" FontFamily="SimSun" BorderThickness="1,1" Height="60" Click="RebootButton_Click"/>
             <Button Margin="3" Content="清空重启次数" Foreground ="DarkBlue" FontSize="26" Background ="{StaticResource GrayBrush2}" FontFamily="SimSun" BorderThickness="1,1" Height="60" Click="ClearRebootButton_Click"/>
-            <ProgressBar Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
-                     Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
+            
         </UniformGrid>
         
         

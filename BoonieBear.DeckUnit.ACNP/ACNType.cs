@@ -480,22 +480,22 @@ namespace BoonieBear.DeckUnit.ACNP
     }
     public struct Power48VState:IMSPState
     {
-        private int _lowCurrentTime;
-        private int _mediumCurrentTime;
-        private int _highCurrentTime;
-        public int LowCurrentTime
+        private uint _lowCurrentTime;
+        private uint _mediumCurrentTime;
+        private uint _highCurrentTime;
+        public uint LowCurrentTime
         {
             get { return _lowCurrentTime; }
             set { _lowCurrentTime = value; }
         }
 
-        public int MediumCurrentTime
+        public uint MediumCurrentTime
         {
             get { return _mediumCurrentTime; }
             set { _mediumCurrentTime = value; }
         }
 
-        public int HighCurrentTime
+        public uint HighCurrentTime
         {
             get { return _highCurrentTime; }
             set { _highCurrentTime = value; }
@@ -511,9 +511,9 @@ namespace BoonieBear.DeckUnit.ACNP
         {
             if (HexStr.Length != 30)
                 return false;
-            _lowCurrentTime = Int32.Parse(HexStr.Substring(0, 10));
-            _mediumCurrentTime = Int32.Parse(HexStr.Substring(10, 10));
-            _highCurrentTime = Int32.Parse(HexStr.Substring(20, 10));
+            _lowCurrentTime = uint.Parse(HexStr.Substring(0, 10));
+            _mediumCurrentTime = uint.Parse(HexStr.Substring(10, 10));
+            _highCurrentTime = uint.Parse(HexStr.Substring(20, 10));
             return true;
         }
 
@@ -603,8 +603,8 @@ namespace BoonieBear.DeckUnit.ACNP
             string cmd;
             try
             {
-                cmd = StringHexConverter.GetFormedString(Voltage33.ToString(), 1, 4) + StringHexConverter.GetFormedString(Voltage48.ToString(), 3, 6) + StringHexConverter.GetFormedString(Pw48Left.ToString(), 5, 8) +
-                    StringHexConverter.GetFormedString(Pw48Consume.ToString(), 5, 8) + StringHexConverter.GetFormedString(Pw33Left.ToString(), 5, 8) + StringHexConverter.GetFormedString(Pw33Consume.ToString(), 5, 8);
+                cmd = StringHexConverter.GetFormedString(Voltage33.ToString("0.000"), 1, 4) + StringHexConverter.GetFormedString(Voltage48.ToString("0.000"), 3, 6) + StringHexConverter.GetFormedString(Pw48Left.ToString("0.000"), 5, 8) +
+                    StringHexConverter.GetFormedString(Pw48Consume.ToString("0.000"), 5, 8) + StringHexConverter.GetFormedString(Pw33Left.ToString("0.000"), 5, 8) + StringHexConverter.GetFormedString(Pw33Consume.ToString("0.000"), 5, 8);
             }
             catch (Exception e)
             {
