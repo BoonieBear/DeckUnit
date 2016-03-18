@@ -191,7 +191,7 @@
 								TouchKeyBoard:TabKeyBoard.Type="Char" />
                                 <CheckBox x:Name ="NetLinkCheckBox" ToolTip ="网络连接状态" Height="30" Content  =" 连接 "
 									Click="NetLinkCheckBox_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
-                                <Button Click="LaunchDownLoadView" Width="60" Height="30" Content="更新"
+                                <Button Click="LaunchDownLoadView" Width="60" Height="30" FontSize="14" Content="更新"
 				                        ToolTip="下载程序/数据"
                                         Style="{DynamicResource SquareButtonStyle}" Margin="10,0,0,0">
                                 </Button>
@@ -210,7 +210,7 @@
                                 
                                 <CheckBox x:Name ="LoadcheckButton" ToolTip ="MSP430进入loader" Height="30" Content  ="Loader"
 									Click="ToggleButton_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
-                                <Button  ToolTip ="选择固件" Width="60" Height="30" Content  ="更新" Margin="10,0,0,0"
+                                <Button  ToolTip ="选择固件" Width="60" Height="30" FontSize="14" Content  ="更新" Margin="10,0,0,0"
 									Click="SelectFileButton_Click" HorizontalAlignment="Left" Style="{DynamicResource SquareButtonStyle}" />
                             </StackPanel>
                             <Button  Style="{DynamicResource SquareButtonStyle}" Width ="60" Height="30" Margin="10,0,0,0" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="14" />

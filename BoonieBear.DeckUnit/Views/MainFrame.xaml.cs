@@ -62,7 +62,9 @@ namespace BoonieBear.DeckUnit.Views
             else
             {
                 if (UnitCore.GetInstance().NetEngine.IsInitialize)
-                    UnitCore.GetInstance().NetEngine.IsInitialize = false;
+                {
+                    UnitCore.GetInstance().NetEngine.Stop();
+                }
                 NetLinkCheckBox.IsChecked = false;
             }
         }
@@ -100,22 +102,16 @@ namespace BoonieBear.DeckUnit.Views
 
         private async void NetLinkCheckBox_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            if (NetLinkCheckBox.IsChecked == true && UnitCore.Instance.NetEngine.IsWorking==false)
-            {
-                if (UnitCore.Instance.CommEngine!=null && UnitCore.Instance.CommEngine.IsWorking)
-                {
-                    var cmd = MSPHexBuilder.Pack250(true);
-
-                    UnitCore.Instance.CommEngine.SendCMD(cmd); //进入调试模式，开启网络
-                    TaskEx.Delay(1000);
-                }
-                UnitCore.Instance.NetEngine.Initialize();
-                UnitCore.Instance.NetEngine.Start();
-            }
+           
+            UnitCore.Instance.NetEngine.Initialize();
+            UnitCore.Instance.NetEngine.Start();
+            
             else
             {
                 if (UnitCore.Instance.NetEngine.IsWorking == true)
+                {
                     UnitCore.Instance.NetEngine.Stop();
+                }
             }
         }
 
@@ -136,7 +132,7 @@ namespace BoonieBear.DeckUnit.Views
                 MessageDialogStyle.AffirmativeAndNegative, LoaderCheck);
                 if (result == MessageDialogResult.Affirmative)
                 {
-                    var cmd = MSPHexBuilder.Pack242();
+                    var cmd = MSPHexBuilder.Pack249();
                     var ret = UnitCore.Instance.CommEngine.SendCMD(cmd);
                     await ret;
                     if(ret.Result)
