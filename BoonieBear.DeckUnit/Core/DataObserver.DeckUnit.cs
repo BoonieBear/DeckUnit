@@ -80,6 +80,13 @@ namespace BoonieBear.DeckUnit.Core
                             break;
                         case 0xEDED:
                             UnitCore.Instance.UnitTraceService.CloseAD();
+                            if (UnitCore.Instance.Wave != null)
+                            {
+                                UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    UnitCore.Instance.Wave.Clear();
+                                }));
+                            }
                             break;
                         case 0xAD01:
                         case 0xAD02:
@@ -88,6 +95,13 @@ namespace BoonieBear.DeckUnit.Core
                             UnitCore.Instance.UnitTraceService.SaveAD(e.DataBuffer);
                             UnitCore.Instance.EventAggregator.PublishMessage(
                                 new UpdateADByteCount((int)UnitCore.Instance.UnitTraceService.GetADCount()));
+                            if (UnitCore.Instance.Wave != null && BitConverter.ToUInt16(e.DataBuffer, 0)==0xAD01)
+                            {
+                                UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
+                                {
+                                    UnitCore.Instance.Wave.Display(e.DataBuffer);
+                                }));
+                            }
                             break;
                         case (int)PackType.Ack:
                         case (int)PackType.FSKData:

@@ -542,6 +542,10 @@
       <Project>{f8f3fad9-f0b9-46b4-a4af-995a3eeb1f3f}</Project>
       <Name>BoonieBear.DeckUnit.UnitBoxTraceService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\WaveBox\BoonieBear.DeckUnit.WaveBox.csproj">
+      <Project>{7fd46512-42b0-4ad2-89df-6f44a650018e}</Project>
+      <Name>BoonieBear.DeckUnit.WaveBox</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="BasicConf.xml">

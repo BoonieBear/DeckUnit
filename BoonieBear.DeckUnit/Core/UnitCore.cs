@@ -30,6 +30,7 @@ using BoonieBear.DeckUnit.BaseType;
 using BoonieBear.DeckUnit.LiveService;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using BoonieBear.DeckUnit.WaveBox;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
@@ -61,7 +62,8 @@ namespace BoonieBear.DeckUnit.Core
         private bool _serviceStarted = false;
         //错误信息
         public string Error { get; private set; }
-        
+        //ad波形
+        public WaveControl Wave = null;
         public Mutex AcnMutex { get; set; }//全局acn解析锁
         public UnitTraceService UnitTraceService
         {
@@ -88,7 +90,7 @@ namespace BoonieBear.DeckUnit.Core
                 _deckUnitConf = DeckUnitConf.GetInstance();
                 _modemConf = _deckUnitConf.GetModemConfigure();
                 _commConf = _deckUnitConf.GetCommConfInfo();
-                //_commConf.LinkIP = "127.0.0.1";
+                _commConf.LinkIP = "127.0.0.1";
                 _baseInfo = _deckUnitConf.GetBaseInfo();
                 if(_deckUnitConf==null)
                     throw new Exception("甲板单元配置信息丢失");

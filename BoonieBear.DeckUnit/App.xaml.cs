@@ -88,6 +88,8 @@ namespace BoonieBear.DeckUnit
         {
             IsExit = true;
             UnitCore.Instance.Stop();
+            if (UnitCore.Instance.Wave != null)
+                UnitCore.Instance.Wave.Dispose();
         }
     }
 }

@@ -13,6 +13,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using BoonieBear.DeckUnit.Core;
 using System.IO;
+using TinyMetroWpfLibrary.EventAggregation;
+using BoonieBear.DeckUnit.Events;
 
 namespace BoonieBear.DeckUnit.Views
 {
@@ -24,6 +26,8 @@ namespace BoonieBear.DeckUnit.Views
         public ADPage()
         {
             InitializeComponent();
+            WaveControl.Initailize();
+            UnitCore.Instance.Wave = WaveControl;
         }
 
         private void TextBlock_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)

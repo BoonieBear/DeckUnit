@@ -4,6 +4,7 @@
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:converter="clr-namespace:BoonieBear.DeckUnit.Converter"
+      xmlns:wavebox="clr-namespace:BoonieBear.DeckUnit.WaveBox;assembly=LOAT.DeckUnit.WaveBox"
       xmlns:metroChart="clr-namespace:De.TorstenMandelkow.MetroChart;assembly=De.TorstenMandelkow.MetroChart"
       xmlns:Custom="http://metro.mahapps.com/winfx/xaml/controls" 
       DataContext="{Binding Source={StaticResource ViewModelLocator}, Path=ADViewModel}"
@@ -39,27 +40,29 @@
                     <Custom:NumericUpDown Value="{Binding SetGain}" Width="100" Maximum="74" Minimum="10" Speedup="False"/>
                 </StackPanel>
                 
-                <GroupBox Header="状态" Margin="4" Custom:ControlsHelper.HeaderFontSize="24">
+                <GroupBox Header="状态" Margin="2" Custom:ControlsHelper.HeaderFontSize="20">
                 <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition />
-                        <RowDefinition/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <StackPanel Margin="5" Orientation="Vertical" VerticalAlignment="Bottom">
-                        <TextBlock Text="{Binding Status}" FontFamily="SimSun" FontSize="32"/>
-                        <Custom:MetroProgressBar IsIndeterminate="True" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}}" EllipseDiameter="10" EllipseOffset="10" Foreground="{DynamicResource AccentSelectedColorBrush}"/>
-                    </StackPanel>
-                    <StackPanel Grid.Row="1" Margin="5" Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <Grid.RowDefinitions>
+                            <RowDefinition  Height="80"/>
+                            <RowDefinition />
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="1" Margin="5" Orientation="Vertical" VerticalAlignment="Bottom">
+                            <TextBlock Text="{Binding Status}" FontFamily="SimSun" FontSize="32"/>
+                            <Custom:MetroProgressBar IsIndeterminate="True" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}}" EllipseDiameter="10" EllipseOffset="10" Foreground="{DynamicResource AccentSelectedColorBrush}"/>
+                        </StackPanel>
+                        <wavebox:WaveControl Grid.Row="0" Name="WaveControl" Visibility="Visible" TimeWindowSamples="163840" SamlesPerSecond="160000" MaxFrequecyShow="163840"/>
+                        <StackPanel Grid.Row="2" Margin="3" Orientation="Horizontal" VerticalAlignment="Bottom">
                         <TextBlock Text="上传速率：" FontFamily="SimSun" FontSize="24"/>
                         <TextBlock Text="{Binding SpeedStr}" FontFamily="SimSun" FontSize="24"/>
                     </StackPanel>
-                    <StackPanel Grid.Row="2" Orientation="Vertical" VerticalAlignment="Bottom">
-                        <StackPanel  Margin="5" Orientation="Horizontal" >
-                            <TextBlock Text="数据大小：" FontFamily="SimSun" FontSize="24"/>
-                            <TextBlock Text="{Binding TotalADByte}" FontFamily="SimSun" FontSize="24"/>
-                        </StackPanel>
-                        <TextBlock Margin="0,5" Text="打开当前AD文件夹" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" Cursor="Hand"/>
+                    <StackPanel Grid.Row="3" Orientation="Vertical" VerticalAlignment="Bottom">
+                            <StackPanel  Margin="3" Orientation="Horizontal" >
+                                <TextBlock Text="数据大小：" FontFamily="SimSun" FontSize="24"/>
+                                <TextBlock Text="{Binding TotalADByte}" FontFamily="SimSun" FontSize="24"/>
+                            </StackPanel>
+                            <TextBlock Margin="0,5" Text="打开当前AD文件夹" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" Cursor="Hand"/>
                         <TextBlock Margin="0,5" Text="打开系统文件夹" FontFamily="SimSun" FontSize="20" HorizontalAlignment="Right" TextDecorations="Underline" Foreground="{DynamicResource GrayNormalBrush}" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown_1" Cursor="Hand" />
                     </StackPanel>
                 </Grid>
