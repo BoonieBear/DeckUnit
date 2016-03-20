@@ -201,7 +201,7 @@
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
                             </Grid>
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="SendBtn" Style="{StaticResource SquareButtonStyle}" Content="发送" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="55" Height="45" Click="SendBtn_Click" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" />
-                            <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入20个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                            <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入30个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
                             <Label Name="SSBToolTip" Foreground="Black" Content="按住说话" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Visibility="Hidden" Margin="0,20,0,0"/>
                             <MetroControl:MetroProgressBar Name="VoiceBar"  Visibility="Hidden" EllipseDiameter="80" EllipseOffset="40" Value="0" Margin="55,20,55,0" MouseLeftButtonDown="VoiceBar_MouseLeftButtonDown" MouseLeftButtonUp="VoiceBar_MouseLeftButtonUp" MouseLeave="VoiceBar_MouseLeave" Opacity="0.4" Height="40">
                                 <MetroControl:MetroProgressBar.Foreground>
@@ -291,12 +291,14 @@
                                         <h:ArrowVisual3D Point1="6000 0 -100" Point2="-6000 0 -100" Diameter="20" Fill="Red"  HeadLength="30" ThetaDiv="36"  />
                                         <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Green" HeadLength="30" ThetaDiv="36"  />
                                     </h:HelixViewport3D>
-                                    <MetroControl:ToggleSwitch x:Name="HeadChoser"  Foreground ="White" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center" Content="北方为正前" ThumbIndicatorWidth="25" OffLabel="" OnLabel="" IsChecked="{Binding SetShipHeadingFront}" Unchecked="HeadChoser_Unchecked" Checked="HeadChoser_Checked"/>
-                                    <TextBlock Foreground ="White" VerticalAlignment="Bottom" FontSize="16" HorizontalAlignment="Center" Text="网格距离500米"/>
+                                    <CheckBox x:Name="HeadChoser"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Center" Content="北方为正前"  IsChecked="{Binding SetShipHeadingFront}" Unchecked="HeadChoser_Unchecked" Checked="HeadChoser_Checked"/>
+                                    <CheckBox x:Name="ShowTrackBox"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="显示轨迹"  IsChecked="{Binding ShowTrack}"/>
+                                    <TextBlock Foreground ="White" VerticalAlignment="Bottom" FontSize="16" HorizontalAlignment="Left" Text="网格距离500米"/>
                                     <!--Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/-->
                                     <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
+                                        <CheckBox Content="超短基线" Foreground ="White" IsChecked="{Binding USBLUsed}"/>
                                         <TextBlock FontSize="16">
-                                            <Run Text="USBL:   "/>
+                                            <Run Text="更新时间:   "/>
                                             <Run Text="{Binding PosFromUSBLTime}"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
@@ -310,22 +312,22 @@
                                         <TextBlock FontSize="16">
                                             <Run Text="母船速度:"/>
                                             <Run Text="{Binding ShipSpeed}"/>
-                                            <Run Text="mm/s"/>
+                                            <Run Text="毫米/秒"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="艏向角:"/>
                                             <Run Text="{Binding ShipHeading}"/>
-                                            <Run Text="°"/>
+                                            <Run Text="度"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="纵倾:"/>
                                             <Run Text="{Binding ShipPitch}"/>
-                                            <Run Text="°"/>
+                                            <Run Text="度"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="横倾:"/>
                                             <Run Text="{Binding ShipRoll}"/>
-                                            <Run Text="°"/>
+                                            <Run Text="度"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="潜器经度:"/>
@@ -341,18 +343,20 @@
                                             <Run Text="m"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
-                                            <Run Text="相对距离(m)"/>
+                                            <Run Text="相对距离(米)"/>
                                             <Run Text=" X:"/>
-                                            <Run Text="{Binding XDistance}"/>
+                                            <Run Text="{Binding XDistanceFromUSBL}"/>
                                             <Run Text=" | Y:"/>
-                                            <Run Text="{Binding YDistance}"/>
+                                            <Run Text="{Binding YDistanceFromUSBL}"/>
                                             <Run Text=" | Z:"/>
-                                            <Run Text="{Binding ZDistance}"/>
+                                            <Run Text="{Binding ZDistanceFromUSBL}"/>
                                         </TextBlock>
                                     </StackPanel>
                                     <StackPanel Name="MovPos" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,80,0">
+
+                                        <CheckBox Content="潜器返回" Foreground ="White" IsChecked="{Binding UWVUsed}"/>
                                         <TextBlock FontSize="16">
-                                            <Run Text="潜器:   "/>
+                                            <Run Text="更新时间:   "/>
                                             <Run Text="{Binding PosFromUwvTime}"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
@@ -366,28 +370,42 @@
                                         <TextBlock FontSize="16">
                                             <Run Text="艏向角:"/>
                                             <Run Text="{Binding MovHeading}"/>
-                                            <Run Text="°"/>
+                                            <Run Text="度"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="纵倾:"/>
                                             <Run Text="{Binding MovPitch}"/>
-                                            <Run Text="°"/>
+                                            <Run Text="度"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="横倾:"/>
                                             <Run Text="{Binding MovRoll}"/>
-                                            <Run Text="°"/>
+                                            <Run Text="度"/>
                                         </TextBlock>
-
+                                        <TextBlock FontSize="16">
+                                            <Run Text="升沉速度:"/>
+                                            <Run Text="{Binding MovRoll}"/>
+                                            <Run Text="米/分"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="16">
+                                            <Run Text="纵向速度:"/>
+                                            <Run Text="{Binding MovRoll}"/>
+                                            <Run Text="米/秒"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="16">
+                                            <Run Text="侧移速度:"/>
+                                            <Run Text="{Binding MovRoll}"/>
+                                            <Run Text="米/秒"/>
+                                        </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="潜器深度:"/>
                                             <Run Text="{Binding MovDepth}"/>
-                                            <Run Text="m"/>
+                                            <Run Text="米"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
                                             <Run Text="潜器高度:"/>
                                             <Run Text="{Binding MovHeight}"/>
-                                            <Run Text="m"/>
+                                            <Run Text="米"/>
                                         </TextBlock>
                                     </StackPanel>
 

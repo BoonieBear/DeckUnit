@@ -69,9 +69,9 @@ namespace BoonieBear.DeckUnit.ACMP
     public class MovGlobalVariables
     {
         public static int MFSKSize = 210;
-        public static int ShipMFSKSize = 80;
-        public static int MovMFSKSize = 209;
-        public static int WordSize = 40;
+        public static int ShipMFSKSize = 92;
+        public static int MovMFSKSize = 183;
+        public static int WordSize = 60;
         public static int ImgSize = 16340;
         public static int MPSKSize = 16560;
     }
@@ -239,7 +239,7 @@ namespace BoonieBear.DeckUnit.ACMP
         public Int16 _relateX;//潜水器相对母船x轴位移
         public Int16 _relateY;//潜水器相对母船y轴位移
         public UInt16 _relateZ;//潜水器相对母船z轴位移	
-        private byte[] storebyte = new byte[40];
+        private byte[] storebyte = new byte[32];
 
         /// <summary>
         /// 按协议打包，无包头ID

@@ -100,50 +100,46 @@ namespace BoonieBear.DeckUnit.ACMP
             {
                 case ModuleType.MFSK:
                     var bytes = _subposition.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,0,26);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,0,24);
                     bytes = _bpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,26,18);
-                    //bytes = _bsssdata.Pack();
-                    //Buffer.BlockCopy(bytes,0,_mfskBytes,44,6);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,24,14);
                     bytes = _adcpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,44,41);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,38,33);
                     bytes = _ctddata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,85,16);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,71,8);
                     bytes = _lifesupply.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,101,14);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,79,6);
                     bytes = _energysys.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,115,34);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,85,26);
                     bytes = _alertdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mfskBytes,149,20);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,111,12);
                     if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
 
-                        Buffer.BlockCopy(bytes, 0, _mfskBytes, 169, bytes.Length);
+                        Buffer.BlockCopy(bytes, 0, _mfskBytes, 123, bytes.Length);
                     }
                     _msg = "";
                     return _mfskBytes;
                 case ModuleType.MPSK:
                     bytes = _subposition.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,0,26);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,0,24);
                     bytes = _bpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,26,18);
-                    //bytes = _bsssdata.Pack();
-                    //Buffer.BlockCopy(bytes,0,_mpskBytes,44,6);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,24,14);
                     bytes = _adcpdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,44,41);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,38,33);
                     bytes = _ctddata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,85,16);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,71,8);
                     bytes = _lifesupply.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,101,14);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,79,6);
                     bytes = _energysys.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,115,34);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,85,26);
                     bytes = _alertdata.Pack();
-                    Buffer.BlockCopy(bytes,0,_mpskBytes,149,20);
+                    Buffer.BlockCopy(bytes,0,_mfskBytes,111,12);
                     if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
-                        Buffer.BlockCopy(bytes, 0, _mpskBytes, 169, bytes.Length);
+                        Buffer.BlockCopy(bytes, 0, _mpskBytes, 123, bytes.Length);
                     }
                     _msg = "";
                     Buffer.BlockCopy(img, 0, _mpskBytes, MovGlobalVariables.MFSKSize, MovGlobalVariables.ImgSize);

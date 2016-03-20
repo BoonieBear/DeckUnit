@@ -641,7 +641,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
        
         private void SendMessageBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            int left = 20 - SendMessageBox.Text.Length;
+            int left = MovGlobalVariables.WordSize/2 - SendMessageBox.Text.Length;
             LeftSize.Text = "(还可继续输入"+left+"个字)";
             if(SendMessageBox.Text.Length>0)
                 SendBtn.Visibility = Visibility.Visible;
@@ -834,7 +834,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             MorseRow.Height =new GridLength(120);
         }
 
-        private async void SendMorse(object sender, RoutedEventArgs e)
+        private void SendMorse(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
             if (btn != null&&UnitCore.Instance.NetCore.IsTCPWorking)

@@ -102,10 +102,11 @@ namespace BoonieBear.DeckUnit.Views
 
         private async void NetLinkCheckBox_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-           
-            UnitCore.Instance.NetEngine.Initialize();
-            UnitCore.Instance.NetEngine.Start();
-            
+            if (UnitCore.Instance.NetEngine.IsWorking == false && NetLinkCheckBox.IsChecked==true)
+            {
+                UnitCore.Instance.NetEngine.Initialize();
+                UnitCore.Instance.NetEngine.Start();
+            }
             else
             {
                 if (UnitCore.Instance.NetEngine.IsWorking == true)

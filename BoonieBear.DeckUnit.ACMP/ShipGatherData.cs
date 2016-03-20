@@ -71,7 +71,7 @@ namespace BoonieBear.DeckUnit.ACMP
             {
                 case ModuleType.MFSK:
                     var bytes = _sysposition.Pack();
-                    Buffer.BlockCopy(bytes, 0, _packageBytes, 0, 40);
+                    Buffer.BlockCopy(bytes, 0, _packageBytes, 0, 32);
                     if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);
