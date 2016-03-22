@@ -258,5 +258,33 @@ namespace BoonieBear.DeckUnit.Views.SetView
                     vm.IsProcessing = false;
             }
         }
+
+        private async void DSPLoader_Click(object sender, RoutedEventArgs e)
+        {
+            var mySettings = new MetroDialogSettings()
+            {
+                AffirmativeButtonText = "确定",
+                NegativeButtonText = "取消",
+                AnimateShow = true,
+                AnimateHide = false
+            };
+
+            var result = await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "设置",
+               "确定进入DSP Loader模式？",
+               MessageDialogStyle.AffirmativeAndNegative, mySettings);
+
+
+
+            if (result == MessageDialogResult.Affirmative)
+            {
+                var vm = this.DataContext as DebugViewModel;
+                if (vm != null)
+                    vm.IsProcessing = true;
+                var cmd = MSPHexBuilder.Pack242();
+                await UnitCore.Instance.CommEngine.SendCMD(cmd);
+                if (vm != null)
+                    vm.IsProcessing = false;
+            }
+        }
     }
 }

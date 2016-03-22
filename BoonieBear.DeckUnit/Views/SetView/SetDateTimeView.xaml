@@ -13,7 +13,7 @@
       mc:Ignorable="d" 
       KeepAlive="True"
 	 d:DesignHeight="480" d:DesignWidth="640"
-	Title="SimpleView" x:Name="SimplePage" Loaded="SimplePage_Loaded">
+	Title="SimpleView" x:Name="SimplePage" Loaded="SimplePage_Loaded" Unloaded="SimplePage_Unloaded">
     <Page.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Page.Resources>
@@ -37,7 +37,7 @@
                 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,30">
                     <TextBlock Foreground ="DarkBlue" Text="设定时间："  FontSize="36" Margin="60,00,0,0" />
-                    <wfi:WindowsFormsHost Width="280" Height="60" FontSize="18">
+                    <wfi:WindowsFormsHost x:Name="FormsHost" Width="280" Height="60" FontSize="18">
                         <wf:DateTimePicker x:Name="StartTime"  Format="Custom" ShowUpDown="True" CustomFormat="yyyy年MM月dd日 HH:mm:ss"/>
                     </wfi:WindowsFormsHost>
                 </StackPanel>

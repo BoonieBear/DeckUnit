@@ -52,7 +52,7 @@
                             <TextBlock Text="{Binding Status}" FontFamily="SimSun" FontSize="32"/>
                             <Custom:MetroProgressBar IsIndeterminate="True" Visibility="{Binding IsWorking, Converter={StaticResource BoolToVisibilityConverter}}" EllipseDiameter="10" EllipseOffset="10" Foreground="{DynamicResource AccentSelectedColorBrush}"/>
                         </StackPanel>
-                        <wavebox:WaveControl Grid.Row="0" Name="WaveControl" Visibility="Visible" TimeWindowSamples="163840" SamlesPerSecond="160000" MaxFrequecyShow="163840"/>
+                        <wavebox:WaveControl Grid.Row="0" Name="WaveControl" Visibility="Visible" TimeWindowSamples="163840" SamlesPerSecond="80000" MaxFrequecyShow="160000" AudioFrameSize="8192"/>
                         <StackPanel Grid.Row="2" Margin="3" Orientation="Horizontal" VerticalAlignment="Bottom">
                         <TextBlock Text="上传速率：" FontFamily="SimSun" FontSize="24"/>
                         <TextBlock Text="{Binding SpeedStr}" FontFamily="SimSun" FontSize="24"/>

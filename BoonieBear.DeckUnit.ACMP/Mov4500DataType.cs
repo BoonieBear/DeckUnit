@@ -567,8 +567,8 @@ namespace BoonieBear.DeckUnit.ACMP
     public class Subposition :IProtocol
     {
         //private long _ltime;
-        private float   _subLong; //潜水器经度
-        private float   _subLat;//潜水器纬度
+        public float   _subLong; //潜水器经度
+        public float _subLat;//潜水器纬度
         private UInt16 _subheading;//潜水器艏向角
         private Int16 _subpitch;//潜水器纵倾角
         private Int16 _subroll;//潜水器横倾角

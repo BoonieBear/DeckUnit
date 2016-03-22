@@ -731,7 +731,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             
         }
         
-        private void Recording(bool start = true)
+        private async void Recording(bool start = true)
         {
             try
             {
@@ -765,7 +765,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                             LogHelper.WriteLog("结束语音发送");
 
                         }
-                        VoiceBarDealy();//留出一段时间给DSP处理单频
+                        await VoiceBarDealy();//留出一段时间给DSP处理单频
                         
                         
                     }

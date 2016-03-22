@@ -153,6 +153,7 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                         "测试开始", "数据包已发送，等待节点回传……",true,md);
                 await TaskEx.Delay(1000);
                 int i = 1;
+                IsReceived = false;
                 while (IsReceived==false)
                 {
                     processcontroller.SetMessage("已等待: " + i + "秒");
@@ -171,9 +172,9 @@ namespace BoonieBear.DeckUnit.ViewModels.SetViewModel
                 }
                 else//收到数据了
                 {
-                    RecvTime = "收到回环包："+DateTime.Now.ToString("s");
-                    await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"收到数据!", "请查看测试结果",
-                         MessageDialogStyle.Affirmative, md);
+                    RecvTime = "收到回环包："+DateTime.Now.ToString();
+                    //await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame,"收到数据!", "请查看测试结果",
+                    //     MessageDialogStyle.Affirmative, md);
                 }
             }
         }

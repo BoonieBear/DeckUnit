@@ -258,7 +258,6 @@
                                         <ModelVisual3D x:Name="MovD">
                                             <ModelVisual3D.Transform>
                                                 <Transform3DGroup>
-                                                    
                                                     <RotateTransform3D>
                                                         <RotateTransform3D.Rotation>
                                                             <AxisAngleRotation3D Axis="1,0,0" Angle="-90"/>
@@ -288,11 +287,50 @@
                                                 </Transform3DGroup>
                                             </ModelVisual3D.Transform>
                                         </ModelVisual3D>
+                                        <ModelVisual3D Content="{Binding USBLTrackModel}" x:Name="Visual3D">
+                                            <ModelVisual3D.Transform>
+                                                <Transform3DGroup>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="0,0,1">
+                                                                <AxisAngleRotation3D.Angle>
+                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleMovConverter}">
+                                                                        <Binding Path="ShipHeading"/>
+                                                                        <Binding Path="MovHeading"/>
+                                                                        <Binding Path="SetShipHeadingFront"/>
+                                                                    </MultiBinding>
+                                                                </AxisAngleRotation3D.Angle>
+                                                            </AxisAngleRotation3D>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                </Transform3DGroup>
+                                            </ModelVisual3D.Transform>
+                                        </ModelVisual3D>
+                                        <ModelVisual3D Content="{Binding UWVTrackModel}">
+                                            <ModelVisual3D.Transform>
+                                                <Transform3DGroup>
+                                                    <RotateTransform3D>
+                                                        <RotateTransform3D.Rotation>
+                                                            <AxisAngleRotation3D Axis="0,0,1">
+                                                                <AxisAngleRotation3D.Angle>
+                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleMovConverter}">
+                                                                        <Binding Path="ShipHeading"/>
+                                                                        <Binding Path="MovHeading"/>
+                                                                        <Binding Path="SetShipHeadingFront"/>
+                                                                    </MultiBinding>
+                                                                </AxisAngleRotation3D.Angle>
+                                                            </AxisAngleRotation3D>
+                                                        </RotateTransform3D.Rotation>
+                                                    </RotateTransform3D>
+                                                </Transform3DGroup>
+                                            </ModelVisual3D.Transform>
+                                        </ModelVisual3D>
                                         <h:ArrowVisual3D Point1="6000 0 -100" Point2="-6000 0 -100" Diameter="20" Fill="Red"  HeadLength="30" ThetaDiv="36"  />
                                         <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Green" HeadLength="30" ThetaDiv="36"  />
                                     </h:HelixViewport3D>
                                     <CheckBox x:Name="HeadChoser"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Center" Content="北方为正前"  IsChecked="{Binding SetShipHeadingFront}" Unchecked="HeadChoser_Unchecked" Checked="HeadChoser_Checked"/>
-                                    <CheckBox x:Name="ShowTrackBox"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="显示轨迹"  IsChecked="{Binding ShowTrack}"/>
+                                    <CheckBox x:Name="ShowUSBLTrackBox"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="显示轨迹"  IsChecked="{Binding ShowUSBLTrack}" Margin="0,0,0,30"/>
+                                    <CheckBox x:Name="ShowUWVTrackBox"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="显示轨迹"  IsChecked="{Binding ShowUWVTrack}"/>
                                     <TextBlock Foreground ="White" VerticalAlignment="Bottom" FontSize="16" HorizontalAlignment="Left" Text="网格距离500米"/>
                                     <!--Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/-->
                                     <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">

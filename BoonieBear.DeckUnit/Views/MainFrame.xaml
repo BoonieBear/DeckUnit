@@ -17,7 +17,7 @@
        x:Class="BoonieBear.DeckUnit.Views.MainFrame"
         Dialog:DialogParticipation.Register="{Binding}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="480" Closing="MetroWindow_Closing" IsWindowDraggable="False">
+        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="470" Closing="MetroWindow_Closing" IsWindowDraggable="False">
     <Window.Resources>
         <ResourceDictionary>
         <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -211,12 +211,12 @@
                                 <CheckBox x:Name ="LoadcheckButton" ToolTip ="MSP430进入loader" Height="30" Content  ="Loader"
 									Click="ToggleButton_Click" FontFamily="Consolas" FontSize="16" HorizontalAlignment="Left" />
                                 <Button  ToolTip ="选择固件" Width="60" Height="30" FontSize="14" Content  ="更新" Margin="10,0,0,0"
-									Click="SelectFileButton_Click" HorizontalAlignment="Left" Style="{DynamicResource SquareButtonStyle}" />
+									Click="SelectFileButton_Click" HorizontalAlignment="Left" Style="{DynamicResource SquareButtonStyle}" IsEnabled="{Binding IsChecked, ElementName=LoadcheckButton}" />
                             </StackPanel>
-                            <Button  Style="{DynamicResource SquareButtonStyle}" Width ="60" Height="30" Margin="10,0,0,0" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="14" />
+                            <Button  Style="{DynamicResource SquareButtonStyle}" Width ="60" Height="30" Margin="10,0,0,0" Content="发送" Command="{Binding SendCMD}" FontFamily="SimSun" FontSize="14"/>
                                 <Button  Style="{DynamicResource SquareButtonStyle}" Width ="60" Height="30" Margin="10,0,0,0" Content="清空" Command="{Binding ClearCmd}" FontFamily="SimSun" FontSize="14" />
                         </StackPanel>
-                        <TextBox x:Name ="DebugLog" Height ="140" FontFamily="SimSun" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="DebugLog_TextChanged">
+                        <TextBox x:Name ="DebugLog" Height ="140" FontFamily="SimSun" FontSize="14" VerticalScrollBarVisibility="Auto" IsReadOnly="True" TextChanged="DebugLog_TextChanged" Width="620" HorizontalScrollBarVisibility="Disabled">
                             <TextBox.Text>
                                 <MultiBinding Converter="{StaticResource MultiDebugStringConverter}">
                                     <Binding Path="ModeType"/>

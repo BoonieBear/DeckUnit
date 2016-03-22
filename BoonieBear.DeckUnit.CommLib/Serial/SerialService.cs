@@ -172,7 +172,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         {
 
                 var str = hexString.Split(',');
-                //MainForm.pMainForm.BuoyChoice.SelectedIndex = int.Parse(BuoyID);
+                ACNProtocol.BuoyID = str[2];
                 if (str[1] == "03")
                 {
                     Debug.WriteLine("收到应答包");

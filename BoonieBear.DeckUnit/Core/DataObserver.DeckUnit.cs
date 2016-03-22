@@ -63,7 +63,9 @@ namespace BoonieBear.DeckUnit.Core
                     var src = e.CallSrc as SerialPort;
                     if (src != null) //loader/Ans mode, 没有存储需求
                     {
-                        str = e.Outstring + "\n";
+                        str = e.Outstring;
+                        if (e.Mode == CallMode.AnsMode)
+                            str += "\n";
                         MainFrameViewModel.pMainFrame.Serialstring += str; 
                         if (MainFrameViewModel.pMainFrame.Serialstring.Length > 4096)
                             MainFrameViewModel.pMainFrame.Serialstring.Remove(0, 1024);
@@ -82,8 +84,11 @@ namespace BoonieBear.DeckUnit.Core
                             UnitCore.Instance.UnitTraceService.CloseAD();
                             if (UnitCore.Instance.Wave != null)
                             {
+                                byte[] data = new byte[2048];
+                                Array.Clear(data, 0, 2048);
                                 UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
                                 {
+                                    UnitCore.Instance.Wave.Display(data);
                                     UnitCore.Instance.Wave.Clear();
                                 }));
                             }
@@ -97,9 +102,11 @@ namespace BoonieBear.DeckUnit.Core
                                 new UpdateADByteCount((int)UnitCore.Instance.UnitTraceService.GetADCount()));
                             if (UnitCore.Instance.Wave != null && BitConverter.ToUInt16(e.DataBuffer, 0)==0xAD01)
                             {
+                                byte[] data = new byte[e.DataBuffer.Length - 4];
+                                Buffer.BlockCopy(e.DataBuffer, 4, data, 0, e.DataBuffer.Length - 4);
                                 UnitCore.Instance.Wave.Dispatcher.Invoke(new Action(() =>
                                 {
-                                    UnitCore.Instance.Wave.Display(e.DataBuffer);
+                                    UnitCore.Instance.Wave.Display(data);
                                 }));
                             }
                             break;
@@ -205,7 +212,7 @@ namespace BoonieBear.DeckUnit.Core
                         if (savedata.CommID == 102) //ping
                         {
                             UnitCore.Instance.EventAggregator.PublishMessage(new PingNotifyEvent(parsestr[3]));
-                            UnitCore.Instance.EventAggregator.PublishMessage(new StatusNotify("回环测试", "收到回环测试数据，请查看测试页面", NotifyLevel.Info));
+                            //UnitCore.Instance.EventAggregator.PublishMessage(new StatusNotify("回环测试", "收到回环测试数据，请查看测试页面", NotifyLevel.Info));
                         }
                     }
                     savedata.LogTime = DateTime.Now;

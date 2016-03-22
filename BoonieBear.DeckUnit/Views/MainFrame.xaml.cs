@@ -136,7 +136,7 @@ namespace BoonieBear.DeckUnit.Views
                     var cmd = MSPHexBuilder.Pack249();
                     var ret = UnitCore.Instance.CommEngine.SendCMD(cmd);
                     await ret;
-                    if(ret.Result)
+                    //if(ret.Result)
                         UnitCore.Instance.CommEngine.SerialService.ChangeMode(SerialServiceMode.LoaderMode);
                 }
                 else

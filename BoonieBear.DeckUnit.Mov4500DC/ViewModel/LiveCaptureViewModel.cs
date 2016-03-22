@@ -33,6 +33,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Models;
 using System.Threading;
 using System.Windows;
 using FILETIME = System.Runtime.InteropServices.FILETIME;
+using HelixToolkit.Wpf;
 
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
@@ -44,7 +45,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         double bytesFormerReceived;
         double bytesFormerSent;
         private bool InInitial = false;
-
+        private List<Point3D> USBLPath = new List<Point3D>();//track
+        private List<Point3D> UWVPath = new List<Point3D>();//track
         public override void Initialize()
         {
 
@@ -166,6 +168,34 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             Y = y;
             Z = -z;
         }
+        private void UpdataUSBLTrack(float x, float y, float z)
+        {
+            USBLPath.Add(new Point3D(-x, y, -z));
+            if (ShowUSBLTrack)
+            {
+                // create the WPF3D model
+                var m = new Model3DGroup();
+                var gm = new MeshBuilder();
+                gm.AddTube(USBLPath, 18, 10, false);
+                m.Children.Add(new GeometryModel3D(gm.ToMesh(), Materials.Gold));
+                USBLTrackModel = m;
+            }
+            
+        }
+        private void UpdataUWVLTrack(float x, float y, float z)
+        {
+            UWVPath.Add(new Point3D(-x, y, -z));
+            if (ShowUWVTrack)
+            {
+                // create the WPF3D model
+                var m = new Model3DGroup();
+                var gm = new MeshBuilder();
+                gm.AddTube(UWVPath, 18, 10, false);
+                m.Children.Add(new GeometryModel3D(gm.ToMesh(), Materials.Rainbow));
+                UWVTrackModel = m;
+            }
+            
+        }
         public override void InitializePage(object extraData)
         {
             SetShipHeadingFront = false;
@@ -285,10 +315,49 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             get { return GetPropertyValue(() => UWVUsed); }
             set { SetPropertyValue(() => UWVUsed, value); }
         }
-        public bool ShowTrack
+        public bool ShowUSBLTrack
         {
-            get { return GetPropertyValue(() => ShowTrack); }
-            set { SetPropertyValue(() => ShowTrack, value); }
+            get { return GetPropertyValue(() => ShowUSBLTrack); }
+            set
+            {
+
+                if (value == false)
+                    USBLTrackModel = null;
+                else
+                {
+                    // create the WPF3D model
+                    var m = new Model3DGroup();
+                    var gm = new MeshBuilder();
+                    gm.AddTube(USBLPath, 18, 10, false);
+                    m.Children.Add(new GeometryModel3D(gm.ToMesh(), Materials.Gold));
+
+                    USBLTrackModel = m;
+                }
+                SetPropertyValue(() => ShowUSBLTrack, value);
+
+            }
+        }
+        public bool ShowUWVTrack
+        {
+            get { return GetPropertyValue(() => ShowUWVTrack); }
+            set
+            {
+
+                if (value == false)
+                    UWVTrackModel = null;
+                else
+                {
+                    // create the WPF3D model
+                    var m = new Model3DGroup();
+                    var gm = new MeshBuilder();
+                    gm.AddTube(UWVPath, 18, 10, false);
+                    m.Children.Add(new GeometryModel3D(gm.ToMesh(), Materials.Rainbow));
+
+                    UWVTrackModel = m;
+                }
+                SetPropertyValue(() => ShowUWVTrack, value);
+
+            }
         }
         public bool SetShipHeadingFront
         {
@@ -549,6 +618,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
         {
             get { return GetPropertyValue(() => Z); }
             set { SetPropertyValue(() => Z, value); }
+        }
+        public Model3D USBLTrackModel
+        {
+            get { return GetPropertyValue(() => USBLTrackModel); }
+            set { SetPropertyValue(() => USBLTrackModel, value); }
+        }
+        public Model3D UWVTrackModel
+        {
+            get { return GetPropertyValue(() => UWVTrackModel); }
+            set { SetPropertyValue(() => UWVTrackModel, value); }
         }
         #endregion
         #region alarm
@@ -1051,13 +1130,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         XDistanceFromUSBL = allpos.RelateX;
                         YDistanceFromUSBL = allpos.RelateY;
                         ZDistanceFromUSBL = allpos.RelateZ;
-                        Transfromxyz(XDistanceFromUSBL, YDistanceFromUSBL, ZDistanceFromUSBL);
+                        UpdataUSBLTrack(XDistanceFromUSBL, YDistanceFromUSBL, ZDistanceFromUSBL);
+                        if(USBLUsed)
+                            Transfromxyz(XDistanceFromUSBL, YDistanceFromUSBL, ZDistanceFromUSBL);
                         UsblPositionCollection.Add(allpos);
                         if (UsblPositionCollection.Count > 10)
                             UsblPositionCollection.RemoveAt(0);
                         //广播
-                       
-                        byte[] posBytes = new byte[34];
+                       byte[] posBytes = new byte[34];
                         posBytes[0] = 0x01;
                         posBytes[1] = 0x20;
                         Buffer.BlockCopy(allpos.Pack(), 0, posBytes, 2, 32);
@@ -1224,6 +1304,24 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovHeaveVelocity = subpos.SubHV;
                         MovPitVelocity = subpos.SubPitV;
                         MovRollVelocity = subpos.SubRollV;
+                        ZDistanceFromUWV = MovDepth;
+                        float DistanceX, DistanceY,movlng,movlat,shiplng,shiplat;
+                        movlng = subpos._subLong/60 + subpos._subLong%60/100;
+                        movlat = subpos._subLat/60 + subpos._subLat%60/100;
+                        if (UsblPositionCollection.Count > 0)
+                        {
+                            var lastshippos = UsblPositionCollection[UsblPositionCollection.Count - 1];
+                            shiplng = lastshippos._shipLong / 60 + lastshippos._shipLong % 60 / 100;
+                            shiplat = lastshippos._shipLat / 60 + lastshippos._shipLat % 60 / 100;
+                            CalcRelativePostion(ShipHeading, movlng, movlat, shiplng, shiplat, out DistanceX,
+                                out DistanceY);
+                            XDistanceFromUWV = DistanceX;
+                            YDistanceFromUWV = DistanceY;
+                            UpdataUWVLTrack(XDistanceFromUWV, YDistanceFromUWV, ZDistanceFromUWV);
+                            if (UWVUsed)
+                                Transfromxyz(XDistanceFromUWV, YDistanceFromUWV, ZDistanceFromUWV);
+                        }
+                        
                         SubPositionCollection.Add(subpos);
                         if (SubPositionCollection.Count > 10)
                             SubPositionCollection.RemoveAt(0);
@@ -1281,6 +1379,69 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 }
                 UnitCore.Instance.LiveHandle(message.Type, chartstring,ImgContainer);
             }));
+        }
+
+        private void CalcRelativePostion(float head, float movlng, float movlat, float shiplng, float shiplat, out float DistanceX, out float DistanceY)
+        {
+            float lngdist = 0;
+            double xdist = 0;
+            float latdist = 0;
+            double ydist = 0;
+            if (movlng <= 0 && shiplng >= 0)
+            {
+                if (shiplng - movlng >= 180)
+                {
+                    lngdist = 360 - (shiplng - movlng);
+                }
+                else
+                {
+                    lngdist = -(shiplng - movlng);
+                }
+            }
+            else if (shiplng <= 0 && movlng >= 0)
+            {
+                if (movlng - shiplng >= 180)
+                {
+                    lngdist = (movlng - shiplng) - 360;
+                }
+                else
+                {
+                    lngdist = movlng - shiplng;
+                }
+            }
+            else//两者同时为正，同时为负
+            {
+                lngdist = movlng - shiplng;
+            }
+            latdist = movlat - shiplat;
+            xdist = ((lngdist - (int)lngdist) / 100 + (int)lngdist) * 60 * 1852;
+            xdist = xdist*Math.Cos(movlat/180*Math.PI);
+            ydist = ((latdist - (int)latdist) / 100 + (int)latdist) * 60 * 1852;
+            //float radius = 0;//相对于正北方向顺时针角度
+            //if ( xdist / ydist>= 0)
+            //{
+            //    if (xdist >= 0) //第一象限
+            //    {
+            //        radius = Math.Atan(xdist/ydist);
+            //    }
+            //    else
+            //    {
+            //        radius = Math.Atan(xdist / ydist)+Math.PI;
+            //    }
+            //}
+            //else
+            //{
+            //    if (xdist >= 0) //第二象限
+            //    {
+            //        radius = Math.PI + Math.Atan(xdist / ydist);
+            //    }
+            //    else//第四象限
+            //    {
+            //        radius = Math.Atan(xdist / ydist) + 2*Math.PI;
+            //    }
+            //}
+            DistanceX = (float)(xdist * Math.Cos(head / 180 * Math.PI) - ydist * Math.Sin(head / 180 * Math.PI));
+            DistanceY = (float)(xdist * Math.Sin(head / 180 * Math.PI) + ydist * Math.Cos(head / 180 * Math.PI));
         }
 
         public void Handle(USBLEvent message)

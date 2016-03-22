@@ -54,10 +54,10 @@
         </Grid>
         <ProgressBar Grid.Row ="2" Visibility="{Binding IsProcessing, Converter={StaticResource BooleanToVisibilityConverter}}"
                      Style="{StaticResource PerformanceProgressBar}" Foreground="Black" VerticalAlignment="Bottom" Margin="0,5,0,0"/>
-        <UniformGrid  Grid.Row ="3" Columns="2">
+        <UniformGrid  Grid.Row ="3" Columns="3">
             <Button Margin="3" Content="重启MSP430" Foreground ="DarkBlue" Background ="{StaticResource GrayBrush2}" FontSize="26" FontFamily="SimSun" BorderThickness="1,1" Height="60" Click="RebootButton_Click"/>
             <Button Margin="3" Content="清空重启次数" Foreground ="DarkBlue" FontSize="26" Background ="{StaticResource GrayBrush2}" FontFamily="SimSun" BorderThickness="1,1" Height="60" Click="ClearRebootButton_Click"/>
-            
+            <Button Margin="3" Content="DSP进入Loader" Foreground ="DarkBlue" FontSize="26" Background ="{StaticResource GrayBrush2}" FontFamily="SimSun" BorderThickness="1,1" Height="60" Click="DSPLoader_Click"/>
         </UniformGrid>
         
         

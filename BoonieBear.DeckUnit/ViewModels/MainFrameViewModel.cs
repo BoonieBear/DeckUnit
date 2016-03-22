@@ -233,7 +233,8 @@ namespace BoonieBear.DeckUnit.ViewModels
             }
             else
             {
-               //await UnitCore.Instance.CommEngine.SendConsoleCMD(CommInput);//没有这个应用
+                
+               await UnitCore.Instance.CommEngine.SendLoaderCMD(CommInput);
 
             }
         }
