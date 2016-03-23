@@ -29,7 +29,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 ACNProtocol.OutPutArrayBit((BitArray)NodeInfo[nodename]);
             }
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] {ACNProtocol.SourceID.ToString(), ID.ToString()};
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+                
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList); 
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
 
@@ -54,7 +65,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 ACNProtocol.OutPutIntBit(dat, 2);//评价
             }
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
 
@@ -83,7 +105,18 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.AddPool(ID);
             if(ID==0)
                 return;
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
 
@@ -114,16 +147,27 @@ namespace BoonieBear.DeckUnit.ACNP
                     ACNProtocol.OutPutIntBit(dat, 2);
                 }
                 ACNProtocol.AddPool(ID);
-                string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+                List<string> IDLst = new List<string>();
+                IDLst.Add(ACNProtocol.SourceID.ToString());
+                if (ACNProtocol.bUseTrack)
+                {
+
+                    if (ACNProtocol.TrackNodeList.Count > 0)
+                    {
+                        IDLst.AddRange(ACNProtocol.TrackNodeList);
+                    }
+
+                }
+                IDLst.Add(ID.ToString());
                 Pack008(ID, IDLst);
             }
         }
 
         //路径安排
-        public static void Pack008(int ID,string[] nodename)
+        public static void Pack008(int ID,List<string> nodename)
         {
             int[] dat = new int[1];
-            int nodenum = nodename.Length;
+            int nodenum = nodename.Count;
             ACNProtocol.InitForPack(nodenum * 6 + 20);
             dat[0] = 8;
             ACNProtocol.OutPutIntBit(dat, 8);
@@ -150,7 +194,18 @@ namespace BoonieBear.DeckUnit.ACNP
             ACNProtocol.OutPutIntBit(b, 12);
             ACNProtocol.OutPutArrayBit(bta);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack103(int ID)
@@ -162,7 +217,18 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 20;
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack105(int ID)
@@ -174,7 +240,18 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 20;
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack107(int ID, bool Rebuild)
@@ -190,7 +267,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 dat[0] = 1;
             ACNProtocol.OutPutIntBit(dat, 1);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack109(int ID)
@@ -202,7 +290,18 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 20;
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack111(int ID, bool Rebuild)
@@ -218,7 +317,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 dat[0] = 1;
             ACNProtocol.OutPutIntBit(dat, 1);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack113(int ID)
@@ -230,7 +340,18 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 20;
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack115(int ID,int CommIndex)
@@ -246,7 +367,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 dat[0] = CommIndex;
             ACNProtocol.OutPutIntBit(dat, 8);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack117(int ID, int CommIndex)
@@ -262,7 +394,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 dat[0] = CommIndex;
             ACNProtocol.OutPutIntBit(dat, 8);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
 
@@ -313,7 +456,18 @@ namespace BoonieBear.DeckUnit.ACNP
                 }
             }
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         public static void Pack121(int ID)
@@ -325,7 +479,18 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = 20;
             ACNProtocol.OutPutIntBit(dat, 12);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         //通信制式开关
@@ -341,7 +506,18 @@ namespace BoonieBear.DeckUnit.ACNP
             BitArray a = new BitArray(16);
             ACNProtocol.OutPutArrayBit(baCommType);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
 
@@ -359,7 +535,18 @@ namespace BoonieBear.DeckUnit.ACNP
             dat[0] = iTimePeriod;
             ACNProtocol.OutPutIntBit(dat, 32);
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
         //收发自动调节开关
@@ -402,7 +589,18 @@ namespace BoonieBear.DeckUnit.ACNP
             }
             //加入列表
             ACNProtocol.AddPool(ID);
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), ID.ToString() };
+            List<string> IDLst = new List<string>();
+            IDLst.Add(ACNProtocol.SourceID.ToString());
+            if (ACNProtocol.bUseTrack)
+            {
+
+                if (ACNProtocol.TrackNodeList.Count > 0)
+                {
+                    IDLst.AddRange(ACNProtocol.TrackNodeList);
+                }
+
+            }
+            IDLst.Add(ID.ToString());
             Pack008(ID, IDLst);
         }
 
@@ -546,7 +744,7 @@ namespace BoonieBear.DeckUnit.ACNP
                 }
                 
             }
-            string[] IDLst = new[] { ACNProtocol.SourceID.ToString(), task.DestID.ToString() };
+            List<string> IDLst = new List<string>() { ACNProtocol.SourceID.ToString(), task.DestID.ToString() };
             Pack008(task.DestID, IDLst);
         }
         

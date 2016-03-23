@@ -50,7 +50,7 @@
                 <TextBlock Foreground ="DarkBlue" Text="目标节点："  VerticalAlignment="Center" FontSize="36" Margin="15,0,0,0" />
                 <picker:ListPicker ItemsSource="{Binding ID}" Margin="10,38"
 					DisplayMemberPath="Text" Width="100" HorizontalAlignment="Center" VerticalAlignment="Center" SelectedItem="{Binding NodeID, Mode=TwoWay}" Height="44" 
-					FullModeHeader="选择要接受命令的节点号">
+					FullModeHeader="选择节点号">
                     <picker:ListPicker.FullModeItemTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Text}" FontSize="24" Margin="{StaticResource WinMargin}"/>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -67,6 +68,8 @@ namespace BoonieBear.DeckUnit.Views
                 }
                 NetLinkCheckBox.IsChecked = false;
             }
+            RouteBox.IsChecked = ACNProtocol.bUseTrack;
+
         }
 
         private void FlyOutView(int index)
@@ -513,5 +516,66 @@ namespace BoonieBear.DeckUnit.Views
                 btn.IsEnabled = true;
             }
         }
+
+        private async void RouteBox_Click(object sender, RoutedEventArgs e)
+        {
+            if (RouteBox.IsChecked==true)
+            {
+                var newdialog = (BaseMetroDialog)App.Current.MainWindow.Resources["RouterDialog"];
+                await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMetroDialogAsync(MainFrameViewModel.pMainFrame,
+                newdialog);
+                
+            }
+            else
+            {
+                ACNProtocol.bUseTrack = false;
+            }
+        }
+
+        private async void ConfirmRouteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ACNProtocol.bUseTrack = true;
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["RouterDialog"]);
+        }
+
+        private async void CancelRouteBtn_Click(object sender, RoutedEventArgs e)
+        {
+            ACNProtocol.bUseTrack = false;
+            await MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame, (BaseMetroDialog)App.Current.MainWindow.Resources["RouterDialog"]);
+            RouteBox.IsChecked = false;
+        }
+
+        private void AddToTrackBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var newdialog = (BaseMetroDialog)App.Current.MainWindow.Resources["RouterDialog"];
+            
+            var id = newdialog.FindChild<NumericUpDown>("TrackID");
+
+            var trackbox = newdialog.FindChild<TextBox>("TrackBox");
+            if (trackbox.Text!=null&&trackbox.Text.Contains(id.Value.ToString()))
+            {
+                return;
+            }
+            if (trackbox.Text.Length > 0)
+            {
+                trackbox.Text = trackbox.Text + id.Value.ToString() + "->";
+            }
+            else
+            {
+                trackbox.Text = "->" + id.Value.ToString() + "->";
+            }
+            ACNProtocol.TrackNodeList.Add(id.Value.ToString());
+            
+        }
+
+        private void ClearTrackBtn_Click(object sender, RoutedEventArgs e)
+        {
+            var newdialog = (BaseMetroDialog)App.Current.MainWindow.Resources["RouterDialog"];
+            var trackbox = newdialog.FindChild<TextBox>("TrackBox");
+            trackbox.Text = string.Empty;
+            ACNProtocol.TrackNodeList.Clear();
+        }
+
+        
     }
 }

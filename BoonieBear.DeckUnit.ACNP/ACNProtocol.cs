@@ -27,6 +27,9 @@ namespace BoonieBear.DeckUnit.ACNP
         public static string Errormessage { get; private set; }
         public static string BuoyID { get; set; }
         public static int Port { get; set; }
+
+        public static bool bUseTrack { get; set; }
+        public static List<string> TrackNodeList  = new List<string>();
         private static bool _Initialed = false;
         public static bool Initialed 
         {
@@ -45,6 +48,7 @@ namespace BoonieBear.DeckUnit.ACNP
         {
             SourceID = (ushort)ID;
             BuoyID = "00";
+            bUseTrack = false;
             Port = 2;
             BlockIndex = 0;
             ACNWebHashtableID.Clear();
@@ -255,6 +259,7 @@ namespace BoonieBear.DeckUnit.ACNP
             CmdNode.Clear();
             byte[] cmd = new byte[(int)Math.Ceiling(((double)total) / 8)];
             packdata.CopyTo(cmd, 0);
+            bUseTrack = false;//reset track flag after pack data every time
             if (bViaComm)
             {
                 return CommPackage(171,cmd);
@@ -688,7 +693,7 @@ namespace BoonieBear.DeckUnit.ACNP
                                     AddtoList("3", "起始地址", sourceID.ToString(), "节点" + sourceID.ToString());
                                     for (int n = 0; n < nodes; n++)
                                     {
-                                        AddtoList("3", "节点ID" + (n + 1).ToString(), GetIntValueFromBit(6).ToString(), "");
+                                        AddtoList("3", "节点ID" + (n + 1).ToString(), "节点" + GetIntValueFromBit(6).ToString(), "");
                                     }
                                     int dest = GetIntValueFromBit(6);
                                     AddtoList("3", "目的地址", dest.ToString(), "节点" + dest.ToString());

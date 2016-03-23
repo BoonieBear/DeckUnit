@@ -161,7 +161,18 @@ namespace BoonieBear.DeckUnit.Views
                 var fr = File.Open(cl.FilePath, FileMode.Open, FileAccess.Read, FileShare.Read);
                 var br = new BinaryReader(fr);
                 //UnitCore.Instance.AcnMutex.WaitOne();
-                ACNProtocol.GetDataForParse(br.ReadBytes((int)fr.Length));
+                var bytes = br.ReadBytes((int) fr.Length);
+                if (BitConverter.ToUInt16(bytes,0) == 0xEE01)
+                {
+                    var newbytes = new byte[bytes.Length - 4];
+                    Buffer.BlockCopy(bytes, 4, newbytes, 0, bytes.Length - 4);
+                    ACNProtocol.GetDataForParse(newbytes);
+                }
+                else
+                {
+                    ACNProtocol.GetDataForParse(bytes);
+                }
+                
                 if (ACNProtocol.Parse())
                 {
                     var tree = StringListToTree.TransListToNodeWriteLineic(ACNProtocol.parselist);

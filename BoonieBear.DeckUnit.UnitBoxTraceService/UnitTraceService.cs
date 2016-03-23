@@ -213,9 +213,19 @@ namespace BoonieBear.DeckUnit.UnitBoxTraceService
         }
         public bool Save(CommandLog log, byte[] bytes)
         {
+            byte[] newbytes = null;
+            if (BitConverter.ToUInt16(bytes, 0) == 0xEE01)
+            {
+                newbytes = new byte[bytes.Length - 4];
+                Buffer.BlockCopy(bytes, 4, newbytes, 0, bytes.Length - 4);
+            }
+            else
+            {
+                newbytes = bytes;
+            }
             if (_adFile.Create())
             {
-                if (_adFile.Write(bytes)>0)
+                if (_adFile.Write(newbytes) > 0)
                 {
                     _adFile.Close();
                     log.FilePath = FileName;

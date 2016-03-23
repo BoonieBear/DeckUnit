@@ -119,6 +119,42 @@
                     </UniformGrid>
                 </StackPanel>
             </Dialog:CustomDialog>
+            <Dialog:CustomDialog x:Key="RouterDialog"
+                                 Title="选择路由"
+                                 x:Name="RouterDialog">
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <!--TextBlock Grid.Row="0" Grid.Column="0" Text="源地址"/>
+                    <metroControl:NumericUpDown x:Name="SourceID" Grid.Row="0" Grid.Column="1" Maximum="63" Minimum="1"/>
+                    <TextBlock Grid.Row="0" Grid.Column="2" Text="目的地址"/>
+                    <metroControl:NumericUpDown x:Name="DestID" Value="5"  Grid.Row="0" Grid.Column="3" Maximum="63" Minimum="1"/-->
+                    <TextBlock Grid.Row="0" Grid.Column="0" FontSize="18" Text="途径节点" VerticalAlignment="Center"/>
+                    <metroControl:NumericUpDown x:Name="TrackID" Grid.Row="0" Grid.Column="1" Value="15"  Grid.ColumnSpan="2" Maximum="63" Minimum="1"/>
+                    <Button x:Name="AddToTrackBtn" Grid.Row="0" Grid.Column="3" Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="添加" Click="AddToTrackBtn_Click" />
+                    <TextBox x:Name="TrackBox" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" IsReadOnly="True"/>
+                    <Button x:Name="ClearTrackBtn" Grid.Row="1" Grid.Column="2" Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="清除" Click="ClearTrackBtn_Click" />
+                    <Button x:Name="ConfirmRouteBtn" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Style="{DynamicResource SquareButtonStyle}"
+							Margin="5"
+							Content="确定" Click="ConfirmRouteBtn_Click" />
+                    <Button x:Name="CancelRouteBtn" Grid.Row="2" Grid.Column="2" Grid.ColumnSpan="2"   Style="{DynamicResource SquareButtonStyle}"
+                            Margin="5"
+						    Content="取消" Click="CancelRouteBtn_Click" />
+                </Grid>
+            </Dialog:CustomDialog>
         </ResourceDictionary>
     </Window.Resources>
     <metroControl:MetroWindow.DataContext>
@@ -133,14 +169,14 @@
 			FadeDuration="0:0:0.20"
 			FadeOffset="0:0:0.20" HorizontalContentAlignment="Stretch" Loaded="ContentFrame_Loaded"/>
         <metroControl:WindowCommands VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="99" Height="40" Margin="0,0,30,0">
-            <Button Click="LaunchDebugView" Width="50"
+            <Button Click="LaunchDebugView" Width="40"
 				ToolTip="调试信息">
                 <Button.Background>
-                    <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.console.png" Stretch="UniformToFill" />
+                    <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.console.png" Stretch="Uniform" />
                 </Button.Background>
             </Button>
 
-            <Button Click="LaunchDataView" Width="50"
+            <Button Click="LaunchDataView" Width="40"
 				ToolTip="接收到的数据 " >
                 <Button.Background>
                     <ImageBrush ImageSource="/LOAT.DeckUnit;component/Assets/appbar/appbar.database.png" Stretch="Uniform" />
@@ -161,6 +197,9 @@
 					HorizontalAlignment="Center"
 					VerticalAlignment="Center"/>
             </Grid>
+        </metroControl:WindowCommands>
+        <metroControl:WindowCommands VerticalAlignment="Top" HorizontalAlignment="Right" Panel.ZIndex="99"  Margin="0,40,20,0">
+            <CheckBox x:Name="RouteBox" Content="选择路由" Click="RouteBox_Click"  />
         </metroControl:WindowCommands>
         <metroControl:FlyoutsControl x:Name="flyoutsControl">
             <metroControl:Flyout x:Name="ConsoleFlyout"
