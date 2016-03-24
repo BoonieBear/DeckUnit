@@ -13,19 +13,25 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
         {
             try
             {
-                var shipheading = (float)values[0];
-                var movheading = (float)values[1];
-                var setShipFront = (bool)values[2];
-                if (setShipFront == false)
+                float? shipheading = values[0] as float?;
+                bool? setShipFront = values[1] as bool?;
+
+                float? movheading = values[1] as float?;
+
+                if (setShipFront != null && setShipFront == false && movheading!=null)
                     return (double)movheading;
-                else
+                else if (movheading != null && shipheading!=null)
                 {
                     return (double)(movheading - shipheading);
+                }
+                else
+                {
+                    return (double)0.0;
                 }
             }
             catch (Exception)
             {
-                return null;
+                return (double)0.0;
             }
                 
 

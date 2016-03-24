@@ -294,9 +294,9 @@
                                                         <RotateTransform3D.Rotation>
                                                             <AxisAngleRotation3D Axis="0,0,1">
                                                                 <AxisAngleRotation3D.Angle>
-                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleMovConverter}">
+                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleShipConverter}">
                                                                         <Binding Path="ShipHeading"/>
-                                                                        <Binding Path="MovHeading"/>
+                                                                        
                                                                         <Binding Path="SetShipHeadingFront"/>
                                                                     </MultiBinding>
                                                                 </AxisAngleRotation3D.Angle>
@@ -313,9 +313,9 @@
                                                         <RotateTransform3D.Rotation>
                                                             <AxisAngleRotation3D Axis="0,0,1">
                                                                 <AxisAngleRotation3D.Angle>
-                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleMovConverter}">
+                                                                    <MultiBinding Converter="{StaticResource _3DChartFrontAngleShipConverter}">
                                                                         <Binding Path="ShipHeading"/>
-                                                                        <Binding Path="MovHeading"/>
+
                                                                         <Binding Path="SetShipHeadingFront"/>
                                                                     </MultiBinding>
                                                                 </AxisAngleRotation3D.Angle>
@@ -325,16 +325,16 @@
                                                 </Transform3DGroup>
                                             </ModelVisual3D.Transform>
                                         </ModelVisual3D>
-                                        <h:ArrowVisual3D Point1="6000 0 -100" Point2="-6000 0 -100" Diameter="20" Fill="Red"  HeadLength="30" ThetaDiv="36"  />
-                                        <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Green" HeadLength="30" ThetaDiv="36"  />
+                                        <h:ArrowVisual3D Point1="6000 0 -100" Point2="-6000 0 -100" Diameter="20" Fill="Black"  HeadLength="30" ThetaDiv="36"  />
+                                        <h:ArrowVisual3D Point1="0 -6000 -100" Point2="0 6000 -100" Diameter="20" Fill="Black" HeadLength="30" ThetaDiv="36"  />
                                     </h:HelixViewport3D>
                                     <CheckBox x:Name="HeadChoser"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Center" Content="北方为正前"  IsChecked="{Binding SetShipHeadingFront}" Unchecked="HeadChoser_Unchecked" Checked="HeadChoser_Checked"/>
-                                    <CheckBox x:Name="ShowUSBLTrackBox"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="显示轨迹"  IsChecked="{Binding ShowUSBLTrack}" Margin="0,0,0,30"/>
-                                    <CheckBox x:Name="ShowUWVTrackBox"  Foreground ="White" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="显示轨迹"  IsChecked="{Binding ShowUWVTrack}"/>
+                                    <CheckBox x:Name="ShowUSBLTrackBox"  Foreground ="Gold" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="USBL轨迹"  IsChecked="{Binding ShowUSBLTrack}" Margin="0,0,0,30"/>
+                                    <CheckBox x:Name="ShowUWVTrackBox"  Foreground ="Red" VerticalAlignment="Bottom" FontSize="14" HorizontalAlignment="Right" Content="测算 轨迹"  IsChecked="{Binding ShowUWVTrack}"/>
                                     <TextBlock Foreground ="White" VerticalAlignment="Bottom" FontSize="16" HorizontalAlignment="Left" Text="网格距离500米"/>
                                     <!--Button Style="{StaticResource ChromeButtonStyle}"  x:Name="NorthButton"  Content="正北" Foreground="DarkGray" Click="NorthButton_Click" VerticalAlignment="Top" FontSize="14" HorizontalAlignment="Center"/-->
                                     <StackPanel Name="USBL" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top">
-                                        <CheckBox Content="超短基线" Foreground ="White" IsChecked="{Binding USBLUsed}"/>
+                                        <RadioButton Content="超短基线" Foreground ="White" IsChecked="{Binding USBLUsed}" GroupName="PositionUsedGroup"/>
                                         <TextBlock FontSize="16">
                                             <Run Text="更新时间:   "/>
                                             <Run Text="{Binding PosFromUSBLTime}"/>
@@ -381,18 +381,25 @@
                                             <Run Text="m"/>
                                         </TextBlock>
                                         <TextBlock FontSize="16">
-                                            <Run Text="相对距离(米)"/>
-                                            <Run Text=" X:"/>
+                                            <Run Text="X(艏向):"/>
                                             <Run Text="{Binding XDistanceFromUSBL}"/>
-                                            <Run Text=" | Y:"/>
+                                            <Run Text="m"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="16">
+                                            
+                                            <Run Text="Y(右舷):"/>
                                             <Run Text="{Binding YDistanceFromUSBL}"/>
-                                            <Run Text=" | Z:"/>
+                                            <Run Text="m"/>
+                                        </TextBlock>
+                                        <TextBlock FontSize="16">
+                                            <Run Text="Z(深度):"/>
                                             <Run Text="{Binding ZDistanceFromUSBL}"/>
+                                            <Run Text="m"/>
                                         </TextBlock>
                                     </StackPanel>
                                     <StackPanel Name="MovPos" Orientation="Vertical" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,0,80,0">
 
-                                        <CheckBox Content="潜器返回" Foreground ="White" IsChecked="{Binding UWVUsed}"/>
+                                        <RadioButton Content="潜器返回" Foreground ="White" IsChecked="{Binding UWVUsed}" GroupName="PositionUsedGroup"/>
                                         <TextBlock FontSize="16">
                                             <Run Text="更新时间:   "/>
                                             <Run Text="{Binding PosFromUwvTime}"/>

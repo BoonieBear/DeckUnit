@@ -13,9 +13,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
         {
             try
             {
-                var shipheading = (float)values[0];
-                var setShipFront = (bool)values[1];
-                if (setShipFront == false)
+                float? shipheading = values[0] as float?;
+                bool? setShipFront = values[1] as bool?;
+                if (setShipFront!=null&&setShipFront == false)
                     return (double)shipheading;
                 else
                 {
@@ -24,7 +24,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Converters
             }
             catch (Exception)
             {
-                return null;
+                return (double)0.0;
             }
                 
         }
