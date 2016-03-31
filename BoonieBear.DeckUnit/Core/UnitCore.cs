@@ -198,7 +198,7 @@ namespace BoonieBear.DeckUnit.Core
 
                     var cmd = MSPHexBuilder.Pack252(DateTime.Now);
                     CommEngine.SendCMD(cmd);//设置系统时间
-                    TaskEx.Delay(TimeSpan.FromMilliseconds(1000));
+                    Thread.Sleep(2000);
                     cmd = MSPHexBuilder.Pack250(true);
                     CommEngine.SendCMD(cmd);//进入调试模式，开启网络
                 }
