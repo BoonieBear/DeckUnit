@@ -72,6 +72,11 @@
                                     通信制式设置
                                 </TextBlock>
                             </Button>
+                            <Button FontFamily="SimSun" TextBlock.FontSize="20" Grid.Row="2" Grid.Column="0" Background="{DynamicResource HorizontalNormalBorderBrush}" Foreground="Black" Command="{Binding GoSetNodeInfoPage}">
+                                <TextBlock>
+                                    设置节点信息表
+                                </TextBlock>
+                            </Button>
                         </Grid>
                     </StackPanel>
                 </ScrollViewer>

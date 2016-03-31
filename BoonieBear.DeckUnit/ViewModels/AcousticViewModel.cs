@@ -39,6 +39,7 @@ namespace BoonieBear.DeckUnit.ViewModels
             GoDeviceParaSet = RegisterCommand(ExecuteGoDeviceParaSet, CanExecuteGoDeviceParaSet, true);
             GoSetRecvEmitPage = RegisterCommand(ExecuteGoSetRecvEmitPage, CanExecuteGoSetRecvEmitPage, true);
             GoComSchemaPage = RegisterCommand(ExecuteGoComSchemaPage, CanExecuteGoComSchemaPage, true);
+            GoSetNodeInfoPage = RegisterCommand(ExecuteGoSetNodeInfoPage, CanExecuteGoSetNodeInfoPage, true);
         }
 
 
@@ -244,6 +245,23 @@ namespace BoonieBear.DeckUnit.ViewModels
         public void ExecuteGoComSchemaPage(object sender, ExecutedRoutedEventArgs eventArgs)
         {
             EventAggregator.PublishMessage(new GoComSchemaEvent());
+        }
+        public ICommand GoSetNodeInfoPage
+        {
+            get { return GetPropertyValue(() => GoSetNodeInfoPage); }
+            set { SetPropertyValue(() => GoSetNodeInfoPage, value); }
+        }
+
+
+        public void CanExecuteGoSetNodeInfoPage(object sender, CanExecuteRoutedEventArgs eventArgs)
+        {
+            eventArgs.CanExecute = true;
+        }
+
+
+        public void ExecuteGoSetNodeInfoPage(object sender, ExecutedRoutedEventArgs eventArgs)
+        {
+            EventAggregator.PublishMessage(new GoSetNodeInfoViewEvent());
         }
         #endregion
 

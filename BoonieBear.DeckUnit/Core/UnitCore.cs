@@ -31,6 +31,9 @@ using BoonieBear.DeckUnit.LiveService;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 using BoonieBear.DeckUnit.WaveBox;
+using System.IO;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 namespace BoonieBear.DeckUnit.Core
 {
     /// <summary>
@@ -65,6 +68,13 @@ namespace BoonieBear.DeckUnit.Core
         //ad波形
         public WaveControl Wave = null;
         public Mutex AcnMutex { get; set; }//全局acn解析锁
+        [Serializable]
+        private class initobject
+        {
+            public Hashtable nodeinfo;//节点信息
+        }
+        initobject initpara = new initobject();
+        public Hashtable NodeInfoMap = new Hashtable();
         public UnitTraceService UnitTraceService
         {
             get { return _unitTraceService ?? (_unitTraceService = new UnitTraceService()); }
@@ -81,7 +91,58 @@ namespace BoonieBear.DeckUnit.Core
         {
             AcnMutex = new Mutex();
         }
+        //读取初始化参数
+        public bool ReadInit()
+        {
+            string MyExecPath = System.IO.Path.GetDirectoryName(
+                System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            string infoname = MyExecPath + "\\" + "DefInit.conf";
+            Stream stream = null;
+            try
+            {
+                if (File.Exists(infoname) != true)
+                    if (SaveInit() != true)
+                        return false;
+                stream = new FileStream(infoname, FileMode.OpenOrCreate, FileAccess.Read, FileShare.Read);
+                IFormatter formatter = new BinaryFormatter();
+                initpara = (initobject)formatter.Deserialize(stream);
+                stream.Close();
 
+                NodeInfoMap = initpara.nodeinfo;
+                return true;
+            }
+            catch (Exception MyEx)
+            {
+                Error = MyEx.Message;
+                if (stream != null)
+                    stream.Close();
+                return false;
+            }
+        }
+        public bool SaveInit()
+        {
+            string MyExecPath = System.IO.Path.GetDirectoryName(
+                System.Reflection.Assembly.GetExecutingAssembly().GetModules()[0].FullyQualifiedName);
+            string infoname = MyExecPath + "\\" + "DefInit.conf";
+            Stream stream = new FileStream(infoname, FileMode.Create, FileAccess.Write, FileShare.None);
+            BinaryFormatter formatter = new BinaryFormatter();
+            try
+            {
+
+                initpara.nodeinfo = NodeInfoMap;
+
+                formatter.Serialize(stream, initpara);
+                stream.Close();
+                return true;
+            }
+            catch (Exception MyEx)
+            {
+                Error = MyEx.Message;
+                if (stream != null)
+                    stream.Close();
+                return false;
+            }
+        }
         public bool LoadConfiguration()
         {
             bool ret = true;
@@ -100,6 +161,8 @@ namespace BoonieBear.DeckUnit.Core
                     throw new Exception("通信配置信息丢失");
                 if (_baseInfo == null)
                     throw new Exception("甲板单元基本信息丢失");
+                if(ReadInit()==false)
+                    throw new Exception("读取参数信息失败");
 
             }
             catch (Exception ex)

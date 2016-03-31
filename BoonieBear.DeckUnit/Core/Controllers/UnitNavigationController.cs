@@ -30,7 +30,8 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         IHandleMessage<GoNewTaskViewEvent>,
         IHandleMessage<GoADCPDataViewEvent>,
         IHandleMessage<GoTaskListViewEvent>,
-        IHandleMessage<GoADViewEvent>
+        IHandleMessage<GoADViewEvent>,
+        IHandleMessage<GoSetNodeInfoViewEvent>
     {
 
         public void Handle(GoHistoryDataPageBaseNavigationRequest message)
@@ -129,6 +130,11 @@ namespace BoonieBear.DeckUnit.Core.Controllers
         public void Handle(GoADViewEvent message)
         {
             NavigateToPage("Views/ADPage.xaml");
+        }
+
+        public void Handle(GoSetNodeInfoViewEvent message)
+        {
+            NavigateToPage("Views/CommandView/SetNodeInfoView.xaml");
         }
     }
 }

@@ -29,7 +29,8 @@ namespace BoonieBear.DeckUnit.ViewModels
         private RefreshNodeConfigViewModel _refreshNodeConfigViewModel;
         private SetEnergyInfoViewModel _setEnergyInfoViewModel;
         private SetDateTimeViewModel _setDateTimeViewModel;
-        private ADCPDataViewModel _adcpDataViewModel ;
+        private ADCPDataViewModel _adcpDataViewModel;
+        private SetNodeInfoViewModel _setNodeInfoViewModel;
 
         /// <summary>
         /// Gets the MainFrame ViewModel
@@ -324,6 +325,18 @@ namespace BoonieBear.DeckUnit.ViewModels
                     _adcpDataViewModel.Initialize();
                 }
                 return _adcpDataViewModel;
+            }
+        }
+        public SetNodeInfoViewModel SetNodeInfoViewModel
+        {
+            get
+            {
+                if (_setNodeInfoViewModel == null)
+                {
+                    _setNodeInfoViewModel = new SetNodeInfoViewModel();
+                    _setNodeInfoViewModel.Initialize();
+                }
+                return _setNodeInfoViewModel;
             }
         }
     }

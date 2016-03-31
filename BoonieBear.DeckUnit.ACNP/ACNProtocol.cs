@@ -13,7 +13,7 @@ namespace BoonieBear.DeckUnit.ACNP
         private static readonly Hashtable ACNCommandID = new Hashtable();
 
         private static BitArray data;//将数据转换成bit数组，低位在前。
-        private static BitArray packdata;//将打包数据转换成bit数组
+        public static BitArray packdata;//将打包数据转换成bit数组
 
         private static Hashtable CmdTable = new Hashtable();//命令哈希表
         private static List<BitArray> CmdForSend = new List<BitArray>();//命令数据

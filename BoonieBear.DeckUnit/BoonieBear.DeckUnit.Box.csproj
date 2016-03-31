@@ -102,7 +102,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\TinyMetroWpfLibrary.dll</HintPath>
     </Reference>
-    <Reference Include="TinyMetroWpfLibrary.Controls">
+    <Reference Include="TinyMetroWpfLibrary.Controls, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Tools\TinyMetroWpfLibrary.Controls.dll</HintPath>
     </Reference>
     <Reference Include="TinyMetroWpfLibrary.Utility, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
@@ -162,6 +163,7 @@
     <Compile Include="Events\GoRefreshNodeConfigViewEvent.cs" />
     <Compile Include="Events\GoSetDateTimePage.cs" />
     <Compile Include="Events\GoSetEnergyViewEvent.cs" />
+    <Compile Include="Events\GoSetNodeInfoViewEvent.cs" />
     <Compile Include="Events\GoTaskListViewEvent.cs" />
     <Compile Include="Events\NodeStatusInfo.cs" />
     <Compile Include="Events\PingNotifyEvent.cs" />
@@ -184,6 +186,7 @@
     <Compile Include="ViewModels\CommandViewModel\DeviceParaSetViewModel.cs" />
     <Compile Include="ViewModels\CommandViewModel\NodeComSchemaViewModel.cs" />
     <Compile Include="ViewModels\CommandViewModel\NodeRecvEmitSetViewModel.cs" />
+    <Compile Include="ViewModels\CommandViewModel\SetNodeInfoViewModel.cs" />
     <Compile Include="ViewModels\CommandViewModel\SimpleViewModel.cs" />
     <Compile Include="ViewModels\DownLoadedViewModel.cs" />
     <Compile Include="ViewModels\DownLoadingViewModel.cs" />
@@ -214,6 +217,9 @@
     </Compile>
     <Compile Include="Views\CommandView\NodeRecvEmitSetView.xaml.cs">
       <DependentUpon>NodeRecvEmitSetView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\CommandView\SetNodeInfoView.xaml.cs">
+      <DependentUpon>SetNodeInfoView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\CommandView\SimpleView.xaml.cs">
       <DependentUpon>SimpleView.xaml</DependentUpon>
@@ -362,6 +368,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\CommandView\NodeRecvEmitSetView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\CommandView\SetNodeInfoView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

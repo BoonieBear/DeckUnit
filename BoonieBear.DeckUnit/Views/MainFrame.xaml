@@ -17,7 +17,7 @@
        x:Class="BoonieBear.DeckUnit.Views.MainFrame"
         Dialog:DialogParticipation.Register="{Binding}"
         commands:ApplicationCommands.RegisterCommandBindings="{Binding RegisteredCommands}"
-        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="470" Closing="MetroWindow_Closing" IsWindowDraggable="False">
+        ShowTitleBar ="False"  ShowCloseButton =" true" Title="水声通信机"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize" WindowStyle="None" Width="640" Height="479" Closing="MetroWindow_Closing" IsWindowDraggable="False">
     <Window.Resources>
         <ResourceDictionary>
         <Converter:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
