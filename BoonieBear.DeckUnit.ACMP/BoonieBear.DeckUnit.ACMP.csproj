@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BoonieBear.DeckUnit.BaseType">
+      <HintPath>..\BoonieBear.DeckUnit.BaseType\bin\Debug\BoonieBear.DeckUnit.BaseType.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />

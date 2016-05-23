@@ -49,6 +49,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Controls
             else
             {
                 newvalue = float.Parse(Value);
+                LastValue = newvalue.ToString();
             }
             if (newvalue - lastvalue > float.Epsilon)
             {

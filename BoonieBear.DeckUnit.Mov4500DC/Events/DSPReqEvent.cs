@@ -5,7 +5,12 @@ using System.Text;
 
 namespace BoonieBear.DeckUnit.Mov4500UI.Events
 {
-    public class GoLiveCaptureNavigationRequest
+    public class DSPReqEvent
     {
+        public DSPReqEvent()
+        {
+
+        }
+
     }
 }

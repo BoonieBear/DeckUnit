@@ -35,6 +35,7 @@ using System.Runtime.InteropServices;
 using MahApps.Metro.Controls;
 using DevExpress.XtraCharts;
 using BoonieBear.DeckUnit.Comm.GPIO;
+using BoonieBear.DeckUnit.Comm.PCI;
 namespace BoonieBear.DeckUnit.Mov4500UI.Views
 {
     /// <summary>
@@ -46,9 +47,22 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         [DllImport("user32.dll")]
         private extern static bool SwapMouseButton(bool fSwap);
         #region 变量区域
+        public static Thread m_pThread_BPsend;
+        public Thread m_pMessage_BPsend;
+        public int idcount = 0;
+        public static int DelayTime = 0;
+        DispatcherTimer CountWatcher = null;
+        int Count = 0;
+        bool IsBPInitialize = false;
+
+        int nAmp = 4004;//录音系数
+        Int16[] databuf = new Int16[16000];
+        int count = 0;
 		bool VoiceBar_MouseLeftButton = false;//记录界面是否在录音
         bool VoiceBarIsable = true;
         GPIOService GPIO = new GPIOService();
+        PCIService PCIIO = new PCIService();
+        bool RecordIOStatus = false;
         private bool _isPressed = false;
         private Point _sourcePoint;
         //选择图片的文件名
@@ -64,11 +78,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private bool isRecording = false;
         private short[] volumnbuffer = new short[400];//half of wavecontrol recording buffer
         private readonly Dispatcher dispatcher;
+
+        public bool GPIOInitial = true;
+        public bool PCIInitial = true;
         #endregion
         public LiveCaptureView()
         {
-            InitializeComponent();            
-            GPIO.Initialize_SUSI();
+            InitializeComponent();             
+            GPIOInitial=GPIO.Initialize_SUSI();
+            PCIInitial=PCIIO.Initialize_PCI();
             WaveControl.Initailize();
             WaveControl.AddRecDoneHandle(RecHandle);
             WaveControl.StartPlaying();
@@ -76,55 +94,113 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             UnitCore.Instance.LiveHandle = AppendRecvInfo;
             UnitCore.Instance.AddFHHandle = AddSendFHToChart;
             UnitCore.Instance.AddImgHandle = AddSendImgToChart;
+
+            LeftSize.Text = "(还可继续输入" + UnitCore.Instance.MFSK_LeftSize + "个字)";
+            SendMessageBox.MaxLength = UnitCore.Instance.MFSK_LeftSize;
+            
+            
+           /* if(SendMessageBox.MaxLength==0)
+            {
+                SendMessageBox.IsReadOnly = true;
+            }*/
+
         }
 
         void Tick(object sender, EventArgs e)
         {
             try
             {
-               if(UnitCore.Instance.NetCore.IsTCPWorking)
-               {
-                   if (VoiceBar_MouseLeftButton==false)//界面不在录音
-                   {
-                       GPIO.IORead();
-                       if ((GPIO.StatusMask & 0x00000002) == 2)//GPIO口接的是第二个，未录音时状态是0b11111101
+                if (UnitCore.Instance.PostMsgEvent_Tick.WaitOne(100))
+                {
+                    UnitCore.Instance.PostMsgEvent_Tick.Reset();                    
+                    if (UnitCore.Instance.NetCore.IsTCPWorking)
+                    {
+                        if (VoiceBar_MouseLeftButton == false)//界面不在录音
+                        {
+                            if (UnitCore.Instance.MovConfigueService.GetMode() == MonitorMode.SHIP)
+                            {
+                                if (PCIInitial == true)
+                                {
+                                    PCIIO.IORead();
+                                    if ((PCIIO.portData[0] & 0x01) == 0)//针1电平反向了，按钮按下是低电平
+                                    {
+                                        RecordIOStatus = true;
+                                    }
+                                    else
+                                    {
+                                        RecordIOStatus = false;
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                if (GPIOInitial == true)
+                                {
+                                    GPIO.IORead();
+                                    if ((GPIO.StatusMask & 0x00000002) == 2)//GPIO口接的是第二个，未录音时状态是0b11111101
+                                        RecordIOStatus = true;
+                                    else
+                                        RecordIOStatus = false;
+                                }
+
+                            }
+
+                       if (RecordIOStatus)
                        {
                            if (!isRecording)
                            {
-                               SendSSBBtn_Click(null,null);
+                               isRecording = true;
+                               App.Current.Dispatcher.Invoke(new Action(() =>
+                               {
+                                   SendSSBBtn_Click(null, null);
+                               }));
                                Recording(true);
                            }
 
-                       }
-                       else
-                       {
-                           if (isRecording)
-                           {
-                               BackToEditBtn_Click(null, null);
-                               Recording(false);
-                           }
+                            }
+                            else
+                            {
+                                if (isRecording)
+                                {
+                                    App.Current.Dispatcher.Invoke(new Action(() =>
+                                    {
+                                        BackToEditBtn_Click(null, null);
+                                    }));
+                                    Recording(false);
+                                }
 
                        }
 
                    }
                    
 
-               }
-               else
-               {
-                   if (isRecording)
-                   {
-                       BackToEditBtn_Click(null, null);
-                       Recording(false);
-                   }
-                   
-
-               }
+                    }
+                    else
+                    {
+                        if (isRecording)
+                        {
+                            Recording(false);
+                        }
+                        App.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            BackToEditBtn_Click(null, null);
+                        }));
+                    }
+                    UnitCore.Instance.PostMsgEvent_Tick.Set();
+                    
+                }
+                else
+                {
+                    return;
+                }
+               
                 
 
             }
             catch (Exception ex)
             {
+                UnitCore.Instance.PostMsgEvent_Tick.Set();
                 UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent(ex.Message, LogType.Both));
             }
 
@@ -133,18 +209,55 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private void RecHandle(byte[] bufBytes)
         {
+            count++;
+            string str = count.ToString();
+            LogHelper.WriteLog("1录音准备发送！" + str);
             Dispatcher.BeginInvoke(new Action(() =>
-            {
-                UnitCore.Instance.MovTraceService.Save("XMTVOICE", bufBytes);
+            {                                
                 try
                 {
+                    LogHelper.WriteLog("2录音条显示！" + str);
                     if (isRecording)
                     {
                         if (UnitCore.Instance.NetCore.IsTCPWorking)
                         {
+                            Count++;
+                            
+                            double[] Voicedata = new double[bufBytes.Length];
+                            Int16[] intVoicedata = new Int16[bufBytes.Length];
+                           /* for (int i = 0; i < bufBytes.Length / 2; i++)
+                            {
+                                Voicedata[i] = ((double)BitConverter.ToInt16(bufBytes, i * 2)) * 10;
+                                if (Voicedata[i]>32767)
+                                {
+                                    Voicedata[i] = 32767;
+                                }
+                                else if (Voicedata[i] <-32767)
+                                {
+                                    Voicedata[i] = -32767;
+                                }
+                                intVoicedata[i] = (Int16)Voicedata[i];
+                                Buffer.BlockCopy(BitConverter.GetBytes(intVoicedata[i]), 0, bufBytes, i * 2, 2);
+                            }
+
+                            UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);*/
+
+                            /*if(Count<41)
+                            {
+                                Buffer.BlockCopy(bufBytes, 0, databuf, bufBytes.Length * (Count - 1), bufBytes.Length);
+                            }
+                            if(Count==40)
+                            {
+                                nAmp = calcAmp(databuf, databuf.Length);                               
+                            }*/
+                            Buffer.BlockCopy(bufBytes, 0, intVoicedata, 0, bufBytes.Length);
+                            intVoicedata = VoiceNormalize(intVoicedata, intVoicedata.Length, nAmp);
+                            Buffer.BlockCopy(intVoicedata, 0, bufBytes, 0, bufBytes.Length);
                             UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, bufBytes);
                         }
                         VoiceBar.Value = UpdateVolumn(bufBytes);
+                        UnitCore.Instance.MovTraceService.Save("XMTVOICE", bufBytes);
+                        LogHelper.WriteLog("2录音条显示！" + str);
                     }
                                                 
                     //WaveControl.Display(bufBytes);
@@ -156,6 +269,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 }
                 
             }));
+            LogHelper.WriteLog("3录音准备发送中！");
             
             
         }
@@ -239,6 +353,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             
 
             await TryConnnect();
+            nAmp = UnitCore.Instance.MovConfigueService.GetNormAmp();
             if (UnitCore.Instance.NetCore.IsTCPWorking)
             {
                 SetupDSP();
@@ -263,7 +378,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 GPIOWatcher = new DispatcherTimer(TimeSpan.FromMilliseconds(250), DispatcherPriority.Normal, Tick, Dispatcher.CurrentDispatcher);
             GPIOWatcher.Start();
 
-
+            if (UnitCore.Instance.WorkMode == MonitorMode.SUBMARINE && !IsBPInitialize)
+            {
+                if (m_pThread_BPsend == null)
+                {
+                    m_pThread_BPsend = new Thread(BPSerialProcsend);//创建并挂起线程
+                }
+                IsBPInitialize = true;
+                SetupBPDSP();
+            }
             
         }
 
@@ -406,6 +529,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 var cmd = "synseq " + dspmode;
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 await TaskEx.Delay(200);
+                if (mode == MonitorMode.SHIP)
+                {
+                    cmd = "h 4 -w";
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                }
+                else
+                {
+                    cmd = "h 1 -w";
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                }
                 cmd = "channel " + channel + " -w";
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                 LogHelper.WriteLog("发射换能器设置为"+channel);
@@ -422,7 +555,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 {
                     cmd = "gm 1";
                     await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
-                    cmd = "gm "+gain;
+                    cmd = "g "+gain;
                     await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
                     LogHelper.WriteLog("接收增益设置为" + gain);
                 }
@@ -440,6 +573,111 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                       " " + dt.Hour.ToString("D2") + " " + dt.Minute.ToString("D2") + " " + dt.Second.ToString("D2");
                 await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
             }
+        }
+
+        private static async void SetupBPDSP()
+        {
+            int m_PulseWidth = UnitCore.Instance.MovConfigueService.GetPulseWidth();
+            int m_DistLimit = UnitCore.Instance.MovConfigueService.GetDistLimit();
+            int m_TVCModel = UnitCore.Instance.MovConfigueService.GetTVCModel();
+            int m_GainStart = UnitCore.Instance.MovConfigueService.GetGainStart();
+            int m_GainUPLimit = UnitCore.Instance.MovConfigueService.GetGainUPLimit();
+            int m_GainDownLimit = UnitCore.Instance.MovConfigueService.GetGainDownLimit();
+            float m_BlindRegion = UnitCore.Instance.MovConfigueService.GetBlindRegion();
+            int m_GateTh = UnitCore.Instance.MovConfigueService.GetGateTh();
+            int m_SoundSpeed = UnitCore.Instance.MovConfigueService.GetSoundSpeed();
+            int ServerMode = UnitCore.Instance.MovConfigueService.GetSERVERMODE();
+            DelayTime = (int)(m_DistLimit * 2 / (float)(m_SoundSpeed) * 1000 + 140 / 400.0 * m_DistLimit * 2);
+            for (int i = 0; i < 1; i++)
+            {
+                string cmd2 = "STPARA,";
+                string str2;
+                string strtvc;
+                str2 = string.Format("{0},{1:D3},{2},{3:+00;-00},{4:+00;-00},{5:+00;-00},{6},{7},{8:D4}",
+                    m_PulseWidth, m_DistLimit, m_TVCModel, m_GainStart, m_GainUPLimit, m_GainDownLimit, m_BlindRegion, m_GateTh, m_SoundSpeed);
+                strtvc = string.Format("{0}", '*');
+                byte[] Bcmd2 = new byte[str2.Length + cmd2.Length + strtvc.Length];
+                str2 = cmd2 + str2 + strtvc;
+                Buffer.BlockCopy(Encoding.UTF8.GetBytes(str2), 0, Bcmd2, 0, Bcmd2.Length);
+                await UnitCore.Instance.CommCore.SendConsoleCMD(Bcmd2, UnitCore.Instance.MovConfigueService.GetOASID()[i].id);
+                //UnitCore.Instance.PostMsgEvent_BPpara.WaitOne(3000);//等待接收完再发送下一次,配置参数时DSP从flash中读数据再写需要1s的延迟
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(1300));//实际测试需要等待时间大部分在1s100ms
+                //Thread.Sleep(1300);
+            }
+            if (ServerMode == 0)//CONTRS同步连续方式需要先广播
+            {
+                await UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("CONTRS*"), 0);// SYNTRS同步轮流
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(200));
+                //		WriteComCMD("GTRSLT*",OASSend[idcount].id,&BPSerial);//读取结果指令
+                //时间校验，参数设定，启动发射
+            }
+
+            ////////////发送线程
+            m_pThread_BPsend.Start();//恢复线程运行
+            
+
+        }
+
+        void BPSerialProcsend()
+        {
+
+            while (UnitCore.Instance.CommCore.IsWorking)
+            {
+                if (UnitCore.Instance.MovConfigueService.GetSERVERMODE() == 1)//同步单次模式需要较多等待时间，等待回波
+                {
+                    UnitCore.Instance.PostMsgEvent_BPsend.WaitOne(2000);
+                }
+                else
+                {
+                    UnitCore.Instance.PostMsgEvent_BPsend.WaitOne(1000);
+                }
+
+
+                UnitCore.Instance.PostMsgEvent_BPsend.Reset();
+                //发送消息在消息处理函数中调用发送子函数
+                m_pMessage_BPsend = new Thread(new ThreadStart(OnCommBPNotifysend));
+                m_pMessage_BPsend.Start();
+
+
+            }
+            return;
+        }
+
+        void OnCommBPNotifysend()
+        {
+            int PreIdCount = (idcount - 1) % (UnitCore.Instance.MovConfigueService.GetCycID().Length);
+            switch (UnitCore.Instance.MovConfigueService.GetSERVERMODE())
+            {
+                case 0:
+                    UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("GTRSLT*"), UnitCore.Instance.MovConfigueService.GetCycID()[0]);
+                    idcount = (idcount + 1) % (UnitCore.Instance.MovConfigueService.GetCycID().Length);
+                    break;
+                case 1:
+                    UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("SYNTRS*"), UnitCore.Instance.MovConfigueService.GetCycID()[0]);
+                    Thread.Sleep(200);
+                    UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("GTRSLT*"), UnitCore.Instance.MovConfigueService.GetCycID()[0]);
+                    idcount = (idcount + 1) % (UnitCore.Instance.MovConfigueService.GetCycID().Length);
+                    break;
+                case 2:
+                    UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("ASYTRS*"), 1);
+                    Thread.Sleep(DelayTime);//经测试得等待100ms           
+                    UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("GTRSLT*"), 1);                    
+                    idcount = (idcount + 1);
+                    
+
+                    //		}
+                    break;
+                case 3:
+                    UnitCore.Instance.CommCore.SendConsoleCMD(Encoding.UTF8.GetBytes("LAKEAS*"), UnitCore.Instance.MovConfigueService.GetCycID()[0]);
+                    //		}
+                    break;
+
+                default:
+                    break;
+            }
+
+            return;
+
         }
 
         //将要发送的文字信息填入chartbox中，靠左对齐
@@ -460,14 +698,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
 
                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船）" + SendMessageBox.Text);
-                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" +
                                                                          "（母船）" + SendMessageBox.Text);
             }
             else
             {
 
                 UnitCore.Instance.MovTraceService.Save("Chart", "（潜器）" + SendMessageBox.Text);
-                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" +
                                                                          "（潜器）" + SendMessageBox.Text);
             }
             SendMessageBox.Text = "";
@@ -579,15 +817,16 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         //将收到的信息填入chartbox中，靠右对齐
         private void AppendRecvInfo(ModuleType type, string msg, Image img)
         {
-            SetTiltle(false);
-            Run run;
+            
             if (type == ModuleType.MFSK)
             {
                 if(msg==null)
                 {
                     MessageRichTextBox.ScrollToEnd();
                     return;
-                }               
+                }
+                SetTiltle(false);
+                Run run;
                 run = new Run(msg);
                 run.FontSize = 22;
                 var chartmsg = new Paragraph(run);
@@ -599,6 +838,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             {
                 if(msg==null)
                     return;
+                SetTiltle(false);
+                Run run;
                 run = new Run("("+"跳频"+")"+msg);
                 run.FontSize = 22;
                 var chartmsg = new Paragraph(run);
@@ -608,8 +849,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             }
             else if (type == ModuleType.MPSK)
             {
+                SetTiltle(false);
                 if (msg != null)
                 {
+                    Run run;
                     run = new Run(msg);
                     run.FontSize = 22;
                     var chartmsg = new Paragraph(run);
@@ -641,7 +884,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
        
         private void SendMessageBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            int left = MovGlobalVariables.WordSize/2 - SendMessageBox.Text.Length;
+            int left = UnitCore.Instance.MFSK_LeftSize - SendMessageBox.Text.Length;
             LeftSize.Text = "(还可继续输入"+left+"个字)";
             if(SendMessageBox.Text.Length>0)
                 SendBtn.Visibility = Visibility.Visible;
@@ -652,13 +895,56 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         private void SendMessageBox_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
              if (e.Key== Key.Return&&SendMessageBox.Text!="")
-                AddSendMsgToChart();
+             {
+                 if (UnitCore.Instance.MFSK_LeftSize < SendMessageBox.Text.Length)
+                 {
+                     UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("输入的文字超出范围！", LogType.Both));
+                 }
+                 else
+                 {
+                     UnitCore.Instance.MFSK_LeftSize = UnitCore.Instance.MFSK_LeftSize - SendMessageBox.Text.Length;
+                     if (UnitCore.Instance.MFSK_LeftSize <=2)
+                     {
+                         SendMessageBox.IsEnabled = false;
+                         UnitCore.Instance.MFSK_LeftSize = 0;
+                     }
+                     else
+                     {
+                         UnitCore.Instance.MFSK_LeftSize = UnitCore.Instance.MFSK_LeftSize - 2;//如果还没满，每次都要加回车，要减去2字节
+                     }
+
+                     SendMessageBox.MaxLength = UnitCore.Instance.MFSK_LeftSize;
+                     AddSendMsgToChart();
+                 }
+             }
         }
 
         private void SendBtn_Click(object sender, RoutedEventArgs e)
         {
             if(SendMessageBox.Text!="")
-                AddSendMsgToChart();
+            {
+                if (UnitCore.Instance.MFSK_LeftSize < SendMessageBox.Text.Length)
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("输入的文字超出范围！", LogType.Both));
+                }
+                else
+                {
+                    UnitCore.Instance.MFSK_LeftSize = UnitCore.Instance.MFSK_LeftSize - SendMessageBox.Text.Length;
+                    if (UnitCore.Instance.MFSK_LeftSize <=2)
+                    {
+                        SendMessageBox.IsEnabled = false;
+                        UnitCore.Instance.MFSK_LeftSize = 0;
+                    }
+                    else
+                    {
+                        UnitCore.Instance.MFSK_LeftSize = UnitCore.Instance.MFSK_LeftSize - 2;//如果还没满，每次都要加回车，要减去2字节
+                    }
+                    SendMessageBox.MaxLength = UnitCore.Instance.MFSK_LeftSize;
+                    AddSendMsgToChart();
+                }
+                
+            }
+                
         }
 
         private void SendMessageBox_GotFocus(object sender, RoutedEventArgs e)
@@ -719,6 +1005,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
                 if (!isRecording)
                 {
+                    isRecording = true;
                     Recording(true);
                 }
                 else
@@ -731,7 +1018,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             
         }
         
-        private async void Recording(bool start = true)
+        private void Recording(bool start = true)
         {
             try
             {
@@ -743,7 +1030,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                         UnitCore.Instance.NetCore.SendSSBNon();
                         UnitCore.Instance.NetCore.Send((int)ModuleType.SSB, UnitCore.Instance.Single);
                         LogHelper.WriteLog("开始发送语音");
-                        isRecording = true;
+                        //isRecording = true;
                         WaveControl.StartRecording();
                         SSBToolTip.Content = "正在发送语音";
                     }
@@ -765,7 +1052,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                             LogHelper.WriteLog("结束语音发送");
 
                         }
-                        await VoiceBarDealy();//留出一段时间给DSP处理单频
+                        VoiceBarDealy();//留出一段时间给DSP处理单频
                         
                         
                     }
@@ -809,9 +1096,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
         //和释放动作效果一样
         private void VoiceBar_MouseLeave(object sender, MouseEventArgs e)
         {
-            Recording(false);
+         //   Recording(false);
         }
-        private void BackToEditBtn_Click(object sender, RoutedEventArgs e)
+        private async void BackToEditBtn_Click(object sender, RoutedEventArgs e)
         {
             SendSSBBtn.Visibility = Visibility.Visible;
             BackToEditBtn.Visibility = Visibility.Hidden;
@@ -834,7 +1121,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             MorseRow.Height =new GridLength(120);
         }
 
-        private void SendMorse(object sender, RoutedEventArgs e)
+        private  void SendMorse(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
             if (btn != null&&UnitCore.Instance.NetCore.IsTCPWorking)
@@ -942,5 +1229,101 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             if (distance < 6000&&e.Delta>0)
                 e.Handled = true;
         }
+
+        private void SendMessageBox_IsEnableChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (SendMessageBox.IsEnabled==true)
+            {
+                SendMessageBox.MaxLength = 20;
+                int left = UnitCore.Instance.MFSK_LeftSize - SendMessageBox.Text.Length;
+                LeftSize.Text = "(还可继续输入" + left + "个字)";
+            }
+           
+        }
+
+        private void ChangeXMTValue(object sender, MouseButtonEventArgs e)
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                var cmd = "a " + slider.Value.ToString("F03");
+                UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("发射幅度设置为" + slider.Value.ToString("F03"));                
+            }
+            var ans = UnitCore.Instance.MovConfigueService.SetXmtAmp((float)slider.Value);//保存幅度
+            if (ans == false)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
+                return;
+            }
+            
+        }
+
+        private void KeyChangeXMTValue(object sender, KeyEventArgs e)
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                var cmd = "a " + slider.Value.ToString("F03");
+                UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                LogHelper.WriteLog("发射幅度设置为" + slider.Value.ToString("F03"));                
+            }
+            var ans = UnitCore.Instance.MovConfigueService.SetXmtAmp((float)slider.Value);//保存幅度
+            if (ans == false)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
+                return;
+            }
+            
+            
+        }
+
+        private int calcAmp(Int16[] Buffer,int nlength)
+        {
+            int[] AmpArray = new int[128];
+            int NorAmp = 32767;
+            //直方图统计
+            for(int i=0;i<nlength;i++)
+            {
+                AmpArray[Math.Abs(Buffer[i])>>8]++;
+            }
+            //计算95%概率分布时的幅度值
+            int nSum = 0;
+            for(int j=0;j<128;j++)
+            {
+                nSum+=AmpArray[j];
+                if((float)nSum/nlength>0.95)
+                {
+                    NorAmp = (j + 1) * 256;
+                    break;
+                }
+
+            }
+            return NorAmp;
+        }
+
+        private Int16[] VoiceNormalize(Int16[] Buffer, int nlength,int nAmp)
+        {
+            //以该幅值做归一化
+            double fFactor=32767.0/nAmp;
+            for(int i=0;i<nlength;i++)
+            {
+                if(Buffer[i]>=nAmp)
+                {
+                    Buffer[i]=32767;
+                }
+                else if(Buffer[i]<=-nAmp)
+                {
+                    Buffer[i]=-32767;
+                }
+                else
+                    Buffer[i]=(Int16)(Buffer[i]*fFactor);
+
+            }
+            return Buffer;
+        }
+
+
+
+
+
     }
 }

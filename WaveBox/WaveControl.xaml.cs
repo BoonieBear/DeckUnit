@@ -346,35 +346,44 @@ namespace BoonieBear.DeckUnit.WaveBox
         }
         public void Display(byte[] buf)
         {
-            if (IsPlaying) 
+            try
             {
-                _stream.Write(buf, 0, buf.Length);
-            }
-
-            if (buf.Length <= _audioFrameSize)
-            {
-                _audioFrame.AddData(buf);
-            }
-            else
-            {
-                int size = 0;
-                for (int i = 0; i < Math.Floor((double)buf.Length / _audioFrameSize); i++)
+                if (IsPlaying)
                 {
-                    
-                    byte[] newbuf = new byte[_audioFrameSize];
-                    Array.Copy(buf, i * _audioFrameSize, newbuf, 0, _audioFrameSize);
-                    _audioFrame.AddData(newbuf);
-                    size += _audioFrameSize;
-                }
-                //最后一包
-                if (buf.Length - size!=0)
-                {
-                    byte[] lastbuf = new byte[buf.Length - size];
-                    Array.Copy(buf, size, lastbuf, 0, buf.Length - size);
-                    _audioFrame.AddData(lastbuf);
+                    _stream.Write(buf, 0, buf.Length);
                 }
 
+                if (buf.Length <= _audioFrameSize)
+                {
+                    _audioFrame.AddData(buf);
+                }
+                else
+                {
+                    int size = 0;
+                    for (int i = 0; i < Math.Floor((double)buf.Length / _audioFrameSize); i++)
+                    {
+
+                        byte[] newbuf = new byte[_audioFrameSize];
+                        Array.Copy(buf, i * _audioFrameSize, newbuf, 0, _audioFrameSize);
+                        _audioFrame.AddData(newbuf);
+                        size += _audioFrameSize;
+                    }
+                    //最后一包
+                    if (buf.Length - size != 0)
+                    {
+                        byte[] lastbuf = new byte[buf.Length - size];
+                        Array.Copy(buf, size, lastbuf, 0, buf.Length - size);
+                        _audioFrame.AddData(lastbuf);
+                    }
+
+                }
+
             }
+            catch (Exception ex) 
+            {
+                throw ex;
+            }
+            
             
 
         }

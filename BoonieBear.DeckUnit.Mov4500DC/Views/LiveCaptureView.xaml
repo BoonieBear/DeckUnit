@@ -69,21 +69,34 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <wavebox:WaveControl Grid.Column="0" Name="WaveControl"/>
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="16" Foreground="White" Margin="5,0,0,8">
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="16" Foreground="White" Margin="5,0,0,30">
                         <Run Text="发射换能器"/>
                     </TextBlock>
-                    <Controls:MetroComboBox x:Name="EmitSelBox" VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="16" BorderThickness="0" Margin="95,0,0,5" Width="35" AllowDrop="True">
+                    <Controls:MetroComboBox x:Name="EmitSelBox" VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding XMTIndex}" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="15" BorderThickness="0" Margin="95,0,0,27" Width="35" AllowDrop="True">
                         <ComboBoxItem Content="1"  Background="{DynamicResource DefaultBackgroundBrush}"/>
                         <ComboBoxItem Content="2"   Background="{DynamicResource DefaultBackgroundBrush}"/>
                         <ComboBoxItem Content="3"  Background="{DynamicResource DefaultBackgroundBrush}"/>
                         <ComboBoxItem Content="4"  Background="{DynamicResource DefaultBackgroundBrush}"/>
                     </Controls:MetroComboBox>
-                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="16" Foreground="White" Margin="145,0,0,8">
+                    <TextBlock VerticalAlignment="Bottom" HorizontalAlignment="Left" FontSize="16" Foreground="White" Margin="145,0,0,30">
                         <Run Text="发射幅度"/>
                     </TextBlock>
-                    <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="215,0,0,3" Height="30" />
-                    <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="385,0,0,8"  Foreground="White" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="50"/>
-                    <MetroControl:FlipView Name="MultiView" Grid.Column="1" SelectionChanged="FlipView_SelectionChanged" Margin="2,0,0,0" IsBannerEnabled="False" MouseOverGlowEnabled="False">
+                    <Slider x:Name="slider" Maximum="1" Minimum="0.001" SmallChange="0.001" LargeChange="0.1" TickPlacement="TopLeft" TickFrequency="0.1" Value="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="160" Margin="215,0,0,25" Height="30" PreviewMouseLeftButtonUp="ChangeXMTValue" PreviewKeyDown="KeyChangeXMTValue"/>
+                    <TextBlock FontSize="16" VerticalAlignment="Bottom" Margin="385,0,0,30"  Foreground="White" Text="{Binding XMTValue, Mode=TwoWay, StringFormat=\{0:F3\}}" HorizontalAlignment="Left" Width="50"/>
+                    <StackPanel Orientation="Horizontal" Margin="4,125,0,2">
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Foreground="White">
+                        <Run Text="增益模式:"/>
+                    </TextBlock>
+                    <Controls:MetroComboBox VerticalAlignment="Bottom" HorizontalAlignment="Left" SelectedIndex="{Binding SelectGMode}" IsReadOnly="True" Background="{DynamicResource DefaultBackgroundBrush}" BorderBrush="{DynamicResource DefaultBackgroundBrush}" FontSize="15" FontFamily="Microsoft YaHei" BorderThickness="0" Width="94" AllowDrop="True">
+                        <ComboBoxItem x:Name="comboBoxItemHand" Content="手动模式"  Background="{DynamicResource DefaultBackgroundBrush}"/>
+                        <ComboBoxItem x:Name="comboBoxItemAuto" Content="自动模式"  Background="{DynamicResource DefaultBackgroundBrush}"/>
+                    </Controls:MetroComboBox>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="16" Foreground="White" >
+                        <Run Text="接收增益："/>
+                    </TextBlock>
+                    <MetroControl:NumericUpDown Value="{Binding Gain}"  Minimum="0" Maximum="74" Height="35" IsEnabled="{Binding IsSelected, ElementName=comboBoxItemHand}"/>
+                    </StackPanel>
+                        <MetroControl:FlipView Name="MultiView" Grid.Column="1" SelectionChanged="FlipView_SelectionChanged" Margin="2,0,0,0" IsBannerEnabled="False" MouseOverGlowEnabled="False">
                         <MetroControl:FlipView.Items>
                             <ScrollViewer Name ="ImgViewer" Style="{DynamicResource TransportScrollViewer}" CanContentScroll="True" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
                                 <StackPanel Orientation="Horizontal" Name="ImagePanel"/>
@@ -190,7 +203,7 @@
                         <Grid Grid.Row="2" Background="{Binding Background, ElementName=SendMessageBox}">
                             <TextBox  Grid.Row="2" VerticalScrollBarVisibility="Auto" 
                                       Name="SendMessageBox" 
-                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" MaxLength="20" />
+                                      Background="{DynamicResource Home_ShareBackground}" FontSize="{DynamicResource Medium}" TextChanged="SendMessageBox_TextChanged" KeyDown="SendMessageBox_KeyDown" IsEnabledChanged="SendMessageBox_IsEnableChanged" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" MinHeight="0" ClipToBounds="True" Padding="0" GotFocus="SendMessageBox_GotFocus" LostFocus="SendMessageBox_LostFocus" Margin="55,0,55,0" MaxLength="20" IsEnabled="{Binding SendMessageBoxreadonly,Mode=TwoWay}"/>
                             <Grid  Margin="3" Grid.Row="2" HorizontalAlignment="Right">
                                 <Controls:FanPanel x:Name="fanpanel" Width="48" Height="48"  PanelRadius="60" AnimationMilliseconds="200" HorizontalAlignment="Center" VerticalAlignment="Center">
                                     <Button Name="AddMorseBtn" Foreground="White" Content="摩尔斯" Background ="{DynamicResource DefaultBackgroundBrush}" Controls:FanPanel.Angle="-180" VerticalAlignment="Center" Visibility="{Binding IsOpen, ConverterParameter=TrueToVisible, Converter={StaticResource BoolToVisibilityConverter}, ElementName=fanpanel}" Click="AddMorseBtn_Click" />
@@ -201,7 +214,7 @@
                                 <Button  VerticalAlignment="Center" Style="{StaticResource AddAnnotationAppBarButtonStyle}" Click="Button_Click"/>
                             </Grid>
                             <Button Background="{Binding Background, ElementName=SendMessageBox}" Name ="SendBtn" Style="{StaticResource SquareButtonStyle}" Content="发送" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center" Width="55" Height="45" Click="SendBtn_Click" Margin="0,0,5,0" FontSize="16" FontFamily="Microsoft YaHei" FontWeight="Normal" Visibility="Hidden" />
-                            <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入30个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
+                            <TextBlock Name="LeftSize" Foreground="Black" Text="(还可继续输入20个字)" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Bottom" />
                             <Label Name="SSBToolTip" Foreground="Black" Content="按住说话" Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="18" Visibility="Hidden" Margin="0,20,0,0"/>
                             <MetroControl:MetroProgressBar Name="VoiceBar"  Visibility="Hidden" EllipseDiameter="80" EllipseOffset="40" Value="0" Margin="55,20,55,0" MouseLeftButtonDown="VoiceBar_MouseLeftButtonDown" MouseLeftButtonUp="VoiceBar_MouseLeftButtonUp" MouseLeave="VoiceBar_MouseLeave" Opacity="0.4" Height="40">
                                 <MetroControl:MetroProgressBar.Foreground>

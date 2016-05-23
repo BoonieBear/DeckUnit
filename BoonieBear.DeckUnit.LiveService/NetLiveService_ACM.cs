@@ -243,6 +243,17 @@ namespace BoonieBear.DeckUnit.LiveService
             return false;
         }
 
+        public async Task<bool> ResetMechan()
+        {
+            var shellcmd = new ACNTCPShellCommand(_shelltcpClient, "boot");
+            var ret = Command.SendTCPAsync(shellcmd);
+            if (await ret)
+            {
+                return true;
+            }
+            return false;
+        }
+
         private void reportprogress(int i)
         {
             SendBytes = i;
@@ -327,6 +338,14 @@ namespace BoonieBear.DeckUnit.LiveService
                 (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
                 throw new Exception("通信网络初始化失败");
             TCPShellService.ConnectSync();
+            TCPShellService.Register(NetDataObserver);
+            
+            if (!TCPShellService.Connected)
+            {
+                _shelltcpClient.Close();
+                _shelltcpClient = null;
+                return false;
+            }
             TCPDataService.ConnectSync();
             TCPShellService.Register(NetDataObserver);
             TCPDataService.Register(NetDataObserver);

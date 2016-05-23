@@ -139,12 +139,10 @@ namespace BoonieBear.DeckUnit.LiveService
             if (!TCPShellService.Init(_shelltcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort1) ||
                 (!TCPDataService.Init(_datatcpClient, IPAddress.Parse(_commConf.LinkIP), _commConf.NetPort2)))
                 throw new Exception("通信网络初始化失败,请检查网络连接状态并重启程序");
-            if (_udpTraceClient != null)
-                _udpTraceClient.Close();
+            //if (_udpTraceClient == null)
                 _udpTraceClient = new UdpClient(_commConf.TraceUDPPort);
             if (!UDPTraceService.Init(_udpTraceClient)) throw new Exception("调试广播网络初始化失败");
-            if (_udpDataClient != null)
-                _udpDataClient.Close();
+            //if (_udpDataClient == null)
                 _udpDataClient = new UdpClient(_commConf.DataUDPPort);
             if (!UDPDataService.Init(_udpDataClient)) throw new Exception("调试数据网络初始化失败");
             IsInitialize = true;
@@ -242,6 +240,17 @@ namespace BoonieBear.DeckUnit.LiveService
                     TCPDataService.UnRegister(datacmd);
                     return x.Result;
                 });
+            }
+            return false;
+        }
+
+        public async Task<bool> ResetMechan()
+        {
+            var shellcmd = new ACNTCPShellCommand(_shelltcpClient, "boot");
+            var ret = Command.SendTCPAsync(shellcmd);
+            if (await ret)
+            {
+                return true;
             }
             return false;
         }

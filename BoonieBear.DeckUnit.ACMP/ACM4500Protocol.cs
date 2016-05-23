@@ -5,6 +5,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using BoonieBear.DeckUnit.BaseType;
 
 namespace BoonieBear.DeckUnit.ACMP
 {
@@ -73,11 +74,12 @@ namespace BoonieBear.DeckUnit.ACMP
             mpskpkg.Clear();
             Errormessage = string.Empty;
         }
-        public static void Init(MonitorMode mode = MonitorMode.SUBMARINE)
+        public static void Init(OASSEND[] OASID,MonitorMode mode = MonitorMode.SUBMARINE)
         {
             mpskpkg= new Dictionary<int, byte[]>();
             ShipdataPool = ShipGatherData.GetInstance();
             UwvdataPool = UWVGatherData.GetInstance();
+            Bpdata._OASID = OASID;
             SetMode(mode);
         }
 

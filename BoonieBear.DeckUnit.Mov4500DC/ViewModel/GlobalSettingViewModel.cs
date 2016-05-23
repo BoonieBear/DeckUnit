@@ -102,10 +102,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             get { return GetPropertyValue(() => SelectGMode); }
             set
             {
-                if (SelectGMode != value && bInitial == true)
-                {
-                    EventAggregator.PublishMessage(new LogEvent("新的模式需在保存设置后生效！", LogType.OnlyInfo));
-                }
                 SetPropertyValue(() => SelectGMode, value);
             }
         }
@@ -176,6 +172,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
         public void ExecuteLinkCheckCommand(object sender, ExecutedRoutedEventArgs eventArgs)
         {
+            LogHelper.WriteLog("开始连接");
             if (UnitCore.Instance.NetCore.IsTCPWorking)
                 return;
             else
@@ -205,6 +202,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 }
                 else
                 {
+                    LogHelper.WriteLog("连接失败！");
+                    EventAggregator.PublishMessage(new LogEvent("网络连接失败！", LogType.OnlyInfo));
                     UWVConnected = false;
                     ShipConnected = false;
                 }
@@ -337,7 +336,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     EventAggregator.PublishMessage(new LogEvent("数据保存服务设置出错！", LogType.Both));
                     return;
                 }
-                ACM4500Protocol.Init((MonitorMode) Enum.Parse(typeof (MonitorMode), SelectMode.ToString()));
+                ACM4500Protocol.Init(UnitCore.Instance.MovConfigueService.GetOASID(), (MonitorMode)Enum.Parse(typeof(MonitorMode), SelectMode.ToString()));
             }
             IPAddress ip;
             if (IPAddress.TryParse(ShipIpAddr, out ip) == false)
@@ -359,7 +358,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             var ans = UnitCore.Instance.MovConfigueService.SetXmtChannel(XmtIndex + 1) &&
                   UnitCore.Instance.MovConfigueService.SetXmtAmp(XMTValue) &&
-                  UnitCore.Instance.MovConfigueService.SetGMode((MonitorGMode)Enum.Parse(typeof(MonitorGMode), SelectMode.ToString())) &&
+                  UnitCore.Instance.MovConfigueService.SetGMode((MonitorGMode)Enum.Parse(typeof(MonitorGMode), SelectGMode.ToString())) &&
                   UnitCore.Instance.MovConfigueService.SetGain(Gain);
             if (ans == false)
             {

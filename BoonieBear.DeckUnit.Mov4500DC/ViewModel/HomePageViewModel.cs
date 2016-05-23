@@ -6,6 +6,8 @@ using System.Windows.Input;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
 using TinyMetroWpfLibrary.Events;
 using TinyMetroWpfLibrary.ViewModel;
+using System.Windows.Navigation;
+
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
     public class HomePageViewModel:ViewModelBase

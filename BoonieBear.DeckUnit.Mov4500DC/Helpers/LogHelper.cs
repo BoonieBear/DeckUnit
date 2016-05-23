@@ -20,7 +20,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Helpers
                 App.Current.Dispatcher.Invoke(new Action(() =>
                 {
                     if (MainFrameViewModel.pMainFrame != null)
-                        MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" + info);
+                        MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" + info);
                 }));
             }
         }
@@ -49,7 +49,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Helpers
             {
                 if (MainFrameViewModel.pMainFrame != null)
                 {
-                    MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" + info);
+                    MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" + info);
                     if (MainFrameViewModel.pMainFrame.MsgLog.Count > 200)
                         MainFrameViewModel.pMainFrame.MsgLog.RemoveAt(0);
                 }

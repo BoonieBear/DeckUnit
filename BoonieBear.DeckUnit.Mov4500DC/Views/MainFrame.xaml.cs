@@ -54,7 +54,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             Application.Current.MainWindow = this;
             TaskEx.Run(()=>UnitCore.Instance.Start());
             
-            Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
+            //Kernel.Instance.Controller.NavigateToPage("Views/HomePageView.xaml");
+            Kernel.Instance.Controller.NavigateToPage("Views/LiveCaptureView.xaml");
             BoonieBear.DeckUnit.Mov4500UI.Helpers.LogHelper.WriteLog("开始工作");
             Splasher.CloseSplash();
             SwapMouseButton(false);//switch back
@@ -78,8 +79,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
             if (textBox.Text.Length> 0)
             {
                 UnitCore.Instance.AddFHHandle(textBox.Text);
-                byte[] newBytes = new byte[8];//跳频固定8字节
-                Buffer.BlockCopy(Encoding.Default.GetBytes(textBox.Text), 0, newBytes, 0, textBox.Text.Length);
+                byte[] newBytes = new byte[8];//跳频固定8字节,不足8字节补零
+                Buffer.BlockCopy(Encoding.Default.GetBytes(textBox.Text), 0, newBytes, 0, Encoding.Default.GetBytes(textBox.Text).Length);
                 bool ret = UnitCore.Instance.NetCore.Send((int)ModuleType.FH, newBytes);
                 await
                     MainFrameViewModel.pMainFrame.DialogCoordinator.HideMetroDialogAsync(MainFrameViewModel.pMainFrame,
@@ -89,6 +90,24 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
                 if (ret == false)
                     await MainFrameViewModel.pMainFrame.DialogCoordinator.ShowMessageAsync(MainFrameViewModel.pMainFrame, "发送失败",
                     UnitCore.Instance.NetCore.Error, MessageDialogStyle.Affirmative, md);
+                else
+                {
+                    App.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        if (MainFrameViewModel.pMainFrame != null)
+                        {
+                            if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
+                            {
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" + "(母船-跳频)" + textBox.Text);
+                            }
+                            else
+                            {
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" + "(潜器-跳频)" + textBox.Text);
+                            }
+                        }
+                            
+                    }));
+                }
             }
             
         }

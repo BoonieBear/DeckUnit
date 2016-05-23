@@ -13,10 +13,10 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
     public abstract class SerialSerialServiceBase :ISerialService
     {
         #region 属性
+        protected SerialPort _serialPort;
+       // public CCheckBP check;
 
-        protected static SerialPort _serialPort;
-
-        public static event EventHandler<CustomEventArgs> DoParse;
+        public event EventHandler<CustomEventArgs> DoParse;
         private List<byte> _recvQueue = new List<byte>();
         public SerialServiceMode SerialServiceMode { get; set; }
         #endregion
@@ -89,16 +89,17 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         private void _SerialPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
             var nCount = _serialPort.BytesToRead;
-            if (SerialServiceMode==SerialServiceMode.HexMode && nCount < 16)
+            /*if (SerialServiceMode==SerialServiceMode.HexMode && nCount < 16)
             {
                 Thread.Sleep(50);
                 return;
-            }
+            }*/
             for (int i = nCount - 1; i >= 0; i--)
             {
-                _recvQueue.Add((byte)_serialPort.ReadByte());
-                CheckQueue(ref _recvQueue);
+                _recvQueue.Add((byte)_serialPort.ReadByte());                
             }
+
+            CheckQueue(ref _recvQueue);
             
         }
 
@@ -172,7 +173,7 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
         {
 
                 var str = hexString.Split(',');
-                ACNProtocol.BuoyID = str[2];
+                //MainForm.pMainForm.BuoyChoice.SelectedIndex = int.Parse(BuoyID);
                 if (str[1] == "03")
                 {
                     Debug.WriteLine("收到应答包");
@@ -436,4 +437,81 @@ namespace BoonieBear.DeckUnit.CommLib.Serial
             }
    
         }
+    public class ACNBPSerialSerialService: SerialSerialServiceBase
+    {
+        private CCheckBP check = new CCheckBP();
+
+        protected override void CheckQueue(ref List<byte> queue)
+        {
+            var bytes = new byte[queue.Count];
+            queue.CopyTo(bytes);
+            
+
+            //对串口接收的数据进行解析
+            byte[] CmdType = new byte[7];
+            byte[] ch = new byte[4096];
+            check.WriteData(bytes, (uint)queue.Count);//写入循环缓冲区，取完整帧和校验
+            while ( check.IsFull())//取完整帧
+            {
+                if (!check.IsCorrect())
+                {
+                    break;
+                    //continue;//校验不正确退出
+                }
+                uint lenth = 0;
+                check.GetFullData(ch, ref lenth);//得到完整帧以及帧的长度
+                Buffer.BlockCopy(ch, 7, CmdType, 0, 6);//找出命令类型
+                if (string.Compare(Encoding.UTF8.GetString(CmdType), "result") == 0)
+                {
+                    byte[] DataBuffer = new byte[lenth + 2];
+                    UInt16 uid = 0x2002; //与网络包格式一致
+                    Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, DataBuffer, 0, 2);
+                    Buffer.BlockCopy(ch, 0, DataBuffer, 2, (int)lenth);
+                    var e = new CustomEventArgs(0, null, DataBuffer, DataBuffer.Length, true, null, CallMode.Sail, _serialPort);
+                    OnParsed(e);
+                }                
+                break;
+            }
+            queue.Clear();
+
+        }           
+     }
+    //使用ACCP协议的串口服务类，Start()中传入解析后的数据类
+    public class ACNADCPSerialSerialService : SerialSerialServiceBase
+    {
+        private CheckADCP check = new CheckADCP();
+        
+        protected override void CheckQueue(ref List<byte> queue)
+        {
+            var bytes = new byte[queue.Count];
+            queue.CopyTo(bytes);
+            byte[] ch = new byte[4096];
+            //对串口接收的数据进行解析
+            if (queue.Count!=0)
+            {
+                check.WriteData(bytes, (uint)queue.Count);//写入循环缓冲区，取完整帧和校验
+                while (check.IsFull())//取完整帧
+                {
+                    uint lenth = 0;
+                    check.GetFullData(ch, ref lenth);//得到完整帧以及帧的长度
+                    byte[] DataBuffer = new byte[lenth + 2];
+                    UInt16 uid = 0x2006; //与网络包格式一致
+                    Buffer.BlockCopy(BitConverter.GetBytes(uid), 0, DataBuffer, 0, 2);
+                    Buffer.BlockCopy(ch, 0, DataBuffer, 2, (int)lenth);
+                    var e = new CustomEventArgs(0, null, DataBuffer, DataBuffer.Length, true, null, CallMode.Sail, _serialPort);
+                    OnParsed(e);                    
+                    break;
+                }
+                queue.Clear();
+
+            }
+        }
+            
+    }
+
+
+
+
+
+    
 }

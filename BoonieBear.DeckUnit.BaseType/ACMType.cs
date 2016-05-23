@@ -5,9 +5,21 @@ using System.Text;
 
 namespace BoonieBear.DeckUnit.BaseType
 {
+    public class CommType
+    {
+        public string Comm { get; set; }
+        public int Baud { get; set; }
+        public int DataBits { get; set; }
+        public int Parity { get; set; }
+        public int StopBits { get; set; }
+
+    }
+
     public class CommConfInfo
     {
         public string SerialPort { get; set; }
+        public CommType BPComm { get; set; }
+        public CommType ADCPComm { get; set; }
         public int SerialPortRate { get; set; }
         public int NetPort1 { get; set; }
         public int NetPort2 { get; set; }
@@ -39,5 +51,11 @@ namespace BoonieBear.DeckUnit.BaseType
         public int USBLPort { get; set; }
         public int BroadCastPort { get; set; }
 
+    }
+
+    public struct OASSEND
+    {
+        public int direction;
+        public int id;
     }
 }

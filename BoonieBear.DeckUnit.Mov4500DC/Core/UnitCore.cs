@@ -33,6 +33,9 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         private readonly static object SyncObject = new object();
         //静态接口，用于在程序域中任意位置操作UnitCore中的成员
         private static UnitCore _instance;
+
+        public AutoResetEvent PostMsgEvent_Tick;//同步事件,是否允许定时检测器录音
+
         //事件绑定接口，用于事件广播
         private IEventAggregator _eventAggregator;
         //网络服务接口
@@ -70,6 +73,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         public delegate void AddImgLiveViewHandle(Image img);
         public AddImgLiveViewHandle AddImgHandle;
 
+        public AutoResetEvent PostMsgEvent_BPpara = new AutoResetEvent(false);//同步事件,是否允许发送配置参数消息
+        public AutoResetEvent PostMsgEvent_BP = new AutoResetEvent(true);//同步事件,是否允许发送信号处理消息
+        public AutoResetEvent PostMsgEvent_BPsend = new AutoResetEvent(false);//同步事件,是否允许向串口写数据
+
+        //MFSK文字还可输入字符数
+        private int _MFSK_LeftSize = 20;
+
         public MovTraceService MovTraceService
         {
             get { return _movTraceService ?? (_movTraceService = new MovTraceService(WorkMode)); }
@@ -89,6 +99,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         {
             
             ACMMutex = new Mutex();
+            PostMsgEvent_Tick=new AutoResetEvent(true);//定时器
 
         }
 
@@ -97,7 +108,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
             bool ret = true;
             try
             {
-                _mov4500Conf = MovConf.GetInstance();
+                if (_mov4500Conf==null)
+                {
+                    _mov4500Conf = MovConf.GetInstance();
+                    _mov4500Conf.SetGMode((MonitorGMode)Enum.Parse(typeof(MonitorGMode), "1"));//首次打开需要将增益模式设置为自动模式
+                }
+                else
+                {
+					_mov4500Conf = MovConf.GetInstance();
+                }
                 _commConf = _mov4500Conf.GetCommConfInfo();
                 _movConfInfo = _mov4500Conf.GetMovConfInfo();
                 WorkMode = (MonitorMode)Enum.Parse(typeof(MonitorMode),_movConfInfo.Mode.ToString());
@@ -125,7 +144,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         }
         public ICommCore CommCore
         {
-            get { return _iCommCore ?? (_iCommCore = CommService.GetInstance(_commConf, Observer)); }
+            get { return _iCommCore ?? (_iCommCore = CommService_BPADCP.GetInstance(_commConf, Observer)); }
         }
 
         private bool LoadMorse()
@@ -159,18 +178,19 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 NetworkChange.NetworkAvailabilityChanged += new
             NetworkAvailabilityChangedEventHandler(AvailabilityChangedCallback);
                 if(!LoadConfiguration()) throw new Exception("无法读取基本配置");
-                ACM4500Protocol.Init(WorkMode);
+                ACM4500Protocol.Init(_mov4500Conf.GetOASID(), (MonitorMode)1);
                 if (!LoadMorse()) throw new Exception("无法读取Morse数据");
                 if(NetCore.IsInitialize)
                     NetCore.Stop();
                 NetCore.Initialize();
                 NetCore.Start();//只启动udp服务，tcp服务单独启动
-                /*没有串口连接
-                 * if(CommCore.IsInitialize)
-                    CommCore.Stop();
-                CommCore.Initialize();
-                CommCore.Start();
-                 * */
+                if (WorkMode == MonitorMode.SUBMARINE)
+                {
+                    if (CommCore.IsInitialize)
+                        CommCore.Stop();
+                    CommCore.Initialize();
+                    CommCore.Start();
+                }                
                 if(!MovTraceService.CreateService()) throw new Exception("数据保存服务启动失败");
                 _serviceStarted = true;
                 Error = NetCore.Error;
@@ -223,6 +243,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
         {
             get { return _serviceStarted; }
         }
+
+        public int MFSK_LeftSize
+        {
+            get { return _MFSK_LeftSize; }
+            set { _MFSK_LeftSize = value; }
+        }
+        
 
         public MovConf MovConfigueService
         {

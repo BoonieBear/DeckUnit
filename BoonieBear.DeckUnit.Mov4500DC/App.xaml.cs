@@ -7,6 +7,7 @@ using BoonieBear.DeckUnit.Mov4500UI.Core;
 using BoonieBear.DeckUnit.Mov4500UI.Helpers;
 using TinyMetroWpfLibrary.Controller;
 using BoonieBear.DeckUnit.Mov4500UI.Events;
+using BoonieBear.DeckUnit.Mov4500UI.Views;
 namespace BoonieBear.DeckUnit.Mov4500UI
 {
     /// <summary>
@@ -89,9 +90,11 @@ namespace BoonieBear.DeckUnit.Mov4500UI
         private void Application_Exit(object sender, ExitEventArgs e)
         {
             IsExit = true;
-            UnitCore.GetInstance().Stop();
+            UnitCore.GetInstance().Stop();            
             if(UnitCore.Instance.Wave!=null)
                 UnitCore.Instance.Wave.Dispose();
+            if (LiveCaptureView.m_pThread_BPsend != null)
+                LiveCaptureView.m_pThread_BPsend.Abort();
         }
     }
 }

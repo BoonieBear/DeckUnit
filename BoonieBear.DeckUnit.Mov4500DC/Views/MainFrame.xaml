@@ -162,7 +162,7 @@
                                 <Setter Property="Template">
                                     <Setter.Value>
                                         <ControlTemplate TargetType="ListBoxItem">
-                                            <Border Background="{TemplateBinding Background}" Height="32">
+                                            <Border Background="{TemplateBinding Background}" Height="22">
                                                 <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
                                               TextBlock.Foreground="{TemplateBinding Foreground}"/>

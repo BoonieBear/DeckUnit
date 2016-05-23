@@ -9,12 +9,13 @@ using DevExpress.Xpf.Core;
 using Microsoft.Win32;
 using ImageProc;
 using BoonieBear.DeckUnit.Device.USBL;
+using System.Threading;
 namespace BoonieBear.DeckUnit.Mov4500UI.Core
 {
     public class Mov4500DataObserver:Observer<CustomEventArgs>
     {
         USBLParser usblParser = new USBLParser();
-        public async void Handle(object sender, CustomEventArgs e)
+        public void Handle(object sender, CustomEventArgs e)
         {
             string datatype = "";
             if (e.ParseOK)
@@ -53,6 +54,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             UnitCore.Instance.Version += shell;
                             if (shell.Contains("/>"))
                                 UnitCore.Instance.Version  = UnitCore.Instance.Version.Replace("/>","");
+                        }
+                        if(shell.Contains("非法的ldr文件"))
+                        {
+                            UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("非法的ldr文件，请重新烧写正确的ldr！", LogType.OnlyInfo));
                         }
                     }
                     //类型标志
@@ -147,10 +152,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                                 LogHelper.WriteLog("发送MFSK");
                                 UnitCore.Instance.NetCore.Send((int) ModuleType.MFSK, fskdata);
                                 UnitCore.Instance.MovTraceService.Save("XMTFSK", fskdata);
+                                UnitCore.Instance.EventAggregator.PublishMessage(new DSPReqEvent());//发送完MFSK通知界面                                
                                 return;
                             case (int)ModuleType.FeedBack:
                                 LogHelper.WriteLog("收到DSP反馈的增益");
-                                UnitCore.Instance.MovConfigueService.SetGain(BitConverter.ToInt16(buffer,0));
+                                UnitCore.Instance.EventAggregator.PublishMessage(new DspFeedbackComEvent(
+                                    ModuleType.FeedBack, buffer));
                                 return;
                             default:
                                 return;
@@ -195,49 +202,71 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                             }
                             return;
                         }
-                        UnitCore.Instance.ACMMutex.WaitOne();
-                        var ret = ACM4500Protocol.DecodeACNData(buffer, (ModuleType)Enum.Parse(typeof(ModuleType), id.ToString()));
-                        //var ret = buffer;
-                        if (ret != null)
-                        {
-                        
-                            switch (id)
-                            {
-                                case (int) ModuleType.MFSK:
-                                    LogHelper.WriteLog("收到MFSK数据");
-                                    UnitCore.Instance.MovTraceService.Save("FSKSRC", ret);
-                                    if (ACM4500Protocol.ParseFSK(ret))
-                                    {
-                                        UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
-                                            ModuleType.MFSK, ACM4500Protocol.Results));
-                                    }
-                                    break;
-                                case (int) ModuleType.MPSK:
-                                    LogHelper.WriteLog("收到MPSK数据");
-                                    UnitCore.Instance.MovTraceService.Save("PSKSRC", ret);
-                                    var jpcdata = ACM4500Protocol.ParsePSK(ret);
-                                    if (jpcdata != null) //全部接收
-                                    {
-                                        UnitCore.Instance.MovTraceService.Save("PSKJPC", jpcdata);
-                                        if (Jp2KConverter.LoadJp2k(jpcdata))
-                                        {
-                                            var imgbuf =
-                                                Jp2KConverter.SaveImg(UnitCore.Instance.MovConfigueService.MyExecPath +
-                                                                      "\\" + "decode.jpg");
-                                            if (imgbuf != null)
-                                            {
-                                                UnitCore.Instance.MovTraceService.Save("IMG", imgbuf);
-                                                ACM4500Protocol.Results.Add(MovDataType.IMAGE, imgbuf);
-                                            }
-                                            UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
-                                                ModuleType.MPSK, ACM4500Protocol.Results));
-                                        }
-                                    }
-                                    break;
-                            }
 
-                        }
-                        UnitCore.Instance.ACMMutex.ReleaseMutex();
+                        App.Current.Dispatcher.Invoke(new Action(() =>
+                        {
+                            try
+                            {
+                                UnitCore.Instance.ACMMutex.WaitOne();
+                                var ret = ACM4500Protocol.DecodeACNData(buffer, (ModuleType)Enum.Parse(typeof(ModuleType), id.ToString()));
+                                //var ret = buffer;
+                                if (ret != null)
+                                {
+
+                                    switch (id)
+                                    {
+                                        case (int)ModuleType.MFSK:
+                                            LogHelper.WriteLog("收到MFSK数据");
+                                            UnitCore.Instance.MovTraceService.Save("FSKSRC", ret);
+                                            if (ACM4500Protocol.ParseFSK(ret))
+                                            {
+                                                UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
+                                                    ModuleType.MFSK, ACM4500Protocol.Results));
+                                            }
+                                            break;
+                                        case (int)ModuleType.MPSK:
+                                            LogHelper.WriteLog("收到MPSK数据");
+                                            UnitCore.Instance.MovTraceService.Save("PSKSRC", ret);
+                                            var jpcdata = ACM4500Protocol.ParsePSK(ret);
+                                            if (jpcdata != null) //全部接收
+                                            {
+                                                UnitCore.Instance.MovTraceService.Save("PSKJPC", jpcdata);
+                                                if (Jp2KConverter.LoadJp2k(jpcdata))
+                                                {
+                                                    var imgbuf =
+                                                        Jp2KConverter.SaveImg(UnitCore.Instance.MovConfigueService.MyExecPath +
+                                                                              "\\" + "decode.jpg");
+                                                    if (imgbuf != null)
+                                                    {
+                                                        UnitCore.Instance.MovTraceService.Save("IMG", imgbuf);
+                                                        ACM4500Protocol.Results.Add(MovDataType.IMAGE, imgbuf);
+                                                    }
+                                                    UnitCore.Instance.EventAggregator.PublishMessage(new MovDataEvent(
+                                                        ModuleType.MPSK, ACM4500Protocol.Results));
+                                                }
+                                            }
+                                            break;
+                                    }
+
+                                }
+                                UnitCore.Instance.ACMMutex.ReleaseMutex();
+
+                            }
+                            catch (Exception ex)
+                            {
+                                    if (UnitCore.Instance.ACMMutex.WaitOne(100) == true)//如果能获取Mutex或已经获取Mutex就释放它
+                                    {
+                                        UnitCore.Instance.ACMMutex.ReleaseMutex();
+                                    }
+                                    UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
+
+                            }
+                            
+
+                        }));
+
+
+                        
                     }
                     else if (e.Mode == CallMode.Sail)
                     {
@@ -251,7 +280,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                         var pos = new Sysposition();
                         if (usblParser.Parse(Encoding.ASCII.GetString(buffer)))
                         {
-                            //pos._ltime = usblParser.Time;
+                            pos._ltime = usblParser.Time;
                             pos._relateX = usblParser.X;
                             pos._relateY = usblParser.Y;
                             pos._relateZ = usblParser.Z;
@@ -272,12 +301,15 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                     }
                 }
                 catch (Exception ex)
-                {
-                    App.Current.Dispatcher.Invoke(new Action(() =>
-                    {
-                        UnitCore.Instance.ACMMutex.ReleaseMutex();
+                {             
+                  //  App.Current.Dispatcher.Invoke(new Action(() =>
+                  //  {
+                       /* if (UnitCore.Instance.ACMMutex.WaitOne(100) == true)//如果能获取Mutex或已经获取Mutex就释放它
+                        {
+                            UnitCore.Instance.ACMMutex.ReleaseMutex();
+                        }*/
                         UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(ex, LogType.Both));
-                    }));
+                  //  }));
                 }
 
 
@@ -288,9 +320,10 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Core
                 {
                     App.Current.Dispatcher.Invoke(new Action(() =>
                     {
-                        UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(e.Ex, LogType.Both));
+                        UnitCore.Instance.NetCore.StopTCpService();
+                       // UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(e.Ex, LogType.Both));
                     }));
-                    UnitCore.Instance.NetCore.StopTCpService();
+                    
                 }
             }
         }

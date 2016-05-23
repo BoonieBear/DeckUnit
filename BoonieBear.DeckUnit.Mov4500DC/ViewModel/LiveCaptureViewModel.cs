@@ -37,14 +37,18 @@ using HelixToolkit.Wpf;
 
 namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 {
-    public class LiveCaptureViewModel : ViewModelBase, IHandleMessage<MovDataEvent>, IHandleMessage<USBLEvent>,IHandleMessage<SailEvent>
+    public class LiveCaptureViewModel : ViewModelBase, IHandleMessage<MovDataEvent>, IHandleMessage<USBLEvent>, IHandleMessage<SailEvent>, IHandleMessage<DspFeedbackComEvent>, IHandleMessage<DSPReqEvent>
     {
-        private DispatcherTimer t;
+        private DispatcherTimer t, timer_DATALINKTIMER, timer_BREAKTIMER;
         private NetworkInterface currentInterface = null;
         private NetworkInterface[] networkInterfaces = null;
         double bytesFormerReceived;
         double bytesFormerSent;
         private bool InInitial = false;
+		public int bpcount = 0;
+        public int adcpcount = 0;
+        public bool RecvData = false;
+		
         private List<Point3D> USBLPath = new List<Point3D>();//track
         private List<Point3D> UWVPath = new List<Point3D>();//track
         private Point3D LastUsblPoint = new Point3D(0, 0, 0);
@@ -54,6 +58,8 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
             LinkStatus = "未连接通信机";
             LinkBoxColor = new SolidColorBrush(Colors.Crimson);
+            SendMessageBoxreadonly=true;
+
             xVel = new ObservableCollection<AdcpInfo>();
             yVel = new ObservableCollection<AdcpInfo>();
             zVel = new ObservableCollection<AdcpInfo>();
@@ -70,7 +76,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             AlertdataCollection = new ObservableCollection<Alertdata>();
             AdcpdataCollection = new ObservableCollection<Adcpdata>();
             ImgCollection =new ObservableCollection<BitmapImage>();
-            LiveInfos=new ObservableCollection<CollectionInfo>();
+
             AddFHCMD = RegisterCommand(ExecuteAddFHCMD, CanExecuteAddFHCMD, true);
             AddImgCMD = RegisterCommand(ExecuteAddImgCMD, CanExecuteAddImgCMD, true);
             xVel.CollectionChanged+=xVel_CollectionChanged;
@@ -86,13 +92,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             AlertdataCollection.CollectionChanged += AlertdataCollection_CollectionChanged;
             AdcpdataCollection.CollectionChanged += AdcpdataCollection_CollectionChanged;
             ImgCollection.CollectionChanged += ImgCollection_CollectionChanged;
-            LiveInfos.CollectionChanged+=LiveInfos_CollectionChanged;
-            
-        }
-
-        private void LiveInfos_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            base.OnPropertyChanged(() => LiveInfos);
         }
 
         private void AlertdataCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -228,16 +227,27 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             }
             XMTValue = float.Parse(UnitCore.Instance.MovConfigueService.GetXmtAmp());
             XMTIndex = int.Parse(UnitCore.Instance.MovConfigueService.GetXmtChannel()) - 1;
+            SelectGMode = (int)UnitCore.Instance.MovConfigueService.GetGMode();
+            Gain = int.Parse(UnitCore.Instance.MovConfigueService.GetGain());
             InInitial = false;
             RefreshLifeInfos();
-            //UpdateUSBLTrack(800,-600,1200);
-            //UpdateUSBLTrack(800, -500, 1200);
-            //UpdateUSBLTrack(800, -300, 1200);
-            //UpdateUWVLTrack(700, -400, 1100);
-            //UpdateUWVLTrack(700, -300, 1100);
-            //UpdateUWVLTrack(700, -200, 1100);
-            //LastUsblPoint = new Point3D(800,-300,1200);
-            //LastUWVPoint = new Point3D(700,-200,1100);
+            if (UnitCore.Instance.MovConfigueService.GetMode() == MonitorMode.SUBMARINE)
+            {
+                if (timer_DATALINKTIMER == null)
+                    timer_DATALINKTIMER = new DispatcherTimer(TimeSpan.FromSeconds(6), DispatcherPriority.Normal, timer_DATALINKTIMER_Tick, Dispatcher.CurrentDispatcher);
+                if (timer_BREAKTIMER == null)
+                    timer_BREAKTIMER = new DispatcherTimer(TimeSpan.FromSeconds(1), DispatcherPriority.Normal, timer_BREAKTIMER_Tick, Dispatcher.CurrentDispatcher);            
+            }
+            else
+            {
+                if (timer_DATALINKTIMER != null)
+                    timer_DATALINKTIMER.Stop();
+                if (timer_BREAKTIMER != null)
+                    timer_BREAKTIMER.Stop();
+            }
+            
+            //ShipHeading = 90.0F;
+            //Transfromxyz(1000, 600, 800);
         }
 
         private void RefreshLifeInfos()
@@ -314,7 +324,43 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             
         }
 
+		void timer_DATALINKTIMER_Tick(object sender, EventArgs e)
+        {
+            if (UnitCore.Instance.CommCore.IsWorking)
+            {
+                if (RecvData)//有接收数据
+                {
+                    RecvData = false;
+                }
+                else
+                {
+                    UnitCore.Instance.CommCore.Sendbreak();
+                    timer_DATALINKTIMER.Stop();
+                    timer_BREAKTIMER.Start();
+                }
+            }
+            else
+            {
+                timer_DATALINKTIMER.Stop();
+            }
 
+
+        }
+        void timer_BREAKTIMER_Tick(object sender, EventArgs e)
+        {
+            if (UnitCore.Instance.CommCore.IsWorking)
+            {
+                UnitCore.Instance.CommCore.Sendcs();
+                timer_BREAKTIMER.Stop();
+                timer_DATALINKTIMER.Start();
+            }
+            else
+            {
+                timer_BREAKTIMER.Stop();
+            }
+
+
+        }
         //show btn or control based on the workmode 
         //if workmode == ship tnshow = true, or btnshow=false
         public bool BtnShowShip
@@ -402,6 +448,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
 
             }
         }
+		public bool SendMessageBoxreadonly
+        {
+            get { return GetPropertyValue(() => SendMessageBoxreadonly); }
+            set { SetPropertyValue(() => SendMessageBoxreadonly, value); }
+        }
+		
         public bool SetShipHeadingFront
         {
             get { return GetPropertyValue(() => SetShipHeadingFront); }
@@ -431,12 +483,42 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     return;
                 }
                 SetPropertyValue(() => XMTValue, value);
-                if (!InInitial)
-                    ChangeXMTValue(XMTValue);
+                /*if (!InInitial)
+                    ChangeXMTValue(XMTValue);*/
             }
         }
 
-        private void ChangeXMTValue(float XMTValue)
+        public int SelectGMode
+        {
+            get { return GetPropertyValue(() => SelectGMode); }
+            set
+            {
+                if (value == SelectGMode)
+                {
+                    return;
+                }
+                SetPropertyValue(() => SelectGMode, value);
+                if (!InInitial)
+                    ChangeSelectGMode(SelectGMode);
+            }
+        }
+
+        public int Gain
+        {
+            get { return GetPropertyValue(() => Gain); }
+            set
+            {
+                if (value == Gain)
+                {
+                    return;
+                }
+                SetPropertyValue(() => Gain, value);
+                if (!InInitial)
+                    ChangeGain(Gain);
+            }
+        }
+
+       /* private void ChangeXMTValue(float XMTValue)
         {
             var cmd = "a " + XMTValue.ToString("F03");
             UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
@@ -447,7 +529,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
                 return;
             }
-        }
+        }*/
 
         private async void ChangeXMTIndex(int index)
         {
@@ -461,6 +543,53 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 LogHelper.WriteLog("接收换能器设置为" + (index + 1).ToString());
             }
             var ans = UnitCore.Instance.MovConfigueService.SetXmtChannel(index + 1);//保存通道
+            if (ans == false)
+            {
+                EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
+                return;
+            }
+        }
+
+        private async void ChangeSelectGMode(int SelectGMode)
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                if (SelectGMode == (int)(MonitorGMode.HAND))
+                {
+                    var cmd = "gm 1";
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    cmd = "g " + Gain;
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    LogHelper.WriteLog("接收增益设置为" + Gain);
+                }
+                else
+                {
+                    var cmd = "gm 2";
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    LogHelper.WriteLog("接收增益设置为自动增益模式");
+                }
+                
+            }
+            var ans = UnitCore.Instance.MovConfigueService.SetGMode((MonitorGMode)Enum.Parse(typeof(MonitorGMode), SelectGMode.ToString()));
+            if (ans == false)
+            {
+                EventAggregator.PublishMessage(new LogEvent("保存运行模式出错！", LogType.Both));
+                return;
+            }
+        }
+
+        private async void ChangeGain(int Gain)
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                if (SelectGMode == (int)(MonitorGMode.HAND))
+                {
+                    var cmd = "g " + Gain;
+                    await UnitCore.Instance.NetCore.SendConsoleCMD(cmd);
+                    LogHelper.WriteLog("接收增益设置为" + Gain);
+                }
+            }
+            var ans = UnitCore.Instance.MovConfigueService.SetGain(Gain);//保存通道
             if (ans == false)
             {
                 EventAggregator.PublishMessage(new LogEvent("保存参数出错", LogType.Both));
@@ -594,21 +723,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             set { SetPropertyValue(() => MovRoll, value); }
         }
 
-        public float MovHeaveVelocity
-        {
-            get { return GetPropertyValue(() => MovHeaveVelocity); }
-            set { SetPropertyValue(() => MovHeaveVelocity, value); }
-        }
-        public float MovPitVelocity
-        {
-            get { return GetPropertyValue(() => MovPitVelocity); }
-            set { SetPropertyValue(() => MovPitVelocity, value); }
-        }
-        public float MovRollVelocity
-        {
-            get { return GetPropertyValue(() => MovRollVelocity); }
-            set { SetPropertyValue(() => MovRollVelocity, value); }
-        }
         public float MovHeight
         {
             get { return GetPropertyValue(() => MovHeight); }
@@ -1094,7 +1208,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var adcp = message.Data[MovDataType.ADCP] as Adcpdata;
                     if (adcp != null)
                     {
-                        ADCPTime = DateTime.Now.ToLongTimeString();
+                        ADCPTime = adcp.Time;
                         xVel.Clear();
                         yVel.Clear();
                         zVel.Clear();
@@ -1109,15 +1223,6 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         AdcpdataCollection.Add(adcp);
                         if (AdcpdataCollection.Count > 10)
                             AdcpdataCollection.RemoveAt(0);
-                        //广播
-                        byte[] posBytes = new byte[5];
-                        posBytes[0] = 0x17;
-                        posBytes[1] = 0x20;
-                        posBytes[2] = (byte)(adcp.BottomTrack*100);
-                        Buffer.BlockCopy(BitConverter.GetBytes((uint)adcp.Height*100), 0, posBytes, 3, 2);
-                        UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
-                        
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.ALERT))
@@ -1125,7 +1230,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var alt = message.Data[MovDataType.ALERT] as Alertdata;
                     if (alt != null)
                     {
-                        AlarmTime = DateTime.Now.ToLongTimeString();
+                        AlarmTime = alt.Time;
                         Leak = alt.Leak;
                         Cable = alt.Cable;
                         AlertTemp = alt.Temperature;
@@ -1144,13 +1249,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (AlertdataCollection.Count > 10)
                             AlertdataCollection.RemoveAt(0);
                         //广播
-                        
-                        byte[] posBytes = new byte[14];
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", alt.Pack());
+                        byte[] posBytes = new byte[22];
                         posBytes[0] = 0x15;
                         posBytes[1] = 0x20;
-                        Buffer.BlockCopy(alt.Pack(), 0, posBytes, 2, 12);
+                        Buffer.BlockCopy(alt.Pack(), 0, posBytes, 2, 20);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.ALLPOST))
@@ -1159,7 +1263,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var allpos = message.Data[MovDataType.ALLPOST] as Sysposition;
                     if (allpos != null)
                     {
-                        PosFromUSBLTime = DateTime.Now.ToLongTimeString();
+                        PosFromUSBLTime = allpos.Time;
                         
                         ShipLongUsbl = allpos.ShipLong;
                         ShipLatUsbl = allpos.ShipLat;
@@ -1181,12 +1285,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (UsblPositionCollection.Count > 10)
                             UsblPositionCollection.RemoveAt(0);
                         //广播
-                       byte[] posBytes = new byte[34];
-                        posBytes[0] = 0x01;
-                        posBytes[1] = 0x20;
-                        Buffer.BlockCopy(allpos.Pack(), 0, posBytes, 2, 32);
-                        UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
+                        //UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", allpos.Pack());
+                        //byte[] posBytes = new byte[42];
+                        //posBytes[0] = 0x01;
+                        //posBytes[1] = 0x20;
+                        //Buffer.BlockCopy(allpos.Pack(), 0, posBytes, 2, 40);
+                        //UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.BP))
@@ -1194,7 +1298,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var bp = message.Data[MovDataType.BP] as Bpdata;
                     if (bp != null)
                     {
-                        BpTime = DateTime.Now.ToLongTimeString();
+                        BpTime = bp.Time;
                         BpBottom = bp.Down;
                         BpBottomBack = bp.Behinddown;
                         BpFront = bp.Front;
@@ -1206,13 +1310,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (BpCollection.Count > 10)
                             BpCollection.RemoveAt(0);
                         //广播
-                        byte[] posBytes = new byte[18];
-                        
-                        posBytes[0] = 0x16;
-                        posBytes[1] = 0x20;
-                        Buffer.BlockCopy(bp.Pack(), 0, posBytes, 2, 16);
-                        UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
+                        //byte[] posBytes = new byte[18];
+                        //UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", bp.Pack());//
+                        //byte[] posBytes = new byte[18];
+                        //posBytes[0] = 0x16;
+                        //posBytes[1] = 0x20;
+                        //Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 16);
+                        //UnitCore.Instance.NetCore.BroadCast(posBytes);
                     }
                 }
                 /*
@@ -1231,7 +1335,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var ctd = message.Data[MovDataType.CTD] as Ctddata;
                     if (ctd != null)
                     {
-                        CTDTime = DateTime.Now.ToLongTimeString();
+                        CTDTime = ctd.Time;
                         CTDSoundvec = ctd.Soundvec;
                         CTDDepth = ctd.Depth;
                         CTDWaterTemp = ctd.Watertemp;
@@ -1240,13 +1344,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (CTDCollection.Count > 10)
                             CTDCollection.RemoveAt(0);
                         //广播
-                       
-                        byte[] posBytes = new byte[10];
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", ctd.Pack());
+                        byte[] posBytes = new byte[18];
                         posBytes[0] = 0x12;
                         posBytes[1] = 0x20;
-                        Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 8);
+                        Buffer.BlockCopy(ctd.Pack(), 0, posBytes, 2, 16);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.ENERGY))
@@ -1254,7 +1357,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var eng = message.Data[MovDataType.ENERGY] as Energysys;
                     if (eng != null)
                     {
-                        EnergyTime = DateTime.Now.ToLongTimeString();
+                        EnergyTime = eng.Time;
                         HeadmainV = eng.HeadmainV;
                         HeadmainI = eng.HeadmainI;
                         Headmainconsume = eng.Headmainconsume;
@@ -1279,13 +1382,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (EnergysysCollection.Count > 10)
                             EnergysysCollection.RemoveAt(0);
                         //广播
-                        
-                        byte[] posBytes = new byte[28];
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", eng.Pack());
+                        byte[] posBytes = new byte[36];
                         posBytes[0] = 0x14;
                         posBytes[1] = 0x20;
-                        Buffer.BlockCopy(eng.Pack(), 0, posBytes, 2, 26);
+                        Buffer.BlockCopy(eng.Pack(), 0, posBytes, 2, 34);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.IMAGE))
@@ -1309,7 +1411,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var life = message.Data[MovDataType.LIFESUPPLY] as Lifesupply;
                     if (life != null)
                     {
-                        LifeTime = DateTime.Now.ToLongTimeString();
+                        LifeTime = life.Time;
                         
                         Oxygen = life.Oxygen;
                         Co2 = life.Co2;
@@ -1320,13 +1422,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (LifesupplyCollection.Count > 10)
                             LifesupplyCollection.RemoveAt(0);
                         //广播
-                        
-                        byte[] posBytes = new byte[8];
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", life.Pack());
+                        byte[] posBytes = new byte[16];
                         posBytes[0] = 0x13;
                         posBytes[1] = 0x20;
-                        Buffer.BlockCopy(life.Pack(), 0, posBytes, 2, 6);
+                        Buffer.BlockCopy(life.Pack(), 0, posBytes, 2, 14);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
                         RefreshLifeInfos();
                     }
                 }
@@ -1336,7 +1437,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var subpos = message.Data[MovDataType.SUBPOST] as Subposition;
                     if (subpos != null)
                     {
-                        PosFromUwvTime = DateTime.Now.ToLongTimeString();
+                        PosFromUwvTime = subpos.Time;
                         
                         MovDepth = subpos.Subdepth;
                         MovLat = subpos.SubLat;
@@ -1345,9 +1446,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovHeight = subpos.Subheight;
                         MovPitch = subpos.Subpitch;
                         MovRoll = subpos.Subroll;
-                        MovHeaveVelocity = subpos.SubHV;
-                        MovPitVelocity = subpos.SubPitV;
-                        MovRollVelocity = subpos.SubRollV;
+                        
                         ZDistanceFromUWV = MovDepth;
                         float DistanceX, DistanceY,movlng,movlat,shiplng,shiplat;
                         movlng = subpos._subLong/60 + subpos._subLong%60/100;
@@ -1371,13 +1470,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         if (SubPositionCollection.Count > 10)
                             SubPositionCollection.RemoveAt(0);
                         //广播
-                        
-                        byte[] posBytes = new byte[26];
+                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", subpos.Pack());
+                        byte[] posBytes = new byte[28];
                         posBytes[0] = 0x11;
                         posBytes[1] = 0x20;
-                        Buffer.BlockCopy(subpos.Pack(), 0, posBytes, 2, 24);
+                        Buffer.BlockCopy(subpos.Pack(), 0, posBytes, 2, 26);
                         UnitCore.Instance.NetCore.BroadCast(posBytes);
-                        UnitCore.Instance.MovTraceService.Save("ACOUSTICTOSAIL", posBytes);
                     }
                 }
                 if (message.Data.ContainsKey(MovDataType.WORD))
@@ -1392,14 +1490,14 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             {
                                 UnitCore.Instance.MovTraceService.Save("FH", "（潜器）" + word);
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（潜器-跳频）" + word);
-                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" +
                                                                          "（潜器-跳频）" + word);
                             }
                             else
                             {
                                 UnitCore.Instance.MovTraceService.Save("FH", "（母船）" + word);
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船-跳频）" + word);
-                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" +
                                                                          "（母船-跳频）" + word);
                             }
                         }
@@ -1408,13 +1506,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                             if (UnitCore.Instance.WorkMode == MonitorMode.SHIP)
                             {
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（潜器）" + word);
-                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" +
                                                                          "（潜器）" + word);
                             }
                             else
                             {
                                 UnitCore.Instance.MovTraceService.Save("Chart", "（母船）" + word);
-                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToShortTimeString() + ":" +
+                                MainFrameViewModel.pMainFrame.MsgLog.Add(DateTime.Now.ToLongTimeString() + ":" +
                                                                          "（母船）" + word);
                             }
                         }
@@ -1473,7 +1571,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 var allpos = message.Position as Sysposition;
                 if (allpos != null)
                 {
-                    PosFromUSBLTime = DateTime.Now.ToLongTimeString();
+                    PosFromUSBLTime = DateTime.FromFileTime(allpos.Ltime).ToShortTimeString();
                     ShipLongUsbl = allpos.ShipLong;
                     ShipLatUsbl = allpos.ShipLat;
                     ShipHeading = allpos.Shipheading;
@@ -1499,10 +1597,12 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
             {
                 if (message.Type == ExchageType.ADCP)
                 {
+                    RecvData = true;
+                    adcpcount++;
                     var adcp = message.SailData as Adcpdata;
                     if (adcp != null)
                     {
-                        ADCPTime = DateTime.Now.ToLongTimeString();
+                        ADCPTime = adcp.Time;
                         xVel.Clear();
                         yVel.Clear();
                         zVel.Clear();
@@ -1524,7 +1624,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var alt = message.SailData as Alertdata;
                     if (alt != null)
                     {
-                        AlarmTime = DateTime.Now.ToLongTimeString();
+                        AlarmTime = alt.Time;
                         Leak = alt.Leak;
                         Cable = alt.Cable;
                         AlertTemp = alt.Temperature;
@@ -1548,12 +1648,13 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                 
                 if (message.Type == ExchageType.BP)
                 {
+                    UnitCore.Instance.PostMsgEvent_BPsend.Set();
+                    bpcount++;
                     var bp = message.SailData as Bpdata;
                     if (bp != null)
                     {
-                        BpTime = DateTime.Now.ToLongTimeString();
-                       // BpBottom = bp.Down;
-                        BpBottom = 101;
+                        BpTime = bp.Time;
+                        BpBottom = bp.Down;
                         BpBottomBack = bp.Behinddown;
                         BpFront = bp.Front;
                         BpFrontDown = bp.Frontdown;
@@ -1571,7 +1672,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var ctd = message.SailData as Ctddata;
                     if (ctd != null)
                     {
-                        CTDTime = DateTime.Now.ToLongTimeString();
+                        CTDTime = ctd.Time;
                         CTDSoundvec = ctd.Soundvec;
                         CTDDepth = ctd.Depth;
                         CTDWaterTemp = ctd.Watertemp;
@@ -1587,7 +1688,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var eng = message.SailData as Energysys;
                     if (eng != null)
                     {
-                        EnergyTime = DateTime.Now.ToLongTimeString();
+                        EnergyTime = eng.Time;
                         HeadmainV = eng.HeadmainV;
                         HeadmainI = eng.HeadmainI;
                         Headmainconsume = eng.Headmainconsume;
@@ -1620,7 +1721,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var life = message.SailData as Lifesupply;
                     if (life != null)
                     {
-                        LifeTime = DateTime.Now.ToLongTimeString();
+                        LifeTime = life.Time;
                         
                         Oxygen = life.Oxygen;
                         Co2 = life.Co2;
@@ -1639,7 +1740,7 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                     var subpos = message.SailData as Subposition;
                     if (subpos != null)
                     {
-                        //PosFromUwvTime = subpos.Time;
+                        PosFromUwvTime = subpos.Time;
                         
                         MovDepth = subpos.Subdepth;
                         MovLat = subpos.SubLat;
@@ -1648,15 +1749,39 @@ namespace BoonieBear.DeckUnit.Mov4500UI.ViewModel
                         MovHeight = subpos.Subheight;
                         MovPitch = subpos.Subpitch;
                         MovRoll = subpos.Subroll;
-                        MovHeaveVelocity = subpos.SubHV;
-                        MovPitVelocity = subpos.SubPitV;
-                        MovRollVelocity = subpos.SubRollV;
                         SubPositionCollection.Add(subpos);
                         if (SubPositionCollection.Count > 10)
                             SubPositionCollection.RemoveAt(0);
                     }
                 }
             }));
+        }
+        public void Handle(DspFeedbackComEvent message)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+                {
+                    if (message.Type == ModuleType.FeedBack)
+                    {
+                        Gain=BitConverter.ToInt16(message.Data, 0);
+                    }
+
+                }));
+
+        }
+
+        public void Handle(DSPReqEvent message)
+        {
+            Application.Current.Dispatcher.Invoke(new Action(() =>
+            {
+                UnitCore.Instance.MFSK_LeftSize = 20;
+                if (SendMessageBoxreadonly==true)
+                {
+                    SendMessageBoxreadonly = false;//产生一个状态切换，让LiveCaptureView产生触发
+                }
+                SendMessageBoxreadonly = true;
+                
+            }));
+
         }
     }
 }

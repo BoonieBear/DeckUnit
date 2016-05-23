@@ -56,7 +56,14 @@ namespace BoonieBear.DeckUnit.ACMP
                     var msg = Encoding.Default.GetString(bytes);
                     if (msg != null)
                     {
-                        Msg = msg;
+                        if (Msg == "")
+                        {
+                            Msg = msg;
+                        }
+                        else
+                        {
+                            Msg = Msg + "\r\n" + msg;
+                        }
                     }
                     break;
                 default:
@@ -71,7 +78,7 @@ namespace BoonieBear.DeckUnit.ACMP
             {
                 case ModuleType.MFSK:
                     var bytes = _sysposition.Pack();
-                    Buffer.BlockCopy(bytes, 0, _packageBytes, 0, 32);
+                    Buffer.BlockCopy(bytes, 0, _packageBytes, 0, 40);
                     if (_msg != "")
                     {
                         bytes = Encoding.Default.GetBytes(_msg);

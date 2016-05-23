@@ -16,24 +16,35 @@ namespace BoonieBear.DeckUnit.Comm.GPIO
 
         public GPIOService()
         {
+            
 
         }
 
-        public void Initialize_SUSI()
+        public bool Initialize_SUSI()
         {
             try
             {
                 if (!SUSI_DLL.SusiDllInit())
                 {
-                    throw new Exception("SusiDllInit failed! " + "ErrorCode = " + SUSI_DLL.SusiDllGetLastError().ToString());
+                    return false;
+                  //  throw new Exception("SusiDllInit failed! " + "ErrorCode = " + SUSI_DLL.SusiDllGetLastError().ToString());
                 }
             }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
+                return false;
             }
             Init_Page_GPIOEX();//初始化GPIO
             GetPinNum();
+            if(InCount>0)//至少要有一个输入GPIO口
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         private void Init_Page_GPIOEX()

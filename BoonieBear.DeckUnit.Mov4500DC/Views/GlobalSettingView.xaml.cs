@@ -102,7 +102,52 @@ namespace BoonieBear.DeckUnit.Mov4500UI.Views
 
         private void RefreshPercentage(object sender, EventArgs e)
         {
-            PercentageRing.Percentange = UnitCore.Instance.NetCore.SendBytes * 100 / (int)Updatefile.Length;
+            try
+            {
+                if (Updatefile.CanRead)//防止烧写完关闭文件时，定是器还未关闭
+                {
+                    PercentageRing.Percentange = UnitCore.Instance.NetCore.SendBytes * 100 / (int)Updatefile.Length;
+                }
+            }
+            catch (Exception MyEx)
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new ErrorEvent(MyEx, LogType.OnlyLog));
+            }
+            
+            
+        }
+
+        private async void ButtonReset_Click(object sender, RoutedEventArgs e)//重启机芯
+        {
+            if (UnitCore.Instance.NetCore.IsTCPWorking)
+            {
+                await TaskEx.Delay(TimeSpan.FromMilliseconds(300));//留出时间给DSP读取程序
+                var ret = await UnitCore.Instance.NetCore.ResetMechan();
+                if (ret)
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("机芯重启完成", LogType.OnlyInfo));
+                    App.Current.Dispatcher.Invoke(new Action(() =>
+                    {
+                        UnitCore.Instance.NetCore.StopTCpService();
+                        UWVConnect.IsChecked = false;
+                        ShipConnect.IsChecked = false;
+                    }));
+                }
+
+                else
+                {
+                    UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("机芯重启失败，请检查通信机网络", LogType.OnlyInfo));
+                }
+            }
+            else 
+            {
+                UnitCore.Instance.EventAggregator.PublishMessage(new LogEvent("请连接通信机", LogType.OnlyInfo));
+
+            }
+            
+            
+
+            
         }
 
     }

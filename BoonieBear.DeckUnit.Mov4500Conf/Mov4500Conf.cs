@@ -51,6 +51,12 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
             return SetValue(str,value);
         }
 
+        public int GetNormAmp()
+        {
+            string[] str = { "Setup", "NormAmp" };
+            return int.Parse( GetValue(str));
+        }
+
         public MonitorGMode GetGMode()
         {
             string[] str = { "Setup", "GMode" };
@@ -134,13 +140,155 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
             throw new NotImplementedException();
         }
 
+
+        public CommType GetBPComm()
+        {
+            string[] str = { "COM", "BPComm" };
+            string sComm = GetValue(str);
+            if (sComm == null)
+                sComm = "COM10,19200,8,0,1";
+            string[] string_Comm = sComm.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            CommType ComPara = new CommType();
+            ComPara.Comm = string_Comm[0];
+            ComPara.Baud = int.Parse(string_Comm[1]);
+            ComPara.DataBits = int.Parse(string_Comm[2]);
+            ComPara.Parity = int.Parse(string_Comm[3]);
+            ComPara.StopBits = int.Parse(string_Comm[4]);
+            return ComPara;
+        }
+
+        public CommType GetADCPComm()
+        {
+            string[] str = { "COM", "ADCPComm" };
+            string sComm = GetValue(str);
+            if (sComm == null)
+                sComm = "COM3,9600,8,0,1";
+            string[] string_Comm = sComm.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            CommType ComPara = new CommType();
+            ComPara.Comm = string_Comm[0];
+            ComPara.Baud = int.Parse(string_Comm[1]);
+            ComPara.DataBits = int.Parse(string_Comm[2]);
+            ComPara.Parity = int.Parse(string_Comm[3]);
+            ComPara.StopBits = int.Parse(string_Comm[4]);
+            return ComPara;
+        }
+
+        public OASSEND[] GetOASID()
+        {
+            string[] str = { "Setup", "OASID" };
+            string sOASID = GetValue(str);
+            string[] string_OASID = sOASID.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            OASSEND[] OASID = new OASSEND[string_OASID.Length];
+            for (int i = 0; i < string_OASID.Length; i++)
+            {
+                OASID[i].direction = i;
+                OASID[i].id = int.Parse(string_OASID[i]);
+            }
+            return OASID;
+
+        }
+
+        public int[] GetCycID()
+        {
+            string[] str = { "Setup", "CycID" };
+            string sCycID = GetValue(str);
+            string[] string_CycID = sCycID.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+            int[] CycID = new int[string_CycID.Length];
+            for (int i = 0; i < string_CycID.Length; i++)
+            {
+                CycID[i] = int.Parse(string_CycID[i]);
+            }
+            return CycID;
+        }
+
+        public int GetPulseWidth()
+        {
+            string[] str = { "Setup", "PulseWidth" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetDistLimit()
+        {
+            string[] str = { "Setup", "DistLimit" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetGainDownLimit()
+        {
+            string[] str = { "Setup", "GainDownLimit" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetGainStart()
+        {
+            string[] str = { "Setup", "GainStart" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetGainUPLimit()
+        {
+            string[] str = { "Setup", "GainUPLimit" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetShootModel()
+        {
+            string[] str = { "Setup", "ShootModel" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetTVCModel()
+        {
+            string[] str = { "Setup", "TVCModel" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetTVCValue()
+        {
+            string[] str = { "Setup", "DistLimit" };
+            return int.Parse(GetValue(str));
+        }
+
+        public float GetBlindRegion()
+        {
+            string[] str = { "Setup", "BlindRegion" };
+            return float.Parse(GetValue(str));
+        }
+
+        public int GetGateTh()
+        {
+            string[] str = { "Setup", "GateTh" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetSoundSpeed()
+        {
+            string[] str = { "Setup", "SoundSpeed" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetSERVERMODE()
+        {
+            string[] str = { "Setup", "SERVERMODE" };
+            return int.Parse(GetValue(str));
+        }
+
+        public int GetCELLNUM()
+        {
+            string[] str = { "Setup", "CELLNUM" };
+            return int.Parse(GetValue(str));
+        }
+
+
         public CommConfInfo GetCommConfInfo()
         {
             var cominfo = new CommConfInfo();
             try
             {
                 if (GetMode()==MonitorMode.SHIP)
+                {
                     cominfo.LinkIP = GetShipIP();
+                }                    
                 else
                 {
                     cominfo.LinkIP = GetUWVIP();
@@ -148,6 +296,9 @@ namespace BoonieBear.DeckUnit.Mov4500Conf
                 cominfo.NetPort1 = int.Parse(GetComPort());
                 cominfo.NetPort2 = int.Parse(GetDataPort());
                 cominfo.TraceUDPPort = int.Parse(GetBroadCastPort());
+                cominfo.BPComm = GetBPComm();
+                cominfo.ADCPComm = GetADCPComm();
+                
             }
             catch (Exception)
             {

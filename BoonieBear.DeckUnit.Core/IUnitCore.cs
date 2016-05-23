@@ -40,6 +40,7 @@ namespace BoonieBear.DeckUnit.ICore
 
         Task <bool> SendCMD(byte[] buf);
         Task<bool> DownloadFile(Stream file,DownLoadFileType type);
+        Task<bool> ResetMechan();//重启机芯
         Task<bool> BroadCast(byte[] buf);
         int SendBytes { get;}
         /// <summary>
@@ -64,14 +65,19 @@ namespace BoonieBear.DeckUnit.ICore
     }
     public interface ICommCore:ICore
     {
-        
-        //串口数据接收服务
         ISerialService SerialService { get; }
         Task<bool> SendConsoleCMD(string cmd);
+        //串口数据接收服务
+        ISerialService BPSerialService { get; }
+        ISerialService ADCPSerialService { get; }
+
+        Task<bool> SendConsoleCMD(byte[] cmd,int Bpid);
         Task<bool> SendLoaderCMD(string cmd);
         Task<bool> SendCMD(byte[] buf);
 
         Task<bool> SendFile(Stream file);
+        void Sendbreak();
+        Task<bool> Sendcs();
         /// <summary>
         /// 数据观察类，主要负责数据的解析和保存
         /// </summary>

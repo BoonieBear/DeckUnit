@@ -56,6 +56,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Automation.BDaq, Version=1.0.1.0, Culture=neutral, PublicKeyToken=463f5928d60183a0, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Windows\assembly\GAC_MSIL\Automation.BDaq\1.0.1.0__463f5928d60183a0\Automation.BDaq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Net" />
@@ -68,8 +72,13 @@
     <Compile Include="GPIO\GPIOService.cs" />
     <Compile Include="GPIO\SUSI.cs" />
     <Compile Include="IDataService.cs" />
+    <Compile Include="PCI\PCIService.cs" />
     <Compile Include="Properties\Annotations.cs" />
     <Compile Include="define.cs" />
+    <Compile Include="Serial\CCheck.cs" />
+    <Compile Include="Serial\CCheckBP.cs" />
+    <Compile Include="Serial\CCycleMem.cs" />
+    <Compile Include="Serial\CheckADCP.cs" />
     <Compile Include="Serial\InterfaceSerial.cs" />
     <Compile Include="Serial\SerialCommand.cs" />
     <Compile Include="Serial\SerialService.cs" />

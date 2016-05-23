@@ -136,5 +136,30 @@ namespace BoonieBear.DeckUnit.LiveService
                 return Command.SendSerialAsync(cmd);
             }
         }
+
+        public ISerialService BPSerialService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public ISerialService ADCPSerialService
+        {
+            get { throw new NotImplementedException(); }
+        }
+
+        public Task<bool> SendConsoleCMD(byte[] cmd, int Bpid)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Sendbreak()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> Sendcs()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
