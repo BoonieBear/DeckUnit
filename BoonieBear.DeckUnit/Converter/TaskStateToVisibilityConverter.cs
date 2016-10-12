@@ -67,9 +67,9 @@ namespace BoonieBear.DeckUnit.Converter
                     if (content == "开始")
                         return Visibility.Collapsed;
                     if (content == "停止")
-                        return Visibility.Collapsed;
-                    if (content == "删除")
                         return Visibility.Visible;
+                    //if (content == "删除")
+                    //    return Visibility.Visible;
                     if (content == "数据")
                         return Visibility.Collapsed;
                     if (content == "重试")

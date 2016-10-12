@@ -192,7 +192,7 @@ namespace BoonieBear.DeckUnit.DAL.SqliteDAL
                 bdTask.StarTime.ToString("s"),bdTask.TotolTime.ToString(),bdTask.LastTime.ToString("s"),bdTask.RecvBytes.ToString(),bdTask.FilePath,bdTask.IsParsed?"1":"0",bdTask.ErrIdxStr,
             };
 
-            sqliteHelperSQL.UpdateInto(_tableName[5], col, values, "", "");
+            sqliteHelperSQL.UpdateInto(_tableName[5], col, values, "TaskInfo_ID", bdTask.TaskID.ToString());
         }
 
         public void DeleteTask(long id)

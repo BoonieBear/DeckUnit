@@ -275,7 +275,7 @@ namespace BoonieBear.DeckUnit.UBP
                 WorkingBdTask.LastTime = DateTime.Now;
                 WorkingBdTask.TaskStage = (int) TaskStage.WaitForAns;
                 _sqlite.UpdateTask(WorkingBdTask);
-                DataRecvTimer = new Timer(DataOutTimeTick, null, 500 * 1000, 0);//默认超时，防止无数据一直等待
+                DataRecvTimer = new Timer(DataOutTimeTick, null, 600 * 1000, 0);//默认超时，防止无数据一直等待
                 SecondTicks = 0;
                 if (WorkingBdTask.ErrIdxStr == "") //没有重传
                 {

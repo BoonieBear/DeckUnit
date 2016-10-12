@@ -322,7 +322,7 @@ namespace BoonieBear.DeckUnit.ViewModels
         {
             if (_currentBdTask != null)
             {
-                if(TaskState=="UNSTART")
+                if(TaskState=="UNSTART"||TaskState=="STOP")
                     if (DeckDataProtocol.StartTask(_currentBdTask.TaskID) == _currentBdTask.TaskID) //正确开始任务
                     {
                         ACNBuilder.PackTask(_currentBdTask, true, -1);
@@ -403,7 +403,7 @@ namespace BoonieBear.DeckUnit.ViewModels
                         IsWorking = false;
                         break;
                     case (int) TaskStage.WaitForAns:
-                        TaskStatus = "等待下组数据";
+                        TaskStatus = "等待应答";
                         TaskState = "WAITING";
                         IsWorking = true;
                         break;
