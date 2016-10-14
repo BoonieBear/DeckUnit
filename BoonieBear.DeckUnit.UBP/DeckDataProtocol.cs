@@ -398,7 +398,7 @@ namespace BoonieBear.DeckUnit.UBP
         public static TaskStage ParseData(byte[] bytes, out string error)
         {
             error = "";
-            if (WorkingBdTask.TaskStage == (int)TaskStage.Pause || WorkingBdTask.TaskStage == (int)TaskStage.UnStart || WorkingBdTask.TaskStage == (int)TaskStage.RecvReply)
+            if (WorkingBdTask.TaskStage == (int)TaskStage.Pause || WorkingBdTask.TaskStage == (int)TaskStage.UnStart )
                 return TaskStage.UnStart;
             try
             {
