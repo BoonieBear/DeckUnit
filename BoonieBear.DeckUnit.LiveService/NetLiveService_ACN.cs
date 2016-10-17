@@ -216,7 +216,7 @@ namespace BoonieBear.DeckUnit.LiveService
                     argu = " -t -m2";
                     break;
                 case DownLoadFileType.FloatM4:
-                    argu = " -t - m4";
+                    argu = " -t -m4";
                     break;
                 case DownLoadFileType.RltUpdate:
                     argu = " -l";
